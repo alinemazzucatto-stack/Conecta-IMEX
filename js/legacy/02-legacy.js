@@ -303,7 +303,7 @@ const firebaseConfig = {
   messagingSenderId: "157972610485",
   appId: "1:157972610485:web:5ffba923909ab1ca466dfc"
 };
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
