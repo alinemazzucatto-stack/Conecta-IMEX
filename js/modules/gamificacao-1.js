@@ -739,7 +739,7 @@ window.gmAjustarEstoque=function(id,atual){
   if(novo===null)return;
   var n=parseInt(novo);if(isNaN(n)||n<0)return;
   if(!window.db)return;
-  db.collection(cLoja()).doc(id).update({estoque:n}).then(function(){S.lojaLoaded=false;renderCatalogoAdmin();});
+  db.collection(cLoja()).doc(id).update({estoque:n}).then(function(){S.lojaLoaded=false;renderCatalogoAdmin();}).catch(function(e){gmToast('Erro ao atualizar estoque: '+e.message);});
 };
 
 /* ── BANNERS ── */
@@ -776,11 +776,11 @@ function renderBannersAdmin(){
 }
 window.gmToggleBanner=function(id,ativo){
   if(!window.db)return;
-  db.collection(cBanners()).doc(id).update({ativo:ativo}).then(renderBannersAdmin);
+  db.collection(cBanners()).doc(id).update({ativo:ativo}).then(renderBannersAdmin).catch(function(e){gmToast('Erro ao atualizar banner: '+e.message);});
 };
 window.gmExcluirBanner=function(id){
   if(!window.db||!window.confirm('Excluir este banner?'))return;
-  db.collection(cBanners()).doc(id)['delete']().then(renderBannersAdmin);
+  db.collection(cBanners()).doc(id)['delete']().then(renderBannersAdmin).catch(function(e){gmToast('Erro ao excluir banner: '+e.message);});
 };
 window.gmNovoBanner=function(){
   var ov=document.getElementById('gm-overlay'),body=document.getElementById('gm-modal-body');
@@ -862,7 +862,7 @@ function renderFilaAdmin(){
 }
 window.gmAtualizarStatus=function(id,status){
   if(!window.db)return;
-  db.collection(cRes()).doc(id).update({status:status}).then(function(){gmToast('Status atualizado.');});
+  db.collection(cRes()).doc(id).update({status:status}).then(function(){gmToast('Status atualizado.');}).catch(function(e){gmToast('Erro ao atualizar status: '+e.message);});
 };
 
 /* ── MODALS ── */
@@ -964,7 +964,7 @@ window.gmSalvar=function(){
 
 window.gmToggle=function(id,ativo){
   if(!window.db)return;
-  db.collection(cLoja()).doc(id).update({ativo:ativo}).then(function(){S.lojaLoaded=false;renderAdminSecao();});
+  db.collection(cLoja()).doc(id).update({ativo:ativo}).then(function(){S.lojaLoaded=false;renderAdminSecao();}).catch(function(e){gmToast('Erro ao atualizar item: '+e.message);});
 };
 
 /* ── TABS ── */
