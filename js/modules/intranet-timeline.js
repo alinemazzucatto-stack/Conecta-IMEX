@@ -651,6 +651,16 @@
           '<div><div class="tl-aniv-name">' + nomeShort + '</div><div class="tl-aniv-when">' + (p.setor || "") + " · " + dataFmt + "</div></div>" +
           '<div class="tl-aniv-gift" title="Parabenizar">🎁</div></div>';
       }).join("");
+      setTimeout(() => {
+        const gifts = document.querySelectorAll(".tl-aniv-gift");
+        gifts.forEach(gift => {
+          gift.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+          }, true);
+        });
+      }, 0);
     }).catch(() => {});
   }
 
