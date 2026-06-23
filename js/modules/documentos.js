@@ -70,12 +70,12 @@ async function carregarMeusDocumentos(){
   }
 
   try{
-    var snap = await db.collection(col('grh_colabs')).where('email','==',email).limit(1).get();
-    if(snap.empty){
+    var colabs = typeof window.grhGetColabs === 'function' ? await window.grhGetColabs() : [];
+    var colab = colabs.find(function(c){ return (c.email||'').toLowerCase() === email.toLowerCase(); });
+    if(!colab){
       body.innerHTML = '<div class="empty"><div class="ei">📭</div>Nenhum cadastro de colaborador encontrado para o seu e-mail.</div>';
       return;
     }
-    var colab = snap.docs[0].data();
     var clt = colab.clt === 'Sim' ? 'Sim' : 'Não';
     var tipos = TIPOS_LABEL[clt];
     var prontuario = colab.prontuario || [];
