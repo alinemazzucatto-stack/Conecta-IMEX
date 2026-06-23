@@ -13,7 +13,7 @@ window.doLogin = async function(){
   var email = (document.getElementById('lEmail') ? document.getElementById('lEmail').value : '').trim();
   var pass  = (document.getElementById('lPass')  ? document.getElementById('lPass').value  : '').trim();
   var btn   = document.getElementById('lBtn');
-  var load  = document.getElementById('lLoad');
+  var load  = document.getElementById('lLoading');
   var err   = document.getElementById('lErr');
   function showErr(msg){ if(err){ err.textContent = msg; err.style.display = 'block'; } else { alert(msg); } }
   if(err) err.style.display = 'none';
