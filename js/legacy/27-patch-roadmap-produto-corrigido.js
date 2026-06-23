@@ -104,7 +104,6 @@
     setTopbar('🚀','Roadmap do Produto');
     window.scrollTo({top:0,behavior:'smooth'});
   }
-  window.abrirRoadmapProduto = abrirRoadmap;
 
   function patchNavigation(){
     if(!window.__roadmapProdutoNavPatch){

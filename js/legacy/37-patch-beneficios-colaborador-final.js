@@ -79,7 +79,6 @@
   var oldSwitch = window.switchView;
   var oldShow = window.showView;
 
-  window.abrirBeneficiosColaborador = renderBeneficiosColaboradorFinal;
   window.renderBeneficiosCards = renderBeneficiosColaboradorFinal;
   window.renderBeneficiosHub = renderBeneficiosColaboradorFinal;
   window.renderBeneficios = renderBeneficiosColaboradorFinal;

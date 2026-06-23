@@ -68,7 +68,6 @@
         <div class="disc-report-footer-space"></div>
       </div>`;
   }
-  window.discMontarRelatorioPremium = montarRelatorioDISC;
   window.discCompartilharResultado = function(){
     const res=window.__ultimoDiscResultado; if(!res){alert('Nenhum resultado para compartilhar.');return;}
     const texto=`Meu resultado DISC: Perfil ${res.perfil} — ${DISC_META[res.perfil]?.nomePerfil || ''}`;
