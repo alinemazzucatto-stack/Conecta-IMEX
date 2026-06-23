@@ -724,6 +724,14 @@ function verificarKeyAntes() {
     </div>
 
 
+    <div id="dash-subtabs">
+      <button class="fr-subtab on" onclick="dashIrPara('geral',this)">📊 Geral</button>
+      <button class="fr-subtab" onclick="dashIrPara('colaboradores',this)">👥 Colaboradores</button>
+      <button class="fr-subtab" onclick="dashIrPara('remuneracao',this)">💰 Remuneração</button>
+      <button class="fr-subtab" onclick="dashIrPara('movimentacoes',this)">🔄 Movimentações</button>
+      <button class="fr-subtab" onclick="dashIrPara('pesquisas',this)">📋 Pesquisas</button>
+    </div>
+
     <div id="dash-pane-geral" class="dash-section active">
       <div class="dash-secao-titulo">📊 Visão Geral</div>
       <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
@@ -770,6 +778,34 @@ function verificarKeyAntes() {
           </div>
         </div>
       </div>
+    </div>
+
+    <div id="dash-pane-colaboradores" class="dash-section">
+      <div class="dash-secao-titulo">👥 Colaboradores</div>
+      <div id="dc-kpis" class="kpis-grid"></div>
+      <div class="card" style="margin-top:16px"><div class="card-body"><div id="dc-setor-tb"></div></div></div>
+    </div>
+
+    <div id="dash-pane-remuneracao" class="dash-section">
+      <div class="dash-secao-titulo">💰 Remuneração</div>
+      <div id="dr-kpis" class="kpis-grid"></div>
+      <div class="cg" style="grid-template-columns:1fr 1fr;margin-top:16px">
+        <div class="card"><div class="card-body"><div id="dr-setor-graf"></div></div></div>
+        <div class="card"><div class="card-body"><div id="dr-setor-tb"></div></div></div>
+      </div>
+    </div>
+
+    <div id="dash-pane-movimentacoes" class="dash-section">
+      <div class="dash-secao-titulo">🔄 Movimentações</div>
+      <div id="dm-kpis" class="kpis-grid"></div>
+      <div class="card" style="margin-top:16px"><div class="card-body"><div id="dm-graf"></div></div></div>
+      <div class="card" style="margin-top:16px"><div class="card-body"><div id="dm-tb"></div></div></div>
+    </div>
+
+    <div id="dash-pane-pesquisas" class="dash-section">
+      <div class="dash-secao-titulo">📋 Pesquisas</div>
+      <div id="dp-kpis" class="kpis-grid"></div>
+      <div class="card" style="margin-top:16px"><div class="card-body"><div id="dp-tb"></div></div></div>
     </div>
   </div>
 
