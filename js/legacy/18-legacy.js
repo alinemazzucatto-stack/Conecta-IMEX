@@ -6,7 +6,7 @@ function orgCarregar() {
   try {
     const el = document.getElementById('org-total-colab');
     if (el) {
-      db.collection(col('colaboradores')).where('status','==','Ativo').get()
+      db.collection(col('grh_colabs')).where('status','==','Ativo').get()
         .then(snap => { el.textContent = snap.size; })
         .catch(() => { el.textContent = '--'; });
     }
@@ -32,7 +32,7 @@ function trilhasCarregar() {
   try {
     const uid = auth.currentUser?.uid;
     if (uid) {
-      db.collection(col('colaboradores')).where('email','==',emailUsuario()).limit(1).get()
+      db.collection(col('grh_colabs')).where('email','==',emailUsuario()).limit(1).get()
         .then(snap => {
           if (!snap.empty) {
             const d = snap.docs[0].data();
@@ -113,7 +113,7 @@ function expCalcularTempoCase() {
   const el = document.getElementById('exp-tempo-casa');
   if (!el) return;
   try {
-    db.collection(col('colaboradores')).where('email','==',emailUsuario()).limit(1).get()
+    db.collection(col('grh_colabs')).where('email','==',emailUsuario()).limit(1).get()
       .then(snap => {
         if (!snap.empty) {
           const d = snap.docs[0].data();

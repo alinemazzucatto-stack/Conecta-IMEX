@@ -197,7 +197,7 @@ window.trilhasCarregar = function(){
   var email = _getEmail();
   if(db2 && email){
     try{
-      db2.collection(col ? col('colaboradores') : 'colaboradores')
+      db2.collection(col ? col('grh_colabs') : 'grh_colabs')
         .where('email','==',email).limit(1).get()
         .then(function(snap){
           if(!snap.empty){
