@@ -1,0 +1,5 @@
+name = "conectaimex2026"
+compatibility_date = "2026-06-23"
+
+[assets]
+directory = "."
