@@ -603,11 +603,10 @@
     const card = document.createElement("div");
     card.className = "tl-sc";
     const itens = [
-      { ico: "📄", label: "Holerite", acao: "if(typeof window.abrirMeusDocumentos==='function')window.abrirMeusDocumentos()", cor: "#3b82f6", bg: "#eff6ff" },
+      { ico: "📄", label: "Meus Documentos", acao: "if(typeof window.abrirMeusDocumentos==='function')window.abrirMeusDocumentos()", cor: "#3b82f6", bg: "#eff6ff" },
       { ico: "🌴", label: "Férias", id: "solicitacao", cor: "#10b981", bg: "#ecfdf5" },
       { ico: "❤️", label: "Benefícios", id: "beneficios", cor: "#ec4899", bg: "#fdf2f8" },
       { ico: "🎧", label: "Chamados", id: "ouvidoria", cor: "#f97316", bg: "#fff7ed" },
-      { ico: "📁", label: "Documentos", id: "intranet", tipo: "documentos", cor: "#7c3aed", bg: "#f5f3ff" },
       { ico: "📅", label: "Agenda", id: "intranet", cor: "#0ea5e9", bg: "#f0f9ff" }
     ];
     card.innerHTML =
