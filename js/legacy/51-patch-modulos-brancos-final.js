@@ -206,7 +206,7 @@
   };
 
   function tryClickFix(e){
-    if(e.target.closest && e.target.closest('.imex-rh-card-final,.imex-rh-grid-final,#grh-tabs,#grh-back-bar,[id^="grh-pane-"]')) return;
+    if(e.target.closest && e.target.closest('.imex-rh-card-final,.imex-rh-grid-final,#grh-tabs,#grh-back-bar,[id^="grh-pane-"],.intra-social-card,#intra-feed,#intra-tabs,#view-meus-documentos')) return;
     const el = e.target.closest('button,a,div,[onclick]');
     if(!el) return;
     const txt = norm(el.innerText || el.title || el.getAttribute('onclick') || '');
