@@ -605,9 +605,7 @@
     const itens = [
       { ico: "📄", label: "Meus Documentos", acao: "if(typeof window.abrirMeusDocumentos==='function')window.abrirMeusDocumentos()", cor: "#3b82f6", bg: "#eff6ff" },
       { ico: "🌴", label: "Férias", id: "solicitacao", cor: "#10b981", bg: "#ecfdf5" },
-      { ico: "❤️", label: "Benefícios", id: "beneficios", cor: "#ec4899", bg: "#fdf2f8" },
-      { ico: "🎧", label: "Chamados", id: "ouvidoria", cor: "#f97316", bg: "#fff7ed" },
-      { ico: "📅", label: "Agenda", id: "intranet", cor: "#0ea5e9", bg: "#f0f9ff" }
+      { ico: "❤️", label: "Benefícios", id: "beneficios", cor: "#ec4899", bg: "#fdf2f8" }
     ];
     card.innerHTML =
       '<div class="tl-quick-head"><div class="tl-sc-title" style="margin-bottom:0"><span class="tl-sc-title-ico">⚡</span>Ações rápidas</div><span class="tl-quick-personalizar">Personalizar ⚙</span></div>' +
