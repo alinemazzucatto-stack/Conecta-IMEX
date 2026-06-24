@@ -5107,8 +5107,8 @@ function grhRenderSetorStats(colabs) {
 // Tipos de documento disponíveis por vínculo — CLT recebe Holerite/Férias,
 // PJ recebe Ordem de Serviço/Nota Fiscal.
 const GRH_TIPOS_DOC = {
-  Sim: [['Holerite','📄'], ['Férias','🌴']],
-  Não: [['Ordem de Serviço','📋'], ['Nota Fiscal','🧾']]
+  Sim: [['Holerite','📄'], ['Férias','🌴'], ['IR','🧮']],
+  Não: [['Ordem de Serviço','📋'], ['Nota Fiscal','🧾'], ['IR','🧮']]
 };
 function grhAtualizarTiposDoc() {
   const sel = document.getElementById('grh-c-doc-tipo');

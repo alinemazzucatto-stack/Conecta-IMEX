@@ -33,7 +33,10 @@
     <div class="card">
       <div class="card-head">
         <div class="cht"><h2>📄 Documentos RH</h2><p>Políticas, procedimentos, contratos e termos — institucionais ou vinculados a um colaborador da Base Central.</p></div>
-        <button type="button" class="btn btn-p btn-sm" onclick="grhDocsAbrirModal()">📤 Enviar Documento</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn btn-g btn-sm" onclick="window.grhAbrirUploadMassa && window.grhAbrirUploadMassa()">📤 Upload em massa</button>
+          <button type="button" class="btn btn-p btn-sm" onclick="grhDocsAbrirModal()">📤 Enviar Documento</button>
+        </div>
       </div>
       <div class="card-body">
         <div class="tabs" id="grhDocsCatBar">

@@ -49,8 +49,8 @@ function esconderOutras(){
 }
 
 var TIPOS_LABEL = {
-  Sim: [['Holerite','📄'], ['Férias','🌴']],
-  Não: [['Ordem de Serviço','📋'], ['Nota Fiscal','🧾']]
+  Sim: [['Holerite','📄'], ['Férias','🌴'], ['IR','🧮']],
+  Não: [['Ordem de Serviço','📋'], ['Nota Fiscal','🧾'], ['IR','🧮']]
 };
 
 async function carregarMeusDocumentos(){
