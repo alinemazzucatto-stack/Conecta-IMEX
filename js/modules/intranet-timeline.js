@@ -603,7 +603,7 @@
     const card = document.createElement("div");
     card.className = "tl-sc";
     const itens = [
-      { ico: "📄", label: "Holerite", id: "beneficios", cor: "#3b82f6", bg: "#eff6ff" },
+      { ico: "📄", label: "Holerite", acao: "if(typeof window.abrirMeusDocumentos==='function')window.abrirMeusDocumentos()", cor: "#3b82f6", bg: "#eff6ff" },
       { ico: "🌴", label: "Férias", id: "solicitacao", cor: "#10b981", bg: "#ecfdf5" },
       { ico: "❤️", label: "Benefícios", id: "beneficios", cor: "#ec4899", bg: "#fdf2f8" },
       { ico: "🎧", label: "Chamados", id: "ouvidoria", cor: "#f97316", bg: "#fff7ed" },
@@ -615,8 +615,9 @@
       '<div class="tl-quick-grid">' +
       itens.map(i =>
         '<div class="tl-quick-item" onclick="' +
-          (i.tipo ? "if(typeof window.intraSelecionar==='function')window.intraSelecionar('" + i.tipo + "');" : "") +
-          "if(typeof window.sbNav==='function')window.sbNav('" + i.id + "')\">" +
+          (i.acao ? i.acao :
+            (i.tipo ? "if(typeof window.intraSelecionar==='function')window.intraSelecionar('" + i.tipo + "');" : "") +
+            "if(typeof window.sbNav==='function')window.sbNav('" + i.id + "')") + '">' +
           '<div class="tl-quick-ico" style="background:' + i.bg + ";color:" + i.cor + '">' + i.ico + "</div>" +
           '<div class="tl-quick-label">' + i.label + "</div></div>"
       ).join("") +
