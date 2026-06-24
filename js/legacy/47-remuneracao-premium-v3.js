@@ -373,13 +373,13 @@
   const oldGrhTab=window.grhTab;
   window.grhTab=function(tab,btn){
     const ret=typeof oldGrhTab==='function'?oldGrhTab.apply(this,arguments):undefined;
-    if(String(tab||'').toLowerCase().includes('remun')){window.__remPremiumRenderedV3=false;setTimeout(aplicar,100);setTimeout(aplicar,500);setTimeout(aplicar,1200);}
+    if(String(tab||'').toLowerCase().includes('remun')){window.__remPremiumRenderedV3=false;aplicar();setTimeout(aplicar,500);setTimeout(aplicar,1200);}
     return ret;
   };
   document.addEventListener('click',function(ev){
     const el=ev.target&&ev.target.closest&&ev.target.closest('button,a,div'); if(!el)return;
     const txt=(el.innerText||'').toLowerCase(); const attrs=((el.getAttribute('onclick')||'')+' '+(el.getAttribute('data-rh-tab')||'')+' '+(el.getAttribute('data-target')||'')).toLowerCase();
-    if(txt.includes('remuneração')||txt.includes('remuneracao')||attrs.includes('remun')){window.__remPremiumRenderedV3=false;setTimeout(aplicar,250);setTimeout(aplicar,900);}
+    if(txt.includes('remuneração')||txt.includes('remuneracao')||attrs.includes('remun')){window.__remPremiumRenderedV3=false;aplicar();setTimeout(aplicar,900);}
   },true);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(aplicar,900)); else setTimeout(aplicar,900);
 })();
