@@ -42,7 +42,7 @@
     'organograma':['🏢','Organograma'], 'meu-desenvolvimento':['✨','Meu Desenvolvimento'],
     'mapeamento-talentos':['📈','Mapeamento de Talentos'], 'gestor':['👔','Gestão de Equipe'],
     'rh':['🏢','RH'], 'calendario':['📅','Calendário'], 'usuarios':['🔑','Gestão de Acessos'],
-    'colaboradores':['👥','Colaboradores']
+    'colaboradores':['👥','Colaboradores'], 'mais':['📦','Mais']
   };
 
   /* ── loaders: chamados APÓS showView ── */
@@ -73,11 +73,11 @@
   }
 
   /* ── ACCESS ── */
-  const ORDER_COLAB   = ['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','conecta-ai','ouvidoria'];
-  const ORDER_GESTOR  = [...ORDER_COLAB,'gestor'];
+  const ORDER_COLAB   = ['intranet','estrutura-carreira','desenvolvimento','mais','ouvidoria'];
+  const ORDER_GESTOR  = ['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','conecta-ai','ouvidoria','gestor'];
   const ORDER_RH      = ['gestao-rh','desenvolvimento-talentos','pesquisas','dashboard','ouvidoria','conecta-ai','auditoria'];
   const ACCESS = {
-    colaborador: [...ORDER_COLAB,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento'],
+    colaborador: [...ORDER_COLAB,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','pesquisas','beneficios','solicitacao','conecta-ai'],
     gestor:      [...ORDER_GESTOR,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento'],
     rh:          [...ORDER_RH,'experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos','organograma','usuarios','colaboradores','rh','gestao-rh'],
     'rh-colaborador': [...ORDER_RH,'experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos','organograma','usuarios','colaboradores','rh','gestao-rh']
@@ -104,7 +104,7 @@
     const order = r==='rh'||r==='rh-colaborador' ? ORDER_RH : (r==='gestor' ? ORDER_GESTOR : ORDER_COLAB);
     const sidebar = document.getElementById('sidebar');
     if(!sidebar) return;
-    const known = [...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos'])];
+    const known = [...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos','pesquisas','beneficios','solicitacao','conecta-ai','mais'])];
     known.forEach(id=>{
       const el = document.getElementById('sb-'+id);
       if(el) el.style.setProperty('display', order.includes(id)?'flex':'none', 'important');

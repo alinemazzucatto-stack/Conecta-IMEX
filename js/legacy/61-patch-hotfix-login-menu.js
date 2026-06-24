@@ -11,6 +11,7 @@
     pesquisas:['📋','Pesquisas'],
     ouvidoria:['📢','Ouvidoria'],
     'conecta-ai':['🤖','Conecta AI'],
+    mais:['📦','Mais'],
     gestor:['👔','Gestor'],
     'gestao-rh':['🏢','Gestão RH'],
     dashboard:['📊','Dashboard RH'],
@@ -19,7 +20,7 @@
   };
 
   const MENU = {
-    colaborador:['intranet','gamificacao','estrutura-carreira','beneficios','solicitacao','pesquisas','ouvidoria','conecta-ai'],
+    colaborador:['intranet','gamificacao','estrutura-carreira','mais','ouvidoria'],
     gestor:['intranet','gamificacao','estrutura-carreira','solicitacao','gestor','pesquisas','beneficios','ouvidoria','conecta-ai'],
     rh:['gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
   };

@@ -268,10 +268,12 @@ function verificarKeyAntes() {
     <div class="sb-item" id="sb-gamificacao" onclick="sbNav('gamificacao')" title=""><span>🏆</span><span class="sb-tip">Gamificação</span></div>
     <div class="sb-item" id="sb-estrutura-carreira" onclick="event.stopImmediatePropagation();window._fixEstruturaMeuDev?window._fixEstruturaMeuDev('estrutura-carreira'):sbNav('estrutura-carreira')" title=""><span>🏢</span><span class="sb-tip">Estrutura e Carreira</span></div>
 
-    <div class="sb-item" id="sb-pesquisas" onclick="sbNav('pesquisas')" title=""><span>📋</span><span class="sb-tip">Pesquisas</span></div>
-    <div class="sb-item" id="sb-beneficios" onclick="sbNav('beneficios')" title=""><span>🎁</span><span class="sb-tip">Meus Benefícios</span></div>
-    <div class="sb-item" id="sb-solicitacao" onclick="sbNav('solicitacao')" title=""><span>🌴</span><span class="sb-tip">Férias</span></div>
-    <div class="sb-item" id="sb-conecta-ai" onclick="sbNav('conecta-ai')" title=""><span>🤖</span><span class="sb-tip">Conecta AI</span></div>
+    <div class="sb-item" id="sb-mais" onclick="sbNav('mais')" title=""><span>📦</span><span class="sb-tip">Mais</span></div>
+    <!-- ── Movidos para dentro do hub "Mais" (ocultos no menu, acessíveis via HUB) ── -->
+    <div class="sb-item" id="sb-pesquisas" onclick="sbNav('pesquisas')" style="display:none" title=""><span>📋</span><span class="sb-tip">Pesquisas</span></div>
+    <div class="sb-item" id="sb-beneficios" onclick="sbNav('beneficios')" style="display:none" title=""><span>🎁</span><span class="sb-tip">Meus Benefícios</span></div>
+    <div class="sb-item" id="sb-solicitacao" onclick="sbNav('solicitacao')" style="display:none" title=""><span>🌴</span><span class="sb-tip">Férias</span></div>
+    <div class="sb-item" id="sb-conecta-ai" onclick="sbNav('conecta-ai')" style="display:none" title=""><span>🤖</span><span class="sb-tip">Conecta AI</span></div>
     <div class="sb-item" id="sb-ouvidoria" onclick="sbNav('ouvidoria')" title=""><span>📢</span><span class="sb-tip">Ouvidoria</span></div>
     <!-- ── SUB-MÓDULOS colaborador (ocultos no menu, acessíveis via HUB) ── -->
     <div class="sb-item" id="sb-organograma" onclick="sbNav('organograma')" style="display:none" title=""><span>🏢</span><span class="sb-tip">Organograma</span></div>
@@ -2993,6 +2995,51 @@ function verificarKeyAntes() {
     </button>
   </div>
 </div>
+
+<!-- ══ VIEW HUB: MAIS ══ -->
+<div id="view-mais" class="page" style="display:none">
+  <div class="hero" style="background:radial-gradient(at 18% 15%, #1d54d6 0%, transparent 48%), radial-gradient(at 85% 5%, #061535 0%, transparent 45%), radial-gradient(at 88% 92%, #1f7fe0 0%, transparent 55%), radial-gradient(at 5% 95%, #040d24 0%, transparent 45%), #0a1d4a!important">
+    <div class="h-content">
+      <div class="h-eyebrow">Mais · Colaborador</div>
+      <h1>MAIS</h1>
+      <p>Férias, benefícios, pesquisas e o assistente Conecta AI, reunidos num só lugar.</p>
+    </div>
+    <div class="h-stats">
+      <div class="h-stat"><span class="h-num">4</span><span class="h-lbl">Cards</span></div>
+    </div>
+  </div>
+
+  <div class="aline-arq-grid">
+    <button class="aline-arq-card" onclick="sbNav('solicitacao')">
+      <div class="aline-arq-ico">🌴</div>
+      <h3>Férias</h3>
+      <p>Solicite férias, acompanhe status de aprovação e veja seu saldo de dias.</p>
+      <div class="aline-arq-tags"><span>Solicitar</span><span>Status</span><span>Saldo</span></div>
+    </button>
+
+    <button class="aline-arq-card" onclick="sbNav('beneficios')">
+      <div class="aline-arq-ico">🎁</div>
+      <h3>Meus Benefícios</h3>
+      <p>Plano de saúde, odontológico, vale alimentação/refeição e demais benefícios.</p>
+      <div class="aline-arq-tags"><span>Saúde</span><span>Odonto</span><span>VA/VR</span></div>
+    </button>
+
+    <button class="aline-arq-card" onclick="sbNav('pesquisas')">
+      <div class="aline-arq-ico">📋</div>
+      <h3>Pesquisas</h3>
+      <p>Pesquisas de clima, satisfação e engajamento abertas para você responder.</p>
+      <div class="aline-arq-tags"><span>Clima</span><span>Satisfação</span><span>Engajamento</span></div>
+    </button>
+
+    <button class="aline-arq-card" onclick="sbNav('conecta-ai')">
+      <div class="aline-arq-ico">🤖</div>
+      <h3>Conecta AI</h3>
+      <p>Assistente virtual para dúvidas sobre férias, PDI, trilha de carreira e comunicados.</p>
+      <div class="aline-arq-tags"><span>Dúvidas</span><span>PDI</span><span>Carreira</span></div>
+    </button>
+  </div>
+</div>
+
 <!-- ══ VIEW TRILHAS DE CARREIRA ══ -->
 <div id="view-trilhas" class="page" style="display:none">
   <div class="hero" style="background:radial-gradient(at 18% 15%, #1d54d6 0%, transparent 48%), radial-gradient(at 85% 5%, #061535 0%, transparent 45%), radial-gradient(at 88% 92%, #1f7fe0 0%, transparent 55%), radial-gradient(at 5% 95%, #040d24 0%, transparent 45%), #0a1d4a!important">
