@@ -2,14 +2,14 @@
 (function(){
   'use strict';
   const $ = id => document.getElementById(id);
-  const COLAB_MENU = ['intranet','gamificacao','estrutura-carreira','beneficios','solicitacao','pesquisas','ouvidoria','conecta-ai'];
+  const COLAB_MENU = ['intranet','gamificacao','estrutura-carreira','mais','ouvidoria'];
   const GESTOR_MENU = ['intranet','gamificacao','estrutura-carreira','solicitacao','gestor','pesquisas','beneficios','ouvidoria','conecta-ai'];
   const RH_MENU = ['gestao-rh','gamificacao','dashboard','ouvidoria','conecta-ai','auditoria'];
-  const COLAB_ALLOWED = new Set([...COLAB_MENU,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','desenvolvimento']);
+  const COLAB_ALLOWED = new Set([...COLAB_MENU,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','desenvolvimento','beneficios','solicitacao','pesquisas','conecta-ai']);
   const GESTOR_ALLOWED = new Set([...GESTOR_MENU,'organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','desenvolvimento']);
   const RH_ALLOWED = new Set([...RH_MENU,'estrutura-carreira','organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','desenvolvimento','gestor','solicitacao','pdi']);
   const META = {
-    intranet:['🏠','Intranet'], 'estrutura-carreira':['🏢','Estrutura e Carreira'], pesquisas:['📋','Pesquisas'], beneficios:['🎁','Meus Benefícios'], solicitacao:['🌴','Férias'], 'conecta-ai':['🤖','Conecta AI'], ouvidoria:['📢','Ouvidoria'], gamificacao:['🏆','Gamificação'], 'gestao-rh':['🏢','Gestão RH'], usuarios:['🔑','Gestão de Acessos'], dashboard:['📊','Dashboard RH'], auditoria:['📝','Auditoria'], gestor:['👔','Gestor'], organograma:['🏢','Organograma'], trilhas:['🚀','Trilhas de Carreira'], experiencia:['📆','Minha Experiência'], cargos:['📄','Descritivo de Cargos'], disc:['🧠','DISC'], 'meu-desenvolvimento':['✨','Meu Desenvolvimento'], desenvolvimento:['🌱','Desenvolvimento']
+    intranet:['🏠','Intranet'], 'estrutura-carreira':['🏢','Estrutura e Carreira'], pesquisas:['📋','Pesquisas'], beneficios:['🎁','Meus Benefícios'], solicitacao:['🌴','Férias'], 'conecta-ai':['🤖','Conecta AI'], ouvidoria:['📢','Ouvidoria'], gamificacao:['🏆','Gamificação'], 'gestao-rh':['🏢','Gestão RH'], usuarios:['🔑','Gestão de Acessos'], dashboard:['📊','Dashboard RH'], auditoria:['📝','Auditoria'], gestor:['👔','Gestor'], organograma:['🏢','Organograma'], trilhas:['🚀','Trilhas de Carreira'], experiencia:['📆','Minha Experiência'], cargos:['📄','Descritivo de Cargos'], disc:['🧠','DISC'], 'meu-desenvolvimento':['✨','Meu Desenvolvimento'], desenvolvimento:['🌱','Desenvolvimento'], mais:['📦','Mais']
   };
   function visualRole(){
     // NÃO ler o texto do #pLabel: dezenas de scripts escrevem nesse rótulo
