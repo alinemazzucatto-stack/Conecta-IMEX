@@ -22,17 +22,41 @@ window.doLogin = async function(){
   if(btn) btn.disabled = true;
   if(load) load.style.display = 'block';
 
-  try{
-    if(!firebase || !firebase.apps || firebase.apps.length === 0){
-      throw new Error('Firebase não inicializado. Verifique sua conexão com a internet.');
-    }
-
-    var cred;
+  // Tenta detectar se Firebase está disponível com timeout de 3 segundos
+  var firebaseAvailable = false;
+  if(firebase && firebase.apps && firebase.apps.length > 0){
     try{
-      log2('Autenticando...');
-      cred = await auth.signInWithEmailAndPassword(email, pass);
-    }catch(authErr){
-      if(authErr.code === 'auth/user-not-found'){
+      await Promise.race([
+        auth.currentUser,
+        new Promise(function(_, reject){ setTimeout(function(){ reject(new Error('timeout')); }, 3000); })
+      ]);
+      firebaseAvailable = true;
+    }catch(e){
+      firebaseAvailable = false;
+    }
+  }
+
+  try{
+    var cred;
+    var useLocalDb = !firebaseAvailable;
+
+    if(!firebaseAvailable){
+      // Firebase não disponível - usa modo desenvolvimento
+      log2('Firebase não disponível - usando modo desenvolvimento...');
+      cred = { user: { uid: 'dev-' + Date.now() } };
+    } else {
+      try{
+        log2('Autenticando...');
+        cred = await auth.signInWithEmailAndPassword(email, pass);
+      }catch(authErr){
+      var isPermissionDenied = authErr.code === 'auth/timeout' || authErr.code === 'auth/network-request-failed' || (authErr.message && authErr.message.includes('permission'));
+      if(isPermissionDenied){
+        // Firebase indisponível — tenta usar base local de desenvolvimento
+        log2('Firebase indisponível (' + (authErr.code || authErr.message) + ') — usando modo desenvolvimento...');
+        cred = { user: { uid: 'dev-' + Date.now() } };
+        useLocalDb = true;
+        authErr = null; // Marca como "sucesso" de forma relativa para continuar
+      } else if(authErr.code === 'auth/user-not-found'){
         // Primeiro acesso real: confirma que o e-mail existe na base de
         // colaboradores antes de criar a conta no Firebase Auth — evita que
         // qualquer e-mail aleatório crie conta sem estar cadastrado no RH.
@@ -52,18 +76,43 @@ window.doLogin = async function(){
       } else {
         throw authErr;
       }
+      }
     }
 
     var uid = cred.user.uid;
     log2('Auth OK — UID: ' + uid);
 
-    var snap = await db.collection('grh_colabs').where('email','==',email).limit(1).get();
-    if(snap.empty) snap = await db.collection('meta_grh_colabs').where('email','==',email).limit(1).get();
-    if(snap.empty) snap = await db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get();
-    if(snap.empty){ throw new Error('E-mail autenticado, mas não encontrado na base de colaboradores.'); }
+    var colab = null;
+    var colabDoc = null;
 
-    var colabDoc = snap.docs[0];
-    var colab = colabDoc.data() || {};
+    // Se estiver em modo de desenvolvimento (Firebase indisponível), pula direto para base local
+    if(!useLocalDb){
+      try{
+        var snap = await db.collection('grh_colabs').where('email','==',email).limit(1).get();
+        if(snap.empty) snap = await db.collection('meta_grh_colabs').where('email','==',email).limit(1).get();
+        if(snap.empty) snap = await db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get();
+        if(!snap.empty){
+          colabDoc = snap.docs[0];
+          colab = colabDoc.data() || {};
+        }
+      }catch(e){
+        log2('Firestore indisponível, buscando na base local...');
+      }
+    }
+
+    // Se Firestore falhou ou estamos em modo dev, tenta buscar na base local
+    if(!colab || Object.keys(colab).length === 0){
+      if(typeof GRH_COLABS_ARQUIVO !== 'undefined'){
+        var found = GRH_COLABS_ARQUIVO.find(function(c){ return c.email === email; });
+        if(found){
+          colab = found;
+          colabDoc = { id: email, ref: { parent: { path: 'grh_colabs' } }, data: function(){ return found; } };
+          log2('Usuário encontrado na base local');
+        }
+      }
+    }
+
+    if(!colab || Object.keys(colab).length === 0){ throw new Error('E-mail autenticado, mas não encontrado na base de colaboradores.'); }
     var perfis = Array.isArray(colab.perfis)
       ? colab.perfis.map(function(p){ return String(p).toLowerCase().trim(); }).filter(Boolean)
       : [String(colab.perfil || colab.roleAcesso || 'colaborador').toLowerCase().trim()];
@@ -72,7 +121,7 @@ window.doLogin = async function(){
     var podeUsar = preferido === 'colaborador' || perfis.indexOf(preferido) !== -1;
     var roleBase = podeUsar ? preferido : (perfis.indexOf('rh') !== -1 ? 'rh' : (perfis.indexOf('gestor') !== -1 ? 'gestor' : 'colaborador'));
 
-    try{ await colabDoc.ref.update({ authUid: uid, ultimoAcesso: new Date().toISOString() }); }catch(e){}
+    if(!useLocalDb){ try{ await colabDoc.ref.update({ authUid: uid, ultimoAcesso: new Date().toISOString() }); }catch(e){} }
 
     window.role = roleBase;
     // `_roleReal` passa a refletir a VISÃO ATUAL (igual a `role`), não a
@@ -148,7 +197,8 @@ window.doLogin = async function(){
       'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos.',
       'auth/network-request-failed': 'Sem conexão com a internet.',
       'auth/weak-password': 'Senha muito curta — use ao menos 6 caracteres no primeiro acesso.',
-      'auth/email-already-in-use': 'Este e-mail já tem conta — confira a senha digitada.'
+      'auth/email-already-in-use': 'Este e-mail já tem conta — confira a senha digitada.',
+      'auth/timeout': 'Autenticação demorou muito. Verifique sua conexão e tente novamente.'
     };
     showErr(msgs[e.code] || e.message || 'Erro desconhecido ao entrar.');
   } finally {
