@@ -182,34 +182,17 @@
   window.renderSidebar = renderMenu;
   window.atualizarSidebar = renderMenu;
 
-  function enterApp(r){
-    r = setRole(r || selectedLoginRole());
-    const email = ($('lEmail') && $('lEmail').value) ? $('lEmail').value.trim() : '';
-    window.currentUserData = {
-      nome: email ? email.split('@')[0] : (r === 'rh' ? 'RH' : r === 'gestor' ? 'Gestor' : 'Colaborador'),
-      email: email || '',
-      role: r,
-      perfis: [r],
-      unidade: 'meta'
-    };
-    try{
-      localStorage.setItem('usuarioLogado', JSON.stringify(window.currentUserData));
-      sessionStorage.setItem('userName', window.currentUserData.nome);
-      sessionStorage.setItem('userEmail', window.currentUserData.email);
-      sessionStorage.setItem('userPerfis', JSON.stringify([r]));
-    }catch(e){}
-
-    const login = $('loginScreen'); if(login) login.style.setProperty('display','none','important');
-    const shell = $('appShell'); if(shell) shell.style.setProperty('display','flex','important');
-
-    renderMenu();
-    navigate(r === 'rh' ? 'gestao-rh' : 'intranet');
-
-    return false;
-  }
-
-  window.entrarDemo = enterApp;
-  window.doLogin = function(){ return enterApp(selectedLoginRole()); };
+  // REMOVIDO (auditoria de segurança): esta função `enterApp` fabricava uma
+  // sessão de usuário só com o texto digitado no campo de e-mail, SEM
+  // verificar senha nenhuma no Firebase Auth, e era atribuída diretamente a
+  // `window.doLogin`/`window.entrarDemo`. Hoje quem define a versão real de
+  // `doLogin` é `js/modules/login-auth.js` (carregado depois, sobrescreve
+  // esta), então esta função fake nunca executa na ordem atual — mas por ser
+  // um login sem senha, deixá-la aqui era um risco grave: bastava um script
+  // carregar fora de ordem, ou `login-auth.js` falhar ao carregar, para
+  // qualquer pessoa entrar no sistema (inclusive como RH) digitando só um
+  // e-mail. `doLogin`/`entrarDemo` não são mais tocados neste arquivo — a
+  // única fonte de autenticação é `login-auth.js`.
 
   function init(){
     setRole(selectedLoginRole());
@@ -217,7 +200,6 @@
     const btn = $('lBtn');
     if(btn){
       btn.disabled = false;
-      btn.onclick = function(ev){ if(ev) ev.preventDefault(); return window.doLogin(); };
       btn.style.pointerEvents = 'auto';
     }
     const login = $('loginScreen');
