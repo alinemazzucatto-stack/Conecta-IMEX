@@ -9,12 +9,12 @@ var PDOT = {colaborador:'👤', gestor:'👔', rh:'🏢', 'rh-colaborador':'🏢
 
 function log2(msg){ try{ console.log('[login]', msg); }catch(e){} }
 
-// Alguns ambientes (firewall corporativo, extensão de navegador, rede
-// instável) bloqueiam especificamente o canal de streaming do Firestore
-// enquanto deixam a API de autenticação (REST simples) passar — nesse caso
-// o get() do Firestore nunca resolve nem rejeita, travando o login para
-// sempre em "Autenticando...". Todo acesso ao Firestore aqui passa por este
-// timeout para garantir que sempre caímos no fallback local em vez de travar.
+// Causa raiz do login travado em "Autenticando..." para sempre: as chamadas
+// de rede do Firebase (Auth e Firestore) não tinham nenhum timeout — em
+// ambientes com firewall/antivírus/extensão bloqueando esses domínios, a
+// Promise nunca resolve nem rejeita, e o await fica pendurado pra sempre
+// (nem o catch nem o finally chegam a rodar). Toda chamada de rede usada no
+// login passa por este helper para garantir que sempre há um desfecho.
 function comTimeout(promise, ms, motivo){
   try{ promise.catch(function(){}); }catch(e){} // evita "unhandled rejection" se resolver tarde
   return Promise.race([
@@ -38,41 +38,28 @@ window.doLogin = async function(){
   if(btn) btn.disabled = true;
   if(load) load.style.display = 'block';
 
-  // Tenta detectar se Firebase está disponível com timeout de 3 segundos
-  var firebaseAvailable = false;
-  if(firebase && firebase.apps && firebase.apps.length > 0){
-    try{
-      await Promise.race([
-        auth.currentUser,
-        new Promise(function(_, reject){ setTimeout(function(){ reject(new Error('timeout')); }, 3000); })
-      ]);
-      firebaseAvailable = true;
-    }catch(e){
-      firebaseAvailable = false;
-    }
-  }
-
   try{
-    var cred;
-    var useLocalDb = !firebaseAvailable;
+    if(!firebase || !firebase.apps || firebase.apps.length === 0){
+      throw new Error('Firebase não inicializado. Verifique sua conexão com a internet.');
+    }
 
-    if(!firebaseAvailable){
-      // Firebase não disponível - usa modo desenvolvimento
-      log2('Firebase não disponível - usando modo desenvolvimento...');
-      cred = { user: { uid: 'dev-' + Date.now() } };
-    } else {
-      try{
-        log2('Autenticando...');
-        cred = await auth.signInWithEmailAndPassword(email, pass);
-      }catch(authErr){
-      var isPermissionDenied = authErr.code === 'auth/timeout' || authErr.code === 'auth/network-request-failed' || (authErr.message && authErr.message.includes('permission'));
-      if(isPermissionDenied){
-        // Firebase indisponível — tenta usar base local de desenvolvimento
-        log2('Firebase indisponível (' + (authErr.code || authErr.message) + ') — usando modo desenvolvimento...');
-        cred = { user: { uid: 'dev-' + Date.now() } };
-        useLocalDb = true;
-        authErr = null; // Marca como "sucesso" de forma relativa para continuar
-      } else if(authErr.code === 'auth/user-not-found'){
+    var cred;
+
+    // IMPORTANTE (segurança): a verificação de senha SEMPRE passa pelo
+    // Firebase Auth de verdade. Uma versão anterior deste código "liberava"
+    // o acesso sem checar a senha quando a rede falhava/travava — isso é uma
+    // falha grave num sistema de RH com dados sensíveis (qualquer senha
+    // digitada para um e-mail existente entraria). Se a autenticação travar
+    // ou falhar por rede, o usuário recebe um erro claro e tenta de novo —
+    // nunca entra sem senha validada.
+    try{
+      log2('Autenticando...');
+      cred = await comTimeout(auth.signInWithEmailAndPassword(email, pass), 12000, 'signin');
+    }catch(authErr){
+      if(String(authErr.message || '').indexOf('firestore-timeout:signin') !== -1){
+        throw new Error('Não foi possível conectar ao servidor de autenticação (conexão lenta ou bloqueada). Verifique sua internet/rede e tente novamente.');
+      }
+      if(authErr.code === 'auth/user-not-found'){
         // Primeiro acesso real: confirma que o e-mail existe na base de
         // colaboradores antes de criar a conta no Firebase Auth — evita que
         // qualquer e-mail aleatório crie conta sem estar cadastrado no RH.
@@ -100,10 +87,9 @@ window.doLogin = async function(){
           throw new Error('E-mail não cadastrado na base de colaboradores.');
         }
         log2('Cadastro encontrado — criando conta de acesso (primeiro login)...');
-        cred = await auth.createUserWithEmailAndPassword(email, pass);
+        cred = await comTimeout(auth.createUserWithEmailAndPassword(email, pass), 12000, 'signup');
       } else {
         throw authErr;
-      }
       }
     }
 
@@ -112,6 +98,7 @@ window.doLogin = async function(){
 
     var colab = null;
     var colabDoc = null;
+    var useLocalDb = false;
 
     // Se estiver em modo de desenvolvimento (Firebase indisponível), pula direto para base local
     var firestoreTravou = false;
