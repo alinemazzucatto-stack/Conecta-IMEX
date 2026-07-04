@@ -61,14 +61,26 @@ window.doLogin = async function(){
         // colaboradores antes de criar a conta no Firebase Auth — evita que
         // qualquer e-mail aleatório crie conta sem estar cadastrado no RH.
         log2('Conta não existe ainda — verificando cadastro em grh_colabs...');
-        var existe = await db.collection('grh_colabs').where('email','==',email).limit(1).get();
-        if(existe.empty){
-          existe = await db.collection('meta_grh_colabs').where('email','==',email).limit(1).get();
+        var achouCadastro = false;
+        try{
+          var existe = await db.collection('grh_colabs').where('email','==',email).limit(1).get();
+          if(existe.empty){
+            existe = await db.collection('meta_grh_colabs').where('email','==',email).limit(1).get();
+          }
+          if(existe.empty){
+            existe = await db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get();
+          }
+          achouCadastro = !existe.empty;
+        }catch(e){
+          // Firestore sem permissão para consulta pré-login (comum quando as
+          // regras exigem autenticação até para leitura) — cai para a base
+          // local do arquivo antes de desistir.
+          log2('Firestore indisponível para verificação — checando base local...');
         }
-        if(existe.empty){
-          existe = await db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get();
+        if(!achouCadastro && typeof GRH_COLABS_ARQUIVO !== 'undefined'){
+          achouCadastro = GRH_COLABS_ARQUIVO.some(function(c){ return c.email === email; });
         }
-        if(existe.empty){
+        if(!achouCadastro){
           throw new Error('E-mail não cadastrado na base de colaboradores.');
         }
         log2('Cadastro encontrado — criando conta de acesso (primeiro login)...');
