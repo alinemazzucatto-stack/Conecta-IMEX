@@ -4207,10 +4207,14 @@ auth.onAuthStateChanged(async (user) => {
       sessionStorage.setItem('userRole',  role);
       sessionStorage.setItem('userName',  udata.nome  || user.email);
       sessionStorage.setItem('userEmail', udata.email || user.email);
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('appShell').style.display    = 'flex';
-      document.getElementById('pLabel').textContent = PLBL[role] || role;
-      document.getElementById('pDot').textContent   = PDOT[role] || '👤';
+      var loginScreenEl = document.getElementById('loginScreen');
+      var appShellEl = document.getElementById('appShell');
+      if(loginScreenEl) loginScreenEl.style.display = 'none';
+      if(appShellEl) appShellEl.style.display = 'flex';
+      var pLabelEl = document.getElementById('pLabel');
+      if(pLabelEl) pLabelEl.textContent = PLBL[role] || role;
+      var pDotEl = document.getElementById('pDot');
+      if(pDotEl) pDotEl.textContent = PDOT[role] || '👤';
       buildSidebar();
       const pU2 = document.getElementById('pUnidade');
       if (pU2) pU2.textContent = currentUnidade === 'xpert' ? '⚡ Xpert' : '🏢 Meta';
@@ -4223,12 +4227,16 @@ auth.onAuthStateChanged(async (user) => {
       }, 0);
     } catch(e) {
       console.error('Erro ao restaurar sessão:', e);
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('appShell').style.display    = 'none';
+      var loginScreenEl = document.getElementById('loginScreen');
+      var appShellEl = document.getElementById('appShell');
+      if(loginScreenEl) loginScreenEl.style.display = 'flex';
+      if(appShellEl) appShellEl.style.display = 'none';
     }
   } else {
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('appShell').style.display    = 'none';
+    var loginScreenEl = document.getElementById('loginScreen');
+    var appShellEl = document.getElementById('appShell');
+    if(loginScreenEl) loginScreenEl.style.display = 'flex';
+    if(appShellEl) appShellEl.style.display = 'none';
   }
 });
 
@@ -5104,10 +5112,12 @@ function grhRenderSetorStats(colabs) {
 // ── Modal colaborador ──
 
 // ── Lógica do Prontuário (Documentos) ──
-// Tipos de documento disponíveis por vínculo — CLT recebe Holerite/Férias,
+// Tipos de documento disponíveis por vínculo — CLT recebe Férias/IR,
 // PJ recebe Ordem de Serviço/Nota Fiscal.
+// "Holerite" foi removido daqui de propósito: a importação em massa agora é feita
+// pelo Upload Automático de Holerites (PDF), em Remuneração → Ações da Folha.
 const GRH_TIPOS_DOC = {
-  Sim: [['Holerite','📄'], ['Férias','🌴'], ['IR','🧮']],
+  Sim: [['Férias','🌴'], ['IR','🧮']],
   Não: [['Ordem de Serviço','📋'], ['Nota Fiscal','🧾'], ['IR','🧮']]
 };
 function grhAtualizarTiposDoc() {
@@ -5405,6 +5415,21 @@ async function grhAbrirModalColab(id) {
     setV('grh-c-status',    c.status);
     setV('grh-c-salario',   c.salario);
     setV('grh-c-role',      c.roleAcesso || 'colaborador');
+    setV('grh-c-telefone',  c.telefone);
+    setV('grh-c-email-pessoal', c.emailPessoal);
+    setV('grh-c-rg',        c.rg);
+    setV('grh-c-estadocivil', c.estadoCivil);
+    setV('grh-c-emerg-nome', c.emergenciaNome);
+    setV('grh-c-emerg-tel', c.emergenciaTelefone);
+    setV('grh-c-tipocontrato', c.tipoContrato || (c.clt === 'Sim' ? 'CLT' : 'PJ'));
+    setV('grh-c-nivel',     c.nivel);
+    setV('grh-c-ctps-num',  c.ctpsNumero);
+    setV('grh-c-ctps-serie', c.ctpsSerie);
+    setV('grh-c-pis',       c.pis);
+    setV('grh-c-banco',     c.banco);
+    setV('grh-c-agencia',   c.agencia);
+    setV('grh-c-conta',     c.conta);
+    setV('grh-c-tipoconta', c.tipoConta);
     grhAtualizarTiposDoc();
     grhRenderProntuario(c.prontuario || []);
     grhRenderHolerites(c.holerites || []);
@@ -5415,8 +5440,11 @@ async function grhAbrirModalColab(id) {
     document.getElementById('grh-colab-id').value = '';
     ['grh-c-nome','grh-c-matricula','grh-c-email','grh-c-cpf','grh-c-funcao','grh-c-setor',
      'grh-c-unidade','grh-c-gestor','grh-c-gestor-email',
-     'grh-c-nasc','grh-c-admissao','grh-c-salario'].forEach(eid => setV(eid,''));
-    setV('grh-c-clt','Sim'); setV('grh-c-status','Ativo'); setV('grh-c-role','colaborador');
+     'grh-c-nasc','grh-c-admissao','grh-c-salario',
+     'grh-c-telefone','grh-c-email-pessoal','grh-c-rg','grh-c-estadocivil','grh-c-emerg-nome','grh-c-emerg-tel',
+     'grh-c-nivel','grh-c-ctps-num','grh-c-ctps-serie','grh-c-pis',
+     'grh-c-banco','grh-c-agencia','grh-c-conta','grh-c-tipoconta'].forEach(eid => setV(eid,''));
+    setV('grh-c-clt','Sim'); setV('grh-c-status','Ativo'); setV('grh-c-role','colaborador'); setV('grh-c-tipocontrato','CLT');
     document.getElementById('grh-c-prontuario-area').style.display = 'none';
   }
   modal.style.display = 'flex';
@@ -5433,12 +5461,30 @@ async function grhSalvarColab() {
     cpf:        g('grh-c-cpf'),
     funcao:     g('grh-c-funcao'),
     setor:      g('grh-c-setor'),
+    unidade:    g('grh-c-unidade'),
+    gestor:     g('grh-c-gestor'),
+    gestorEmail: g('grh-c-gestor-email'),
     nascimento: g('grh-c-nasc'),
     admissao:   g('grh-c-admissao'),
     clt:        g('grh-c-clt'),
     status:     g('grh-c-status'),
     salario:    parseFloat(g('grh-c-salario')) || null,
     roleAcesso,
+    telefone:   g('grh-c-telefone'),
+    emailPessoal: g('grh-c-email-pessoal'),
+    rg:         g('grh-c-rg'),
+    estadoCivil: g('grh-c-estadocivil'),
+    emergenciaNome: g('grh-c-emerg-nome'),
+    emergenciaTelefone: g('grh-c-emerg-tel'),
+    tipoContrato: g('grh-c-tipocontrato'),
+    nivel:      g('grh-c-nivel'),
+    ctpsNumero: g('grh-c-ctps-num'),
+    ctpsSerie:  g('grh-c-ctps-serie'),
+    pis:        g('grh-c-pis'),
+    banco:      g('grh-c-banco'),
+    agencia:    g('grh-c-agencia'),
+    conta:      g('grh-c-conta'),
+    tipoConta:  g('grh-c-tipoconta'),
   };
   if (!dados.nome) { alert('Nome é obrigatório.'); return; }
   try {
