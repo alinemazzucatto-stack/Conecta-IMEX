@@ -7,8 +7,21 @@
   const RH_ALLOWED = new Set(['intranet','gestao-rh','usuarios','dashboard','auditoria','pesquisas','beneficios','conecta-ai','ouvidoria','gamificacao','estrutura-carreira','organograma','trilhas','experiencia','cargos','disc','meu-desenvolvimento','desenvolvimento','gestor','solicitacao','pdi']);
   const META = {intranet:['🏠','Intranet'],'estrutura-carreira':['🏢','Estrutura e Carreira'],gamificacao:['🏆','Gamificação'],'gestao-rh':['🏢','Gestão RH'],beneficios:['🎁','Meus Benefícios'],pesquisas:['📋','Pesquisas'],solicitacao:['🌴','Férias'],ouvidoria:['📢','Ouvidoria'],'conecta-ai':['🤖','Conecta AI'],dashboard:['📊','Dashboard RH'],auditoria:['📝','Auditoria'],usuarios:['🔑','Gestão de Acessos'],gestor:['👔','Gestor']};
 
+  // Causa de um loop infinito real (RangeError: Maximum call stack size
+  // exceeded em sbNav/navegar/gestaoRhCarregar): esta função e a `role()`
+  // de 23-legacy.js liam fontes DIFERENTES para decidir o papel atual —
+  // esta priorizava sessionStorage/localStorage (que podem ficar
+  // desatualizados entre sessões/testes), enquanto 23-legacy.js prioriza as
+  // variáveis vivas (window._roleAtivo/_roleReal/role, atualizadas a cada
+  // login). Quando as duas discordavam, uma função redirecionava
+  // 'gestao-rh'→'intranet' achando que não é RH, e a outra redirecionava
+  // 'intranet'→'gestao-rh' achando que é — um ping-pong sem fim. Agora as
+  // duas leem a MESMA fonte, na mesma ordem de prioridade.
   function roleAtual(){
-    const p = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('role') || localStorage.getItem('imexPreferredRole') || localStorage.getItem('role') || '').toLowerCase();
+    const vivo = String(window._roleAtivo || window._roleReal || window.role || '').toLowerCase().trim();
+    if(['rh','gestor','colaborador'].includes(vivo)) return vivo;
+    if(vivo === 'rh-colaborador') return 'rh';
+    const p = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || sessionStorage.getItem('role') || localStorage.getItem('imexPreferredRole') || localStorage.getItem('role') || '').toLowerCase();
     if(['rh','gestor','colaborador'].includes(p)) return p;
     const label = (($('pLabel')||{}).textContent || '').toLowerCase();
     if(label.includes('rh')) return 'rh';
