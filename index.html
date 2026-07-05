@@ -4728,8 +4728,18 @@ Desenvolvimento, Movimentações e Auditoria.
    dinâmico à direita (cards de notificação flutuando + rede de conexão).
    Substitui visualmente o layout centralizado único, mantendo a mesma
    identidade índigo do resto do sistema. */
+/* IMPORTANTE: `display` aqui NÃO pode ter !important. O login bem-sucedido
+   (js/modules/login-auth.js e o onAuthStateChanged em 02-legacy.js) esconde
+   esta tela com `loginScreen.style.display = 'none'` (inline, sem
+   !important) — um !important no CSS sempre vence um style inline sem
+   !important, então a tela de login nunca desaparecia de verdade depois de
+   um login válido: ela ficava por cima (z-index alto) do app já carregado
+   por baixo, parecendo que o login "não funcionava" / "voltava sozinho".
+   As demais propriedades continuam !important pois só importam enquanto
+   este elemento já está com display:flex (não competem com nenhum código
+   que precise trocar para display:none). */
 #loginScreen{
-  display:flex !important;
+  display:flex;
   align-items:stretch !important;
   justify-content:flex-start !important;
   background:#0d0b1f !important;
