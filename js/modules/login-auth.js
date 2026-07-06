@@ -38,6 +38,16 @@ window.doLogin = async function(){
   if(btn) btn.disabled = true;
   if(load) load.style.display = 'block';
 
+  // Existe um SEGUNDO listener (auth.onAuthStateChanged em 02-legacy.js) que
+  // reage à MESMA autenticação de forma independente, usando outra coleção
+  // (`users`) e outra lógica de papel — os dois corriam em paralelo e o que
+  // terminasse primeiro "vencia", às vezes deixando `window.currentUserData`
+  // vazio ou o papel errado (colaborador em vez de rh, etc.), causando
+  // oscilações visuais e inconsistências após o login. Esta flag avisa esse
+  // outro listener para não fazer nada enquanto ESTE login (a fonte
+  // completa e correta) está em andamento.
+  window.__loginEmAndamento = true;
+
   try{
     if(!firebase || !firebase.apps || firebase.apps.length === 0){
       throw new Error('Firebase não inicializado. Verifique sua conexão com a internet.');
@@ -226,6 +236,7 @@ window.doLogin = async function(){
   } finally {
     if(btn) btn.disabled = false;
     if(load) load.style.display = 'none';
+    window.__loginEmAndamento = false;
   }
 };
 

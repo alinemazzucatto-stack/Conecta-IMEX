@@ -4173,6 +4173,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // INICIALIZAÇÃO — Firebase Auth listener
 // ══════════════════════════════════════
 auth.onAuthStateChanged(async (user) => {
+  // Login em andamento pelo fluxo real (js/modules/login-auth.js) — ele já
+  // cuida de tudo (coleção correta grh_colabs, papel/perfis, navegação).
+  // Sem esta checagem, este listener corria em paralelo com aquele fluxo,
+  // usando a coleção `users` (não `grh_colabs`) e um papel padrão diferente
+  // — o que terminasse primeiro "vencia" a corrida, deixando
+  // `window.currentUserData` vazio ou o papel errado às vezes. Aqui só
+  // resta a função original deste listener: restaurar uma sessão já
+  // autenticada quando a página é recarregada SEM passar pelo botão Entrar.
+  if (window.__loginEmAndamento) return;
   if (user) {
     try {
       const userDoc = await db.collection('users').doc(user.uid).get();
@@ -4202,8 +4211,16 @@ auth.onAuthStateChanged(async (user) => {
       // oscilando entre RH/colaborador a cada recarregamento de página.
       window.role = role;
       window._roleReal = _roleReal;
+      // Mesmo problema do `role`/`_roleReal` logo acima: `currentUserData`/
+      // `currentUnidade` são `let` no topo do arquivo, então atribuir só a
+      // variável "pura" não cria `window.currentUserData` — e é isso que
+      // login-auth.js e várias outras funções leem. Sem espelhar em
+      // `window.`, um simples F5 estando logado deixava `window.currentUserData`
+      // indefinido até alguma outra ação recarregar os dados.
       currentUserData = udata;
       currentUnidade  = udata.unidade || 'meta';
+      window.currentUserData = currentUserData;
+      window.currentUnidade  = currentUnidade;
       sessionStorage.setItem('userRole',  role);
       sessionStorage.setItem('userName',  udata.nome  || user.email);
       sessionStorage.setItem('userEmail', udata.email || user.email);

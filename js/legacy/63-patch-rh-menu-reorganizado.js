@@ -15,10 +15,22 @@
   };
 
   function $(id){ return document.getElementById(id); }
+  // Causa de um flash real do menu de RH ao logar como colaborador: esta
+  // função checava a CLASSE do <body> e o TEXTO do rótulo de perfil ANTES
+  // das variáveis vivas do papel — mas body/pLabel podem ficar um instante
+  // com o valor de uma renderização anterior (ex.: sessão de RH anterior na
+  // mesma aba) até o login atual terminar de os atualizar. Como esta função
+  // roda em timers independentes do login (100ms/500ms após o carregamento
+  // da página), ela podia "ver" esse resíduo e montar o menu de RH mesmo
+  // quando `window.role` já dizia "colaborador" corretamente. Agora as
+  // variáveis vivas (mesma fonte usada no login) têm prioridade absoluta.
   function roleAtualSeguro(){
+    const vivo = String(window.currentUserRole || window.selectedRole || window._roleReal || window.role || '').toLowerCase().trim();
+    if(vivo === 'rh' || vivo === 'rh-colaborador') return 'rh';
+    if(vivo === 'gestor' || vivo === 'colaborador') return vivo;
     const bodyRh = document.body && document.body.classList.contains('role-rh');
     const label = (($('pLabel') && $('pLabel').textContent) || '').toLowerCase();
-    const stored = String(window.currentUserRole || window.role || window.selectedRole || window._roleReal || sessionStorage.getItem('userRole') || sessionStorage.getItem('imexPreferredRole') || '').toLowerCase();
+    const stored = String(sessionStorage.getItem('userRole') || sessionStorage.getItem('imexPreferredRole') || '').toLowerCase();
     if(bodyRh || label === 'rh' || stored === 'rh' || stored.includes('rh')) return 'rh';
     if(stored.includes('gestor')) return 'gestor';
     return 'colaborador';
