@@ -44,14 +44,7 @@
       }
     }
 
-    // Oculta a tabela se existir (deixa só os cards coloridos visíveis)
-    const table = pane.querySelector('table');
-    if(table) {
-      const deveOcultar = table.style.display !== 'none';
-      if(deveOcultar) {
-        table.style.setProperty('display', 'none', 'important');
-      }
-    }
+    // Tabela é parte do painel premium — deixar visível
   }
 
   // Observa mudanças no painel e força visibilidade
