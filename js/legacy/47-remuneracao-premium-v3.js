@@ -240,36 +240,7 @@
           </div>
         </div>
 
-        <div class="rem-card">
-          <div class="rem-card-head">
-            <div><h2>📋 Remuneração dos Colaboradores</h2><p>Base real de colaboradores. Salários aparecem como “Não informado” quando não existem no cadastro.</p></div>
-            <div class="rem-tools">
-              <button class="btn btn-g" onclick="window.remExportExcelV3()">📊 Exportar Excel</button>
-              <button class="btn btn-g" onclick="window.remExportPDFV3()">📄 Exportar PDF</button>
-              <button class="btn btn-g" onclick="typeof grhBaixarModeloHolerites==='function' && grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
-              <button class="btn btn-g" onclick="document.getElementById('rem-holerites-file-input-v3').click()">📤 Importar holerites</button>
-              <input type="file" id="rem-holerites-file-input-v3" accept=".xlsx,.xls" style="display:none" onchange="typeof grhImportarHolerites==='function' && grhImportarHolerites(this)"/>
-              <button class="btn btn-p" onclick="window.remNovaAlteracaoV3()">+ Nova Alteração</button>
-            </div>
-          </div>
-          <div class="rem-card-body">
-            <div class="rem-filter-row">
-              <input id="remBuscaV3" placeholder="Buscar colaborador, cargo ou setor..." oninput="window.remFiltrarV3()">
-              <select id="remTipoV3" onchange="window.remFiltrarV3()"><option value="">Tipo contrato</option><option>CLT</option><option>PJ</option></select>
-              <select id="remSetorV3" onchange="window.remFiltrarV3()"><option value="">Setor</option>${[...new Set(colaboradoresRem.map(c=>c.setor).filter(Boolean))].map(s=>`<option>${esc(s)}</option>`).join('')}</select>
-              <select id="remFaixaV3" onchange="window.remFiltrarV3()"><option value="">Faixa salarial</option><option value="0">Sem salário informado</option><option value="2000">Até R$ 2.000</option><option value="4000">R$ 2.001 a R$ 4.000</option><option value="6000">R$ 4.001 a R$ 6.000</option><option value="6001">Acima de R$ 6.000</option></select>
-              <button class="btn btn-g" onclick="window.remLimparFiltrosV3()">Limpar</button>
-            </div>
-            <div class="rem-table-wrap">
-              <table class="rem-table">
-                <thead><tr><th>Colaborador</th><th>Cargo</th><th>Setor</th><th>Tipo</th><th>Salário Atual</th><th>Último Reajuste</th><th>Status</th><th>Ações</th></tr></thead>
-                <tbody id="remTbodyV3">${renderRows(colaboradoresRem)}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="rem-grid-2">
+        <div class=”rem-grid-2”>
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>🏢 Custos por Centro de Custo</h2><p>Somatório dos salários e benefícios informados por área.</p></div></div>
             <div class="rem-card-body"><div class="rem-bars">
