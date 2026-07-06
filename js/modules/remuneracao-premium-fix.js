@@ -47,33 +47,21 @@
     // Tabela é parte do painel premium — deixar visível
   }
 
-  // Observa mudanças no painel e força visibilidade
-  function observarMudancas() {
+  // Executa uma única vez quando o painel fica pronto
+  function init() {
     const pane = document.getElementById('grh-pane-remuneracao') || document.getElementById('grh-pane-remuneracoes');
     if(!pane) {
-      setTimeout(observarMudancas, 500);
+      setTimeout(init, 500);
       return;
     }
-
+    // Garante que o painel premium está visível (executa uma única vez)
     forcarVisibilidade();
-
-    // Cria um MutationObserver para garantir que o painel colorido continue visível
-    const observer = new MutationObserver(() => {
-      forcarVisibilidade();
-    });
-
-    observer.observe(pane, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class']
-    });
   }
 
   // Inicia quando o DOM estiver pronto
   if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', observarMudancas);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    setTimeout(observarMudancas, 500);
+    setTimeout(init, 500);
   }
 })();
