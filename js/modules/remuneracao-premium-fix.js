@@ -46,8 +46,11 @@
 
     // Oculta a tabela se existir (deixa só os cards coloridos visíveis)
     const table = pane.querySelector('table');
-    if(table && table.style.marginTop !== '32px') {
-      table.style.marginTop = '32px';
+    if(table) {
+      const deveOcultar = table.style.display !== 'none';
+      if(deveOcultar) {
+        table.style.setProperty('display', 'none', 'important');
+      }
     }
   }
 
@@ -80,7 +83,4 @@
   } else {
     setTimeout(observarMudancas, 500);
   }
-
-  // Monitora quando o painel de remuneração é aberto
-  setInterval(forcarVisibilidade, 1000);
 })();
