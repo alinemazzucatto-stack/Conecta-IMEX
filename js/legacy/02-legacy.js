@@ -4430,14 +4430,24 @@ async function grhGetColabs(force = false) {
 }
 async function grhGetRem(force = false) {
   if (_grhRem && !force) return _grhRem;
-  const snap = await db.collection(col('grh_rem')).get();
-  _grhRem = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  try {
+    const snap = await db.collection(col('grh_rem')).get();
+    _grhRem = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  } catch(e) {
+    console.error('Erro ao carregar remuneração:', e);
+    _grhRem = [];
+  }
   return _grhRem;
 }
 async function grhGetMov(force = false) {
   if (_grhMov && !force) return _grhMov;
-  const snap = await db.collection(col('grh_mov')).get();
-  _grhMov = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  try {
+    const snap = await db.collection(col('grh_mov')).get();
+    _grhMov = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+  } catch(e) {
+    console.error('Erro ao carregar movimentações:', e);
+    _grhMov = [];
+  }
   return _grhMov;
 }
 async function grhGetDesl(force = false) {

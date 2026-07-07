@@ -45,7 +45,17 @@
   }
 
   function extrairCampos(texto) {
+    if(!texto || typeof texto !== 'string') {
+      console.warn('[extrair] Texto inválido ou vazio');
+      return { nome: '', codigo: '', cpf: '', mes: '', ano: '' };
+    }
+
     const linhas = texto.split('\n').map(l => l.trim()).filter(Boolean);
+    if(!linhas.length) {
+      console.warn('[extrair] Nenhuma linha para processar');
+      return { nome: '', codigo: '', cpf: '', mes: '', ano: '' };
+    }
+
     const unido = linhas.join('\n');
 
     let nome = '';
@@ -62,12 +72,8 @@
     }
 
     // Linha de dados do funcionário: "00035 ABRANHAM JOAO RESQUE VELOSO NETO 212420 001 001 000 000"
-    // (código, depois o nome em maiúsculas, depois os códigos numéricos de CBO/Emp/Local/Depto).
-    // É o padrão exato do modelo "Recibo de Pagamento de Salário" (Nome do Funcionário fica só
-    // no cabeçalho da tabela, o valor real vem na linha seguinte).
-    // /i porque o mesmo PDF traz alguns nomes TUDO MAIÚSCULO ("ABRANHAM...") e outros
-    // em Caixa Normal ("Bruno de Paula Silva") — inconsistência do sistema de origem.
-    const linhaValoresRx = /^(\d{2,6})\s+([A-ZÀ-ÜÇ][A-ZÀ-ÜÇÀ-ÿa-z\s]{3,70}?)\s+\d{4,7}\s+\d{1,3}\s+\d{1,3}/mi;
+    // Permite variações de layout (sem os números ao final)
+    const linhaValoresRx = /^(\d{2,6})\s+([A-ZÀ-ÜÇa-z][A-ZÀ-ÜÇÀ-ÿa-z\s']{3,70}?)(?:\s+\d+|\s|$)/mi;
     const lv = unido.match(linhaValoresRx);
     if(lv) {
       codigo = lv[1];
