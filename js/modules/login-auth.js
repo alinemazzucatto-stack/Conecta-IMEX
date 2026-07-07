@@ -209,9 +209,9 @@ window.doLogin = async function(){
     }
 
     if(typeof window.buildSidebar === 'function') window.buildSidebar();
-    irParaDestino();
-    setTimeout(irParaDestino, 60);
-    setTimeout(irParaDestino, 250);
+    // Navegar após buildSidebar estar pronto, com uma única tentativa
+    // (múltiplas tentativas causavam oscilação entre views)
+    setTimeout(irParaDestino, 100);
 
     setTimeout(async function(){
       try{ if(typeof window.updateHero === 'function') await window.updateHero(); }catch(e){}

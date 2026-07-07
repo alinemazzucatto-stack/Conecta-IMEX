@@ -4250,6 +4250,17 @@ auth.onAuthStateChanged(async (user) => {
       if(appShellEl) appShellEl.style.display = 'none';
     }
   } else {
+    // Sem usuário autenticado: limpa resquícios de sessão anterior que podem
+    // causar conflito/oscilação com o novo login. Isso evita que um "colaborador"
+    // logado anteriormente interfira com um novo login de RH na mesma máquina.
+    try { localStorage.removeItem('usuarioLogado'); } catch(e) {}
+    try { sessionStorage.removeItem('userRole'); } catch(e) {}
+    try { sessionStorage.removeItem('userName'); } catch(e) {}
+    try { sessionStorage.removeItem('userEmail'); } catch(e) {}
+    try { sessionStorage.removeItem('userDocId'); } catch(e) {}
+    try { sessionStorage.removeItem('userPerfis'); } catch(e) {}
+    try { sessionStorage.removeItem('imexPreferredRole'); } catch(e) {}
+    try { sessionStorage.removeItem('imexRoleReal'); } catch(e) {}
     var loginScreenEl = document.getElementById('loginScreen');
     var appShellEl = document.getElementById('appShell');
     if(loginScreenEl) loginScreenEl.style.display = 'flex';
