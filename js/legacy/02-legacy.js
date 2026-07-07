@@ -4472,6 +4472,13 @@ async function grhGetDesl(force = false) {
   return _grhDesl;
 }
 
+// ── Exposições globais para remuneração ──
+window.grhRenderRemuneracao = grhRenderRemuneracao;
+window.grhMontarBaseRemuneracao = grhMontarBaseRemuneracao;
+window.grhSalvarRemuneracao = grhSalvarRemuneracao;
+window.grhExcluirRem = grhExcluirRem;
+window.grhAbrirModalRemuneracao = grhAbrirModalRemuneracao;
+
 // ── Entrada principal ──
 async function gestaoRhCarregar() {
   // Importar planilha na primeira vez se o banco estiver vazio
@@ -5774,12 +5781,22 @@ function grhMontarBaseRemuneracao(colabs, rem, mesFiltro = '') {
 
 async function grhRenderRemuneracao() {
   const tbody = document.getElementById('grh-rem-body');
-  if (!tbody) return;
+  if (!tbody) {
+    console.warn('[grhRenderRemuneracao] tbody não encontrado');
+    return;
+  }
+
+  tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--ink-60)">⏳ Carregando dados de remuneração…</td></tr>`;
+
   try {
     const rem = await grhGetRem();
-    const colabs = await grhGetColabs().catch(() => []);
+    const colabs = await grhGetColabs().catch(err => {
+      console.error('[grhRenderRemuneracao] Erro ao carregar colaboradores:', err);
+      return [];
+    });
+
     const q = (document.getElementById('grh-rem-search')?.value || '').toLowerCase();
-    const mesFiltro = document.getElementById('grh-rem-mes')?.value || '';
+    const mesFiltro = (document.getElementById('grh-rem-mes')?.value || '').trim();
 
     // Base oficial da aba: todos os colaboradores ativos cadastrados em Colaboradores, CLT + PJ.
     // Os lançamentos da coleção grh_rem apenas complementam/atualizam salário, benefícios e competência.
@@ -5854,8 +5871,11 @@ async function grhRenderRemuneracao() {
       </td>
     </tr>`;
     }).join('');
+
+    console.log(`[grhRenderRemuneracao] Renderizou ${dados.length} registros (filtrados de ${baseTotais.length})`);
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--rust)">Erro: ${e.message}</td></tr>`;
+    console.error('[grhRenderRemuneracao] Erro fatal:', e);
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--rust)">❌ Erro: ${e.message}</td></tr>`;
   }
 }
 
@@ -5959,6 +5979,7 @@ async function grhSalvarRemuneracao() {
       await db.collection(col('grh_rem')).add({ ...dados, criadoEm: new Date().toISOString() });
     }
     _grhRem = null;
+    _grhColabs = null;
     grhFecharModal('grh-modal-rem');
     await grhRenderRemuneracao();
     await grhAtualizarHero();
@@ -5970,6 +5991,7 @@ async function grhExcluirRem(id, nome) {
   if (!confirm(`Excluir registro de remuneração de "${nome}"?`)) return;
   await db.collection(col('grh_rem')).doc(id).delete();
   _grhRem = null;
+  _grhColabs = null;
   await grhRenderRemuneracao();
 }
 
