@@ -337,6 +337,11 @@
     const visible=getComputedStyle(p).display!=='none';
     if(visible && !window.__remPremiumRenderedV3){
       await carregarBaseReal();
+      if(!colaboradoresRem || colaboradoresRem.length === 0) {
+        console.warn('[remuneracao] Nenhum dado carregado. Verifique Firebase permissions.');
+        notify('⚠️ Sem dados de remuneração. Verifique sua conexão.');
+        return;
+      }
       render();
     }
   }
