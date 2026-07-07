@@ -4428,6 +4428,11 @@ async function grhGetColabs(force = false) {
   _grhColabs.sort((a, b) => (a.nome || '').localeCompare(b.nome || '', 'pt-BR'));
   return _grhColabs;
 }
+// Expõe funções como globais para acesso de outros módulos
+window.grhGetColabs = grhGetColabs;
+window.grhGetRem = function(force) { return grhGetRem(force); };
+window.grhGetMov = function(force) { return grhGetMov(force); };
+window.grhGetDesl = function(force) { return grhGetDesl(force); };
 async function grhGetRem(force = false) {
   if (_grhRem && !force) return _grhRem;
   try {
