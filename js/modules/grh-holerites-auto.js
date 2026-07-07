@@ -401,7 +401,7 @@
       for(const p of processados) {
         try {
           // Guarda a entrada de holerite (sem arquivo PDF, apenas dados)
-          const colabRef = db.collection(col('grh_colabs')).doc(p.id);
+          const colabRef = db.collection('grh_colabs').doc(p.id);
           const snap = await colabRef.get();
           const dados = snap.data() || {};
           const holerites = Array.isArray(dados.holerites) ? dados.holerites.slice() : [];
