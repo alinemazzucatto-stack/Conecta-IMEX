@@ -100,8 +100,12 @@
     try{
       if(tab==='colaboradores' && typeof window.grhRenderColabs==='function') window.grhRenderColabs();
       if(tab==='enderecos' && typeof window.grhRenderEnderecos==='function') window.grhRenderEnderecos();
-      // DISABLED: Use new premium v3 dashboard (47-remuneracao-premium-v3.js)
-      // if(tab==='remuneracao' && typeof window.grhRenderRemuneracao==='function') window.grhRenderRemuneracao();
+      if(tab==='remuneracao'){
+        // Use new premium v3 dashboard instead of old renderer
+        if(typeof window.grhTab==='function'){
+          window.grhTab('remuneracao');
+        }
+      }
       if(tab==='movimentacoes' && typeof window.grhRenderMovimentacoes==='function') window.grhRenderMovimentacoes();
       if(tab==='desligamentos' && typeof window.grhRenderDesligamentos==='function') window.grhRenderDesligamentos();
       if(tab==='admissao' && typeof window.grhRenderAdmissao==='function') window.grhRenderAdmissao();
