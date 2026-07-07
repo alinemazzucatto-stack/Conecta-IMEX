@@ -4172,6 +4172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════
 // INICIALIZAÇÃO — Firebase Auth listener
 // ══════════════════════════════════════
+var __authCheckDone = false;
 auth.onAuthStateChanged(async (user) => {
   // Login em andamento pelo fluxo real (js/modules/login-auth.js) — ele já
   // cuida de tudo (coleção correta grh_colabs, papel/perfis, navegação).
@@ -4181,8 +4182,24 @@ auth.onAuthStateChanged(async (user) => {
   // `window.currentUserData` vazio ou o papel errado às vezes. Aqui só
   // resta a função original deste listener: restaurar uma sessão já
   // autenticada quando a página é recarregada SEM passar pelo botão Entrar.
-  if (window.__loginEmAndamento) return;
+  if (window.__loginEmAndamento || window.__restoringSession) return;
+
+  // Verificação inicial: se há usuário no Firebase mas sessionStorage vazio,
+  // fazer logout para forçar login limpo (evita conflito/oscilação)
+  if (!__authCheckDone) {
+    __authCheckDone = true;
+    if (user) {
+      const hasValidSession = sessionStorage.getItem('userEmail') &&
+                             sessionStorage.getItem('userRole');
+      if (!hasValidSession) {
+        try { auth.signOut(); } catch(e) {}
+        return;
+      }
+    }
+  }
+
   if (user) {
+    window.__restoringSession = true;
     try {
       const userDoc = await db.collection('users').doc(user.uid).get();
       let udata;
@@ -4241,15 +4258,18 @@ auth.onAuthStateChanged(async (user) => {
         try { await renderAll(); } catch(e) {}
         try { enforcePermissions(); } catch(e) {}
         if (role === 'colaborador') try { await updateColResumo(); } catch(e) {}
+        window.__restoringSession = false;
       }, 0);
     } catch(e) {
       console.error('Erro ao restaurar sessão:', e);
+      window.__restoringSession = false;
       var loginScreenEl = document.getElementById('loginScreen');
       var appShellEl = document.getElementById('appShell');
       if(loginScreenEl) loginScreenEl.style.display = 'flex';
       if(appShellEl) appShellEl.style.display = 'none';
     }
   } else {
+    window.__restoringSession = false;
     // Sem usuário autenticado: limpa resquícios de sessão anterior que podem
     // causar conflito/oscilação com o novo login. Isso evita que um "colaborador"
     // logado anteriormente interfira com um novo login de RH na mesma máquina.
