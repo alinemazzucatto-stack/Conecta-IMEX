@@ -62,14 +62,8 @@
   } else {
     buildParticles();
   }
+  // Retry buildParticles once after a short delay to ensure particles are added
+  // (removed redundant setInterval that was causing render oscillation)
   setTimeout(buildParticles, 300);
-  setTimeout(buildParticles, 1200);
-
-  setInterval(function() {
-    var ls = document.getElementById("loginScreen");
-    if(ls && window.getComputedStyle(ls).display !== "none" && !ls.querySelector(".tl-lp")) {
-      buildParticles();
-    }
-  }, 2000);
 })();
 
