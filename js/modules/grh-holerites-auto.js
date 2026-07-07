@@ -305,17 +305,24 @@
     if(!file) return;
     const resultado = document.getElementById('grh-holerites-resultado');
     resultado.innerHTML = '<p style="color:var(--ink-60);font-size:13px">⏳ Carregando bibliotecas…</p>';
+    console.log('[holerites] Iniciando processamento de:', file.name, 'Tipo:', file.type);
 
     try {
       if(!window.pdfjsLib) {
+        console.log('[holerites] Carregando PDF.js...');
         await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        console.log('[holerites] PDF.js carregado');
+      } else {
+        console.log('[holerites] PDF.js já estava carregado');
       }
 
       resultado.innerHTML = '<p style="color:var(--ink-60);font-size:13px">⏳ Processando ' + file.name + '…</p>';
 
       const arrayBuffer = await file.arrayBuffer();
+      console.log('[holerites] Arquivo carregado, tamanho:', arrayBuffer.byteLength, 'bytes');
       const pdf = await window.pdfjsLib.getDocument({data: arrayBuffer}).promise;
+      console.log('[holerites] PDF parseado, páginas:', pdf.numPages);
       const colabs = typeof window.grhGetColabs === 'function' ? await window.grhGetColabs() : [];
 
       // Guarda o PDF e a base de colaboradores na sessão, pra permitir resolução manual
