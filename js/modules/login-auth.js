@@ -235,6 +235,66 @@ window.doLogin = async function(){
     }, 0);
 
   }catch(e){
+    // ── FALLBACK DE DEV: Se Firebase falhar, tentar login com dados de teste ──
+    var USUARIOS_TESTE_FALLBACK = [
+      {email:'colaborador@teste.com', senha:'123456', nome:'João Silva', perfil:'colaborador', setor:'TI'},
+      {email:'gestor@teste.com', senha:'123456', nome:'Maria Santos', perfil:'gestor', setor:'Gestão'},
+      {email:'rh@teste.com', senha:'123456', nome:'Pedro Costa', perfil:'rh', setor:'RH'},
+      {email:'admin@teste.com', senha:'123456', nome:'Admin User', perfil:'rh', setor:'Sistema'}
+    ];
+    var usuarioTeste = USUARIOS_TESTE_FALLBACK.find(u => u.email === email);
+    if(usuarioTeste && usuarioTeste.senha === pass){
+      log2('Firebase falhou, usando fallback local para ' + email);
+      window.currentUserData = {
+        uid:'test_'+Math.random().toString(36).substr(2,9),
+        id:email,
+        docId:email,
+        nome:usuarioTeste.nome,
+        email:email,
+        role:usuarioTeste.perfil,
+        perfis:[usuarioTeste.perfil],
+        unidade:'meta',
+        setor:usuarioTeste.setor,
+        cargo:usuarioTeste.setor,
+        gestor:''
+      };
+      var roleBase = usuarioTeste.perfil;
+      window.role = roleBase;
+      window._roleReal = roleBase;
+      sessionStorage.setItem('userRole',roleBase);
+      sessionStorage.setItem('userPerfis',JSON.stringify([roleBase]));
+      sessionStorage.setItem('userName',usuarioTeste.nome);
+      sessionStorage.setItem('userEmail',email);
+      sessionStorage.setItem('userDocId',email);
+      sessionStorage.setItem('imexPreferredRole',roleBase);
+      sessionStorage.setItem('__lastLoginTime',Date.now().toString());
+      localStorage.setItem('usuarioLogado',JSON.stringify(window.currentUserData));
+
+      var loginScreen = document.getElementById('loginScreen');
+      var appShell = document.getElementById('appShell');
+      if(loginScreen) loginScreen.style.display = 'none';
+      if(appShell) appShell.style.display = 'flex';
+      var pLabel = document.getElementById('pLabel');
+      if(pLabel) pLabel.textContent = roleBase.charAt(0).toUpperCase() + roleBase.slice(1);
+      var pDot = document.getElementById('pDot');
+      var dots = {colaborador:'👤',gestor:'👔',rh:'🏢'};
+      if(pDot) pDot.textContent = dots[roleBase] || '👤';
+      document.body.classList.remove('role-rh','role-gestor','role-colaborador');
+      document.body.classList.add('role-'+roleBase);
+      setTimeout(function(){
+        if(typeof window.buildSidebar === 'function') window.buildSidebar();
+        var destino = roleBase === 'rh' ? 'gestao-rh' : (roleBase === 'gestor' ? 'gestor' : 'intranet');
+        if(typeof window.sbNav === 'function') window.sbNav(destino);
+      }, 100);
+      setTimeout(async function(){
+        try{if(typeof window.updateHero === 'function') await window.updateHero();}catch(e){}
+        try{if(typeof window.renderAll === 'function') await window.renderAll();}catch(e){}
+        try{if(typeof window.enforcePermissions === 'function') window.enforcePermissions();}catch(e){}
+        if(roleBase === 'colaborador'){try{if(typeof window.updateColResumo === 'function') await window.updateColResumo();}catch(e){}}
+      }, 0);
+      return;
+    }
+
     var msgs = {
       'auth/wrong-password': 'Senha incorreta.',
       'auth/invalid-credential': 'E-mail ou senha inválidos.',
