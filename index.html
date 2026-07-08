@@ -4,6 +4,64 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Conecta IMEX - Intranet Social Feed Expandido</title>
+<style>
+/* ===== CRITICAL CSS — Layout de Login IMUTÁVEL =====
+   Aplica IMEDIATAMENTE (antes de qualquer outro CSS)
+   Força o layout de duas colunas: visual-panel LEFT, login-box RIGHT
+   NÃO pode ser sobrescrito por styles.css ou qualquer outro CSS tardio */
+#loginScreen{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  background:#0d0b1f !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  margin:0 !important;
+  width:100% !important;
+  height:100% !important;
+  position:fixed !important;
+  inset:0 !important;
+  z-index:9999 !important;
+}
+#loginScreen .login-box,
+#loginScreen .login-form,
+.login-box{
+  order:2 !important;
+  flex:0 0 460px !important;
+  max-width:460px !important;
+  width:460px !important;
+  height:100% !important;
+  max-height:100vh !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:0 !important;
+}
+#li-visual-panel,
+.li-visual-panel{
+  order:1 !important;
+  flex:1 1 auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#0d0b1f !important;
+  min-height:100vh !important;
+}
+@media(max-width:920px){
+  #loginScreen .login-box,
+  #loginScreen .login-form,
+  .login-box{
+    flex:1 1 100% !important;
+    max-width:100% !important;
+    width:100% !important;
+    order:auto !important;
+  }
+  #li-visual-panel,
+  .li-visual-panel{
+    display:none !important;
+  }
+}
+</style>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
