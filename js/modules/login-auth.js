@@ -155,6 +155,19 @@ window.doLogin = async function(){
 
     if(!useLocalDb){ try{ await comTimeout(colabDoc.ref.update({ authUid: uid, ultimoAcesso: new Date().toISOString() }), 6000, 'update-acesso'); }catch(e){} }
 
+    // ── CONSOLIDAR ESTADO CENTRALIZADO (se disponível) ──
+    if (typeof setUserState === 'function') {
+      setUserState('email', email);
+      setUserState('role', roleBase);
+      setUserState('roleReal', roleBase);
+      setUserState('unidade', (colab.unidade || 'meta').toString().toLowerCase().indexOf('xpert') !== -1 ? 'xpert' : 'meta');
+      setUserState('isAuthenticated', true);
+      setUserState('sessionStartTime', new Date().toISOString());
+    }
+
+    // Flag para onAuthStateChanged em 02-legacy.js não executar neste momento
+    try { sessionStorage.setItem('__lastLoginTime', Date.now().toString()); } catch(e) {}
+
     window.role = roleBase;
     // `_roleReal` passa a refletir a VISÃO ATUAL (igual a `role`), não a
     // permissão de fundo da conta — dezenas de funções antigas usam
