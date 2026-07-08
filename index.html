@@ -63,6 +63,43 @@
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ===== ANTI-OSCILLATION CSS — Bloqueia QUALQUER mudança ao layout =====
+   Aplicado LOGO ANTES de fechar </head>, garante que NENHUM CSS posterior possa mudar */
+#loginScreen{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  background:#0d0b1f !important;
+  position:fixed !important;
+  inset:0 !important;
+  z-index:9999 !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+#loginScreen > * {
+  align-items:stretch !important;
+}
+.login-box, #loginScreen .login-box, #loginScreen > .login-box {
+  order:2 !important;
+  flex:0 0 460px !important;
+  max-width:460px !important;
+  width:460px !important;
+  margin:0 !important;
+  padding:0 !important;
+  justify-content:flex-start !important;
+}
+#li-visual-panel, .li-visual-panel, #loginScreen > :first-child {
+  order:1 !important;
+  flex:1 1 auto !important;
+  justify-content:center !important;
+  align-items:center !important;
+}
+</style>
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script>
