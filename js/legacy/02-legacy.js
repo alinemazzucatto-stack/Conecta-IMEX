@@ -4583,10 +4583,31 @@ async function grhGetColabs(force = false) {
   return _grhColabs;
 }
 // Expõe funções como globais para acesso de outros módulos
-window.grhGetColabs = grhGetColabs;
-window.grhGetRem = function(force) { return grhGetRem(force); };
-window.grhGetMov = function(force) { return grhGetMov(force); };
-window.grhGetDesl = function(force) { return grhGetDesl(force); };
+// Protegidas contra sobrescrita para evitar referências circulares e recursão infinita
+Object.defineProperty(window, 'grhGetColabs', {
+  value: grhGetColabs,
+  writable: false,
+  configurable: false,
+  enumerable: true
+});
+Object.defineProperty(window, 'grhGetRem', {
+  value: grhGetRem,
+  writable: false,
+  configurable: false,
+  enumerable: true
+});
+Object.defineProperty(window, 'grhGetMov', {
+  value: grhGetMov,
+  writable: false,
+  configurable: false,
+  enumerable: true
+});
+Object.defineProperty(window, 'grhGetDesl', {
+  value: grhGetDesl,
+  writable: false,
+  configurable: false,
+  enumerable: true
+});
 async function grhGetRem(force = false) {
   if (_grhRem && !force) return _grhRem;
   try {
