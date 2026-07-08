@@ -236,13 +236,16 @@ window.doLogin = async function(){
 
   }catch(e){
     // ── FALLBACK DE DEV: Se Firebase falhar, tentar login com dados de teste ──
+    log2('ERRO Firebase: ' + (e.code || e.message || e));
     var USUARIOS_TESTE_FALLBACK = [
       {email:'colaborador@teste.com', senha:'123456', nome:'João Silva', perfil:'colaborador', setor:'TI'},
       {email:'gestor@teste.com', senha:'123456', nome:'Maria Santos', perfil:'gestor', setor:'Gestão'},
       {email:'rh@teste.com', senha:'123456', nome:'Pedro Costa', perfil:'rh', setor:'RH'},
       {email:'admin@teste.com', senha:'123456', nome:'Admin User', perfil:'rh', setor:'Sistema'}
     ];
+    log2('Tentando fallback com email: ' + email);
     var usuarioTeste = USUARIOS_TESTE_FALLBACK.find(u => u.email.toLowerCase() === email.toLowerCase());
+    log2('Usuário de teste encontrado: ' + (usuarioTeste ? usuarioTeste.email : 'NÃO'));
     if(usuarioTeste && usuarioTeste.senha === pass){
       log2('Firebase falhou, usando fallback local para ' + email);
       window.currentUserData = {
