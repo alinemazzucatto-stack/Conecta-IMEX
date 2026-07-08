@@ -309,6 +309,21 @@ function hasPerfil(perfil) {
 function isRH() { return role === 'rh' || role === 'rh-colaborador'; }
 function isGestor() { return role === 'gestor'; }
 
+// ── FUNÇÃO CENTRALIZADA DE EMAIL (única implementação) ──
+// Consolidada de 3 implementações diferentes (antes havia conflitos)
+// Prioridade: estado centralizado > currentUserData > sessionStorage > fallback
+function getEmail() {
+  if (window.__IMEX_STATE && window.__IMEX_STATE.email) {
+    return window.__IMEX_STATE.email;
+  }
+  if (window.currentUserData && window.currentUserData.email) {
+    return window.currentUserData.email;
+  }
+  const stored = sessionStorage.getItem('userEmail');
+  if (stored) return stored;
+  return '';
+}
+
 // Retorna o prefixo da coleção para a unidade atual
 function col(name) {
   if (!currentUnidade) return name;
@@ -4611,7 +4626,13 @@ async function grhGetDesl(force = false) {
   return _grhDesl;
 }
 
-// ── Exposições globais para remuneração ──
+// ── Exposições globais consolidadas ──
+// Funções centralizadas que devem ser usadas por TODO o sistema
+window.getEmail = getEmail;  // Consolidada de 3 implementações anteriores
+window.isRH = isRH;          // Consolidada de 3 implementações diferentes
+window.isGestor = isGestor;  // Consolidada
+
+// Funções de remuneração
 window.grhRenderRemuneracao = grhRenderRemuneracao;
 window.grhMontarBaseRemuneracao = grhMontarBaseRemuneracao;
 window.grhSalvarRemuneracao = grhSalvarRemuneracao;

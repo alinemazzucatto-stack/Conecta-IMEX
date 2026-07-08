@@ -99,8 +99,16 @@ function nextLv(xp){var l=getLv(xp);return l.num<10?LEVELS[l.num]:null;}
 function lvProg(xp){var l=getLv(xp),n=nextLv(xp);if(!n)return 100;return Math.min(100,Math.round(((xp-l.min)/(n.min-l.min))*100));}
 function fmtXP(n){return n>=1000?(n/1000).toFixed(1).replace('.0','')+'k':String(n);}
 function fmtN(n){return Number(n).toLocaleString('pt-BR');}
-function getEmail(){return(typeof emailUsuario==='function'?emailUsuario():'')||sessionStorage.getItem('imexEmail')||'';}
-function isRH(){return(window.role||'').toLowerCase().includes('rh');}
+
+// ── CONSOLIDAÇÃO: Funções getEmail e isRH desativadas (02-legacy.js é a fonte de verdade) ──
+// Anteriormente havia 3+ implementações de getEmail() e isRH() em diferentes arquivos
+// causando inconsistência. Agora todas usam as definições globais de 02-legacy.js
+// getEmail() - DESATIVADA - usar window.currentUserData.email ou sessionStorage.getItem('userEmail')
+// isRH() - DESATIVADA - usar isRH() global de 02-legacy.js
+// ANTES:
+// function getEmail(){return(typeof emailUsuario==='function'?emailUsuario():'')||sessionStorage.getItem('imexEmail')||'';}
+// function isRH(){return(window.role||'').toLowerCase().includes('rh');}
+
 function getNome(){return(typeof getNomeUsuario==='function'?getNomeUsuario():'')||(document.getElementById('pLabel')||{}).textContent||'';}
 function fmtDate(d){if(!d)return '';try{var dt=d&&d.toDate?d.toDate():new Date(d);return dt.toLocaleDateString('pt-BR');}catch(e){return '';}}
 
