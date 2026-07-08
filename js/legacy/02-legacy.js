@@ -245,6 +245,53 @@ function openSurvey() {
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1ebvydJcpBt2Esjlk2-vs6TxEa1L-WNozMNIJzjAXSQ5oacQdrsQh8ddaPxCNCZ46/exec';
 const PLBL = {colaborador:'Colaborador',gestor:'Gestor',rh:'RH','rh-colaborador':'RH/Colaborador'};
 const PDOT = {colaborador:'👤',gestor:'👔',rh:'🏢','rh-colaborador':'🏢'};
+
+// ── ESTADO CENTRALIZADO DO USUÁRIO (FONTE ÚNICA DE VERDADE) ──
+// Qualquer mudança aqui é refletida em sessionStorage + window + variáveis locais
+window.__IMEX_STATE = {
+  user: null,           // Objeto de usuário completo
+  email: null,          // Email do usuário
+  role: 'colaborador',  // Role: colaborador, gestor, rh
+  roleReal: null,       // Role real (salvo em sessionStorage.imexRoleReal)
+  unidade: 'meta',      // Unidade: meta, xpert
+  isAuthenticated: false,
+  sessionStartTime: null,
+  lastActivityTime: null
+};
+
+// Proxy para manter em sync com sessionStorage
+function setUserState(key, value) {
+  window.__IMEX_STATE[key] = value;
+  sessionStorage.setItem('__IMEX_STATE_' + key, JSON.stringify(value));
+  if (key === 'role') sessionStorage.setItem('userRole', String(value));
+  if (key === 'email') sessionStorage.setItem('userEmail', String(value));
+  if (key === 'roleReal') sessionStorage.setItem('imexRoleReal', String(value));
+  if (key === 'unidade') sessionStorage.setItem('imexUnidade', String(value));
+}
+
+function getUserState(key) {
+  const val = window.__IMEX_STATE[key];
+  return val !== undefined ? val : sessionStorage.getItem('__IMEX_STATE_' + key);
+}
+
+function syncUserState() {
+  // Sincroniza estado do sessionStorage para __IMEX_STATE
+  const keys = ['user', 'email', 'role', 'roleReal', 'unidade', 'isAuthenticated'];
+  keys.forEach(key => {
+    const stored = sessionStorage.getItem('__IMEX_STATE_' + key);
+    if (stored) {
+      try {
+        window.__IMEX_STATE[key] = JSON.parse(stored);
+      } catch(e) {
+        window.__IMEX_STATE[key] = stored;
+      }
+    }
+  });
+}
+
+// Sincronizar ao carregar a página
+syncUserState();
+
 let currentUserData = null;
 let currentUnidade = null; // 'meta' ou 'xpert'
 
@@ -724,6 +771,7 @@ async function updateColResumo() {
 async function doLogout() {
   try { await log('Logout','Perfil: '+(PLBL&&PLBL[role]||role||''),'🚪'); } catch(e){}
   try { if(typeof auth !== 'undefined' && auth && auth.signOut) await auth.signOut(); } catch(e){}
+
   // Guarda o último perfil usado antes de limpar a sessão — sem isso, o
   // próximo login sempre cai em "colaborador" (padrão), mesmo para quem é
   // RH, a não ser que clique manualmente no seletor de perfil da tela de
@@ -731,14 +779,33 @@ async function doLogout() {
   // correta automaticamente.
   var ultimoPerfil = null;
   try { ultimoPerfil = sessionStorage.getItem('imexPreferredRole'); } catch(e){}
+
+  // Limpar TODAS as variáveis de estado
   role=null; loginRole=null; currentUserData=null; currentUnidade=null;
   try{ _roleReal=null; }catch(e){}
   window.role=null; window._roleReal=null; window.currentUserData=null; window.currentUnidade=null;
+
+  // Limpar estado centralizado se disponível
+  if (window.__IMEX_STATE) {
+    window.__IMEX_STATE.user = null;
+    window.__IMEX_STATE.email = null;
+    window.__IMEX_STATE.role = 'colaborador';
+    window.__IMEX_STATE.roleReal = null;
+    window.__IMEX_STATE.isAuthenticated = false;
+    window.__IMEX_STATE.sessionStartTime = null;
+  }
+
   _cacheReqs=null; _cacheAudit=null; _cacheNotif=null;
   _cacheColabs=null; _cacheSurveys=null; _cacheCfg=null;
+
   try { sessionStorage.clear(); } catch(e){}
   try { if(ultimoPerfil) sessionStorage.setItem('imexPreferredRole', ultimoPerfil); } catch(e){}
   try { localStorage.removeItem('imexRole'); localStorage.removeItem('imexUser'); } catch(e){}
+
+  // Limpar flags de login
+  window.__loginEmAndamento = false;
+  window.__restoringSession = false;
+  try { sessionStorage.removeItem('__lastLoginTime'); } catch(e){}
   var lEmail=document.getElementById('lEmail'); if(lEmail) lEmail.value='';
   var lPass=document.getElementById('lPass'); if(lPass) lPass.value='';
   var lErr=document.getElementById('lErr'); if(lErr) lErr.style.display='none';
@@ -909,13 +976,36 @@ let _roleAtivo = null;      // role atualmente ativo na UI
 const RH_ONLY_MODULES_CORE = ['gestao-rh','rh','dashboard','auditoria','usuarios','desenvolvimento-talentos'];
 
 function perfilAtivoSeguro() {
-  const label = (document.getElementById('pLabel')?.textContent || '').toLowerCase();
-  if (label.includes('colaborador')) return 'colaborador';
-  if (label.includes('gestor')) return 'gestor';
-  if (label.includes('rh')) return 'rh';
+  // Prioridade de leitura: estado centralizado > sessionStorage > DOM > fallback
+  let r = null;
 
-  const r = String(role || sessionStorage.getItem('userRole') || 'colaborador').toLowerCase().trim();
+  // 1. Tentar estado centralizado
+  if (window.__IMEX_STATE && window.__IMEX_STATE.role) {
+    r = String(window.__IMEX_STATE.role).toLowerCase().trim();
+  }
+
+  // 2. Fallback para sessionStorage
+  if (!r || r === 'null') {
+    r = String(sessionStorage.getItem('userRole') || '').toLowerCase().trim();
+  }
+
+  // 3. Fallback para variável global
+  if (!r || r === 'null') {
+    r = String(role || '').toLowerCase().trim();
+  }
+
+  // 4. Fallback para label visual (último recurso)
+  if (!r || r === 'null') {
+    const label = (document.getElementById('pLabel')?.textContent || '').toLowerCase();
+    if (label.includes('colaborador')) r = 'colaborador';
+    else if (label.includes('gestor')) r = 'gestor';
+    else if (label.includes('rh')) r = 'rh';
+  }
+
+  // Normalizar valores especiais
   if (r === 'rh-colaborador') return 'colaborador';
+
+  // Garantir que é válido
   return ROLE_ACCESS[r] ? r : 'colaborador';
 }
 
@@ -995,6 +1085,30 @@ function buildSidebar() {
     if (lbl) lbl.textContent = (role !== 'colaborador') ? '👤 Minha Visão' : ('🏢 Voltar: ' + PLBL[_roleReal]);
   }
 }
+
+// ── PROTEÇÃO CONTRA SOBRESCRITA DE buildSidebar ──
+// Diversos patches legacies sobrescrevem buildSidebar, causando oscilações.
+// Esta versão CONSOLIDADA é a única que deve ser usada.
+// Qualquer tentativa de sobrescrita é registrada (logging) mas não permitida.
+(function() {
+  const originalBuildSidebar = buildSidebar;
+  const preventOverwrite = function() {
+    console.warn('[SEGURANÇA] Tentativa bloqueada de sobrescrita de buildSidebar. Usando versão consolidada.');
+    return originalBuildSidebar.apply(this, arguments);
+  };
+
+  // Intercepta qualquer tentativa de sobrescrita APÓS 1 segundo (tempo para legacy scripts carregarem)
+  setTimeout(() => {
+    Object.defineProperty(window, 'buildSidebar', {
+      get: () => originalBuildSidebar,
+      set: (val) => {
+        console.warn('[SEGURANÇA] Tentativa de sobrescrita bloqueada:', val.toString().slice(0, 100));
+        // Não permite sobrescrita
+      },
+      configurable: false
+    });
+  }, 1000);
+})();
 
 // ── PERMISSÕES DE UI POR PERFIL ──────────────────────────────────────
 function aplicarPermissoesUI() {
@@ -1125,6 +1239,21 @@ function switchView(v) {
   // Reaplicar permissões de UI ao trocar de painel
   if (typeof aplicarPermissoesUI === 'function') aplicarPermissoesUI();
 }
+
+// ── PROTEÇÃO CONTRA SOBRESCRITA DE switchView ──
+// Alguns patches legacies tentam redefine switchView, causando comportamento impredizível.
+(function() {
+  const originalSwitchView = switchView;
+  setTimeout(() => {
+    Object.defineProperty(window, 'switchView', {
+      get: () => originalSwitchView,
+      set: (val) => {
+        console.warn('[SEGURANÇA] Tentativa de sobrescrita de switchView bloqueada');
+      },
+      configurable: false
+    });
+  }, 1000);
+})();
 
 // ── FRACIONAMENTO CLT ──
 // ── ABONO ──
@@ -4182,7 +4311,17 @@ auth.onAuthStateChanged(async (user) => {
   // `window.currentUserData` vazio ou o papel errado às vezes. Aqui só
   // resta a função original deste listener: restaurar uma sessão já
   // autenticada quando a página é recarregada SEM passar pelo botão Entrar.
-  if (window.__loginEmAndamento || window.__restoringSession) return;
+  if (window.__loginEmAndamento || window.__restoringSession) {
+    console.log('[onAuthStateChanged] Pulando (login em andamento ou restaurando sessão)');
+    return;
+  }
+
+  // SEGURANÇA: Se houve login recente (menos de 2 segundos), pular para evitar race condition
+  const lastLoginTime = sessionStorage.getItem('__lastLoginTime');
+  if (lastLoginTime && Date.now() - parseInt(lastLoginTime) < 2000) {
+    console.log('[onAuthStateChanged] Pulando (login recente detectado)');
+    return;
+  }
 
   // Verificação inicial: se há usuário no Firebase mas sessionStorage vazio,
   // fazer logout para forçar login limpo (evita conflito/oscilação)
