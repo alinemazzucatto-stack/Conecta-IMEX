@@ -65,24 +65,24 @@ function verificarKeyAntes() {
    o layout novo. Colocando a geometria aqui também, ela já está correta
    desde a primeira pintura da página. */
 #loginScreen{
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-start;
-  background:#0d0b1f;
-  overflow:hidden;
-  padding:0;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  background:#0d0b1f !important;
+  overflow:hidden !important;
+  padding:0 !important;
 }
 #loginScreen .login-box{
-  order:2;
-  flex:0 0 460px;
-  max-width:460px;
-  width:460px;
-  height:100%;
-  max-height:100vh;
-  margin:0;
-  border-radius:0;
+  order:2 !important;
+  flex:0 0 460px !important;
+  max-width:460px !important;
+  width:460px !important;
+  height:100% !important;
+  max-height:100vh !important;
+  margin:0 !important;
+  border-radius:0 !important;
 }
-#li-visual-panel{ order:1; flex:1; }
+#li-visual-panel{ order:1 !important; flex:1 !important; }
 @media(max-width:920px){
   #li-visual-panel{ display:none; }
   #loginScreen .login-box{ flex:1 1 100%; max-width:100%; width:100%; }
