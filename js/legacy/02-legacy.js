@@ -1108,18 +1108,9 @@ function buildSidebar() {
 (function() {
   const originalBuildSidebar = buildSidebar;
 
-  // Protege IMEDIATAMENTE (sem setTimeout para evitar conflitos)
-  try {
-    Object.defineProperty(window, 'buildSidebar', {
-      value: originalBuildSidebar,
-      writable: true,
-      configurable: true,
-      enumerable: true
-    });
-    console.log('[SEGURANÇA] buildSidebar protegida contra sobrescrita');
-  } catch(e) {
-    console.warn('[SEGURANÇA] buildSidebar já estava protegida:', e.message);
-  }
+  // Não proteger - permitir sobrescrita por patches
+  window.buildSidebar = originalBuildSidebar;
+  console.log('[SEGURANÇA] buildSidebar definida (permitindo sobrescrita)');
 })();
 
 // ── PERMISSÕES DE UI POR PERFIL ──────────────────────────────────────
@@ -1257,18 +1248,9 @@ function switchView(v) {
 (function() {
   const originalSwitchView = switchView;
 
-  // Protege IMEDIATAMENTE (sem setTimeout para evitar conflitos)
-  try {
-    Object.defineProperty(window, 'switchView', {
-      value: originalSwitchView,
-      writable: true,
-      configurable: true,
-      enumerable: true
-    });
-    console.log('[SEGURANÇA] switchView protegida contra sobrescrita');
-  } catch(e) {
-    console.warn('[SEGURANÇA] switchView já estava protegida:', e.message);
-  }
+  // Não proteger - permitir sobrescrita por patches
+  window.switchView = originalSwitchView;
+  console.log('[SEGURANÇA] switchView definida (permitindo sobrescrita)');
 })();
 
 // ── FRACIONAMENTO CLT ──
@@ -4585,30 +4567,11 @@ async function grhGetColabs(force = false) {
 }
 // Expõe funções como globais para acesso de outros módulos
 // Protegidas contra sobrescrita para evitar referências circulares e recursão infinita
-Object.defineProperty(window, 'grhGetColabs', {
-  value: grhGetColabs,
-  writable: true,
-  configurable: true,
-  enumerable: true
-});
-Object.defineProperty(window, 'grhGetRem', {
-  value: grhGetRem,
-  writable: true,
-  configurable: true,
-  enumerable: true
-});
-Object.defineProperty(window, 'grhGetMov', {
-  value: grhGetMov,
-  writable: true,
-  configurable: true,
-  enumerable: true
-});
-Object.defineProperty(window, 'grhGetDesl', {
-  value: grhGetDesl,
-  writable: true,
-  configurable: true,
-  enumerable: true
-});
+// Permitir sobrescrita por patches
+window.grhGetColabs = grhGetColabs;
+window.grhGetRem = grhGetRem;
+window.grhGetMov = grhGetMov;
+window.grhGetDesl = grhGetDesl;
 async function grhGetRem(force = false) {
   if (_grhRem && !force) return _grhRem;
   try {
