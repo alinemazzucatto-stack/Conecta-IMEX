@@ -4,8 +4,17 @@
 if(window.__conectaAiV2) return;
 window.__conectaAiV2 = true;
 
-function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
-function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
+// ── CONSOLIDAÇÃO DE ESTADO (02-legacy.js é a única fonte de verdade) ──
+// As funções isRH() e isGestor() foram desativadas aqui para usar as definições globais
+// de 02-legacy.js. Isto evita lógica duplicada que causava oscilações.
+// Consulte a Fase 2 da auditoria de estabilidade para detalhes.
+// ANTES (REMOVIDO):
+// function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
+// function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
+
+// AGORA: Usa as funções globais de 02-legacy.js que também verificam window.__IMEX_STATE
+// if isRH e isGestor não existem globalmente, isto falhará - é proposital
+// para forçar que o desenvolvedor saiba que está usando estado global
 
 function setPergunta(txt){
   var el = document.getElementById('ai-lateral-pergunta');
