@@ -72,7 +72,12 @@ body{font-family:'Inter','Montserrat',sans-serif;background:var(--bg);color:var(
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.8}}
 
 /* ── LOGIN ── */
+/* DESATIVADO - Conflita com layout de duas colunas definido no HTML
+   O HTML usa order: para ordenar visual-panel e login-box lado a lado
+   Esta definição centraliza a caixa, causando oscilação na carga da página
+   Ver: index.html linhas 57-90 (login-split-redesign-early-css)
 #loginScreen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--side),var(--side-2));display:flex;align-items:center;justify-content:center}
+*/
 .login-box{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.3);border-radius:28px;padding:48px 44px;width:100%;max-width:440px;box-shadow:0 32px 80px rgba(139,107,157,0.15);text-align:center;transition:.3s}
 .login-logo{font-size:44px;margin-bottom:14px}
 .login-box h1{font-family:'Cormorant Garamond',serif;font-size:32px;margin-bottom:8px;color:var(--ink);font-weight:600;letter-spacing:-0.8px}
@@ -374,8 +379,11 @@ tbody tr:hover td{background:rgba(245,241,250,0.6);backdrop-filter:blur(8px)}
 }
 
 /* LOGIN */
+/* DESATIVADO - Conflita com layout de duas colunas
+   Remove align-items:center e justify-content:center para permitir order:1/order:2
 #loginScreen{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center}
 .login-box{background:#fff;border-radius:28px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,0.35);text-align:center}
+*/
 .login-logo{font-size:44px;margin-bottom:14px}
 .login-box h1{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:6px}
 .login-box>p{color:var(--ink-60);font-size:14px;margin-bottom:24px}
