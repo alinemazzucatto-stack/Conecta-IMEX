@@ -1112,8 +1112,8 @@ function buildSidebar() {
   try {
     Object.defineProperty(window, 'buildSidebar', {
       value: originalBuildSidebar,
-      writable: false,
-      configurable: false,
+      writable: true,
+      configurable: true,
       enumerable: true
     });
     console.log('[SEGURANÇA] buildSidebar protegida contra sobrescrita');
@@ -1261,8 +1261,8 @@ function switchView(v) {
   try {
     Object.defineProperty(window, 'switchView', {
       value: originalSwitchView,
-      writable: false,
-      configurable: false,
+      writable: true,
+      configurable: true,
       enumerable: true
     });
     console.log('[SEGURANÇA] switchView protegida contra sobrescrita');
@@ -4587,26 +4587,26 @@ async function grhGetColabs(force = false) {
 // Protegidas contra sobrescrita para evitar referências circulares e recursão infinita
 Object.defineProperty(window, 'grhGetColabs', {
   value: grhGetColabs,
-  writable: false,
-  configurable: false,
+  writable: true,
+  configurable: true,
   enumerable: true
 });
 Object.defineProperty(window, 'grhGetRem', {
   value: grhGetRem,
-  writable: false,
-  configurable: false,
+  writable: true,
+  configurable: true,
   enumerable: true
 });
 Object.defineProperty(window, 'grhGetMov', {
   value: grhGetMov,
-  writable: false,
-  configurable: false,
+  writable: true,
+  configurable: true,
   enumerable: true
 });
 Object.defineProperty(window, 'grhGetDesl', {
   value: grhGetDesl,
-  writable: false,
-  configurable: false,
+  writable: true,
+  configurable: true,
   enumerable: true
 });
 async function grhGetRem(force = false) {
