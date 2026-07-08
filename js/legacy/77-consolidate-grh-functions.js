@@ -2,28 +2,29 @@
 (function(){
   'use strict';
 
-  // Proteger funções grhGet contra redefinição acidental
-  const protectedGrhFunctions = [
-    'grhGetColabs',
-    'grhGetRem',
-    'grhGetMov',
-    'grhGetDesl',
+  // NOTA: grhGetColabs, grhGetRem, grhGetMov, grhGetDesl já são protegidas em 02-legacy.js
+  // Proteger funções grhRender contra redefinição acidental (estas NÃO são protegidas ainda)
+  const protectedRenderFunctions = [
     'grhRenderColabs',
     'grhRenderRemuneracao',
     'grhRenderMovimentacoes',
     'grhRenderDesligamentos'
   ];
 
-  protectedGrhFunctions.forEach(fnName => {
+  protectedRenderFunctions.forEach(fnName => {
     if(typeof window[fnName] === 'function'){
       const originalFn = window[fnName];
-      Object.defineProperty(window, fnName, {
-        value: originalFn,
-        writable: false,
-        configurable: false,
-        enumerable: true
-      });
-      console.log(`[GRH CONSOLIDATION] ${fnName} protegida contra sobrescrita`);
+      try {
+        Object.defineProperty(window, fnName, {
+          value: originalFn,
+          writable: false,
+          configurable: false,
+          enumerable: true
+        });
+        console.log(`[GRH CONSOLIDATION] ${fnName} protegida contra sobrescrita`);
+      } catch(e) {
+        console.warn(`[GRH CONSOLIDATION] ${fnName} já estava protegida`);
+      }
     }
   });
 

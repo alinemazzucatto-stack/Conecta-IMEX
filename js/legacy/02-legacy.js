@@ -1107,22 +1107,19 @@ function buildSidebar() {
 // Qualquer tentativa de sobrescrita é registrada (logging) mas não permitida.
 (function() {
   const originalBuildSidebar = buildSidebar;
-  const preventOverwrite = function() {
-    console.warn('[SEGURANÇA] Tentativa bloqueada de sobrescrita de buildSidebar. Usando versão consolidada.');
-    return originalBuildSidebar.apply(this, arguments);
-  };
 
-  // Intercepta qualquer tentativa de sobrescrita APÓS 1 segundo (tempo para legacy scripts carregarem)
-  setTimeout(() => {
+  // Protege IMEDIATAMENTE (sem setTimeout para evitar conflitos)
+  try {
     Object.defineProperty(window, 'buildSidebar', {
-      get: () => originalBuildSidebar,
-      set: (val) => {
-        console.warn('[SEGURANÇA] Tentativa de sobrescrita bloqueada:', val.toString().slice(0, 100));
-        // Não permite sobrescrita
-      },
-      configurable: false
+      value: originalBuildSidebar,
+      writable: false,
+      configurable: false,
+      enumerable: true
     });
-  }, 1000);
+    console.log('[SEGURANÇA] buildSidebar protegida contra sobrescrita');
+  } catch(e) {
+    console.warn('[SEGURANÇA] buildSidebar já estava protegida:', e.message);
+  }
 })();
 
 // ── PERMISSÕES DE UI POR PERFIL ──────────────────────────────────────
@@ -1259,15 +1256,19 @@ function switchView(v) {
 // Alguns patches legacies tentam redefine switchView, causando comportamento impredizível.
 (function() {
   const originalSwitchView = switchView;
-  setTimeout(() => {
+
+  // Protege IMEDIATAMENTE (sem setTimeout para evitar conflitos)
+  try {
     Object.defineProperty(window, 'switchView', {
-      get: () => originalSwitchView,
-      set: (val) => {
-        console.warn('[SEGURANÇA] Tentativa de sobrescrita de switchView bloqueada');
-      },
-      configurable: false
+      value: originalSwitchView,
+      writable: false,
+      configurable: false,
+      enumerable: true
     });
-  }, 1000);
+    console.log('[SEGURANÇA] switchView protegida contra sobrescrita');
+  } catch(e) {
+    console.warn('[SEGURANÇA] switchView já estava protegida:', e.message);
+  }
 })();
 
 // ── FRACIONAMENTO CLT ──
