@@ -248,12 +248,10 @@ function verificarKeyAntes() {
     <div id="lDebug" style="display:none;margin-top:12px;padding:12px;background:#1a1a2e;color:#00ff88;font-size:11px;font-family:monospace;border-radius:8px;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
   </div>
 </div>
-<!-- ═══ LOGIN AUTH (DEVE CARREGAR PRIMEIRO) ═══ -->
+<!-- ═══ LOGIN AUTH COM FALLBACK INTEGRADO ═══ -->
 <script src="js/modules/login-auth.js"></script>
 <!-- ═══ FIX: ELIMINAR RACE CONDITION DE LOGIN ═══ -->
 <script src="js/modules/000-fix-login-race-condition.js"></script>
-<!-- ═══ INTERCEPTOR: FALLBACK LOGIN SEM FIREBASE ═══ -->
-<script src="js/modules/000-login-fallback-dev.js"></script>
 <!-- ═══ ORCHESTRATOR DE INICIALIZAÇÃO (intercepta todos os 59 listeners) ═══ -->
 <script src="js/modules/000-init-orchestrator.js"></script>
 <script src="js/legacy/01-legacy.js"></script>
