@@ -242,7 +242,7 @@ window.doLogin = async function(){
       {email:'rh@teste.com', senha:'123456', nome:'Pedro Costa', perfil:'rh', setor:'RH'},
       {email:'admin@teste.com', senha:'123456', nome:'Admin User', perfil:'rh', setor:'Sistema'}
     ];
-    var usuarioTeste = USUARIOS_TESTE_FALLBACK.find(u => u.email === email);
+    var usuarioTeste = USUARIOS_TESTE_FALLBACK.find(u => u.email.toLowerCase() === email.toLowerCase());
     if(usuarioTeste && usuarioTeste.senha === pass){
       log2('Firebase falhou, usando fallback local para ' + email);
       window.currentUserData = {
