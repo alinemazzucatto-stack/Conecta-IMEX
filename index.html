@@ -248,7 +248,9 @@ function verificarKeyAntes() {
     <div id="lDebug" style="display:none;margin-top:12px;padding:12px;background:#1a1a2e;color:#00ff88;font-size:11px;font-family:monospace;border-radius:8px;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
   </div>
 </div>
-<!-- ═══ FIX: ELIMINAR RACE CONDITION DE LOGIN (carregado PRIMEIRO) ═══ -->
+<!-- ═══ LOGIN AUTH (DEVE CARREGAR PRIMEIRO) ═══ -->
+<script src="js/modules/login-auth.js"></script>
+<!-- ═══ FIX: ELIMINAR RACE CONDITION DE LOGIN ═══ -->
 <script src="js/modules/000-fix-login-race-condition.js"></script>
 <!-- ═══ INTERCEPTOR: FALLBACK LOGIN SEM FIREBASE ═══ -->
 <script src="js/modules/000-login-fallback-dev.js"></script>
@@ -352,7 +354,6 @@ function verificarKeyAntes() {
 <script src="js/modules/documentos.js"></script>
 <script src="js/modules/meu-perfil.js"></script>
 <script src="js/modules/gestao-rh-fix.js"></script>
-<script src="js/modules/login-auth.js"></script>
 <script src="js/modules/login-reset-password.js"></script>
 <script src="js/modules/gamificacao-2.js"></script>
 <script src="js/modules/ferias-2.js"></script>
