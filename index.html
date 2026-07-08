@@ -63,43 +63,6 @@
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-<style>
-/* ===== ANTI-OSCILLATION CSS — Bloqueia QUALQUER mudança ao layout =====
-   Aplicado LOGO ANTES de fechar </head>, garante que NENHUM CSS posterior possa mudar */
-#loginScreen{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:stretch !important;
-  justify-content:flex-start !important;
-  background:#0d0b1f !important;
-  position:fixed !important;
-  inset:0 !important;
-  z-index:9999 !important;
-  padding:0 !important;
-  margin:0 !important;
-  border:none !important;
-  box-shadow:none !important;
-  border-radius:0 !important;
-}
-#loginScreen > * {
-  align-items:stretch !important;
-}
-.login-box, #loginScreen .login-box, #loginScreen > .login-box {
-  order:2 !important;
-  flex:0 0 460px !important;
-  max-width:460px !important;
-  width:460px !important;
-  margin:0 !important;
-  padding:0 !important;
-  justify-content:flex-start !important;
-}
-#li-visual-panel, .li-visual-panel, #loginScreen > :first-child {
-  order:1 !important;
-  flex:1 1 auto !important;
-  justify-content:center !important;
-  align-items:center !important;
-}
-</style>
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script>
@@ -285,6 +248,12 @@ function verificarKeyAntes() {
     <div id="lDebug" style="display:none;margin-top:12px;padding:12px;background:#1a1a2e;color:#00ff88;font-size:11px;font-family:monospace;border-radius:8px;white-space:pre-wrap;max-height:200px;overflow-y:auto"></div>
   </div>
 </div>
+<!-- ═══ FIX: ELIMINAR RACE CONDITION DE LOGIN (carregado PRIMEIRO) ═══ -->
+<script src="js/modules/000-fix-login-race-condition.js"></script>
+<!-- ═══ INTERCEPTOR: FALLBACK LOGIN SEM FIREBASE ═══ -->
+<script src="js/modules/000-login-fallback-dev.js"></script>
+<!-- ═══ ORCHESTRATOR DE INICIALIZAÇÃO (intercepta todos os 59 listeners) ═══ -->
+<script src="js/modules/000-init-orchestrator.js"></script>
 <script src="js/legacy/01-legacy.js"></script>
 <script src="js/legacy/02-legacy.js"></script>
 <script src="js/legacy/03-legacy.js"></script>
@@ -356,8 +325,6 @@ function verificarKeyAntes() {
 <script src="js/legacy/64-patch-trilha-cards-expansiveis.js"></script>
 <script src="js/legacy/65-patch-remuneracao-beneficios-helper-imex.js"></script>
 <script src="js/legacy/66-legacy.js"></script>
-<!-- Desabilitado: competindo com arquivo 47 (números coloridos) -->
-<!-- script src="js/legacy/67-imex-v84-colab-remu-script.js"></script -->
 <script src="js/legacy/68-patch-docs-hero-compacto.js"></script>
 <script src="js/legacy/69-patch-docs-rh-final-verified.js"></script>
 <script src="js/legacy/70-fix-final-login-docs.js"></script>
@@ -387,7 +354,6 @@ function verificarKeyAntes() {
 <script src="js/modules/gestao-rh-fix.js"></script>
 <script src="js/modules/login-auth.js"></script>
 <script src="js/modules/login-reset-password.js"></script>
-<script src="js/modules/debug.js"></script>
 <script src="js/modules/gamificacao-2.js"></script>
 <script src="js/modules/ferias-2.js"></script>
 <script src="js/modules/dashboard-rh.js"></script>
