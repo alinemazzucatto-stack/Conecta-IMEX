@@ -297,7 +297,7 @@ window.doLogin = async function(){
         try{if(typeof window.enforcePermissions === 'function') window.enforcePermissions();}catch(e){}
         if(roleBase === 'colaborador'){try{if(typeof window.updateColResumo === 'function') await window.updateColResumo();}catch(e){}}
         window.__loginEmAndamento = false;
-      }, 100);
+      }, 1000);
       if(btn) btn.disabled = false;
       if(load) load.style.display = 'none';
       return;
