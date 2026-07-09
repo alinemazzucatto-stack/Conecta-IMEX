@@ -193,6 +193,11 @@
     window.applyMenu();
   };
 
+  // Compatibilidade com código legado (português)
+  window.aplicarMenu = window.applyMenu;
+  window.navegar = function(viewId) { window.forceView(viewId); };
+  window.irPara = function(viewId) { window.forceView(viewId); };
+
   // ──────────────────────────────────────────────────────────────────────────────
   // 5. INICIALIZAÇÃO
   // ──────────────────────────────────────────────────────────────────────────────
