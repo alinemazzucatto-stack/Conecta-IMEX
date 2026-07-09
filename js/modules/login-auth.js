@@ -248,20 +248,23 @@ window.doLogin = async function(){
     log2('Usuário de teste encontrado: ' + (usuarioTeste ? usuarioTeste.email : 'NÃO'));
     if(usuarioTeste && usuarioTeste.senha === pass){
       log2('Firebase falhou, usando fallback local para ' + email);
+      var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('imexPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
+      var perfisDisponiveisFallback = [usuarioTeste.perfil];
+      var roleFallback = (preferidoFallback === usuarioTeste.perfil || perfisDisponiveisFallback.indexOf(preferidoFallback) !== -1) ? preferidoFallback : usuarioTeste.perfil;
       window.currentUserData = {
         uid:'test_'+Math.random().toString(36).substr(2,9),
         id:email,
         docId:email,
         nome:usuarioTeste.nome,
         email:email,
-        role:usuarioTeste.perfil,
+        role:roleFallback,
         perfis:[usuarioTeste.perfil],
         unidade:'meta',
         setor:usuarioTeste.setor,
         cargo:usuarioTeste.setor,
         gestor:''
       };
-      var roleBase = usuarioTeste.perfil;
+      var roleBase = roleFallback;
       window.role = roleBase;
       window._roleReal = roleBase;
       sessionStorage.setItem('userRole',roleBase);
