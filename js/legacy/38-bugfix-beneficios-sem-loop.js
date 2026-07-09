@@ -48,13 +48,14 @@
     if(!/beneficios|meus-beneficios/i.test(txt)) desativarBeneficios();
   }, true);
 
+  // REMOVED: Performance optimization - 250ms setInterval polling
   // Segurança extra: se outro módulo estiver ativo, Benefícios fica escondido.
-  setInterval(function(){
+  /*setInterval(function(){
     var v = $('view-beneficios');
     if(!v) return;
     var outraAtiva = Array.prototype.some.call(document.querySelectorAll('[id^="view-"]'), function(el){
       return el.id !== 'view-beneficios' && el.classList.contains('active') && getComputedStyle(el).display !== 'none';
     });
     if(outraAtiva) desativarBeneficios();
-  }, 250);
+  }, 250);*/
 })();

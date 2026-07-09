@@ -2111,9 +2111,11 @@ window.acessosSalvar=async function(){
   }
 };
 
+// REMOVED: Performance optimization - 600ms setInterval polling
 // Auto-inicialização: o sistema de abas da Gestão RH é frágil e tem várias
 // camadas reescrevendo o conteúdo, então em vez de depender de um callback
 // específico, observa quando o painel fica visível e carrega os dados ali.
+/*
 (function(){
   var apCarregado = false;
   setInterval(function(){
@@ -2127,6 +2129,7 @@ window.acessosSalvar=async function(){
     }
   }, 600);
 })();
+*/
 
 // ── RENDER RH ──
 async function renderRH(){

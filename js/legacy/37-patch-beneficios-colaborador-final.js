@@ -115,7 +115,8 @@
       if(vazio || oculto) renderBeneficiosColaboradorFinal();
     }
   }
-  setInterval(conferir, 800);
+  // REMOVED: Performance optimization - 800ms setInterval polling
+  // setInterval(conferir, 800);
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', conferir);
   else setTimeout(conferir, 100);
 })();

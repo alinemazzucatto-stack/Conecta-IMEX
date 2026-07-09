@@ -30,7 +30,8 @@ var mo = new MutationObserver(function(){ tentarCarregar(); });
   if(v) mo.observe(v, {attributes:true, attributeFilter:['style','class']});
   else requestAnimationFrame(observe);
 })();
-setInterval(tentarCarregar, 600);
+// REMOVED: Performance optimization - 600ms setInterval polling (MutationObserver handles updates)
+// setInterval(tentarCarregar, 600);
 
 /* 3) Animação de contagem nos números do hero */
 function animarNumero(id, valor){

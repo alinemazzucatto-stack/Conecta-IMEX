@@ -71,7 +71,9 @@
     return typeof prevSwitchView === 'function' ? prevSwitchView.apply(this, arguments) : undefined;
   };
 
-  // 4) Fallback: se view-pesquisas ficar visível, redireciona (só para RH)
+  // 4) REMOVED: Aggressive 300ms polling causes performance drain and CSS race conditions
+  // Consolidated in 000-core-functions.js with event-driven approach
+  /*
   setInterval(function(){
     if(!souRH()) return;
     var vp = document.getElementById('view-pesquisas');
@@ -83,5 +85,6 @@
       abrirPesquisasDashboard();
     }
   }, 300);
+  */
 })();
 

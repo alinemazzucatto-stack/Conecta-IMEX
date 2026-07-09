@@ -247,7 +247,8 @@ function tentarInicializar(){
   if(visivel && !_conectaAiEstavaVisivel) window.conectaAIAtualizarTemas();
   _conectaAiEstavaVisivel = visivel;
 }
-setInterval(tentarInicializar, 700);
+// REMOVED: Performance optimization - 700ms setInterval polling
+// setInterval(tentarInicializar, 700);
 setTimeout(window.conectaAIAtualizarTemas, 200);
 })();
 

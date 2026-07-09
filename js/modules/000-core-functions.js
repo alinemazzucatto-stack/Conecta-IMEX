@@ -78,6 +78,16 @@
     __navigationInProgress = true;
 
     try {
+      // ──────────────────────────────────────────────────────────────────────
+      // PESQUISAS: Apenas RH pode acessar. Colaborador/Gestor -> Dashboard
+      // ──────────────────────────────────────────────────────────────────────
+      if (String(viewId || '').toLowerCase() === 'pesquisas' && !window.isRH()) {
+        console.log('[PESQUISAS] Access denied for role:', window.getRoleOrDefault(), '→ redirecting to dashboard');
+        __navigationInProgress = false;
+        window.forceView('dashboard');
+        return;
+      }
+
       var allViews = document.querySelectorAll('[id^="view-"]');
       if (allViews && allViews.length > 0) {
         allViews.forEach(function(v) {

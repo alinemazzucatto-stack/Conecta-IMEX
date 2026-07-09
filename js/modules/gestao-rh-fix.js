@@ -23,6 +23,7 @@ var mo = new MutationObserver(corrigir);
   if(hero) mo.observe(hero, {attributes:true, attributeFilter:['style','class']});
   corrigir();
 })();
-setInterval(corrigir, 500);
+// REMOVED: Performance optimization - 500ms setInterval polling (MutationObserver handles updates)
+// setInterval(corrigir, 500);
 })();
 

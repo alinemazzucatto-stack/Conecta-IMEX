@@ -131,13 +131,14 @@ window.grhRenderRoadmap = function(){
   if(pane) pane.innerHTML = window.grhRoadmapPainelHTML();
 };
 
-setInterval(function(){
+// REMOVED: Performance optimization - 400ms setInterval polling
+/*setInterval(function(){
   var pane = document.getElementById('grh-pane-roadmap');
   if(!pane) return;
   if(window.getComputedStyle(pane).display === 'none') return;
   if(!pane.querySelector('[data-grh-roadmap="1"]')){
     pane.innerHTML = window.grhRoadmapPainelHTML();
   }
-}, 400);
+}, 400);*/
 
 })();

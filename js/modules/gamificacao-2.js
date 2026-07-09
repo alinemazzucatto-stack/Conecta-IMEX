@@ -33,6 +33,7 @@
   montarFundo();
   var mo = new MutationObserver(montarFundo);
   mo.observe(document.body, {childList:true, subtree:true});
-  setInterval(montarFundo, 1500);
+  // REMOVED: Performance optimization - 1500ms setInterval polling (MutationObserver handles updates)
+  // setInterval(montarFundo, 1500);
 })();
 

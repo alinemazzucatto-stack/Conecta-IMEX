@@ -116,13 +116,14 @@
       +infoBar+'</div>';
   };
 
+  // REMOVED: Performance optimization - 400ms setInterval polling
   // Força re-render do pane quando visível (usa data-grh-pesq="2" como fingerprint novo)
-  setInterval(function(){
+  /*setInterval(function(){
     var pane=document.getElementById('grh-pane-pesquisas');
     if(!pane) return;
     if(window.getComputedStyle(pane).display==='none') return;
     if(!pane.querySelector('[data-grh-pesq="2"]')){
       pane.innerHTML=window.grhPesquisasPainelHTML();
     }
-  },400);
+  },400);*/
 })();

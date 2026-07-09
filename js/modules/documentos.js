@@ -121,15 +121,17 @@ window.abrirMeusDocumentos = function(){
   carregarMeusDocumentos();
 };
 
-setInterval(ensureSidebarIcon, 900);
+// REMOVED: Performance optimization - 900ms setInterval polling
+// setInterval(ensureSidebarIcon, 900);
 setTimeout(ensureSidebarIcon, 300);
 
+// REMOVED: Performance optimization - 400ms setInterval polling
 // Mantém a view estável caso o vigia de navegação do sistema tente escondê-la
-setInterval(function(){
+/*setInterval(function(){
   var v = document.getElementById('view-meus-documentos');
   if(v && v.classList.contains('active') && window.getComputedStyle(v).display === 'none'){
     v.style.setProperty('display','block','important');
   }
-}, 400);
+}, 400);*/
 })();
 

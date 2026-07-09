@@ -86,6 +86,7 @@
   const oldRender=window.grhRenderMovimentacoes;
   window.grhRenderMovimentacoes=function(){const r=typeof oldRender==='function'?oldRender.apply(this,arguments):undefined; setTimeout(aplicar,20); setTimeout(window.movFinalRender,60); return r;};
   new MutationObserver(()=>aplicar()).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
-  setInterval(aplicar,700);
+  // REMOVED: Performance optimization - 700ms setInterval polling
+  // setInterval(aplicar,700);
   document.addEventListener('click',()=>setTimeout(aplicar,60),true);
 })();

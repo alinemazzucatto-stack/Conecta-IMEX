@@ -1051,6 +1051,7 @@ function dashChecarVisibilidade(){
   if(visivel && !dashEstavaVisivel) dashCarregarTudo();
   dashEstavaVisivel = visivel;
 }
-setInterval(dashChecarVisibilidade, 500);
+// REMOVED: Performance optimization - 500ms setInterval polling
+// setInterval(dashChecarVisibilidade, 500);
 setTimeout(dashChecarVisibilidade, 300);
 })();

@@ -41,11 +41,12 @@ window.grhDocsCarregar = function(force){
   return Promise.resolve();
 };
 
+// REMOVED: Performance optimization - 400ms setInterval polling
 /* ═══════════════════════════════════════════════
    GUARD — caso alguma chamada residual ao Firebase
    consiga setar _grhDocsErro, limpa em 400ms
    ═══════════════════════════════════════════════ */
-setInterval(function(){
+/*setInterval(function(){
   if(window._grhDocsErro){
     window._grhDocsErro       = null;
     window._grhDocsCarregando = false;
@@ -54,7 +55,7 @@ setInterval(function(){
     if(typeof window.grhDocsResumoAtualizar==='function') window.grhDocsResumoAtualizar();
     if(typeof window.grhDocsRender==='function') window.grhDocsRender();
   }
-}, 400);
+}, 400);*/
 
 /* ═══════════════════════════════════════════════
    SALVAR (novo ou editar)
