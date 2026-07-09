@@ -306,6 +306,7 @@ window.doLogin = async function(){
       return;
     }
 
+    // ── ERRO: Fallback falhou ou usuário não encontrado ──
     var msgs = {
       'auth/wrong-password': 'Senha incorreta.',
       'auth/invalid-credential': 'E-mail ou senha inválidos.',
@@ -318,8 +319,18 @@ window.doLogin = async function(){
     };
     showErr(msgs[e.code] || e.message || 'Erro desconhecido ao entrar.');
   } finally {
-    // NÃO redefinir __loginEmAndamento aqui — o fallback define em setTimeout
-    // para evitar que 02-legacy.js reverta loginScreen/appShell enquanto UI está mudando
+    // CRÍTICO: Sempre limpar flags de autenticação em progresso
+    // Se chegou aqui sem sucesso, precisa liberar UI para nova tentativa
+    window.__loginEmAndamento = false;
+    window.__restoringSession = false;
+
+    // Liberar botão e ocultar loading se ainda estiverem presos
+    try {
+      var btn = document.getElementById('lBtn');
+      var load = document.getElementById('lLoading');
+      if(btn) btn.disabled = false;
+      if(load) load.style.display = 'none';
+    } catch(e) {}
   }
 };
 
