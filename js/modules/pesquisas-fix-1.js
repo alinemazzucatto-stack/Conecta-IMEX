@@ -46,7 +46,8 @@
 
   // Esse painel (grh-pane-pesquisas dentro de Gestão RH) é exclusivo de RH.
   // Colaborador/gestor devem continuar na view-pesquisas normal.
-  function souRH(){ return typeof window.isRH === 'function' ? window.isRH() : false; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function souRH(){ return typeof window.isRH === 'function' ? window.isRH() : false; }
 
   // 1) Intercepta grhTab
   var prevGrhTab = window.grhTab;

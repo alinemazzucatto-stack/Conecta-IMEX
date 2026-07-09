@@ -24,12 +24,13 @@
   };
   const ALIAS = {'aprovacao-ferias':'gestor'};
 
-  function roleAtual(){
-    const r = String(window.role || sessionStorage.getItem('userRole') || window._roleAtivo || window._roleReal || 'colaborador').toLowerCase();
-    if(r.includes('rh')) return 'rh';
-    if(r.includes('gestor')) return 'gestor';
-    return 'colaborador';
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   const r = String(window.role || sessionStorage.getItem('userRole') || window._roleAtivo || window._roleReal || 'colaborador').toLowerCase();
+  //   if(r.includes('rh')) return 'rh';
+  //   if(r.includes('gestor')) return 'gestor';
+  //   return 'colaborador';
+  // }
   function setTopbar(icon,label){
     const pi=document.getElementById('tPageIcon'); if(pi){pi.textContent=icon; pi.style.display='';}
     const pt=document.getElementById('tPageTitle'); if(pt) pt.textContent=label;

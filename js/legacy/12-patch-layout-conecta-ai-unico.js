@@ -5,8 +5,10 @@
     views.forEach((el,i)=>{ if(i>0) el.remove(); });
     document.querySelectorAll('#card-conecta-ai,#card-talentos,[data-intra-tab="conecta-ai"],[data-intra-tab="clima-live"],#sb-talentos').forEach(e=>e.remove());
   }
-  function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
-  function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
   window.conectaAIAtualizarTemas=function(){
     const box=document.getElementById('ai-lateral-temas'); if(!box) return;
     let temas;

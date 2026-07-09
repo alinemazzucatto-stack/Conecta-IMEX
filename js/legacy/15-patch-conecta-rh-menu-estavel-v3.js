@@ -44,12 +44,13 @@
   const R_DOT = {colaborador:'👤',gestor:'👔',rh:'🏢','rh-colaborador':'🏢'};
 
   function norm(v){ return String(v||'').toLowerCase().trim(); }
-  function roleAtual(){
-    let r = norm(window.role || sessionStorage.getItem('userRole') || 'colaborador');
-    if(r === 'rh-colaborador') r = 'rh';
-    if(!ACCESS_FINAL[r]) r = 'colaborador';
-    return r;
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   let r = norm(window.role || sessionStorage.getItem('userRole') || 'colaborador');
+  //   if(r === 'rh-colaborador') r = 'rh';
+  //   if(!ACCESS_FINAL[r]) r = 'colaborador';
+  //   return r;
+  // }
   function perfisReais(){
     try{
       if(window.currentUserData && Array.isArray(window.currentUserData.perfis)) return window.currentUserData.perfis.map(norm);
@@ -132,47 +133,49 @@
     document.querySelectorAll('[id^="view-"]').forEach(el=>{ el.classList.remove('active','dev-active'); el.style.setProperty('display','none','important'); });
     const hero=document.getElementById('mainHero'); if(hero) hero.style.setProperty('display','none','important');
   }
-  function navegar(id){
-    const allowed=ACCESS_FINAL[roleAtual()] || ACCESS_FINAL.colaborador;
-    if(!allowed.includes(id)) id='intranet';
-    esconderViews();
-    if(id==='estrutura-carreira') renderEstruturaCarreira();
-    if(id==='desenvolvimento') renderDesenvolvimentoHub();
-    if(id==='beneficios') renderBeneficiosHub();
-    if(id==='meu-desenvolvimento' && typeof renderMeuDesenvolvimento==='function') renderMeuDesenvolvimento();
-    const v=document.getElementById('view-'+id);
-    if(v){ v.classList.add('active'); if(id==='meu-desenvolvimento') v.classList.add('dev-active'); v.style.setProperty('display','block','important'); }
-    document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
-    const activeMain = (['organograma','trilhas'].includes(id)) ? 'estrutura-carreira' : (['experiencia','cargos','disc','meu-desenvolvimento'].includes(id) ? 'desenvolvimento' : id);
-    const sb=document.getElementById('sb-'+activeMain); if(sb) sb.classList.add('active');
-    const meta=META_FINAL[id] || META_FINAL[activeMain]; if(meta) setTopbar(meta[0], meta[1]);
-    try{
-      if(id==='intranet' && typeof intraCarregar==='function') intraCarregar();
-      if(id==='pesquisas' && typeof pesqCarregar==='function') pesqCarregar();
-      if(id==='disc' && typeof discCarregar==='function') discCarregar();
-      if(id==='cargos' && typeof cargosCarregar==='function') cargosCarregar();
-      if(id==='conecta-ai' && typeof carregarTemasAI==='function') carregarTemasAI();
-      if(id==='gestao-rh' && typeof gestaoRhCarregar==='function') gestaoRhCarregar();
-      if(id==='usuarios' && typeof carregarUsuarios==='function') carregarUsuarios();
-      if(id==='ouvidoria' && typeof ouvidoriaCarregar==='function') ouvidoriaCarregar();
-      if(id==='gestor' && typeof renderGestor==='function') renderGestor();
-    }catch(e){ console.warn('navegar:', id, e); }
-  }
-  function aplicarMenu(){
-    window.ROLE_ACCESS = window.ROLE_ACCESS || {};
-    Object.keys(ACCESS_FINAL).forEach(k=>window.ROLE_ACCESS[k]=ACCESS_FINAL[k].slice());
-    window.TAB_META = window.TAB_META || {};
-    Object.keys(META_FINAL).forEach(k=>window.TAB_META[k]={icon:META_FINAL[k][0], label:META_FINAL[k][1]});
-    const r=roleAtual();
-    const menuOrder = r==='rh' ? ORDER_RH : (r==='gestor' ? ORDER_GESTOR : ORDER_FINAL);
-    const sidebar=document.getElementById('sidebar'); const spacer=sidebar ? sidebar.querySelector('.sb-spacer') : null;
-    menuOrder.forEach(ensureItem);
-    if(sidebar && spacer){ menuOrder.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el, spacer); }); }
-    const allSidebarIds=['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','conecta-ai','ouvidoria','gestor','disc','cargos','meu-desenvolvimento','organograma','trilhas','experiencia','gestao-rh','usuarios','dashboard','auditoria','pdi','rh','calendario','colaboradores'];
-    allSidebarIds.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display', menuOrder.includes(id) ? 'flex' : 'none', 'important'); });
-    const grh=document.getElementById('sb-gestao-rh'); if(grh) grh.classList.toggle('sb-rh-highlight', r==='rh');
-    setPerfilVisual();
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function navegar(id){
+  //   const allowed=ACCESS_FINAL[roleAtual()] || ACCESS_FINAL.colaborador;
+  //   if(!allowed.includes(id)) id='intranet';
+  //   esconderViews();
+  //   if(id==='estrutura-carreira') renderEstruturaCarreira();
+  //   if(id==='desenvolvimento') renderDesenvolvimentoHub();
+  //   if(id==='beneficios') renderBeneficiosHub();
+  //   if(id==='meu-desenvolvimento' && typeof renderMeuDesenvolvimento==='function') renderMeuDesenvolvimento();
+  //   const v=document.getElementById('view-'+id);
+  //   if(v){ v.classList.add('active'); if(id==='meu-desenvolvimento') v.classList.add('dev-active'); v.style.setProperty('display','block','important'); }
+  //   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  //   const activeMain = (['organograma','trilhas'].includes(id)) ? 'estrutura-carreira' : (['experiencia','cargos','disc','meu-desenvolvimento'].includes(id) ? 'desenvolvimento' : id);
+  //   const sb=document.getElementById('sb-'+activeMain); if(sb) sb.classList.add('active');
+  //   const meta=META_FINAL[id] || META_FINAL[activeMain]; if(meta) setTopbar(meta[0], meta[1]);
+  //   try{
+  //     if(id==='intranet' && typeof intraCarregar==='function') intraCarregar();
+  //     if(id==='pesquisas' && typeof pesqCarregar==='function') pesqCarregar();
+  //     if(id==='disc' && typeof discCarregar==='function') discCarregar();
+  //     if(id==='cargos' && typeof cargosCarregar==='function') cargosCarregar();
+  //     if(id==='conecta-ai' && typeof carregarTemasAI==='function') carregarTemasAI();
+  //     if(id==='gestao-rh' && typeof gestaoRhCarregar==='function') gestaoRhCarregar();
+  //     if(id==='usuarios' && typeof carregarUsuarios==='function') carregarUsuarios();
+  //     if(id==='ouvidoria' && typeof ouvidoriaCarregar==='function') ouvidoriaCarregar();
+  //     if(id==='gestor' && typeof renderGestor==='function') renderGestor();
+  //   }catch(e){ console.warn('navegar:', id, e); }
+  // }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function aplicarMenu(){
+  //   window.ROLE_ACCESS = window.ROLE_ACCESS || {};
+  //   Object.keys(ACCESS_FINAL).forEach(k=>window.ROLE_ACCESS[k]=ACCESS_FINAL[k].slice());
+  //   window.TAB_META = window.TAB_META || {};
+  //   Object.keys(META_FINAL).forEach(k=>window.TAB_META[k]={icon:META_FINAL[k][0], label:META_FINAL[k][1]});
+  //   const r=roleAtual();
+  //   const menuOrder = r==='rh' ? ORDER_RH : (r==='gestor' ? ORDER_GESTOR : ORDER_FINAL);
+  //   const sidebar=document.getElementById('sidebar'); const spacer=sidebar ? sidebar.querySelector('.sb-spacer') : null;
+  //   menuOrder.forEach(ensureItem);
+  //   if(sidebar && spacer){ menuOrder.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el, spacer); }); }
+  //   const allSidebarIds=['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','conecta-ai','ouvidoria','gestor','disc','cargos','meu-desenvolvimento','organograma','trilhas','experiencia','gestao-rh','usuarios','dashboard','auditoria','pdi','rh','calendario','colaboradores'];
+  //   allSidebarIds.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display', menuOrder.includes(id) ? 'flex' : 'none', 'important'); });
+  //   const grh=document.getElementById('sb-gestao-rh'); if(grh) grh.classList.toggle('sb-rh-highlight', r==='rh');
+  //   setPerfilVisual();
+  // }
   window.buildSidebar = function(){ aplicarMenu(); const r=roleAtual(); const first=(r==='rh'?ORDER_RH:(r==='gestor'?ORDER_GESTOR:ORDER_FINAL))[0] || 'intranet'; navegar(first); };
   window.switchView = function(v){ aplicarMenu(); navegar(v); };
   window.sbNav = function(v){ aplicarMenu(); navegar(v); };

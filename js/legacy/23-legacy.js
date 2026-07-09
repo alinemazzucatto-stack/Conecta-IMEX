@@ -4,8 +4,10 @@
   window.__roteadorFinalInstalado = true;
 
   /* ── helpers ── */
-  function role(){ return String(window._roleAtivo||window._roleReal||window.role||sessionStorage.getItem('userRole')||'colaborador').toLowerCase(); }
-  function isRH(){ const r=role(); return r==='rh'||r==='rh-colaborador'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function role(){ return String(window._roleAtivo||window._roleReal||window.role||sessionStorage.getItem('userRole')||'colaborador').toLowerCase(); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){ const r=role(); return r==='rh'||r==='rh-colaborador'; }
   function topbar(icon,label){
     const pi=document.getElementById('tPageIcon'); if(pi) pi.textContent=icon;
     const pt=document.getElementById('tPageTitle'); if(pt) pt.textContent=label;
@@ -84,36 +86,38 @@
   };
 
   /* ── roteador principal ── */
-  function navegar(id){
-    const r = role();
-    const allowed = ACCESS[r] || ACCESS.colaborador;
-    if(!allowed.includes(id)) id = isRH() ? 'gestao-rh' : 'intranet';
-    const meta = META[id] || ['▫️', id];
-    showView(id);
-    topbar(meta[0], meta[1]);
-    loadView(id);
-    // Bloqueia ações RH-only para colaboradores
-    if(!isRH() && typeof window.aplicarBloqueioColaborador==='function'){
-      setTimeout(window.aplicarBloqueioColaborador, 80);
-    }
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function navegar(id){
+  //   const r = role();
+  //   const allowed = ACCESS[r] || ACCESS.colaborador;
+  //   if(!allowed.includes(id)) id = isRH() ? 'gestao-rh' : 'intranet';
+  //   const meta = META[id] || ['▫️', id];
+  //   showView(id);
+  //   topbar(meta[0], meta[1]);
+  //   loadView(id);
+  //   // Bloqueia ações RH-only para colaboradores
+  //   if(!isRH() && typeof window.aplicarBloqueioColaborador==='function'){
+  //     setTimeout(window.aplicarBloqueioColaborador, 80);
+  //   }
+  // }
 
   /* ── menu sidebar ── */
-  function aplicarMenu(){
-    const r = role();
-    const order = r==='rh'||r==='rh-colaborador' ? ORDER_RH : (r==='gestor' ? ORDER_GESTOR : ORDER_COLAB);
-    const sidebar = document.getElementById('sidebar');
-    if(!sidebar) return;
-    const known = [...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos','pesquisas','beneficios','solicitacao','conecta-ai','mais'])];
-    known.forEach(id=>{
-      const el = document.getElementById('sb-'+id);
-      if(el) el.style.setProperty('display', order.includes(id)?'flex':'none', 'important');
-    });
-    const lbl = document.getElementById('btnTrocarPerfilLabel');
-    if(lbl) lbl.textContent = isRH() ? '👤 Minha Visão' : '🏢 Voltar RH';
-    const pLabel = document.getElementById('pLabel'); if(pLabel) pLabel.textContent = isRH()?'RH':(r==='gestor'?'Gestor':'Colaborador');
-    const pDot   = document.getElementById('pDot');   if(pDot)   pDot.textContent   = isRH()?'🏢':(r==='gestor'?'👔':'👤');
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function aplicarMenu(){
+  //   const r = role();
+  //   const order = r==='rh'||r==='rh-colaborador' ? ORDER_RH : (r==='gestor' ? ORDER_GESTOR : ORDER_COLAB);
+  //   const sidebar = document.getElementById('sidebar');
+  //   if(!sidebar) return;
+  //   const known = [...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos','pesquisas','beneficios','solicitacao','conecta-ai','mais'])];
+  //   known.forEach(id=>{
+  //     const el = document.getElementById('sb-'+id);
+  //     if(el) el.style.setProperty('display', order.includes(id)?'flex':'none', 'important');
+  //   });
+  //   const lbl = document.getElementById('btnTrocarPerfilLabel');
+  //   if(lbl) lbl.textContent = isRH() ? '👤 Minha Visão' : '🏢 Voltar RH';
+  //   const pLabel = document.getElementById('pLabel'); if(pLabel) pLabel.textContent = isRH()?'RH':(r==='gestor'?'Gestor':'Colaborador');
+  //   const pDot   = document.getElementById('pDot');   if(pDot)   pDot.textContent   = isRH()?'🏢':(r==='gestor'?'👔':'👤');
+  // }
 
   /* ── instala ── */
   function instalar(){

@@ -5,7 +5,8 @@
   function normKey(v){ return safe(v).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
   function niveis(){ return {1:'Trainee / Estagiário',2:'Júnior / Assistente',3:'Pleno / Analista',4:'Sênior / Especialista',5:'Líder / Coordenador',6:'Gerente / Diretor',7:'C-Level / Presidente'}; }
   function normCargo(c, idx){ if(typeof c==='string') c={nome:c}; c=c||{}; var n=parseInt(c.nivel||c.level||c.grade||1,10); var o=parseInt(c.ordem||c.order||(idx+1),10); return Object.assign({}, c, {nome:safe(c.nome||c.cargo||c.titulo||c.title||c.name,'Cargo sem nome'), nivel:(Number.isFinite(n)&&n>0?n:1), ordem:(Number.isFinite(o)&&o>0?o:idx+1), proximo:safe(c.proximo||c.proximoCargo||c.nextCargo||c.next,'')}); }
-  function isRH(){ return ((_roleReal||role)==='rh' || (_roleReal||role)==='rh-colaborador'); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){ return ((_roleReal||role)==='rh' || (_roleReal||role)==='rh-colaborador'); }
   window.BaseCargosState = {setores:[], filtro:'', setor:'__all__'};
 
   function ensureModal(){

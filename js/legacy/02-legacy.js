@@ -306,8 +306,10 @@ function hasPerfil(perfil) {
 // isso devem refletir a VISÃO ATIVA agora (`role`), não a permissão de
 // fundo (`hasPerfil`) — senão uma conta híbrida RH+colaborador continua
 // vendo conteúdo de RH mesmo tendo escolhido "ver como colaborador".
-function isRH() { return role === 'rh' || role === 'rh-colaborador'; }
-function isGestor() { return role === 'gestor'; }
+// REMOVED: Consolidated in 000-core-functions.js
+// function isRH() { return role === 'rh' || role === 'rh-colaborador'; }
+// REMOVED: Consolidated in 000-core-functions.js
+// function isGestor() { return role === 'gestor'; }
 
 // ── FUNÇÃO CENTRALIZADA DE EMAIL (única implementação) ──
 // Consolidada de 3 implementações diferentes (antes havia conflitos)

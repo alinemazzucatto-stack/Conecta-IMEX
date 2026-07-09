@@ -1,15 +1,16 @@
 // ===== script: (sem id) =====
 // Correção final: modelos prontos e encerradas aparecem somente para RH.
 (function(){
-  function isRH(){
-    // `_roleReal === 'rh-colaborador'` é a marca de "conta híbrida vendo
-    // como colaborador" (ver login) — NÃO significa "é RH agora". Checar
-    // isso aqui é o inverso do que se quer: libera conteúdo de RH
-    // justamente para quem escolheu ver como colaborador.
-    try {
-      return (typeof role !== 'undefined' && role === 'rh') || (typeof window.role !== 'undefined' && window.role === 'rh');
-    } catch(e){ return false; }
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){
+  //   // `_roleReal === 'rh-colaborador'` é a marca de "conta híbrida vendo
+  //   // como colaborador" (ver login) — NÃO significa "é RH agora". Checar
+  //   // isso aqui é o inverso do que se quer: libera conteúdo de RH
+  //   // justamente para quem escolheu ver como colaborador.
+  //   try {
+  //     return (typeof role !== 'undefined' && role === 'rh') || (typeof window.role !== 'undefined' && window.role === 'rh');
+  //   } catch(e){ return false; }
+  // }
   function aplicarPermissoesPesquisas(){
     var rh = isRH();
     var tabModelos = document.getElementById('pesq-tab-modelos-btn');

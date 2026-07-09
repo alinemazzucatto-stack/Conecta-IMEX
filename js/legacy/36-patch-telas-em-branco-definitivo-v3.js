@@ -91,16 +91,17 @@
   var oldShow = window.showView;
   var oldGrh = window.grhTab;
 
-  function navegar(id){
-    if(id==='meus-beneficios') id='beneficios';
-    if(id==='beneficios') return renderBeneficiosDireto();
-    if(id==='beneficios-rh') return renderGestaoRHBeneficiosDireto();
-    var ret;
-    try{ if(typeof oldSb === 'function') ret = oldSb.apply(this, arguments); }catch(e){ console.warn('[patch-v3] sbNav anterior falhou:', id, e); }
-    setTimeout(function(){ conferirTela(id); }, 80);
-    setTimeout(function(){ conferirTela(id); }, 350);
-    return ret;
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function navegar(id){
+  //   if(id==='meus-beneficios') id='beneficios';
+  //   if(id==='beneficios') return renderBeneficiosDireto();
+  //   if(id==='beneficios-rh') return renderGestaoRHBeneficiosDireto();
+  //   var ret;
+  //   try{ if(typeof oldSb === 'function') ret = oldSb.apply(this, arguments); }catch(e){ console.warn('[patch-v3] sbNav anterior falhou:', id, e); }
+  //   setTimeout(function(){ conferirTela(id); }, 80);
+  //   setTimeout(function(){ conferirTela(id); }, 350);
+  //   return ret;
+  // }
 
   function conferirTela(id){
     if(id==='beneficios') return renderBeneficiosDireto();
