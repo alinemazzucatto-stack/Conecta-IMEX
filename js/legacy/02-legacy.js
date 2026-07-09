@@ -4410,6 +4410,12 @@ auth.onAuthStateChanged(async (user) => {
     // Sem usuário autenticado: limpa resquícios de sessão anterior que podem
     // causar conflito/oscilação com o novo login. Isso evita que um "colaborador"
     // logado anteriormente interfira com um novo login de RH na mesma máquina.
+    // MAS: se estamos em login em andamento (fallback), não limpar — o fallback
+    // já definiu os dados corretos e está transitando para app
+    if (window.__loginEmAndamento) {
+      console.log('[onAuthStateChanged] Pulando limpeza (login em andamento)');
+      return;
+    }
     try { localStorage.removeItem('usuarioLogado'); } catch(e) {}
     try { sessionStorage.removeItem('userRole'); } catch(e) {}
     try { sessionStorage.removeItem('userName'); } catch(e) {}
