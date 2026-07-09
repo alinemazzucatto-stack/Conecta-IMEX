@@ -79,9 +79,9 @@
 
     try {
       // ──────────────────────────────────────────────────────────────────────
-      // PESQUISAS: Apenas RH pode acessar. Colaborador/Gestor -> Dashboard
+      // PESQUISAS: RH e Gestor podem acessar. Colaborador -> Dashboard
       // ──────────────────────────────────────────────────────────────────────
-      if (String(viewId || '').toLowerCase() === 'pesquisas' && !window.isRH()) {
+      if (String(viewId || '').toLowerCase() === 'pesquisas' && window.isColaborador() && !window.isGestor() && !window.isRH()) {
         console.log('[PESQUISAS] Access denied for role:', window.getRoleOrDefault(), '→ redirecting to dashboard');
         __navigationInProgress = false;
         window.forceView('dashboard');
