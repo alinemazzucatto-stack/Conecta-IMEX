@@ -83,6 +83,7 @@
     }
   }
 
-  setInterval(checkAndFixDesl, 500);
+  // REMOVED: Performance optimization - 500ms setInterval polling
+  // setInterval(checkAndFixDesl, 500);
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(checkAndFixDesl, 800); });
 })();

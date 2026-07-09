@@ -1041,10 +1041,11 @@ var _orig=window.sbNav;
 if(typeof _orig==='function'){
   window.sbNav=function(id){var r=_orig.apply(this,arguments);if(id==='gamificacao')setTimeout(function(){init(true);},120);return r;};
 }
-setInterval(function(){
+// REMOVED: Performance optimization - 900ms setInterval polling
+/*setInterval(function(){
   var v=document.getElementById('view-gamificacao');
   if(v&&window.getComputedStyle(v).display!=='none')init();
-},900);
+},900);*/
 setTimeout(init,1000);
 })();
 

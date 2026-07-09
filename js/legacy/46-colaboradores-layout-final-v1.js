@@ -197,10 +197,10 @@
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){
       setTimeout(aplicar,900);
-      setInterval(aplicar,2200);
+      /* REMOVED: Performance optimization */ /* setInterval(aplicar,2200); */
     });
   }else{
     setTimeout(aplicar,900);
-    setInterval(aplicar,2200);
+    /* REMOVED: Performance optimization */ /* setInterval(aplicar,2200); */
   }
 })();

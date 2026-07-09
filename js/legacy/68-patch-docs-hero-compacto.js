@@ -131,5 +131,6 @@
   window.voltarGestaoRH=window.voltarGestaoRHSeguro;
   document.addEventListener('click',function(){setTimeout(removeHeroTextNodes,30)},true);
   document.addEventListener('DOMContentLoaded',function(){removeHeroTextNodes(); if($('grh-pane-documentos') && getComputedStyle($('grh-pane-documentos')).display!=='none') applyDocsMode(true);});
-  setInterval(function(){removeHeroTextNodes(); var p=$('grh-pane-documentos'); if(p && getComputedStyle(p).display!=='none' && !p.querySelector('[data-docs-rh="1"]')){p.innerHTML=window.grhDocsPainelHTML(); window.grhDocsCarregar(true);} },1200);
+  // REMOVED: Performance optimization - 1200ms setInterval polling
+  // setInterval(function(){removeHeroTextNodes(); var p=$('grh-pane-documentos'); if(p && getComputedStyle(p).display!=='none' && !p.querySelector('[data-docs-rh="1"]')){p.innerHTML=window.grhDocsPainelHTML(); window.grhDocsCarregar(true);} },1200);
 })();

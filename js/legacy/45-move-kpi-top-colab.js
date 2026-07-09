@@ -8,5 +8,6 @@ function move(){
    table.parentNode.insertBefore(panel, table);
  }
 }
-setInterval(move,1000);
+// REMOVED: Performance optimization - 1000ms setInterval polling
+// setInterval(move,1000);
 })();

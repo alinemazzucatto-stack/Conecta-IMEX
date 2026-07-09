@@ -19,10 +19,11 @@ function aplicarBadges(){
   });
 }
 
-setInterval(function(){
+// REMOVED: Performance optimization - 700ms setInterval polling
+/*setInterval(function(){
   var v = document.getElementById('view-solicitacao');
   if(v && window.getComputedStyle(v).display !== 'none') aplicarBadges();
-}, 700);
+}, 700);*/
 setTimeout(aplicarBadges, 300);
 })();
 

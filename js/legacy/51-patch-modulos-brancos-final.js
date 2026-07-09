@@ -234,5 +234,6 @@
   }
 
   new MutationObserver(repairBlank).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
-  setInterval(repairBlank, 1000);
+  // REMOVED: Performance optimization - 1000ms setInterval polling (MutationObserver handles updates)
+  // setInterval(repairBlank, 1000);
 })();

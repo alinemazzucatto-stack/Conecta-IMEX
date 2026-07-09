@@ -101,10 +101,11 @@ function observeBeneficios(){
   upgradeCards();
 }
 observeBeneficios();
-setInterval(function(){
+// REMOVED: Performance optimization - 250ms setInterval polling (MutationObserver handles updates)
+/*setInterval(function(){
   var v = document.getElementById('view-beneficios');
   if(v && window.getComputedStyle(v).display !== 'none') upgradeCards();
-}, 250);
+}, 250);*/
 })();
 
 // ===== script: pcb-click-fix-js =====

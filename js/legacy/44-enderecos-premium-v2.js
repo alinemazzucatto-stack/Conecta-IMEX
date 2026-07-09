@@ -439,10 +439,10 @@
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', function(){
       setTimeout(aplicar,800);
-      setInterval(aplicar,1500);
+      /* REMOVED: Performance optimization */ /* setInterval(aplicar,1500); */
     });
   }else{
     setTimeout(aplicar,800);
-    setInterval(aplicar,1500);
+    /* REMOVED: Performance optimization */ /* setInterval(aplicar,1500); */
   }
 })();

@@ -46,6 +46,9 @@ function precisaCorrigir(){
   return !pesqOk || gestaoVisivel;
 }
 
+// REMOVED: MutationObserver + 1000ms polling causes performance drain
+// Event-driven approach now in 000-core-functions.js
+/*
 var mo = new MutationObserver(function(){
   if(precisaCorrigir()) forcarPesquisas();
 });
@@ -59,6 +62,7 @@ var mainHost = document.querySelector('.main-area') || document.body;
 mo.observe(mainHost, {childList:true, subtree:false});
 observeViews();
 setInterval(observeViews, 1000); // garante observar views criadas dinamicamente depois
+*/
 
 document.addEventListener('click', function(ev){
   var t = ev.target;

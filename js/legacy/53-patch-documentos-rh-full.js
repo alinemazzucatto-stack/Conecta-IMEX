@@ -359,7 +359,8 @@
     };
     new MutationObserver(carregarSeVisivel).observe(pane, { attributes:true, attributeFilter:['style','class'] });
     carregarSeVisivel();
-    setInterval(carregarSeVisivel, 2000); // rede de segurança extra para casos sem mudança de atributo
+    // REMOVED: Performance optimization - 2000ms setInterval polling (MutationObserver handles updates)
+    // setInterval(carregarSeVisivel, 2000); // rede de segurança extra para casos sem mudança de atributo
   }
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(grhDocsObservarPane, 300); });
   setTimeout(grhDocsObservarPane, 1500);

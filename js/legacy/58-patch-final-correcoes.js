@@ -130,5 +130,6 @@
   document.addEventListener('DOMContentLoaded', function(){
     [80, 400, 1000, 2000].forEach(t=>setTimeout(guardLoop, t));
   });
-  setInterval(guardLoop, 1500);
+  // REMOVED: Performance optimization - 1500ms setInterval polling
+  // setInterval(guardLoop, 1500);
 })();

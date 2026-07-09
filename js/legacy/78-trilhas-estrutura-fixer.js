@@ -24,6 +24,7 @@
     setTimeout(fixEstruturaView, 1200);
   });
 
+  // REMOVED: Performance optimization - 400ms setInterval polling
   // Monitora continuamente enquanto a view puder ficar ativa
-  setInterval(fixEstruturaView, 400);
+  // setInterval(fixEstruturaView, 400);
 })();

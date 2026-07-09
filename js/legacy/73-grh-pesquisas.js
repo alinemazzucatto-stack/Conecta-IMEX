@@ -109,8 +109,9 @@ window.grhPesqSalvar = function(id){
   if(pane){ pane.__pesqBuilt=false; pane.innerHTML=window.grhPesquisasPainelHTML(); }
 };
 
+// REMOVED: Performance optimization - 400ms setInterval polling
 /* Renderiza o pane quando aberto e ainda sem conteúdo */
-setInterval(function(){
+/*setInterval(function(){
   var pane=document.getElementById('grh-pane-pesquisas');
   if(!pane) return;
   var style=window.getComputedStyle(pane);
@@ -118,6 +119,6 @@ setInterval(function(){
   if(!pane.querySelector('[data-grh-pesq="2"]')){
     pane.innerHTML=window.grhPesquisasPainelHTML();
   }
-},400);
+},400);*/
 
 })();

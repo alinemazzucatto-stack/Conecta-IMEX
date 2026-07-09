@@ -209,8 +209,8 @@
   }, true);
 
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', function(){setTimeout(trocarAcoes,800);setInterval(trocarAcoes,1500);});
+    document.addEventListener('DOMContentLoaded', function(){setTimeout(trocarAcoes,800);/* REMOVED: Performance optimization */ /* setInterval(trocarAcoes,1500); */});
   }else{
-    setTimeout(trocarAcoes,800);setInterval(trocarAcoes,1500);
+    setTimeout(trocarAcoes,800);/* REMOVED: Performance optimization */ /* setInterval(trocarAcoes,1500); */
   }
 })();

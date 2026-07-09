@@ -278,7 +278,8 @@ window.abrirMeusDados = function(){
   carregarMeusDados();
 };
 
-setInterval(ensureSidebarIcon, 900);
+// REMOVED: Performance optimization - 900ms setInterval polling
+// setInterval(ensureSidebarIcon, 900);
 setTimeout(ensureSidebarIcon, 300);
 // Reforço: reage na hora se algum outro script reconstruir a sidebar
 // (mesmo padrão que resolveu o sumiço dos botões em Remuneração).
@@ -302,11 +303,12 @@ setTimeout(function(){
   document.body.appendChild(b);
 }, 4000);
 
+// REMOVED: Performance optimization - 400ms setInterval polling
 // Mantém a view estável caso o vigia de navegação do sistema tente escondê-la
-setInterval(function(){
+/*setInterval(function(){
   var v = document.getElementById('view-meus-dados');
   if(v && v.classList.contains('active') && window.getComputedStyle(v).display === 'none'){
     v.style.setProperty('display','block','important');
   }
-}, 400);
+}, 400);*/
 })();
