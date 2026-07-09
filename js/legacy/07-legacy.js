@@ -1,9 +1,12 @@
 // ===== script: (sem id) =====
 // ── AJUSTES SOLICITADOS: menu, Conecta AI por perfil e Mapa de Talentos só RH ──
 (function(){
-  function isRHProfile(){ return role === 'rh' || role === 'rh-colaborador'; }
-  function isGestorProfile(){ return role === 'gestor'; }
-  function isColabProfile(){ return role === 'colaborador'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRHProfile(){ return role === 'rh' || role === 'rh-colaborador'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isGestorProfile(){ return role === 'gestor'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isColabProfile(){ return role === 'colaborador'; }
 
   function ajustarMenuFerias(){
     document.querySelectorAll('.sidebar .sb-divider').forEach(div=>{

@@ -11,10 +11,11 @@
   const meta = {
     intranet:['🏠','Intranet'], 'estrutura-carreira':['🏢','Estrutura e Carreira'], desenvolvimento:['🚀','Desenvolvimento'], pesquisas:['📋','Pesquisas'], beneficios:['🎁','Meus Benefícios'], solicitacao:['🌴','Férias'], 'conecta-ai':['🤖','Conecta AI'], ouvidoria:['📣','Ouvidoria'], gamificacao:['🏆','Gamificação'], 'gestao-rh':['🏢','Gestão RH'], usuarios:['🔑','Gestão de Acessos'], dashboard:['📊','Dashboard'], auditoria:['📋','Auditoria'], gestor:['👔','Gestor'], rh:['🏢','RH'], organograma:['🏢','Organograma'], trilhas:['🚀','Trilhas de Carreira'], experiencia:['📅','Minha Experiência'], cargos:['📄','Descritivo de Cargos'], disc:['🧠','DISC'], 'meu-desenvolvimento':['✨','Meu Desenvolvimento']
   };
-  function roleAtual(){
-    const r = String(window.role || sessionStorage.getItem('userRole') || 'colaborador').toLowerCase().trim();
-    return roleMap[r] ? r : 'colaborador';
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   const r = String(window.role || sessionStorage.getItem('userRole') || 'colaborador').toLowerCase().trim();
+  //   return roleMap[r] ? r : 'colaborador';
+  // }
   function setTopbar(id){
     const m = meta[id] || ['▫️', id];
     const icon = $('tPageIcon'); if(icon) icon.textContent = m[0];

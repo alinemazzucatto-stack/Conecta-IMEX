@@ -17,18 +17,20 @@
   // 'gestao-rh'→'intranet' achando que não é RH, e a outra redirecionava
   // 'intranet'→'gestao-rh' achando que é — um ping-pong sem fim. Agora as
   // duas leem a MESMA fonte, na mesma ordem de prioridade.
-  function roleAtual(){
-    const vivo = String(window._roleAtivo || window._roleReal || window.role || '').toLowerCase().trim();
-    if(['rh','gestor','colaborador'].includes(vivo)) return vivo;
-    if(vivo === 'rh-colaborador') return 'rh';
-    const p = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || sessionStorage.getItem('role') || localStorage.getItem('imexPreferredRole') || localStorage.getItem('role') || '').toLowerCase();
-    if(['rh','gestor','colaborador'].includes(p)) return p;
-    const label = (($('pLabel')||{}).textContent || '').toLowerCase();
-    if(label.includes('rh')) return 'rh';
-    if(label.includes('gestor')) return 'gestor';
-    return 'colaborador';
-  }
-  window.roleAtual = roleAtual;
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   const vivo = String(window._roleAtivo || window._roleReal || window.role || '').toLowerCase().trim();
+  //   if(['rh','gestor','colaborador'].includes(vivo)) return vivo;
+  //   if(vivo === 'rh-colaborador') return 'rh';
+  //   const p = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || sessionStorage.getItem('role') || localStorage.getItem('imexPreferredRole') || localStorage.getItem('role') || '').toLowerCase();
+  //   if(['rh','gestor','colaborador'].includes(p)) return p;
+  //   const label = (($('pLabel')||{}).textContent || '').toLowerCase();
+  //   if(label.includes('rh')) return 'rh';
+  //   if(label.includes('gestor')) return 'gestor';
+  //   return 'colaborador';
+  // }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // window.roleAtual = roleAtual;
 
   function allowedSet(){ const r=roleAtual(); return r==='rh'?RH_ALLOWED:(r==='gestor'?GESTOR_ALLOWED:COLAB_ALLOWED); }
   function isAllowed(id){ return allowedSet().has(id); }

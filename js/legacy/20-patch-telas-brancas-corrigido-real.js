@@ -26,11 +26,12 @@
     'rh-colaborador':[...ORDER_RH,'experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos','organograma','usuarios','colaboradores','rh']
   };
   function norm(v){return String(v||'').toLowerCase().trim();}
-  function roleAtual(){
-    let r = norm(window.role || sessionStorage.getItem('userRole') || 'colaborador');
-    if(r === 'rh-colaborador') return 'rh';
-    return ACCESS[r] ? r : 'colaborador';
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   let r = norm(window.role || sessionStorage.getItem('userRole') || 'colaborador');
+  //   if(r === 'rh-colaborador') return 'rh';
+  //   return ACCESS[r] ? r : 'colaborador';
+  // }
   function mainArea(){return document.querySelector('.main-area') || document.getElementById('appShell') || document.body;}
   function ensureStyle(){
     if(document.getElementById('patch-telas-brancas-css')) return;
@@ -96,38 +97,40 @@
     el.onclick=function(e){ if(e) e.preventDefault(); window.sbNav(id); return false; };
     return el;
   }
-  function aplicarMenu(){
-    ensureStyle();
-    const r=roleAtual(); const order=r==='rh'?ORDER_RH:(r==='gestor'?ORDER_GESTOR:ORDER_COLAB);
-    const sidebar=document.getElementById('sidebar'); const spacer=sidebar && sidebar.querySelector('.sb-spacer');
-    order.forEach(ensureItem);
-    if(sidebar && spacer){ order.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el, spacer); }); }
-    const known=[...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos'])];
-    known.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display', order.includes(id) ? 'flex' : 'none', 'important'); });
-    const lbl=document.getElementById('btnTrocarPerfilLabel');
-    if(lbl) lbl.textContent = r==='rh' ? '👤 Minha Visão' : '🏢 Voltar RH';
-    const pLabel=document.getElementById('pLabel'); if(pLabel) pLabel.textContent = r==='rh' ? 'RH' : (r==='gestor'?'Gestor':'Colaborador');
-    const pDot=document.getElementById('pDot'); if(pDot) pDot.textContent = r==='rh' ? '🏢' : (r==='gestor'?'👔':'👤');
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function aplicarMenu(){
+  //   ensureStyle();
+  //   const r=roleAtual(); const order=r==='rh'?ORDER_RH:(r==='gestor'?ORDER_GESTOR:ORDER_COLAB);
+  //   const sidebar=document.getElementById('sidebar'); const spacer=sidebar && sidebar.querySelector('.sb-spacer');
+  //   order.forEach(ensureItem);
+  //   if(sidebar && spacer){ order.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el, spacer); }); }
+  //   const known=[...new Set([...ORDER_COLAB,...ORDER_GESTOR,...ORDER_RH,'gestor','disc','cargos','pdi','organograma','trilhas','experiencia','meu-desenvolvimento','usuarios','colaboradores','rh','calendario','mapeamento-talentos'])];
+  //   known.forEach(id=>{ const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display', order.includes(id) ? 'flex' : 'none', 'important'); });
+  //   const lbl=document.getElementById('btnTrocarPerfilLabel');
+  //   if(lbl) lbl.textContent = r==='rh' ? '👤 Minha Visão' : '🏢 Voltar RH';
+  //   const pLabel=document.getElementById('pLabel'); if(pLabel) pLabel.textContent = r==='rh' ? 'RH' : (r==='gestor'?'Gestor':'Colaborador');
+  //   const pDot=document.getElementById('pDot'); if(pDot) pDot.textContent = r==='rh' ? '🏢' : (r==='gestor'?'👔':'👤');
+  // }
   function hideAll(){
     document.querySelectorAll('[id^="view-"]').forEach(el=>{ el.classList.remove('active'); el.style.setProperty('display','none','important'); });
     const hero=document.getElementById('mainHero'); if(hero) hero.style.setProperty('display','none','important');
   }
-  function navegar(id){
-    aplicarMenu();
-    const r=roleAtual(); const allowed=ACCESS[r]||ACCESS.colaborador;
-    if(!allowed.includes(id)) id = r==='rh' ? 'gestao-rh' : 'intranet';
-    renderFallback(id);
-    const v=ensureView(id);
-    hideAll();
-    v.classList.add('active'); v.style.setProperty('display','block','important');
-    document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
-    let activeId = (r==='rh' && ['experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos'].includes(id)) ? 'desenvolvimento-talentos' : id;
-    const sb=document.getElementById('sb-'+activeId); if(sb) sb.classList.add('active');
-    setTopbar(activeId);
-    try{
-      if(id==='pesquisas' && typeof window.pesqCarregar==='function') window.pesqCarregar();
-      if(id==='dashboard' && typeof window.renderDash==='function') window.renderDash();
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function navegar(id){
+  //   aplicarMenu();
+  //   const r=roleAtual(); const allowed=ACCESS[r]||ACCESS.colaborador;
+  //   if(!allowed.includes(id)) id = r==='rh' ? 'gestao-rh' : 'intranet';
+  //   renderFallback(id);
+  //   const v=ensureView(id);
+  //   hideAll();
+  //   v.classList.add('active'); v.style.setProperty('display','block','important');
+  //   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  //   let activeId = (r==='rh' && ['experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos'].includes(id)) ? 'desenvolvimento-talentos' : id;
+  //   const sb=document.getElementById('sb-'+activeId); if(sb) sb.classList.add('active');
+  //   setTopbar(activeId);
+  //   try{
+  //     if(id==='pesquisas' && typeof window.pesqCarregar==='function') window.pesqCarregar();
+  //     if(id==='dashboard' && typeof window.renderDash==='function') window.renderDash();
       if(id==='auditoria' && typeof window.renderAudit==='function') window.renderAudit();
       if(id==='ouvidoria' && typeof window.ouvidoriaCarregar==='function') window.ouvidoriaCarregar();
       if(id==='intranet' && typeof window.intraCarregar==='function') window.intraCarregar();

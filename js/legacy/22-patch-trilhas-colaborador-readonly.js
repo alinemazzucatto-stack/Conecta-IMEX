@@ -6,7 +6,8 @@
     if(r==='gestor') return 'gestor';
     return 'colaborador';
   }
-  function isRHFinal(){ return roleAtualFinal()==='rh'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRHFinal(){ return roleAtualFinal()==='rh'; }
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function ensureViewFinal(id){
     let v=document.getElementById('view-'+id);

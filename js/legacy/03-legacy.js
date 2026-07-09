@@ -604,7 +604,8 @@ async function intraRenderOrganograma() {
   if (!canvas) return;
   canvas.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-30)">⏳ Carregando...</div>';
 
-  const isRH = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
+  // Local const isRH removed - use window.isRH()
+  // const isRH = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
   const rhTb = document.getElementById('intra-org-rh-toolbar');
   if (rhTb) rhTb.style.display = isRH ? 'flex' : 'none';
 
@@ -694,7 +695,8 @@ async function intraOrgAbrirTrilha(setorId) {
   if (!setor) return;
   _intraOrgAtualSetor = setorId;
 
-  const isRH   = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
+  // Local const isRH removed - use window.isRH()
+  // const isRH   = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
   const cor    = setor.cor || '#0047FF';
   const rhBtns = document.getElementById('intra-org-trilha-rh-btns');
   const descList = await orgGetDescritivos().catch(() => []);
@@ -787,7 +789,8 @@ async function intraOrgDrop(e, targetIdx) {
     const setores  = await intraOrgGetSetores();
     const setor    = setores.find(s => s.id === body._setorId);
     const descList = await orgGetDescritivos().catch(() => []);
-    const isRH = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
+    // Local const isRH removed - use window.isRH()
+    // const isRH = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
     intraOrgRenderTrilha(setor, descList, isRH, true);
   } catch(ex) {}
 }
@@ -810,7 +813,8 @@ async function intraOrgAbrirCargo(cargoNome, setorId, setorNome) {
   const proximo  = intraOrgResolverProximo(cargos, cargo, idx);
   const descList = await orgGetDescritivos().catch(() => []);
   const desc     = descList.find(d => intraOrgNormKey(d.cargo) === intraOrgNormKey(cargoNome));
-  const isRH     = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
+  // Local const isRH removed - use window.isRH()
+  // const isRH     = (_roleReal || role) === 'rh' || (_roleReal || role) === 'rh-colaborador';
   const NIVEIS   = {1:'Trainee / Estagiário',2:'Júnior / Assistente',3:'Pleno / Analista',4:'Sênior / Especialista',5:'Líder / Coordenador',6:'Gerente / Diretor',7:'C-Level / Presidente'};
 
   document.getElementById('intra-org-mc-setor').textContent  = setorNome;

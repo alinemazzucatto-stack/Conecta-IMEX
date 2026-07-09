@@ -1,7 +1,9 @@
 // ===== script: patch-conecta-ai-final-js =====
 (function(){
-  function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
-  function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
   window.conectaAIAtualizarTemas=function(){
     const box=document.getElementById('ai-lateral-temas'); if(!box) return;
     let temas;

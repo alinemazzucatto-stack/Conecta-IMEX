@@ -15,7 +15,8 @@
     experiencia:['📆','Experiência'], disc:['🧠','DISC'], cargos:['📄','Descritivo de Cargos'], trilhas:['🚀','Trilhas de Carreira'], pdi:['🎯','PDI'], 'meu-desenvolvimento':['✨','Meu Desenvolvimento'], organograma:['🏢','Organograma']
   };
   function norm(v){return String(v||'').toLowerCase().trim();}
-  function roleAtual(){let r=norm(window.role||sessionStorage.getItem('userRole')||'colaborador'); if(r==='rh-colaborador') return 'rh'; return ACCESS_RH_FINAL[r]?r:'colaborador';}
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){let r=norm(window.role||sessionStorage.getItem('userRole')||'colaborador'); if(r==='rh-colaborador') return 'rh'; return ACCESS_RH_FINAL[r]?r:'colaborador';}
   function setTopbar(icon,label){const pi=document.getElementById('tPageIcon'); if(pi) pi.textContent=icon; const pt=document.getElementById('tPageTitle'); if(pt) pt.textContent=label;}
   function ensureStyle(){
     if(document.getElementById('patch-rh-hub-final-style')) return;
@@ -56,24 +57,26 @@
     try{ if(typeof oldGrhTab==='function' && !['documentos','beneficios-rh'].includes(tab)) oldGrhTab(tab,btn); }catch(e){}
   };
   function esconderViews(){document.querySelectorAll('[id^="view-"]').forEach(el=>{el.classList.remove('active','dev-active'); el.style.setProperty('display','none','important');}); const hero=document.getElementById('mainHero'); if(hero) hero.style.setProperty('display','none','important');}
-  function aplicarMenu(){
-    window.ROLE_ACCESS=ACCESS_RH_FINAL; window.TAB_META={}; Object.keys(META_RH_FINAL).forEach(k=>window.TAB_META[k]={icon:META_RH_FINAL[k][0],label:META_RH_FINAL[k][1]});
-    const r=roleAtual(); const order=r==='rh'?ORDER_RH:(r==='gestor'?ORDER_GESTOR:ORDER_COLAB); const sidebar=document.getElementById('sidebar'); const spacer=sidebar?.querySelector('.sb-spacer');
-    order.forEach(ensureItem); if(sidebar&&spacer) order.forEach(id=>{const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el,spacer);});
-    const all=['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','gestor','conecta-ai','ouvidoria','gestao-rh','desenvolvimento-talentos','dashboard','auditoria','usuarios','disc','cargos','pdi','rh','organograma','trilhas','experiencia','meu-desenvolvimento','calendario','colaboradores'];
-    all.forEach(id=>{const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display',order.includes(id)?'flex':'none','important');});
-  }
-  function navegar(id){
-    aplicarMenu(); const r=roleAtual(); const allowed=ACCESS_RH_FINAL[r]||ACCESS_RH_FINAL.colaborador; if(!allowed.includes(id)) id=(r==='rh'?'gestao-rh':'intranet');
-    esconderViews(); if(id==='desenvolvimento-talentos') renderDesenvolvimentoTalentos();
-    const v=document.getElementById('view-'+id); if(v){v.classList.add('active'); v.style.setProperty('display','block','important');}
-    if(id==='gestao-rh') { patchGestaoRHTabs(); if(typeof gestaoRhCarregar==='function') gestaoRhCarregar(); }
-    document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
-    const main = (r==='rh' && ['experiencia','disc','cargos','trilhas','pdi'].includes(id)) ? 'desenvolvimento-talentos' : id;
-    const sb=document.getElementById('sb-'+main); if(sb) sb.classList.add('active');
-    const meta=META_RH_FINAL[main]||META_RH_FINAL[id]; if(meta) setTopbar(meta[0],meta[1]);
-    try{ if(id==='pesquisas'&&typeof pesqCarregar==='function') pesqCarregar(); if(id==='dashboard'&&typeof renderDash==='function') renderDash(); if(id==='auditoria'&&typeof renderAudit==='function') renderAudit(); if(id==='ouvidoria'&&typeof ouvidoriaCarregar==='function') ouvidoriaCarregar(); if(id==='conecta-ai'&&typeof carregarTemasAI==='function') carregarTemasAI(); if(id==='disc'&&typeof discCarregar==='function') discCarregar(); if(id==='cargos'&&typeof cargosCarregar==='function') cargosCarregar(); if(id==='trilhas'&&typeof trilhasCarregar==='function') trilhasCarregar(); if(id==='experiencia'&&typeof expCarregar==='function') expCarregar(); if(id==='pdi'&&typeof pdiCarregar==='function') pdiCarregar(); if(id==='intranet'&&typeof intraCarregar==='function') intraCarregar(); if(id==='gestor'&&typeof renderGestor==='function') renderGestor(); }catch(e){console.warn('navegar rh final:',id,e);}
-  }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function aplicarMenu(){
+  //   window.ROLE_ACCESS=ACCESS_RH_FINAL; window.TAB_META={}; Object.keys(META_RH_FINAL).forEach(k=>window.TAB_META[k]={icon:META_RH_FINAL[k][0],label:META_RH_FINAL[k][1]});
+  //   const r=roleAtual(); const order=r==='rh'?ORDER_RH:(r==='gestor'?ORDER_GESTOR:ORDER_COLAB); const sidebar=document.getElementById('sidebar'); const spacer=sidebar?.querySelector('.sb-spacer');
+  //   order.forEach(ensureItem); if(sidebar&&spacer) order.forEach(id=>{const el=document.getElementById('sb-'+id); if(el) sidebar.insertBefore(el,spacer);});
+  //   const all=['intranet','estrutura-carreira','desenvolvimento','pesquisas','beneficios','solicitacao','gestor','conecta-ai','ouvidoria','gestao-rh','desenvolvimento-talentos','dashboard','auditoria','usuarios','disc','cargos','pdi','rh','organograma','trilhas','experiencia','meu-desenvolvimento','calendario','colaboradores'];
+  //   all.forEach(id=>{const el=document.getElementById('sb-'+id); if(el) el.style.setProperty('display',order.includes(id)?'flex':'none','important');});
+  // }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function navegar(id){
+  //   aplicarMenu(); const r=roleAtual(); const allowed=ACCESS_RH_FINAL[r]||ACCESS_RH_FINAL.colaborador; if(!allowed.includes(id)) id=(r==='rh'?'gestao-rh':'intranet');
+  //   esconderViews(); if(id==='desenvolvimento-talentos') renderDesenvolvimentoTalentos();
+  //   const v=document.getElementById('view-'+id); if(v){v.classList.add('active'); v.style.setProperty('display','block','important');}
+  //   if(id==='gestao-rh') { patchGestaoRHTabs(); if(typeof gestaoRhCarregar==='function') gestaoRhCarregar(); }
+  //   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+  //   const main = (r==='rh' && ['experiencia','disc','cargos','trilhas','pdi'].includes(id)) ? 'desenvolvimento-talentos' : id;
+  //   const sb=document.getElementById('sb-'+main); if(sb) sb.classList.add('active');
+  //   const meta=META_RH_FINAL[main]||META_RH_FINAL[id]; if(meta) setTopbar(meta[0],meta[1]);
+  //   try{ if(id==='pesquisas'&&typeof pesqCarregar==='function') pesqCarregar(); if(id==='dashboard'&&typeof renderDash==='function') renderDash(); if(id==='auditoria'&&typeof renderAudit==='function') renderAudit(); if(id==='ouvidoria'&&typeof ouvidoriaCarregar==='function') ouvidoriaCarregar(); if(id==='conecta-ai'&&typeof carregarTemasAI==='function') carregarTemasAI(); if(id==='disc'&&typeof discCarregar==='function') discCarregar(); if(id==='cargos'&&typeof cargosCarregar==='function') cargosCarregar(); if(id==='trilhas'&&typeof trilhasCarregar==='function') trilhasCarregar(); if(id==='experiencia'&&typeof expCarregar==='function') expCarregar(); if(id==='pdi'&&typeof pdiCarregar==='function') pdiCarregar(); if(id==='intranet'&&typeof intraCarregar==='function') intraCarregar(); if(id==='gestor'&&typeof renderGestor==='function') renderGestor(); }catch(e){console.warn('navegar rh final:',id,e);}
+  // }
   window.buildSidebar=function(){aplicarMenu(); navegar(roleAtual()==='rh'?'gestao-rh':'intranet');};
   window.switchView=function(v){navegar(v);}; window.sbNav=function(v){navegar(v);};
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(aplicarMenu,200); setTimeout(()=>{if(roleAtual()==='rh') patchGestaoRHTabs();},900);});

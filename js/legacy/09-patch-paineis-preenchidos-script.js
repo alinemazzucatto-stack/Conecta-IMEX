@@ -1,7 +1,9 @@
 // ===== script: patch-paineis-preenchidos-script =====
 (function(){
-  function roleAtual(){ return (window.role || localStorage.getItem('conecta-imex_role') || '').toLowerCase(); }
-  function isRH(){ const r=roleAtual(); return r==='rh' || r==='rh-colaborador' || r.includes('rh'); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){ return (window.role || localStorage.getItem('conecta-imex_role') || '').toLowerCase(); }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function isRH(){ const r=roleAtual(); return r==='rh' || r==='rh-colaborador' || r.includes('rh'); }
   function moveIntranetTop(){
     const side=document.getElementById('sidebar');
     const logo=side?.querySelector('.sb-logo');

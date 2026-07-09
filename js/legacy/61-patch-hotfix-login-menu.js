@@ -52,13 +52,15 @@
     return r;
   }
 
-  function roleAtual(){
-    const r = String(window.currentUserRole || window.selectedRole || window.role || sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || 'colaborador').toLowerCase();
-    if(r.includes('rh')) return 'rh';
-    if(r.includes('gestor')) return 'gestor';
-    return 'colaborador';
-  }
-  window.roleAtual = roleAtual;
+  // REMOVED: Consolidated in 000-core-functions.js
+  // function roleAtual(){
+  //   const r = String(window.currentUserRole || window.selectedRole || window.role || sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || 'colaborador').toLowerCase();
+  //   if(r.includes('rh')) return 'rh';
+  //   if(r.includes('gestor')) return 'gestor';
+  //   return 'colaborador';
+  // }
+  // REMOVED: Consolidated in 000-core-functions.js
+  // window.roleAtual = roleAtual;
 
   window.selectRole = function(r, btn){
     setRole(r);
