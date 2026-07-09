@@ -325,112 +325,114 @@ window.entrarDemo = window.doLogin;
 })();
 
 // ===== script: perfil-estavel-js =====
-(function(){
-'use strict';
-// DESATIVADO: este script capturava o papel ativo UMA VEZ no carregamento
-// da página e depois forçava esse valor de volta a cada 150ms para sempre
-// (`window.role`/`sessionStorage.userRole`). Se o valor capturado no
-// instante do carregamento fosse "colaborador" (ex.: resquício de sessão
-// anterior), ele ficava brigando para sempre contra uma sessão de RH
-// legítima — essa era a causa real do menu lateral oscilando. Foi criado
-// para um diagnóstico (troca de perfil via "Minha Visão") que depois se
-// mostrou não ser a causa do bug original; mantido aqui desativado em vez
-// de removido, para preservar o histórico.
-return;
-if(window.__perfilEstavelInit) return;
-window.__perfilEstavelInit = true;
-
-// Inicializa com o papel salvo na sessão (login direto), não só com
-// trocas de perfil explícitas — protege também quem nunca usou "Minha Visão".
-window.__perfilAlvo = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || null);
-
-var origTrocarPerfil = window.trocarPerfil;
-window.trocarPerfil = function(){
-  var r = (typeof origTrocarPerfil === 'function') ? origTrocarPerfil.apply(this, arguments) : undefined;
-  // O role já foi alterado pelas implementações anteriores nesta chamada;
-  // capturamos o resultado como o "alvo" que deve ser mantido estável.
-  window.__perfilAlvo = String(window.role || '').toLowerCase();
-  return r;
-};
-
-function reforcarPerfil(){
-  if(!window.__perfilAlvo) return;
-  var atual = String(window.role || '').toLowerCase();
-  if(atual === window.__perfilAlvo) return;
-  window.role = window.__perfilAlvo;
-  try{ sessionStorage.setItem('userRole', window.__perfilAlvo); }catch(e){}
-  try{ sessionStorage.setItem('imexPreferredRole', window.__perfilAlvo); }catch(e){}
-  document.body.classList.remove('role-rh','role-gestor','role-colaborador');
-  document.body.classList.add('role-' + window.__perfilAlvo);
-  var pLabel = document.getElementById('pLabel');
-  if(pLabel){
-    pLabel.textContent = window.__perfilAlvo === 'rh' ? 'RH' : (window.__perfilAlvo === 'gestor' ? 'Gestor' : 'Colaborador');
-  }
-  if(typeof window.buildSidebar === 'function'){ try{ window.buildSidebar(); }catch(e){} }
-  if(typeof window.aplicarPermissoesPesquisas === 'function'){ try{ window.aplicarPermissoesPesquisas(); }catch(e){} }
-}
-
-setInterval(reforcarPerfil, 150);
-})();
+// REMOVED: Caused menu oscillation
+// (function(){
+// 'use strict';
+// // DESATIVADO: este script capturava o papel ativo UMA VEZ no carregamento
+// // da página e depois forçava esse valor de volta a cada 150ms para sempre
+// // (`window.role`/`sessionStorage.userRole`). Se o valor capturado no
+// // instante do carregamento fosse "colaborador" (ex.: resquício de sessão
+// // anterior), ele ficava brigando para sempre contra uma sessão de RH
+// // legítima — essa era a causa real do menu lateral oscilando. Foi criado
+// // para um diagnóstico (troca de perfil via "Minha Visão") que depois se
+// // mostrou não ser a causa do bug original; mantido aqui desativado em vez
+// // de removido, para preservar o histórico.
+// return;
+// if(window.__perfilEstavelInit) return;
+// window.__perfilEstavelInit = true;
+//
+// // Inicializa com o papel salvo na sessão (login direto), não só com
+// // trocas de perfil explícitas — protege também quem nunca usou "Minha Visão".
+// window.__perfilAlvo = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || null);
+//
+// var origTrocarPerfil = window.trocarPerfil;
+// window.trocarPerfil = function(){
+//   var r = (typeof origTrocarPerfil === 'function') ? origTrocarPerfil.apply(this, arguments) : undefined;
+//   // O role já foi alterado pelas implementações anteriores nesta chamada;
+//   // capturamos o resultado como o "alvo" que deve ser mantido estável.
+//   window.__perfilAlvo = String(window.role || '').toLowerCase();
+//   return r;
+// };
+//
+// function reforcarPerfil(){
+//   if(!window.__perfilAlvo) return;
+//   var atual = String(window.role || '').toLowerCase();
+//   if(atual === window.__perfilAlvo) return;
+//   window.role = window.__perfilAlvo;
+//   try{ sessionStorage.setItem('userRole', window.__perfilAlvo); }catch(e){}
+//   try{ sessionStorage.setItem('imexPreferredRole', window.__perfilAlvo); }catch(e){}
+//   document.body.classList.remove('role-rh','role-gestor','role-colaborador');
+//   document.body.classList.add('role-' + window.__perfilAlvo);
+//   var pLabel = document.getElementById('pLabel');
+//   if(pLabel){
+//     pLabel.textContent = window.__perfilAlvo === 'rh' ? 'RH' : (window.__perfilAlvo === 'gestor' ? 'Gestor' : 'Colaborador');
+//   }
+//   if(typeof window.buildSidebar === 'function'){ try{ window.buildSidebar(); }catch(e){} }
+//   if(typeof window.aplicarPermissoesPesquisas === 'function'){ try{ window.aplicarPermissoesPesquisas(); }catch(e){} }
+// }
+//
+// setInterval(reforcarPerfil, 150);
+// })();
 
 // ===== script: colab-lock-js =====
-(function(){
-'use strict';
-// DESATIVADO: estava interceptando navegação legítima do colaborador
-// (Férias, Benefícios, Gamificação, Conecta AI todos caindo na Intranet).
-// Causa real do problema de Pesquisas era outra (variáveis `role`/`_roleReal`
-// já corrigidas no login). Mantido aqui desligado em vez de removido.
-return;
-if(window.__colabLockInit) return;
-window.__colabLockInit = true;
-
-function roleReal(){
-  return String(sessionStorage.getItem('userRole') || window.role || '').toLowerCase();
-}
-
-var RH_VIEWS = ['view-gestao-rh','view-dashboard','view-auditoria','view-usuarios'];
-
-function corrigir(){
-  if(roleReal() !== 'colaborador') return; // só protege sessões realmente de colaborador
-  var algumaRhVisivel = RH_VIEWS.some(function(id){
-    var el = document.getElementById(id);
-    return el && window.getComputedStyle(el).display !== 'none';
-  });
-  if(!algumaRhVisivel) return;
-
-  RH_VIEWS.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el){
-      el.classList.remove('active');
-      el.style.setProperty('display','none','important');
-    }
-  });
-  document.querySelectorAll('[id^="sb-"]').forEach(function(sb){
-    if(RH_VIEWS.some(function(id){ return id.includes(sb.id.replace('sb-','')); })){
-      sb.style.setProperty('display','none','important');
-    }
-  });
-
-  var intranet = document.getElementById('view-intranet');
-  if(intranet){
-    intranet.classList.add('active');
-    intranet.style.setProperty('display','block','important');
-  }
-  document.querySelectorAll('.sb-item[id^="sb-"]').forEach(function(sb){
-    sb.classList.toggle('active', sb.id === 'sb-intranet');
-  });
-  var pLabel = document.getElementById('pLabel'); if(pLabel) pLabel.textContent = 'Colaborador';
-}
-
-var mo = new MutationObserver(corrigir);
-function observarTudo(){
-  RH_VIEWS.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) mo.observe(el, {attributes:true, attributeFilter:['style','class']});
-  });
-}
-observarTudo();
-setInterval(observarTudo, 1000); // cobre views criadas dinamicamente depois do load inicial
-setInterval(corrigir, 200);
-})();
+// REMOVED: Blocked legitimate navigation
+// (function(){
+// 'use strict';
+// // DESATIVADO: estava interceptando navegação legítima do colaborador
+// // (Férias, Benefícios, Gamificação, Conecta AI todos caindo na Intranet).
+// // Causa real do problema de Pesquisas era outra (variáveis `role`/`_roleReal`
+// // já corrigidas no login). Mantido aqui desligado em vez de removido.
+// return;
+// if(window.__colabLockInit) return;
+// window.__colabLockInit = true;
+//
+// function roleReal(){
+//   return String(sessionStorage.getItem('userRole') || window.role || '').toLowerCase();
+// }
+//
+// var RH_VIEWS = ['view-gestao-rh','view-dashboard','view-auditoria','view-usuarios'];
+//
+// function corrigir(){
+//   if(roleReal() !== 'colaborador') return; // só protege sessões realmente de colaborador
+//   var algumaRhVisivel = RH_VIEWS.some(function(id){
+//     var el = document.getElementById(id);
+//     return el && window.getComputedStyle(el).display !== 'none';
+//   });
+//   if(!algumaRhVisivel) return;
+//
+//   RH_VIEWS.forEach(function(id){
+//     var el = document.getElementById(id);
+//     if(el){
+//       el.classList.remove('active');
+//       el.style.setProperty('display','none','important');
+//     }
+//   });
+//   document.querySelectorAll('[id^="sb-"]').forEach(function(sb){
+//     if(RH_VIEWS.some(function(id){ return id.includes(sb.id.replace('sb-','')); })){
+//       sb.style.setProperty('display','none','important');
+//     }
+//   });
+//
+//   var intranet = document.getElementById('view-intranet');
+//   if(intranet){
+//     intranet.classList.add('active');
+//     intranet.style.setProperty('display','block','important');
+//   }
+//   document.querySelectorAll('.sb-item[id^="sb-"]').forEach(function(sb){
+//     sb.classList.toggle('active', sb.id === 'sb-intranet');
+//   });
+//   var pLabel = document.getElementById('pLabel'); if(pLabel) pLabel.textContent = 'Colaborador';
+// }
+//
+// var mo = new MutationObserver(corrigir);
+// function observarTudo(){
+//   RH_VIEWS.forEach(function(id){
+//     var el = document.getElementById(id);
+//     if(el) mo.observe(el, {attributes:true, attributeFilter:['style','class']});
+//   });
+// }
+// observarTudo();
+// setInterval(observarTudo, 1000); // cobre views criadas dinamicamente depois do load inicial
+// setInterval(corrigir, 200);
+// })();
 
