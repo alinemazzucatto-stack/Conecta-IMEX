@@ -127,70 +127,16 @@
   window.irPara = function(viewId) { window.forceView(viewId); };
 
   // ──────────────────────────────────────────────────────────────────────────────
-  // 4. MENU & SIDEBAR (ÚNICA DEFINIÇÃO)
+  // 4. MENU & SIDEBAR (definidas em 57-patch-critico-navegacao-renderizacao.js)
   // ──────────────────────────────────────────────────────────────────────────────
+  // Não redefinimos applyMenu() aqui — deixamos 57-patch fornecer a implementação
+  // completa com as listas COLAB_MENU, GESTOR_MENU, RH_MENU e visualRole()
 
-  window.applyMenu = function() {
-    try {
-      var role = window.getRoleOrDefault();
-      var body = document.body;
-
-      if (body) {
-        body.classList.remove('role-rh', 'role-gestor', 'role-colaborador');
-        body.classList.add('role-' + role);
-      }
-
-      var sbItems = document.querySelectorAll('.sb-item');
-      if (sbItems && sbItems.length > 0) {
-        sbItems.forEach(function(item) {
-          item.style.display = 'none';
-        });
-
-        // RH: acesso total
-        if (window.isRH()) {
-          var rhItems = ['sb-intranet', 'sb-gamificacao', 'sb-estrutura-carreira',
-                        'sb-mais', 'sb-pesquisas', 'sb-beneficios', 'sb-solicitacao',
-                        'sb-conecta-ai', 'sb-ouvidoria', 'sb-organograma', 'sb-trilhas',
-                        'sb-experiencia', 'sb-cargos', 'sb-disc', 'sb-meu-desenvolvimento',
-                        'sb-gestao-rh', 'sb-dashboard', 'sb-auditoria', 'sb-pdi',
-                        'sb-usuarios', 'sb-gestor', 'sb-rh'];
-          rhItems.forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'block';
-          });
-        }
-
-        // GESTOR: acesso reduzido
-        else if (window.isGestor()) {
-          var gestorItems = ['sb-intranet', 'sb-gamificacao', 'sb-estrutura-carreira',
-                            'sb-mais', 'sb-beneficios', 'sb-solicitacao', 'sb-conecta-ai',
-                            'sb-ouvidoria', 'sb-gestor'];
-          gestorItems.forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'block';
-          });
-        }
-
-        // COLABORADOR: acesso limitado
-        else {
-          var colabItems = ['sb-intranet', 'sb-gamificacao', 'sb-estrutura-carreira',
-                           'sb-mais', 'sb-beneficios', 'sb-solicitacao', 'sb-conecta-ai',
-                           'sb-ouvidoria'];
-          colabItems.forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'block';
-          });
-        }
-      }
-
-      console.log('[MENU] Applied for role:', role);
-    } catch(e) {
-      console.error('[MENU] Error:', e.message);
-    }
-  };
-
+  // Aliases para compatibilidade
   window.buildSidebar = function() {
-    window.applyMenu();
+    if (typeof window.applyMenu === 'function') {
+      window.applyMenu();
+    }
   };
 
   // Compatibilidade com código legado (português)
