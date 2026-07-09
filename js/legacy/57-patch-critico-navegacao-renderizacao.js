@@ -118,5 +118,6 @@
     if(!active) forceView(r==='rh'?'gestao-rh':'intranet');
   }
   document.addEventListener('DOMContentLoaded', function(){ [50,300,800,1500,2500].forEach(t=>setTimeout(guard,t)); });
-  setInterval(guard, 1200);
+  // DESABILITADO: setInterval estava causando loop de renderização durante login
+  // setInterval(guard, 1200);
 })();
