@@ -275,8 +275,10 @@ window.doLogin = async function(){
 
       var loginScreen = document.getElementById('loginScreen');
       var appShell = document.getElementById('appShell');
+      var load = document.getElementById('lLoading');
       if(loginScreen) loginScreen.style.display = 'none';
       if(appShell) appShell.style.display = 'flex';
+      if(load) load.style.display = 'none';
       var pLabel = document.getElementById('pLabel');
       if(pLabel) pLabel.textContent = roleBase.charAt(0).toUpperCase() + roleBase.slice(1);
       var pDot = document.getElementById('pDot');
