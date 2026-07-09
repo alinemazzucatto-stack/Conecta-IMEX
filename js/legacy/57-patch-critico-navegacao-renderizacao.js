@@ -109,15 +109,16 @@
   window.buildSidebar = function(){ applyMenu(); forceView(visualRole()==='rh'?'gestao-rh':'intranet'); };
   window.switchView = function(id){ forceView(id); };
   window.sbNav = function(id){ forceView(id); };
-  function guard(){
-    applyMenu();
-    const r=visualRole();
-    const gestao=$('view-gestao-rh');
-    if(r!=='rh' && gestao && getComputedStyle(gestao).display!=='none') forceView('intranet');
-    const active=document.querySelector('[id^="view-"].active');
-    if(!active) forceView(r==='rh'?'gestao-rh':'intranet');
-  }
-  document.addEventListener('DOMContentLoaded', function(){ [50,300,800,1500,2500].forEach(t=>setTimeout(guard,t)); });
+  // REMOVED: guard() function no longer needed — renderization stable after login fix
+  // function guard(){
+  //   applyMenu();
+  //   const r=visualRole();
+  //   const gestao=$('view-gestao-rh');
+  //   if(r!=='rh' && gestao && getComputedStyle(gestao).display!=='none') forceView('intranet');
+  //   const active=document.querySelector('[id^="view-"].active');
+  //   if(!active) forceView(r==='rh'?'gestao-rh':'intranet');
+  // }
+  // document.addEventListener('DOMContentLoaded', function(){ [50,300,800,1500,2500].forEach(t=>setTimeout(guard,t)); });
   // DESABILITADO: setInterval estava causando loop de renderização durante login
   // setInterval(guard, 1200);
 })();
