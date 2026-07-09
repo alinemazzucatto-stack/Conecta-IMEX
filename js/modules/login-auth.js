@@ -296,7 +296,10 @@ window.doLogin = async function(){
         try{if(typeof window.renderAll === 'function') await window.renderAll();}catch(e){}
         try{if(typeof window.enforcePermissions === 'function') window.enforcePermissions();}catch(e){}
         if(roleBase === 'colaborador'){try{if(typeof window.updateColResumo === 'function') await window.updateColResumo();}catch(e){}}
-      }, 0);
+        window.__loginEmAndamento = false;
+      }, 100);
+      if(btn) btn.disabled = false;
+      if(load) load.style.display = 'none';
       return;
     }
 
@@ -312,9 +315,8 @@ window.doLogin = async function(){
     };
     showErr(msgs[e.code] || e.message || 'Erro desconhecido ao entrar.');
   } finally {
-    if(btn) btn.disabled = false;
-    if(load) load.style.display = 'none';
-    window.__loginEmAndamento = false;
+    // NÃO redefinir __loginEmAndamento aqui — o fallback define em setTimeout
+    // para evitar que 02-legacy.js reverta loginScreen/appShell enquanto UI está mudando
   }
 };
 
