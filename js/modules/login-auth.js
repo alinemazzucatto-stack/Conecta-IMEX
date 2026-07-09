@@ -203,8 +203,16 @@ window.doLogin = async function(){
     sessionStorage.setItem('userDocId', colabDoc.id);
     localStorage.setItem('usuarioLogado', JSON.stringify(window.currentUserData));
 
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appShell').style.display = 'flex';
+    // ── PROTEGER manipulação de DOM ──
+    try {
+      var loginScreenEl = document.getElementById('loginScreen');
+      var appShellEl = document.getElementById('appShell');
+      if(loginScreenEl) loginScreenEl.style.display = 'none';
+      if(appShellEl) appShellEl.style.display = 'flex';
+    } catch(e) {
+      log2('ERRO ao ocultar login/mostrar app: ' + (e.message || e));
+      throw new Error('Falha ao transicionar para app (DOM indisponível)');
+    }
     var pLabel = document.getElementById('pLabel'); if(pLabel) pLabel.textContent = PLBL[roleBase] || roleBase;
     var pDot = document.getElementById('pDot'); if(pDot) pDot.textContent = PDOT[roleBase] || '👤';
     document.body.classList.remove('role-rh','role-gestor','role-colaborador');
