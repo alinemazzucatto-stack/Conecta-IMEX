@@ -115,54 +115,15 @@
     document.querySelectorAll('[id^="view-"]').forEach(el=>{ el.classList.remove('active'); el.style.setProperty('display','none','important'); });
     const hero=document.getElementById('mainHero'); if(hero) hero.style.setProperty('display','none','important');
   }
-  // REMOVED: Consolidated in 000-core-functions.js
-  // function navegar(id){
-  //   aplicarMenu();
-  //   const r=roleAtual(); const allowed=ACCESS[r]||ACCESS.colaborador;
-  //   if(!allowed.includes(id)) id = r==='rh' ? 'gestao-rh' : 'intranet';
-  //   renderFallback(id);
-  //   const v=ensureView(id);
-  //   hideAll();
-  //   v.classList.add('active'); v.style.setProperty('display','block','important');
-  //   document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
-  //   let activeId = (r==='rh' && ['experiencia','disc','cargos','trilhas','pdi','mapeamento-talentos'].includes(id)) ? 'desenvolvimento-talentos' : id;
-  //   const sb=document.getElementById('sb-'+activeId); if(sb) sb.classList.add('active');
-  //   setTopbar(activeId);
-  //   try{
-  //     if(id==='pesquisas' && typeof window.pesqCarregar==='function') window.pesqCarregar();
-  //     if(id==='dashboard' && typeof window.renderDash==='function') window.renderDash();
-      if(id==='auditoria' && typeof window.renderAudit==='function') window.renderAudit();
-      if(id==='ouvidoria' && typeof window.ouvidoriaCarregar==='function') window.ouvidoriaCarregar();
-      if(id==='intranet' && typeof window.intraCarregar==='function') window.intraCarregar();
-      if(id==='solicitacao' && typeof window.updateResumo==='function') window.updateResumo();
-      if(id==='disc' && typeof window.discCarregar==='function') window.discCarregar();
-      if(id==='cargos' && typeof window.cargosCarregar==='function') window.cargosCarregar();
-      if(id==='trilhas' && typeof window.trilhasCarregar==='function') window.trilhasCarregar();
-      if(id==='experiencia' && typeof window.expCarregar==='function') window.expCarregar();
-      if(id==='pdi' && typeof window.pdiCarregar==='function') window.pdiCarregar();
-      if(id==='meu-desenvolvimento' && typeof window.renderMeuDesenvolvimento==='function') window.renderMeuDesenvolvimento();
-      if(id==='organograma'        && typeof window.orgCarregar==='function')      window.orgCarregar();
-      if(id==='gestao-rh'           && typeof window.gestaoRhCarregar==='function') window.gestaoRhCarregar();
-      if(id==='gestor'              && typeof window.renderGestor==='function')     window.renderGestor();
-      if(id==='rh'                  && typeof window.renderRH==='function')         { window.renderRH(); if(!window.politicaState && typeof window.politicaCarregar==='function') window.politicaCarregar(); }
-      if(id==='calendario'          && typeof window.renderCal==='function')        window.renderCal();
-      if(id==='usuarios'            && typeof window.carregarUsuarios==='function') window.carregarUsuarios();
-      if(id==='beneficios'          && typeof window.benCarregar==='function')      window.benCarregar();
-      if(id==='conecta-ai'          && typeof window.carregarTemasAI==='function')  window.carregarTemasAI();
-      if(id==='desenvolvimento-talentos' && typeof window.renderDTHub==='function') window.renderDTHub();
-    }catch(e){ console.warn('Navegação corrigida:', id, e); }
-    setTimeout(()=>{ const still=document.getElementById('view-'+id); if(still){ still.style.setProperty('display','block','important'); still.classList.add('active'); } }, 60);
-  }
-  window.switchView = navegar;
-  window.sbNav = navegar;
-  window.buildSidebar = function(){ aplicarMenu(); navegar(roleAtual()==='rh'?'gestao-rh':'intranet'); };
-  window.trocarPerfil = function(){
-    const r=roleAtual();
-    if(r==='rh'){ window.role='colaborador'; sessionStorage.setItem('userRole','colaborador'); navegar('intranet'); }
-    else { window.role='rh'; sessionStorage.setItem('userRole','rh'); navegar('gestao-rh'); }
-  };
-  document.addEventListener('DOMContentLoaded', function(){
-    setTimeout(aplicarMenu, 80);
-    setTimeout(()=>{ const r=roleAtual(); const any=document.querySelector('[id^="view-"][style*="block"]'); if(!any) navegar(r==='rh'?'gestao-rh':'intranet'); }, 350);
-  });
+  // REMOVED: Consolidated in 000-core-functions.js (navegar/aplicarMenu e todo
+  // o bloco que os usava — switchView/sbNav/buildSidebar/trocarPerfil e o
+  // listener de DOMContentLoaded — foram removidos daqui de vez). A versão
+  // anterior deste comentário só comentou a ABERTURA da função e deixou o
+  // meio/fim do bloco como código "vivo", com um `catch` sem `try`
+  // correspondente — isso quebrava o PARSE do arquivo inteiro (SyntaxError:
+  // Unexpected token 'catch'), impedindo até `hideAll()` acima de ser
+  // definida e derrubando qualquer script carregado depois deste na mesma
+  // tag <script>. Reintroduzir esse bloco sem os `//` também sobrescreveria
+  // window.switchView/sbNav (definidos em 000-core-functions.js) com
+  // `navegar`, que não existe mais neste arquivo.
 })();

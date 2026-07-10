@@ -48,6 +48,15 @@ window.doLogin = async function(){
   // completa e correta) está em andamento.
   window.__loginEmAndamento = true;
 
+  // DIAG: heartbeat só para diagnóstico do bug de travamento — prova que a
+  // aba/thread principal ainda está rodando enquanto o login está pendurado.
+  // Remover depois que a causa raiz do travamento for confirmada.
+  var __diagTicks = 0;
+  var __diagHeartbeat = setInterval(function(){
+    __diagTicks++;
+    log2('DIAG heartbeat #' + __diagTicks + ' — JS ainda rodando, login ainda em andamento.');
+  }, 2000);
+
   try{
     if(!firebase || !firebase.apps || firebase.apps.length === 0){
       throw new Error('Firebase não inicializado. Verifique sua conexão com a internet.');
@@ -114,18 +123,30 @@ window.doLogin = async function(){
     var firestoreTravou = false;
     if(!useLocalDb){
       try{
+        log2('DIAG: consultando grh_colabs...');
         var snap = await comTimeout(db.collection('grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-grh');
-        if(snap.empty) snap = await comTimeout(db.collection('meta_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-meta');
-        if(snap.empty) snap = await comTimeout(db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-xpert');
+        log2('DIAG: grh_colabs respondeu, empty=' + snap.empty);
+        if(snap.empty){
+          log2('DIAG: consultando meta_grh_colabs...');
+          snap = await comTimeout(db.collection('meta_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-meta');
+          log2('DIAG: meta_grh_colabs respondeu, empty=' + snap.empty);
+        }
+        if(snap.empty){
+          log2('DIAG: consultando xpert_grh_colabs...');
+          snap = await comTimeout(db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-xpert');
+          log2('DIAG: xpert_grh_colabs respondeu, empty=' + snap.empty);
+        }
         if(!snap.empty){
           colabDoc = snap.docs[0];
           colab = colabDoc.data() || {};
         }
+        log2('DIAG: bloco de consultas concluído, colab=' + (colab ? 'encontrado' : 'null'));
       }catch(e){
         firestoreTravou = String(e.message || '').indexOf('firestore-timeout') !== -1;
-        log2('Firestore indisponível (' + e.message + '), buscando na base local...');
+        log2('DIAG: catch acionado. Firestore indisponível (' + (e.message || e) + '), buscando na base local...');
       }
     }
+    log2('DIAG: saiu do bloco Firestore, seguindo para fallback local se necessário.');
 
     // Se Firestore falhou ou estamos em modo dev, tenta buscar na base local
     if(!colab || Object.keys(colab).length === 0){
@@ -204,11 +225,17 @@ window.doLogin = async function(){
     localStorage.setItem('usuarioLogado', JSON.stringify(window.currentUserData));
 
     // ── PROTEGER manipulação de DOM ──
+    // setProperty(...,'important') em vez de .style.display=: já aconteceu
+    // de um CSS antigo com "#loginScreen{ display:flex !important }" vencer
+    // um .style.display='none' comum e deixar a tela de login presa por
+    // cima do app pra sempre, mesmo com o login já tendo funcionado por
+    // baixo. Usando !important aqui também, este código nunca mais fica
+    // refém de nenhum !important que apareça (de novo) no CSS.
     try {
       var loginScreenEl = document.getElementById('loginScreen');
       var appShellEl = document.getElementById('appShell');
-      if(loginScreenEl) loginScreenEl.style.display = 'none';
-      if(appShellEl) appShellEl.style.display = 'flex';
+      if(loginScreenEl) loginScreenEl.style.setProperty('display', 'none', 'important');
+      if(appShellEl) appShellEl.style.setProperty('display', 'flex', 'important');
     } catch(e) {
       log2('ERRO ao ocultar login/mostrar app: ' + (e.message || e));
       throw new Error('Falha ao transicionar para app (DOM indisponível)');
@@ -287,8 +314,8 @@ window.doLogin = async function(){
       var loginScreen = document.getElementById('loginScreen');
       var appShell = document.getElementById('appShell');
       var load = document.getElementById('lLoading');
-      if(loginScreen) loginScreen.style.display = 'none';
-      if(appShell) appShell.style.display = 'flex';
+      if(loginScreen) loginScreen.style.setProperty('display', 'none', 'important');
+      if(appShell) appShell.style.setProperty('display', 'flex', 'important');
       if(load) load.style.display = 'none';
       var pLabel = document.getElementById('pLabel');
       if(pLabel) pLabel.textContent = roleBase.charAt(0).toUpperCase() + roleBase.slice(1);
@@ -327,6 +354,9 @@ window.doLogin = async function(){
     };
     showErr(msgs[e.code] || e.message || 'Erro desconhecido ao entrar.');
   } finally {
+    clearInterval(__diagHeartbeat);
+    log2('DIAG: bloco finally executado — a função doLogin terminou (sucesso ou erro).');
+
     // CRÍTICO: Sempre limpar flags de autenticação em progresso
     // Se chegou aqui sem sucesso, precisa liberar UI para nova tentativa
     window.__loginEmAndamento = false;
@@ -344,6 +374,34 @@ window.doLogin = async function(){
 
 // Garante que nenhum patch posterior volte a usar o login fake (enterApp).
 window.entrarDemo = window.doLogin;
+
+// ═══ WATCHDOG: tela de login presa por CSS ═══
+// Camada extra de proteção, independente das correções de display acima.
+// Um bug real já aconteceu aqui: blocos <style> antigos em index.html
+// tinham "#loginScreen{ display:flex !important }", que sempre vence um
+// .style.display='none' comum feito por JS — o login funcionava por baixo
+// (Firebase OK, dados carregados) mas a tela de login nunca sumia
+// visualmente, parecendo travado em "autenticando" pra sempre. Isso foi
+// corrigido no CSS e o JS acima passou a usar setProperty(...,'important'),
+// mas para o dia em que outro patch reintroduzir por engano um !important
+// no #loginScreen, este watchdog roda a cada 1s e AUTOCORRIGE sozinho: se
+// há um usuário autenticado mas a tela de login ainda está computando como
+// visível, força ela a esconder e avisa alto no console (em vez de o
+// usuário simplesmente ver "não funciona" sem pista nenhuma).
+setInterval(function(){
+  try {
+    if (window.__loginEmAndamento) return;
+    if (!window.currentUserData) return;
+    var ls = document.getElementById('loginScreen');
+    if (!ls) return;
+    if (getComputedStyle(ls).display !== 'none') {
+      console.error('[login] WATCHDOG: usuário autenticado (' + (window.currentUserData.email || '?') + ') mas #loginScreen continua visível — provável CSS com !important sobrescrevendo o display (veja blocos <style> com #loginScreen em index.html). Corrigindo automaticamente.');
+      ls.style.setProperty('display', 'none', 'important');
+      var as = document.getElementById('appShell');
+      if (as) as.style.setProperty('display', 'flex', 'important');
+    }
+  } catch(e) {}
+}, 1000);
 })();
 
 // ===== script: perfil-estavel-js =====

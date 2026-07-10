@@ -9,8 +9,16 @@
    Aplica IMEDIATAMENTE (antes de qualquer outro CSS)
    Força o layout de duas colunas: visual-panel LEFT, login-box RIGHT
    NÃO pode ser sobrescrito por styles.css ou qualquer outro CSS tardio */
+/* IMPORTANTE: `display` NÃO pode ter !important (mesmo motivo documentado
+   mais abaixo, no bloco #login-split-redesign-css): login-auth.js e o
+   onAuthStateChanged em 02-legacy.js escondem esta tela com
+   `loginScreen.style.display = 'none'` (inline, sem !important) após um
+   login bem-sucedido. Um !important aqui sempre vence esse inline style,
+   então a tela de login nunca desaparecia de verdade — ficava por cima
+   (z-index:9999) do app já carregado por baixo, parecendo que o login
+   travava/nunca terminava. As demais propriedades continuam !important. */
 #loginScreen{
-  display:flex !important;
+  display:flex;
   flex-direction:row !important;
   align-items:stretch !important;
   justify-content:flex-start !important;
@@ -122,8 +130,12 @@ function verificarKeyAntes() {
    (caixa única centralizada, vinda de css/styles.css) antes de trocar para
    o layout novo. Colocando a geometria aqui também, ela já está correta
    desde a primeira pintura da página. */
+/* `display` sem !important pelo mesmo motivo documentado no bloco CRITICAL
+   CSS acima e no bloco login-split-redesign-css mais abaixo: um !important
+   aqui venceria o `loginScreen.style.display = 'none'` inline aplicado por
+   login-auth.js após login bem-sucedido, e a tela de login nunca sumiria. */
 #loginScreen{
-  display:flex !important;
+  display:flex;
   align-items:stretch !important;
   justify-content:flex-start !important;
   background:#0d0b1f !important;
