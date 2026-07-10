@@ -826,8 +826,8 @@ async function doLogout() {
   var lEmail=document.getElementById('lEmail'); if(lEmail) lEmail.value='';
   var lPass=document.getElementById('lPass'); if(lPass) lPass.value='';
   var lErr=document.getElementById('lErr'); if(lErr) lErr.style.display='none';
-  var ls=document.getElementById('loginScreen'); if(ls) ls.style.display='flex';
-  var app=document.getElementById('appShell'); if(app) app.style.display='none';
+  var ls=document.getElementById('loginScreen'); if(ls) ls.style.setProperty('display','flex','important');
+  var app=document.getElementById('appShell'); if(app) app.style.setProperty('display','none','important');
 }
 
 function renderMeuDesenvolvimento() {
@@ -4385,8 +4385,8 @@ auth.onAuthStateChanged(async (user) => {
       sessionStorage.setItem('userEmail', udata.email || user.email);
       var loginScreenEl = document.getElementById('loginScreen');
       var appShellEl = document.getElementById('appShell');
-      if(loginScreenEl) loginScreenEl.style.display = 'none';
-      if(appShellEl) appShellEl.style.display = 'flex';
+      if(loginScreenEl) loginScreenEl.style.setProperty('display', 'none', 'important');
+      if(appShellEl) appShellEl.style.setProperty('display', 'flex', 'important');
       var pLabelEl = document.getElementById('pLabel');
       if(pLabelEl) pLabelEl.textContent = PLBL[role] || role;
       var pDotEl = document.getElementById('pDot');
@@ -4407,8 +4407,8 @@ auth.onAuthStateChanged(async (user) => {
       window.__restoringSession = false;
       var loginScreenEl = document.getElementById('loginScreen');
       var appShellEl = document.getElementById('appShell');
-      if(loginScreenEl) loginScreenEl.style.display = 'flex';
-      if(appShellEl) appShellEl.style.display = 'none';
+      if(loginScreenEl) loginScreenEl.style.setProperty('display', 'flex', 'important');
+      if(appShellEl) appShellEl.style.setProperty('display', 'none', 'important');
     }
   } else {
     window.__restoringSession = false;
@@ -4431,8 +4431,8 @@ auth.onAuthStateChanged(async (user) => {
     try { sessionStorage.removeItem('imexRoleReal'); } catch(e) {}
     var loginScreenEl = document.getElementById('loginScreen');
     var appShellEl = document.getElementById('appShell');
-    if(loginScreenEl) loginScreenEl.style.display = 'flex';
-    if(appShellEl) appShellEl.style.display = 'none';
+    if(loginScreenEl) loginScreenEl.style.setProperty('display', 'flex', 'important');
+    if(appShellEl) appShellEl.style.setProperty('display', 'none', 'important');
   }
 });
 

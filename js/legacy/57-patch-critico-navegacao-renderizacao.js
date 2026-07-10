@@ -50,6 +50,12 @@
       if(id==='gestao-rh' && r!=='rh') el.style.setProperty('display','none','important');
     });
   }
+  // Exposta no window: 000-core-functions.js (que carrega ANTES deste arquivo)
+  // faz `window.aplicarMenu = window.applyMenu` esperando encontrar isto aqui.
+  // Sem esta linha, applyMenu ficava só no closure deste IIFE e window.applyMenu
+  // nunca existia — qualquer chamador de window.aplicarMenu()/window.applyMenu()
+  // (ex.: 23-legacy.js instalar()) recebia "is not a function".
+  window.applyMenu = applyMenu;
   function hideAll(){
     document.querySelectorAll('[id^="view-"]').forEach(v=>{v.classList.remove('active','dev-active','beneficios-force-active'); v.style.setProperty('display','none','important');});
     const hero=$('mainHero'); if(hero) hero.style.setProperty('display','none','important');

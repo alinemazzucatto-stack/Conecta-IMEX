@@ -66,6 +66,18 @@
   window.roleAtualFinal = function() { return window.getRoleOrDefault(); };
   window.effectiveRole = function() { return window.getRoleOrDefault(); };
 
+  // Aliases adicionais: vários arquivos legados (07-legacy.js,
+  // 22-patch-trilhas-colaborador-readonly.js) tiveram suas próprias
+  // isRHProfile()/isGestorProfile()/isColabProfile()/isRHFinal() comentadas
+  // com "REMOVED: Consolidated in 000-core-functions.js", mas esses nomes
+  // nunca foram criados aqui — só isRH/isGestor/isColaborador. Isso deixava
+  // ReferenceError sempre que essas telas rodavam (menu, Conecta AI,
+  // trilhas de carreira). Sem alias == função "consolidada" que não existe.
+  window.isRHProfile = function() { return window.isRH(); };
+  window.isGestorProfile = function() { return window.isGestor(); };
+  window.isColabProfile = function() { return window.isColaborador(); };
+  window.isRHFinal = function() { return window.getRoleOrDefault() === 'rh'; };
+
   // ──────────────────────────────────────────────────────────────────────────────
   // 3. SISTEMA DE NAVEGAÇÃO (ÚNICA DEFINIÇÃO)
   // ──────────────────────────────────────────────────────────────────────────────
@@ -140,7 +152,14 @@
   };
 
   // Compatibilidade com código legado (português)
-  window.aplicarMenu = window.applyMenu;
+  // NÃO copiar window.applyMenu diretamente aqui: este arquivo carrega
+  // PRIMEIRO (prefixo 000-), antes de 57-patch-critico-navegacao-renderizacao.js
+  // definir applyMenu de verdade — uma cópia direta capturaria `undefined`
+  // para sempre. Um wrapper preguiçoso resolve window.applyMenu só na hora
+  // da chamada, quando ele já existe.
+  window.aplicarMenu = function() {
+    if (typeof window.applyMenu === 'function') window.applyMenu();
+  };
   window.navegar = function(viewId) { window.forceView(viewId); };
   window.irPara = function(viewId) { window.forceView(viewId); };
 
