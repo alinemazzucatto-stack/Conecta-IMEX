@@ -351,7 +351,13 @@ function verificarKeyAntes() {
 <script src="js/legacy/77-desligamentos-fallback-fixer.js"></script>
 <script src="js/legacy/78-trilhas-estrutura-fixer.js"></script>
 <script src="js/legacy/79-aline-carreira-def.js"></script>
-<script src="js/modules/remuneracao-premium-fix.js"></script>
+<!-- DESATIVADO (de novo): remuneracao-premium-fix.js volta a causar oscilação
+     visual no painel de Remuneração (confirmado em 2026-07-10). Já tinha sido
+     desativado antes pelo mesmo motivo (commit f51e2f2), mas foi reativado por
+     engano em d029279 acreditando que o debounce adicionado resolveria — não
+     resolveu. O 47-remuneracao-premium-v3.js já renderiza o painel sozinho,
+     sem precisar deste reforço de visibilidade via MutationObserver. -->
+<!-- <script src="js/modules/remuneracao-premium-fix.js"></script> -->
 <script src="js/modules/core-late.js"></script>
 <script src="js/modules/pesquisas-fix-1.js"></script>
 <script src="js/modules/intranet-timeline.js"></script>
