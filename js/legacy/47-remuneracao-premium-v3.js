@@ -538,18 +538,6 @@
 
     p.innerHTML = `
       <div class="rem-premium-wrap">
-        <div class="hero" style="background:radial-gradient(at 18% 15%, #1d54d6 0%, transparent 48%), radial-gradient(at 85% 5%, #061535 0%, transparent 45%), radial-gradient(at 88% 92%, #1f7fe0 0%, transparent 55%), radial-gradient(at 5% 95%, #040d24 0%, transparent 45%), #0a1d4a!important">
-          <div class="h-content">
-            <div class="h-eyebrow">Painel estratégico de RH</div>
-            <h1>REMUNERAÇÃO</h1>
-            <p>Folha, custos com pessoal, faixas salariais e simulações — tudo consolidado a partir da base real de colaboradores.</p>
-          </div>
-          <div class="h-stats">
-            <div class="h-stat"><span class="h-num">${s.ativos}</span><span class="h-lbl">Colaboradores ativos</span></div>
-            <div class="h-stat"><span class="h-num">${money(s.custo)}</span><span class="h-lbl">Custo total RH</span></div>
-          </div>
-        </div>
-
         <div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(4,minmax(180px,1fr))">
           ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha, '#7c3aed', true)}
           ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null, '#3b82f6')}

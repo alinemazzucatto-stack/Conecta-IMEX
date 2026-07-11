@@ -1259,6 +1259,12 @@ tbody tr:hover td{background:var(--cream)}
   }
 
 /* ===== style: remuneracao-premium-v3-css ===== */
+/* Fundo cinza claro atrás dos cards brancos — sem isso, os cards (brancos,
+   borda quase invisível #eef2f7, sombra de 5% de opacidade) ficam sobre um
+   fundo também branco/transparente e não se distinguem uns dos outros.
+   #grh-pane-remuneracao é o seletor mais específico usado só pra vencer a
+   regra duplicada .rem-premium-wrap{...} que já existe em index.html. */
+#grh-pane-remuneracao .rem-premium-wrap{background:#f1f5f9;border-radius:24px;padding:20px}
 .rem-premium-wrap{display:grid;gap:20px}
   .rem-kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(135px,1fr));gap:14px}
   .rem-kpi{background:#fff;border:1px solid #dbeafe;border-radius:18px;padding:16px 18px;box-shadow:0 8px 22px rgba(16,24,40,.05)}
