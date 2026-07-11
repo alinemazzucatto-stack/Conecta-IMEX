@@ -628,7 +628,7 @@
           <div class="rem-card-body">${lineChartRem(labelsSerie, serie, '#7c3aed')}</div>
         </div>
 
-        <div class="rem-grid-3">
+        <div class="rem-grid-2">
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>📊 Distribuição por Faixa Salarial</h2><p>Colaboradores ativos com salário informado.</p></div></div>
             <div class="rem-card-body">
@@ -653,19 +653,6 @@
                 const grupos = TIPOS_CONTRATO_CONHECIDOS.map(t=>({label:t, valor:ativos.filter(c=>c.tipo===t).length, cor:CORES_TIPO[t]})).filter(g=>g.valor>0);
                 return donutSegmentos(grupos.length ? grupos : [{label:'Sem dados',valor:1,cor:'#e2e8f0'}], ativos.length);
               })()}
-            </div>
-          </div>
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📋 Remuneração por Setor</h2><p>Média e total salarial por setor, colaboradores ativos.</p></div></div>
-            <div class="rem-card-body">
-              <table class="rem-table"><thead><tr><th>Setor</th><th>Colab.</th><th>Média</th><th>Total</th></tr></thead><tbody>
-                ${setoresReais.map(st=>{
-                  const doSetor = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (c.setor||'Não informado')===st);
-                  const total = doSetor.reduce((s,c)=>s+c.salario,0);
-                  const media = doSetor.length ? total/doSetor.length : 0;
-                  return `<tr><td>${esc(st)}</td><td>${doSetor.length}</td><td>${money(media)}</td><td>${money(total)}</td></tr>`;
-                }).join('') || '<tr><td colspan="4" class="rem-table-empty">Sem colaboradores cadastrados.</td></tr>'}
-              </tbody></table>
             </div>
           </div>
         </div>
