@@ -25,14 +25,17 @@
     return (Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   }
 
-  // Campos do painel de benefícios (arquivo 47)
+  // Campos do painel de benefícios (arquivo 47) — precisa bater com os ids
+  // reais gerados em render() (js/legacy/47-remuneracao-premium-v3.js):
+  // rem-beneficio-va/saude/odonto/colabmais/sindicato. Não existe mais
+  // Vale Refeição nem "Outros" genérico nesse painel — Wellhub/Gympass caiu
+  // dentro de "Colab+".
   var CATEGORIAS = [
-    { key:'saude',   label:'Plano de Saúde (Unimed)', campo:'rem-beneficio-saude' },
-    { key:'va',      label:'Vale Alimentação',        campo:'rem-beneficio-va' },
-    { key:'vr',      label:'Vale Refeição',           campo:'rem-beneficio-vr' },
-    { key:'odonto',  label:'Odontológico',            campo:'rem-beneficio-odonto' },
-    { key:'wellhub', label:'Colab+ / Wellhub',        campo:'rem-beneficio-wellhub' },
-    { key:'outros',  label:'Outros (ex: Sindicato)',  campo:'rem-beneficio-outros' }
+    { key:'va',        label:'Vale Alimentação',       campo:'rem-beneficio-va' },
+    { key:'saude',     label:'Plano de Saúde (Unimed)', campo:'rem-beneficio-saude' },
+    { key:'odonto',    label:'Plano Odontológico',      campo:'rem-beneficio-odonto' },
+    { key:'colabmais', label:'Colab+',                  campo:'rem-beneficio-colabmais' },
+    { key:'sindicato', label:'Cartão Sindicato',        campo:'rem-beneficio-sindicato' }
   ];
 
   function opcoesCategoria(sel){
@@ -46,11 +49,10 @@
     var t = (texto + ' ' + (nome||'')).toLowerCase();
     if(t.indexOf('unimed') !== -1) return 'saude';
     if(t.indexOf('odont') !== -1) return 'odonto';
-    if(t.indexOf('sindic') !== -1) return 'outros';
-    if(t.indexOf('colab') !== -1 || t.indexOf('wellhub') !== -1 || t.indexOf('gympass') !== -1) return 'wellhub';
-    if(t.indexOf('aliment') !== -1 || t.indexOf('alelo') !== -1 || t.indexOf('ticket') !== -1) return 'va';
-    if(t.indexOf('refei') !== -1) return 'vr';
-    return 'outros';
+    if(t.indexOf('sindic') !== -1) return 'sindicato';
+    if(t.indexOf('colab') !== -1 || t.indexOf('wellhub') !== -1 || t.indexOf('gympass') !== -1) return 'colabmais';
+    if(t.indexOf('aliment') !== -1 || t.indexOf('alelo') !== -1 || t.indexOf('ticket') !== -1 || t.indexOf('refei') !== -1) return 'va';
+    return 'sindicato';
   }
 
   // Extrai o valor TOTAL do relatório. Estratégias em ordem de confiança.
@@ -153,6 +155,15 @@
   }
 
   window.grhAbrirBeneficiosPdf = function(){
+    // O modal cobre a tela com um fundo semi-transparente — se o painel de
+    // Remuneração não estiver realmente ativo por trás dele (ex.: outra
+    // aba/tela ficou visível por baixo por algum motivo), força a volta pra
+    // cá antes de abrir, pra nunca aparecer outra tela (ex.: Meus Benefícios
+    // do colaborador) por trás do modal de RH.
+    var paneRem = document.getElementById('grh-pane-remuneracao');
+    if (paneRem && getComputedStyle(paneRem).display === 'none' && typeof window.grhTab === 'function') {
+      window.grhTab('remuneracao');
+    }
     criarModal();
     arquivosProcessados = [];
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
