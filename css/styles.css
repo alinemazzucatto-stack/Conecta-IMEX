@@ -1346,6 +1346,7 @@ tbody tr:hover td{background:var(--cream)}
   .rem-ia-fallback{margin-top:10px;font-size:11px;color:#94a3b8;font-style:italic}
   .rem-budget-bar{height:14px;background:#eef2ff;border-radius:999px;overflow:hidden;margin-top:16px}
   .rem-budget-bar-fill{height:100%;border-radius:999px;transition:width .3s ease}
+  .rem-acoes-rapidas{display:flex;flex-wrap:wrap;gap:10px}
   @media(max-width:1200px){.rem-kpi-grid{grid-template-columns:repeat(3,1fr)}.rem-grid-2{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){.rem-kpi-grid,.rem-filter-row,.rem-form,.rem-info-grid,.rem-sim-grid{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:1fr}}
 

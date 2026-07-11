@@ -705,6 +705,20 @@
             })()}
           </div>
         </div>
+
+        <div class="rem-card">
+          <div class="rem-card-head"><div><h2>⚡ Ações Rápidas</h2><p>Exportações e relatórios gerados a partir da base real deste painel.</p></div></div>
+          <div class="rem-card-body">
+            <div class="rem-acoes-rapidas">
+              <button class="btn btn-g btn-sm" onclick="window.remExportExcelV3()">📊 Exportar Excel</button>
+              <button class="btn btn-g btn-sm" onclick="window.remExportPDFV3()">📄 Exportar PDF</button>
+              <button class="btn btn-g btn-sm" onclick="window.remRelatorioExecutivoV3()">📈 Relatório Executivo</button>
+              <button class="btn btn-g btn-sm" onclick="window.remRelatorioPorSetorV3()">🏢 Relatório por Setor</button>
+              <button class="btn btn-g btn-sm" onclick="window.remHistoricoReajustesV3()">🔄 Histórico de Reajustes</button>
+              <button class="btn btn-g btn-sm" onclick="window.remFaixasSalariaisV3()">📐 Faixas Salariais</button>
+            </div>
+          </div>
+        </div>
       </div>`;
     window.__remPremiumRenderedV3 = true;
     setTimeout(()=>{ if(typeof window.remGerarInsightsIAV3==='function') window.remGerarInsightsIAV3(); }, 50);
@@ -871,6 +885,70 @@
   window.remNovaAlteracaoV3=function(){window.remAbrirV3(0,'edit');};
   window.remExportExcelV3=function(){ if(!window.XLSX){alert('Biblioteca Excel não carregada.');return;} const ws=XLSX.utils.json_to_sheet(colaboradoresRem.map(c=>({Colaborador:c.nome,Matrícula:c.mat,Cargo:c.cargo,Setor:c.setor,Tipo:c.tipo,Salário:c.salario||'',Status:c.status}))); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Remuneracao'); XLSX.writeFile(wb,'remuneracao_base_real.xlsx'); };
   window.remExportPDFV3=function(){ if(!(window.jspdf&&window.jspdf.jsPDF)){alert('Biblioteca PDF não carregada.');return;} const doc=new window.jspdf.jsPDF(); doc.text('Remuneração - Base Real',14,18); if(doc.autoTable){doc.autoTable({startY:26,head:[['Colaborador','Cargo','Tipo','Salário','Status']],body:colaboradoresRem.map(c=>[c.nome,c.cargo,c.tipo,c.salario?money(c.salario):'Não informado',c.status])});} doc.save('remuneracao_base_real.pdf'); };
+
+  // ── Ações Rápidas ── reaproveitam XLSX/jsPDF já usados acima, sem nova
+  // biblioteca — só filtram/agrupam a mesma base (colaboradoresRem) de
+  // formas diferentes para cada relatório.
+  window.remRelatorioExecutivoV3 = function(){
+    if(!(window.jspdf&&window.jspdf.jsPDF)){alert('Biblioteca PDF não carregada.');return;}
+    const s = stats();
+    const doc = new window.jspdf.jsPDF();
+    doc.setFontSize(16); doc.text('Relatório Executivo — Remuneração', 14, 18);
+    doc.setFontSize(10); doc.text('Gerado em ' + new Date().toLocaleDateString('pt-BR'), 14, 25);
+    const linhas = [
+      ['Folha Salarial (mês)', money(s.folha)],
+      ['Custo Total com Pessoal', money(s.custo)],
+      ['Salário Médio', money(s.mediaGeral)],
+      ['Maior Salário', s.maiorSalario?money(s.maiorSalario):'—'],
+      ['Menor Salário', s.menorSalario?money(s.menorSalario):'—'],
+      ['Custo dos Benefícios', money(s.benef)],
+      ['Colaboradores Ativos', String(s.ativos)],
+      ['CLT / PJ', s.clt+' / '+s.pj]
+    ];
+    if(doc.autoTable) doc.autoTable({startY:32, head:[['Indicador','Valor']], body:linhas});
+    doc.save('relatorio_executivo_remuneracao.pdf');
+  };
+  window.remRelatorioPorSetorV3 = function(){
+    if(!window.XLSX){alert('Biblioteca Excel não carregada.');return;}
+    const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)));
+    const setoresReaisRel = [...new Set(ativos.map(c=>c.setor||'Não informado'))];
+    const linhas = setoresReaisRel.map(st=>{
+      const doSetor = ativos.filter(c=>(c.setor||'Não informado')===st);
+      const total = doSetor.reduce((s,c)=>s+c.salario,0);
+      return { Setor:st, Colaboradores:doSetor.length, 'Salário Médio': doSetor.length?(total/doSetor.length):0, 'Custo Total':total };
+    });
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Por Setor');
+    XLSX.writeFile(wb, 'remuneracao_por_setor.xlsx');
+  };
+  window.remHistoricoReajustesV3 = async function(){
+    if(!window.XLSX){alert('Biblioteca Excel não carregada.');return;}
+    let mov = [];
+    try{ mov = typeof window.grhGetMov==='function' ? await window.grhGetMov() : []; }catch(e){}
+    const alteracoes = (Array.isArray(mov)?mov:[]).filter(m=>m.tipo==='Alteração Salarial');
+    if(!alteracoes.length){ notify('Nenhum reajuste salarial registrado ainda.'); return; }
+    const linhas = alteracoes.map(m=>({Data:m.data||'', Colaborador:m.nome||'', 'Salário Anterior':m.salarioAnt||'', 'Salário Novo':m.salarioNovo||'', Motivo:m.observacao||'', Responsável:m.alteradoPor||''}));
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Historico Reajustes');
+    XLSX.writeFile(wb, 'historico_reajustes.xlsx');
+  };
+  window.remFaixasSalariaisV3 = function(){
+    if(!window.XLSX){alert('Biblioteca Excel não carregada.');return;}
+    const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && c.salario>0);
+    const porCargoExport = {};
+    ativos.forEach(c=>{ (porCargoExport[c.cargo]=porCargoExport[c.cargo]||[]).push(c); });
+    const linhas = [];
+    Object.keys(porCargoExport).sort().forEach(cg=>{
+      const grupo = porCargoExport[cg];
+      if(grupo.length<2) return;
+      const f = faixaDe(grupo);
+      linhas.push({Cargo:cg, Nível:'Geral', Mínimo:f.min, Midpoint:f.mid, Máximo:f.max, Pessoas:f.n});
+    });
+    if(!linhas.length){ notify('Nenhum cargo com dados suficientes para gerar faixas.'); return; }
+    const ws = XLSX.utils.json_to_sheet(linhas);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Faixas Salariais');
+    XLSX.writeFile(wb, 'faixas_salariais.xlsx');
+  };
 
   async function aplicar(){
     const p=pane(); if(!p) return;
