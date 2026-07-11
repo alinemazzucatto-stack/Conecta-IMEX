@@ -102,7 +102,7 @@
 
   window.AuditDetector = {
     detectAll: function() {
-      const issues = [];
+      let issues = [];
 
       issues = issues.concat(this.detectBrokenModules());
       issues = issues.concat(this.detectPermissionIssues());
