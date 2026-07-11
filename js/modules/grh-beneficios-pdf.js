@@ -154,16 +154,27 @@
     document.body.appendChild(div);
   }
 
-  window.grhAbrirBeneficiosPdf = function(){
-    // O modal cobre a tela com um fundo semi-transparente — se o painel de
-    // Remuneração não estiver realmente ativo por trás dele (ex.: outra
-    // aba/tela ficou visível por baixo por algum motivo), força a volta pra
-    // cá antes de abrir, pra nunca aparecer outra tela (ex.: Meus Benefícios
-    // do colaborador) por trás do modal de RH.
+  // O modal cobre a tela com um fundo semi-transparente — se o painel de
+  // Remuneração não estiver realmente ativo por trás dele (ex.: outra
+  // aba/tela como "Meus Benefícios" do colaborador ficou visível por baixo
+  // por algum motivo), reexibe ele antes de abrir/aplicar. Só alterna
+  // display (sem chamar grhTab/aplicar): isso evitaria um recarregamento
+  // completo de ~4-5s do painel — que pareceria o sistema "travando" bem no
+  // meio do fluxo de importar/aplicar benefícios.
+  function garantirTelaRemuneracaoVisivel(){
     var paneRem = document.getElementById('grh-pane-remuneracao');
-    if (paneRem && getComputedStyle(paneRem).display === 'none' && typeof window.grhTab === 'function') {
-      window.grhTab('remuneracao');
+    if (!paneRem) return;
+    if (getComputedStyle(paneRem).display === 'none') {
+      var outerView = document.getElementById('view-gestao-rh');
+      if (outerView) outerView.style.display = 'block';
+      document.querySelectorAll('#view-gestao-rh [id^="grh-pane-"]').forEach(function(p){
+        p.style.display = (p === paneRem) ? 'block' : 'none';
+      });
     }
+  }
+
+  window.grhAbrirBeneficiosPdf = function(){
+    garantirTelaRemuneracaoVisivel();
     criarModal();
     arquivosProcessados = [];
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
@@ -286,6 +297,7 @@
   }
 
   window.grhBeneficiosPdfAplicar = function(){
+    garantirTelaRemuneracaoVisivel();
     var soma = totaisPorCategoria();
     var aplicados = 0;
 
@@ -304,19 +316,19 @@
     }
 
     var out = document.getElementById('grh-beneficios-pdf-resultado');
+    var aviso = document.createElement('div');
     if(aplicados){
-      var diag = '';
-      try{
-        var backup = localStorage.getItem('grh_beneficios_totais');
-        diag = backup ? ('💾 Confirmado salvo no navegador: <code style="font-size:11px">'+backup+'</code>') : '⚠️ Não consegui confirmar o salvamento local (localStorage vazio).';
-      }catch(e){ diag = '⚠️ localStorage bloqueado neste navegador: '+(e.message||e); }
-      var aviso = document.createElement('div');
       aviso.style.cssText = 'color:#15803d;background:#dcfce7;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
-      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) no painel!</strong> Confira o gráfico atrás deste modal.<br><span style="font-size:11px;color:#166534">'+diag+'</span>';
+      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) no painel!</strong> Feche este modal para conferir o gráfico.';
       out.appendChild(aviso);
       if(typeof addNotif === 'function') addNotif('Benefícios importados do PDF e aplicados ao painel.', 'success');
     } else {
-      alert('Não encontrei os campos de benefícios na tela. Abra o painel de Remuneração antes de aplicar.');
+      // Antes usava alert() nativo aqui — ele bloqueia a página inteira até
+      // alguém clicar OK, o que parecia (e na prática era) o sistema
+      // travando. Mensagem inline não bloqueia nada.
+      aviso.style.cssText = 'color:#b91c1c;background:#fee2e2;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
+      aviso.innerHTML = '<strong>⚠️ Não encontrei os campos de benefícios na tela.</strong> Feche este modal, abra o painel de Remuneração e tente novamente.';
+      out.appendChild(aviso);
     }
   };
 })();
