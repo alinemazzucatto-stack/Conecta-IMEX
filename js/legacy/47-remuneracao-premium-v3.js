@@ -213,6 +213,140 @@
     }catch(e){ notify('❌ Erro ao salvar: ' + (e.message||e)); }
   };
 
+  // ── Motor de Alertas Inteligentes ──
+  // 100% determinístico (sem IA) — cada alerta é calculado a partir de
+  // dados já carregados (colaboradoresRem, grh_mov) ou da faixa salarial
+  // derivada em faixaDe()/ORDEM_NIVEIS. Nenhuma regra usa número mágico
+  // sem explicação: os limiares (12 meses, 60 dias, etc.) ficam nomeados
+  // em constantes no topo da função para fácil ajuste futuro.
+  const MESES_SEM_REAJUSTE_ALERTA = 12;
+  const DIAS_DISSIDIO_PROXIMO_ALERTA = 60;
+  async function calcularAlertasInteligentes(){
+    const alertas = [];
+    const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && c.salario>0);
+    let mov = [];
+    try{ mov = typeof window.grhGetMov==='function' ? await window.grhGetMov() : []; }catch(e){}
+    const alteracoesSalariais = (Array.isArray(mov)?mov:[]).filter(m=>m.tipo==='Alteração Salarial');
+
+    // 1) Sem reajuste há 12+ meses (ou nunca teve reajuste desde a admissão)
+    const hoje = new Date();
+    let semReajuste = 0;
+    ativos.forEach(c=>{
+      const doColab = alteracoesSalariais.filter(m=>norm(m.nome)===norm(c.nome)).sort((a,b)=>String(a.data||'').localeCompare(String(b.data||''))).pop();
+      const dataBase = doColab ? doColab.data : c.adm;
+      if(!dataBase || dataBase==='--') return;
+      const d = new Date(dataBase);
+      if(isNaN(d.getTime())) return;
+      const meses = (hoje.getFullYear()-d.getFullYear())*12 + (hoje.getMonth()-d.getMonth());
+      if(meses >= MESES_SEM_REAJUSTE_ALERTA) semReajuste++;
+    });
+    if(semReajuste>0) alertas.push({icone:'⚠️', tipo:'warn', texto:`${semReajuste} colaborador${semReajuste>1?'es':''} sem reajuste há ${MESES_SEM_REAJUSTE_ALERTA}+ meses`});
+
+    // 2) Fora da faixa do cargo (usa a mesma faixa real derivada da Estrutura Salarial)
+    const porCargo = {};
+    ativos.forEach(c=>{ (porCargo[c.cargo]=porCargo[c.cargo]||[]).push(c); });
+    // "Fora da faixa" = 20%+ acima/abaixo do midpoint real do cargo
+    // (min/max da própria amostra nunca ficariam "fora" por definição, por
+    // isso o critério usa o midpoint, não os extremos observados).
+    let acimaFaixa=0, abaixoFaixa=0;
+    Object.keys(porCargo).forEach(cg=>{
+      const grupo = porCargo[cg];
+      if(grupo.length<3) return; // faixa pouco confiável com menos de 3 pessoas
+      const f = faixaDe(grupo);
+      grupo.forEach(c=>{
+        if(c.salario > f.mid*1.2) acimaFaixa++;
+        else if(c.salario < f.mid*0.8) abaixoFaixa++;
+      });
+    });
+    if(acimaFaixa>0) alertas.push({icone:'📈', tipo:'info', texto:`${acimaFaixa} salário${acimaFaixa>1?'s':''} 20%+ acima do midpoint do próprio cargo`});
+    if(abaixoFaixa>0) alertas.push({icone:'📉', tipo:'warn', texto:`${abaixoFaixa} salário${abaixoFaixa>1?'s':''} 20%+ abaixo do midpoint do próprio cargo (possível piso)`});
+
+    // 3) Distorção salarial no mesmo cargo (maior salário mais que o dobro do menor, com 3+ pessoas)
+    let cargosComDistorcao = 0;
+    Object.keys(porCargo).forEach(cg=>{
+      const grupo = porCargo[cg];
+      if(grupo.length<3) return;
+      const f = faixaDe(grupo);
+      if(f.min>0 && f.max/f.min >= 2) cargosComDistorcao++;
+    });
+    if(cargosComDistorcao>0) alertas.push({icone:'🔀', tipo:'warn', texto:`${cargosComDistorcao} cargo${cargosComDistorcao>1?'s têm':' tem'} distorção salarial (maior salário 2x+ o menor entre pessoas do mesmo cargo)`});
+
+    // 4) Dissídio previsto próximo (config manual do RH, col('grh_config_remuneracao'))
+    let dissidio = null;
+    try{
+      const doc = await db.collection(col('grh_config_remuneracao')).doc('geral').get();
+      if(doc.exists) dissidio = doc.data();
+    }catch(e){}
+    if(dissidio && dissidio.dataDissidio){
+      const d = new Date(dissidio.dataDissidio);
+      if(!isNaN(d.getTime())){
+        const dias = Math.round((d-hoje)/86400000);
+        if(dias>=0 && dias<=DIAS_DISSIDIO_PROXIMO_ALERTA) alertas.push({icone:'📅', tipo:'info', texto:`Dissídio previsto em ${dias} dia${dias===1?'':'s'} (${d.toLocaleDateString('pt-BR')})`});
+      }
+    }
+
+    return { alertas, dissidio };
+  }
+  // ── Insights Conecta AI (híbrido) ──
+  // Parte 1 (sempre): insights determinísticos, reaproveitando os mesmos
+  // dados dos Alertas Inteligentes + tendência da folha — sem custo, sem
+  // depender de rede.
+  // Parte 2 (quando disponível): 1 chamada real à IA via chamarAnthropicProxy
+  // (a MESMA função já usada pelo Conecta AI em js/modules/conecta-ai.js,
+  // que fala com o proxy em /api/ai) pedindo uma leitura preditiva/
+  // narrativa. Se o proxy falhar ou não existir, cai para um texto local
+  // (mesmo padrão de fallback do conecta-ai.js), nunca deixando a seção
+  // vazia nem travada em "carregando".
+  function insightsDeterministicos(s, alertas, trendFolha){
+    const lista = [];
+    if(trendFolha) lista.push(`💰 A folha ${trendFolha.pct>=0?'cresceu':'caiu'} ${Math.abs(trendFolha.pct).toFixed(1)}% em relação à competência anterior.`);
+    alertas.forEach(a=>lista.push(`${a.icone} ${a.texto}.`));
+    if(s.pj>0 && s.ativos>0){
+      const pctPj = Math.round(s.pj/s.ativos*100);
+      if(pctPj>=40) lista.push(`🤝 ${pctPj}% da base ativa é PJ — proporção alta, vale revisar enquadramento.`);
+    }
+    if(!lista.length) lista.push('✅ Sem pontos de atenção automáticos neste momento.');
+    return lista;
+  }
+  window.remGerarInsightsIAV3 = async function(){
+    const el = document.getElementById('rem-ia-insights'); if(!el) return;
+    const s = stats();
+    const alertasInfo = await calcularAlertasInteligentes();
+    const serieInfo = await folhaSerieRealOuEstimada();
+    const trendFolha = serieInfo.real && serieInfo.serie.length>=2 ? { pct: ((s.folha-serieInfo.serie[serieInfo.serie.length-2])/(serieInfo.serie[serieInfo.serie.length-2]||1))*100 } : null;
+    const det = insightsDeterministicos(s, alertasInfo.alertas, trendFolha);
+    const detHTML = '<ul class="rem-ia-lista">' + det.map(t=>`<li>${esc(t)}</li>`).join('') + '</ul>';
+
+    if(typeof chamarAnthropicProxy !== 'function'){
+      el.innerHTML = detHTML + '<p class="rem-ia-fallback">Leitura preditiva por IA indisponível (proxy não configurado neste ambiente) — mostrando apenas insights por regras.</p>';
+      return;
+    }
+    el.innerHTML = detHTML + '<div class="rem-ia-loading">🧠 Gerando leitura preditiva da IA…</div>';
+    const resumo = `Folha atual: ${money(s.folha)}. Custo total com pessoal: ${money(s.custo)}. ${s.ativos} colaboradores ativos (${s.clt} CLT, ${s.pj} PJ). Salário médio: ${money(s.mediaGeral)}. Alertas automáticos: ${alertasInfo.alertas.map(a=>a.texto).join('; ') || 'nenhum'}.`;
+    try{
+      const resp = await chamarAnthropicProxy({
+        model:'claude-sonnet-4-20250514', max_tokens:280,
+        system:'Você é o Conecta AI, analista de remuneração/RH da IMEX. A partir dos números fornecidos, escreva no máximo 3 frases curtas com uma leitura preditiva ou recomendação prática (ex: previsão de crescimento da folha, risco de distorção salarial, sugestão de ação). Direto, sem saudação, em português.',
+        messages:[{role:'user', content:resumo}]
+      });
+      const txt = (resp.content||[]).map(c=>c.text||'').join('').trim();
+      el.innerHTML = detHTML + (txt ? `<div class="rem-ia-predicao">🔮 ${esc(txt).replace(/\n/g,'<br>')}</div>` : '');
+    }catch(e){
+      el.innerHTML = detHTML + '<p class="rem-ia-fallback">Leitura preditiva por IA indisponível no momento — mostrando apenas insights por regras.</p>';
+    }
+  };
+
+  window.remSalvarDissidioV3 = async function(){
+    const data = document.getElementById('rem-dissidio-data')?.value;
+    if(!data){ notify('Informe uma data.'); return; }
+    try{
+      await db.collection(col('grh_config_remuneracao')).doc('geral').set({dataDissidio:data}, {merge:true});
+      notify('💾 Data de dissídio salva.');
+      window.__remPremiumRenderedV3 = false;
+      await aplicar();
+    }catch(e){ notify('❌ Erro ao salvar: '+(e.message||e)); }
+  };
+
   // Conta quantas "Alteração Salarial" foram registradas em grh_mov dentro
   // da competência (mês) atual — usado no KPI "Reajustes no Mês".
   async function reajustesDoMesAtual(){
@@ -289,12 +423,13 @@
     }
   }
 
-  function render(serieInfo, reajustesMes, custosExtra){
+  function render(serieInfo, reajustesMes, custosExtra, alertasInfo){
     const p=pane(); if(!p) return;
     const s=stats();
     serieInfo = serieInfo || { real:false, labels:meses, serie:folhaSerie() };
     reajustesMes = reajustesMes || 0;
     custosExtra = custosExtra || { atual:{horasExtras:0,bonus:0,comissoes:0,outros:0}, anterior:{horasExtras:0,bonus:0,comissoes:0,outros:0}, competenciaAtual:competenciaAtualStr(), competenciaAnterior:'' };
+    alertasInfo = alertasInfo || { alertas:[], dissidio:null };
     const serie=serieInfo.serie;
     const labelsSerie=serieInfo.labels;
     const maxSerie=Math.max(...serie,1);
@@ -503,8 +638,28 @@
             </div>
           </div>
         </div>
+
+        <div class="rem-grid-2">
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>🔔 Alertas Inteligentes</h2><p>Calculados automaticamente a partir da base real — sem IA, 100% regra determinística.</p></div></div>
+            <div class="rem-card-body">
+              ${alertasInfo.alertas.length ? `<div class="rem-alertas-lista">${alertasInfo.alertas.map(a=>`<div class="rem-alerta rem-alerta-${a.tipo}"><span>${a.icone}</span><span>${esc(a.texto)}</span></div>`).join('')}</div>` : '<div class="empty">✅ Nenhum alerta no momento.</div>'}
+              <div class="rem-beneficios-form" style="grid-template-columns:2fr 1fr;margin-top:16px;align-items:end">
+                <div class="field"><label>Data prevista do dissídio</label><input id="rem-dissidio-data" type="date" value="${alertasInfo.dissidio&&alertasInfo.dissidio.dataDissidio?esc(alertasInfo.dissidio.dataDissidio):''}"></div>
+                <button class="btn btn-g btn-sm" onclick="window.remSalvarDissidioV3()">💾 Salvar</button>
+              </div>
+            </div>
+          </div>
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>🧠 Insights Conecta AI</h2><p>Leitura automática dos números do módulo.</p></div></div>
+            <div class="rem-card-body" id="rem-ia-insights">
+              <div class="empty"><div class="ei">⏳</div>Gerando insights…</div>
+            </div>
+          </div>
+        </div>
       </div>`;
     window.__remPremiumRenderedV3 = true;
+    setTimeout(()=>{ if(typeof window.remGerarInsightsIAV3==='function') window.remGerarInsightsIAV3(); }, 50);
   }
 
   // ── Simulador de reajuste ──
@@ -682,7 +837,8 @@
       const serieInfo = await folhaSerieRealOuEstimada();
       const reajustesMes = await reajustesDoMesAtual();
       const custosExtra = await carregarCustosExtra();
-      render(serieInfo, reajustesMes, custosExtra);
+      const alertasInfo = await calcularAlertasInteligentes();
+      render(serieInfo, reajustesMes, custosExtra, alertasInfo);
     }
   }
 

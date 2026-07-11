@@ -1336,6 +1336,14 @@ tbody tr:hover td{background:var(--cream)}
   .rem-sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .rem-sim-grid .field{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
   .rem-sim-grid input,.rem-sim-grid select{border:1px solid #dbe3ef;border-radius:12px;padding:11px 13px;font-size:14px;color:#0f172a;background:#fff;font-family:inherit}
+  .rem-alertas-lista{display:grid;gap:10px}
+  .rem-alerta{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;font-size:13px;font-weight:700}
+  .rem-alerta-warn{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .rem-alerta-info{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+  .rem-ia-lista{margin:0;padding-left:18px;font-size:13px;color:#334155;line-height:1.7}
+  .rem-ia-loading{margin-top:10px;font-size:12px;color:#64748b}
+  .rem-ia-predicao{margin-top:12px;padding:14px;border-radius:14px;background:#f5f3ff;border:1px solid #ddd6fe;font-size:13px;color:#4c1d95;line-height:1.6}
+  .rem-ia-fallback{margin-top:10px;font-size:11px;color:#94a3b8;font-style:italic}
   @media(max-width:1200px){.rem-kpi-grid{grid-template-columns:repeat(3,1fr)}.rem-grid-2{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){.rem-kpi-grid,.rem-filter-row,.rem-form,.rem-info-grid,.rem-sim-grid{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:1fr}}
 
