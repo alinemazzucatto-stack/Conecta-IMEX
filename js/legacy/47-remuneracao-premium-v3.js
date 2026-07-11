@@ -626,13 +626,21 @@
             </div>
           </div>
           <div class="rem-card">
-            <div class="rem-card-head"><div><h2>🧮 Simulador de Reajuste</h2><p>Simule o impacto de um reajuste salarial por setor.</p></div></div>
+            <div class="rem-card-head"><div><h2>🧮 Simulador de Reajuste</h2><p>Simule o impacto de um reajuste por setor, cargo ou colaborador individual. Não salva nada — é só simulação.</p></div></div>
             <div class="rem-card-body">
-              <div class="rem-sim-grid">
+              <div class="rem-sim-grid" style="grid-template-columns:repeat(4,1fr)">
                 <div class="field"><label>Percentual de reajuste</label><input id="rem-sim-pct" type="number" min="0" step="0.1" placeholder="Ex: 8" value="8"></div>
-                <div class="field"><label>Setor</label><select id="rem-sim-setor">
+                <div class="field"><label>Setor</label><select id="rem-sim-setor" onchange="document.getElementById('rem-sim-colab').value=''">
                   <option value="">Todos os setores</option>
                   ${setoresReais.map(st=>`<option value="${esc(st)}">${esc(st)}</option>`).join('')}
+                </select></div>
+                <div class="field"><label>Cargo</label><select id="rem-sim-cargo" onchange="document.getElementById('rem-sim-colab').value=''">
+                  <option value="">Todos os cargos</option>
+                  ${[...new Set(colaboradoresRem.map(c=>c.cargo).filter(Boolean))].sort().map(cg=>`<option value="${esc(cg)}">${esc(cg)}</option>`).join('')}
+                </select></div>
+                <div class="field"><label>Colaborador (opcional)</label><select id="rem-sim-colab">
+                  <option value="">Todos (usa setor/cargo acima)</option>
+                  ${colaboradoresRem.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${esc(c.nome)}">${esc(c.nome)}</option>`).join('')}
                 </select></div>
               </div>
               <div class="rem-beneficios-actions"><button class="btn btn-p btn-sm" onclick="window.remSimularReajusteV3()">▶️ Executar simulação</button></div>
@@ -729,24 +737,48 @@
   // arquivo — é a mesma suposição já usada no restante do painel para
   // estimar o custo de encargos sobre folha CLT.
   const TAXA_ENCARGOS_CLT = 0.68;
+  // Não salva nada — só calcula e mostra na tela. Aceita 3 granularidades,
+  // da mais ampla pra mais específica: setor, cargo, ou 1 colaborador em
+  // particular (quando um colaborador é escolhido, setor/cargo do filtro
+  // são ignorados, pois já é o caso mais específico possível).
   window.remSimularReajusteV3 = function(){
     const pct = parseFloat(document.getElementById('rem-sim-pct')?.value) || 0;
     const setorSel = document.getElementById('rem-sim-setor')?.value || '';
-    const alvo = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (!setorSel || c.setor===setorSel));
+    const cargoSel = document.getElementById('rem-sim-cargo')?.value || '';
+    const colabSel = document.getElementById('rem-sim-colab')?.value || '';
+    const el = document.getElementById('rem-simulador-resultado'); if(!el) return;
+
+    let alvo;
+    if(colabSel){
+      alvo = colaboradoresRem.filter(c=>c.nome===colabSel);
+    }else{
+      alvo = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (!setorSel || c.setor===setorSel) && (!cargoSel || c.cargo===cargoSel));
+    }
+    if(!alvo.length){ el.innerHTML = '<div class="empty">Nenhum colaborador encontrado com esse filtro.</div>'; return; }
+
     const folhaClt = alvo.filter(c=>c.tipo==='CLT').reduce((s,c)=>s+c.salario,0);
-    const folhaPj = alvo.filter(c=>c.tipo==='PJ').reduce((s,c)=>s+c.salario,0);
+    const folhaPj = alvo.filter(c=>c.tipo!=='CLT').reduce((s,c)=>s+c.salario,0);
     const aumentoMensalClt = folhaClt * pct/100;
     const aumentoMensalPj = folhaPj * pct/100;
     const aumentoMensal = aumentoMensalClt + aumentoMensalPj;
     const impactoAnual = aumentoMensal * 12;
     const impactoComEncargos = (aumentoMensalClt*12*(1+TAXA_ENCARGOS_CLT)) + (aumentoMensalPj*12);
-    const el = document.getElementById('rem-simulador-resultado'); if(!el) return;
-    if(!alvo.length){ el.innerHTML = '<div class="empty">Nenhum colaborador ativo nesse setor.</div>'; return; }
-    el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr">
-      <div class="rem-compare-kpi"><small>Aumento da folha</small><strong>${money(aumentoMensal)}</strong><span>mensal</span></div>
-      <div class="rem-compare-kpi"><small>Impacto anual</small><strong>${money(impactoAnual)}</strong><span>sem encargos</span></div>
-      <div class="rem-compare-kpi"><small>Impacto com encargos</small><strong>${money(impactoComEncargos)}</strong><span>CLT +${Math.round(TAXA_ENCARGOS_CLT*100)}%, PJ sem encargo</span></div>
-    </div>`;
+    const novaFolha = alvo.reduce((s,c)=>s+c.salario,0) + aumentoMensal;
+
+    let extraColab = '';
+    if(colabSel && alvo.length===1){
+      const c = alvo[0];
+      const novoSalario = c.salario * (1+pct/100);
+      extraColab = `<div class="rem-compare-kpi"><small>Novo Salário</small><strong>${money(novoSalario)}</strong><span>${esc(c.nome)} · era ${money(c.salario)}</span></div>`;
+    }
+
+    el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:repeat(${extraColab?4:3},1fr)">
+      <div class="rem-compare-kpi"><small>Aumento da Folha</small><strong>${money(aumentoMensal)}</strong><span>mensal · ${alvo.length} pessoa${alvo.length>1?'s':''}</span></div>
+      <div class="rem-compare-kpi"><small>Impacto Anual</small><strong>${money(impactoAnual)}</strong><span>sem encargos</span></div>
+      <div class="rem-compare-kpi"><small>Impacto com Encargos</small><strong>${money(impactoComEncargos)}</strong><span>CLT +${Math.round(TAXA_ENCARGOS_CLT*100)}%, PJ sem encargo</span></div>
+      ${extraColab}
+    </div>
+    <p style="font-size:11px;color:#64748b;margin-top:10px">Novo custo da folha do grupo simulado: <strong>${money(novaFolha)}</strong> (era ${money(alvo.reduce((s,c)=>s+c.salario,0))}). Simulação apenas — nada foi salvo.</p>`;
   };
 
   // ── Histórico salarial do colaborador ──
