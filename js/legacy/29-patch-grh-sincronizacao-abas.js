@@ -184,6 +184,11 @@
       clt:        g('grh-c-clt'),
       status:     g('grh-c-status'),
       salario:    parseFloat(g('grh-c-salario')) || null,
+      // Esses 2 campos já existiam no formulário (preenchidos ao editar em
+      // grhAbrirModalColab) mas nunca eram salvos por esta função — o RH
+      // selecionava um valor e ele se perdia ao salvar. Corrigido aqui.
+      tipoContrato: g('grh-c-tipocontrato') || (g('grh-c-clt')==='Sim' ? 'CLT' : 'PJ'),
+      nivel:      g('grh-c-nivel'),
       roleAcesso
     };
 

@@ -56,8 +56,14 @@
       <div class="rem-legend">${legenda}</div>`;
   }
 
+  // Tipos reconhecidos no campo `tipoContrato` (formulário de Colaboradores,
+  // #grh-c-tipocontrato). Quando presente, é usado tal qual — sem isso,
+  // "Estágio"/"Aprendiz"/"Terceirizado" caíam todos no fallback genérico
+  // CLT abaixo e ficavam invisíveis na Distribuição por Tipo de Contrato.
+  const TIPOS_CONTRATO_CONHECIDOS = ['CLT','PJ','Estágio','Aprendiz','Terceirizado'];
   function contratoOf(c){
-    const raw = nvl(c.tipo,c.contrato,c.tipoContrato,c.regime,c.clt,c.ehClt,c['É CLT?'],c['CLT']);
+    if(c.tipoContrato && TIPOS_CONTRATO_CONHECIDOS.indexOf(c.tipoContrato)!==-1) return c.tipoContrato;
+    const raw = nvl(c.tipo,c.contrato,c.regime,c.clt,c.ehClt,c['É CLT?'],c['CLT']);
     if(typeof raw === 'boolean') return raw ? 'CLT' : 'PJ';
     const s=norm(raw);
     if(s==='sim' || s==='s' || s==='true' || s==='clt' || s.includes('clt')) return 'CLT';
@@ -98,6 +104,7 @@
       mat:nvl(c.matricula,c.matrícula,c.id,c.codigo,c['Matrícula'],String(idx+1).padStart(3,'0')),
       cargo:nvl(c.funcao,c.função,c.cargo,c.cargoAtual,c['Função'],c['Cargo'],'Não informado'),
       setor:nvl(c.setor,c.departamento,c.area,c.área,c['Setor'],'Não informado'),
+      nivel:nvl(c.nivel,''),
       tipo,
       salario,
       temHolerite: !!holerite,
@@ -150,10 +157,15 @@
     const benef = ativos.reduce((s,c)=>s+c.benef,0);
     const provisoes = ativos.reduce((s,c)=>s+(c.provisoes||0),0);
     const comHolerite = ativos.filter(c=>c.temHolerite).length;
+    const comSalario = ativos.filter(c=>c.salario>0);
+    const salarios = comSalario.map(c=>c.salario);
     return {
       folha:total,
       mediaClt:clts.length ? clts.reduce((s,c)=>s+c.salario,0)/clts.length : 0,
       mediaPj:pjs.length ? pjs.reduce((s,c)=>s+c.salario,0)/pjs.length : 0,
+      mediaGeral: comSalario.length ? total/comSalario.length : 0,
+      maiorSalario: salarios.length ? Math.max.apply(null, salarios) : 0,
+      menorSalario: salarios.length ? Math.min.apply(null, salarios) : 0,
       custo:total+benef+provisoes,
       benef:benef,
       provisoes:provisoes,
@@ -162,6 +174,63 @@
       pj:pjs.length,
       comHolerite:comHolerite
     };
+  }
+
+  // Horas extras / bônus / comissões / outros custos não têm nenhuma fonte
+  // de dado no sistema hoje — diferente de "Custos dos Benefícios" (que só
+  // calcula na tela e nunca persiste), aqui gravamos de verdade em
+  // col('grh_custos_extra'), 1 documento por competência (mês), para que o
+  // Comparativo Detalhado da Folha tenha um "anterior" real de verdade.
+  function competenciaAtualStr(){ const h=new Date(); return h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0'); }
+  function competenciaAnteriorStr(comp){ const [a,m]=comp.split('-').map(Number); const d=new Date(a,(m-1)-1,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+  async function carregarCustosExtra(){
+    const atual = competenciaAtualStr();
+    const anterior = competenciaAnteriorStr(atual);
+    const vazio = {horasExtras:0,bonus:0,comissoes:0,outros:0};
+    try{
+      const [docAtual, docAnterior] = await Promise.all([
+        db.collection(col('grh_custos_extra')).doc(atual).get(),
+        db.collection(col('grh_custos_extra')).doc(anterior).get()
+      ]);
+      return {
+        atual: docAtual.exists ? Object.assign({}, vazio, docAtual.data()) : vazio,
+        anterior: docAnterior.exists ? Object.assign({}, vazio, docAnterior.data()) : vazio,
+        competenciaAtual: atual, competenciaAnterior: anterior
+      };
+    }catch(e){
+      console.warn('[remuneracao] Falha ao carregar custos extras', e);
+      return { atual: vazio, anterior: vazio, competenciaAtual: atual, competenciaAnterior: anterior };
+    }
+  }
+  window.remSalvarCustosExtraV3 = async function(){
+    const g = id => parseFloat(document.getElementById(id)?.value) || 0;
+    const dados = { horasExtras:g('rem-extra-horas'), bonus:g('rem-extra-bonus'), comissoes:g('rem-extra-comissoes'), outros:g('rem-extra-outros'), atualizadoEm:new Date().toISOString() };
+    try{
+      await db.collection(col('grh_custos_extra')).doc(competenciaAtualStr()).set(dados, {merge:true});
+      notify('💾 Custos extras salvos para ' + competenciaAtualStr() + '.');
+      window.__remPremiumRenderedV3 = false;
+      await aplicar();
+    }catch(e){ notify('❌ Erro ao salvar: ' + (e.message||e)); }
+  };
+
+  // Conta quantas "Alteração Salarial" foram registradas em grh_mov dentro
+  // da competência (mês) atual — usado no KPI "Reajustes no Mês".
+  async function reajustesDoMesAtual(){
+    try{
+      if(typeof window.grhGetMov !== 'function') return 0;
+      const mov = await window.grhGetMov();
+      const hoje = new Date();
+      const prefixo = hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+      return (Array.isArray(mov)?mov:[]).filter(m=>m.tipo==='Alteração Salarial' && String(m.data||'').startsWith(prefixo)).length;
+    }catch(e){ return 0; }
+  }
+
+  // Card KPI com indicador de variação opcional (usado nos cards executivos
+  // do topo). `trend` é {pct, favoravel} ou null quando não há comparação
+  // real disponível — nesse caso mostra só o valor, sem inventar tendência.
+  function kpiCardRem(icon, label, valor, sub, trend){
+    const trendHTML = trend ? `<div class="rem-kpi-trend ${trend.pct>=0?(trend.favoravel===false?'down':'up'):(trend.favoravel===false?'up':'down')}">${trend.pct>=0?'▲':'▼'} ${Math.abs(trend.pct).toFixed(1)}% vs anterior</div>` : '';
+    return `<div class="rem-kpi"><small>${icon} ${label}</small><strong>${valor}</strong><span>${sub}</span>${trendHTML}</div>`;
   }
 
   function renderRows(list){
@@ -220,25 +289,47 @@
     }
   }
 
-  function render(serieInfo){
+  function render(serieInfo, reajustesMes, custosExtra){
     const p=pane(); if(!p) return;
     const s=stats();
     serieInfo = serieInfo || { real:false, labels:meses, serie:folhaSerie() };
+    reajustesMes = reajustesMes || 0;
+    custosExtra = custosExtra || { atual:{horasExtras:0,bonus:0,comissoes:0,outros:0}, anterior:{horasExtras:0,bonus:0,comissoes:0,outros:0}, competenciaAtual:competenciaAtualStr(), competenciaAnterior:'' };
     const serie=serieInfo.serie;
     const labelsSerie=serieInfo.labels;
     const maxSerie=Math.max(...serie,1);
     const setores=[...new Set(colaboradoresRem.map(c=>c.cc || c.setor || 'Não informado'))];
     const setoresReais=[...new Set(colaboradoresRem.map(c=>c.setor || 'Não informado'))];
 
+    // Comparação com a competência anterior — só quando há uma segunda
+    // competência REAL na série (serieInfo.real). Sem dado real de mês
+    // anterior, os KPIs mostram só o valor atual, sem tendência inventada.
+    const folhaAnterior = serieInfo.real && serie.length>=2 ? serie[serie.length-2] : null;
+    const trendFolha = folhaAnterior ? { pct: ((s.folha-folhaAnterior)/(folhaAnterior||1))*100, favoravel:false } : null;
+
     p.innerHTML = `
       <div class="rem-premium-wrap">
-        <div class="rem-kpi-grid">
-          <div class="rem-kpi"><small>💰 Folha do Mês</small><strong>${s.folha ? money(s.folha) : 'R$ 0,00'}</strong><span>${s.comHolerite}/${s.ativos} com holerite real importado</span></div>
-          <div class="rem-kpi"><small>📄 Salário Médio CLT</small><strong>${s.mediaClt ? money(s.mediaClt) : 'R$ 0,00'}</strong><span>${s.clt} contratos CLT</span></div>
-          <div class="rem-kpi"><small>🤝 Salário Médio PJ</small><strong>${s.mediaPj ? money(s.mediaPj) : 'R$ 0,00'}</strong><span>${s.pj} prestadores PJ</span></div>
-          <div class="rem-kpi"><small>🏢 Custo Total RH</small><strong>${money(s.custo)}</strong><span>folha + benefícios + provisões (${money(s.provisoes)})</span></div>
-          <div class="rem-kpi"><small>🎁 Custo Benefícios</small><strong>${money(s.benef)}</strong><span>saúde, odonto, VA e sindicato</span></div>
-          <div class="rem-kpi"><small>👥 Colaboradores Ativos</small><strong>${s.ativos}</strong><span>base real de colaboradores</span></div>
+        <div class="hero" style="background:radial-gradient(at 18% 15%, #1d54d6 0%, transparent 48%), radial-gradient(at 85% 5%, #061535 0%, transparent 45%), radial-gradient(at 88% 92%, #1f7fe0 0%, transparent 55%), radial-gradient(at 5% 95%, #040d24 0%, transparent 45%), #0a1d4a!important">
+          <div class="h-content">
+            <div class="h-eyebrow">Painel estratégico de RH</div>
+            <h1>REMUNERAÇÃO</h1>
+            <p>Folha, custos com pessoal, faixas salariais e simulações — tudo consolidado a partir da base real de colaboradores.</p>
+          </div>
+          <div class="h-stats">
+            <div class="h-stat"><span class="h-num">${s.ativos}</span><span class="h-lbl">Colaboradores ativos</span></div>
+            <div class="h-stat"><span class="h-num">${money(s.custo)}</span><span class="h-lbl">Custo total RH</span></div>
+          </div>
+        </div>
+
+        <div class="rem-kpi-grid" style="grid-template-columns:repeat(4,minmax(135px,1fr))">
+          ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha)}
+          ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null)}
+          ${kpiCardRem('📊','Salário Médio', s.mediaGeral?money(s.mediaGeral):'R$ 0,00', `${s.clt} CLT · ${s.pj} PJ`, null)}
+          ${kpiCardRem('🏆','Maior Salário', s.maiorSalario?money(s.maiorSalario):'—', 'na base ativa', null)}
+          ${kpiCardRem('📉','Menor Salário', s.menorSalario?money(s.menorSalario):'—', 'na base ativa', null)}
+          ${kpiCardRem('🎁','Custo dos Benefícios', money(s.benef), 'saúde, odonto, VA e sindicato', null)}
+          ${kpiCardRem('🔄','Reajustes no Mês', String(reajustesMes), 'alterações salariais registradas', null)}
+          ${kpiCardRem('👥','Colaboradores Ativos', String(s.ativos), 'base real de colaboradores', null)}
         </div>
 
         <div class="rem-comparativo-grid" id="rem-comparativo-folha-beneficios-imex">
@@ -274,6 +365,44 @@
           </div>
         </div>
 
+        <div class="rem-card" style="margin-bottom:18px">
+          <div class="rem-card-head"><div><h2>📋 Comparativo Detalhado da Folha</h2><p>Competência ${esc(custosExtra.competenciaAtual)} vs. ${custosExtra.competenciaAnterior ? esc(custosExtra.competenciaAnterior) : 'sem competência anterior registrada'}.</p></div></div>
+          <div class="rem-card-body">
+            ${(()=>{
+              const encargosAtual = s.clt ? s.mediaClt*s.clt*TAXA_ENCARGOS_CLT : 0;
+              const linhas = [
+                {label:'Folha Salarial', atual:s.folha, anterior: custosExtra.competenciaAnterior ? (serie.length>=2?serie[serie.length-2]:null) : null},
+                {label:'Benefícios', atual:s.benef, anterior:null},
+                {label:'Encargos (estimado)', atual:encargosAtual, anterior:null},
+                {label:'Horas Extras', atual:custosExtra.atual.horasExtras, anterior:custosExtra.anterior.horasExtras},
+                {label:'Bônus', atual:custosExtra.atual.bonus, anterior:custosExtra.anterior.bonus},
+                {label:'Comissões', atual:custosExtra.atual.comissoes, anterior:custosExtra.anterior.comissoes},
+                {label:'Outros Custos', atual:custosExtra.atual.outros, anterior:custosExtra.anterior.outros}
+              ];
+              const totalAtual = linhas.reduce((s2,l)=>s2+(l.atual||0),0);
+              const totalAnterior = linhas.every(l=>l.anterior!=null) ? linhas.reduce((s2,l)=>s2+(l.anterior||0),0) : null;
+              const linhaHTML = l => {
+                const temAnterior = l.anterior!=null;
+                const variacao = temAnterior ? l.atual-l.anterior : null;
+                const perc = temAnterior && l.anterior ? (variacao/l.anterior*100) : null;
+                return `<tr><td>${esc(l.label)}</td><td>${money(l.atual||0)}</td><td>${temAnterior?money(l.anterior):'—'}</td><td>${temAnterior?(variacao>=0?'+':'')+money(variacao):'—'}</td><td>${perc!=null?(perc>=0?'+':'')+perc.toFixed(1)+'%':'—'}</td></tr>`;
+              };
+              return `<table class="rem-table">
+                <thead><tr><th>Indicador</th><th>Competência Atual</th><th>Competência Anterior</th><th>Variação</th><th>%</th></tr></thead>
+                <tbody>${linhas.map(linhaHTML).join('')}
+                <tr style="font-weight:900"><td>Custo Total com Pessoal</td><td>${money(totalAtual)}</td><td>${totalAnterior!=null?money(totalAnterior):'—'}</td><td>${totalAnterior!=null?money(totalAtual-totalAnterior):'—'}</td><td>${totalAnterior?((totalAtual-totalAnterior)/totalAnterior*100).toFixed(1)+'%':'—'}</td></tr>
+                </tbody></table>
+              <div class="rem-sim-grid" style="margin-top:16px;grid-template-columns:repeat(4,1fr)">
+                <div class="field"><label>Horas Extras (mês)</label><input id="rem-extra-horas" type="number" min="0" step="0.01" value="${custosExtra.atual.horasExtras||''}" placeholder="0,00"></div>
+                <div class="field"><label>Bônus (mês)</label><input id="rem-extra-bonus" type="number" min="0" step="0.01" value="${custosExtra.atual.bonus||''}" placeholder="0,00"></div>
+                <div class="field"><label>Comissões (mês)</label><input id="rem-extra-comissoes" type="number" min="0" step="0.01" value="${custosExtra.atual.comissoes||''}" placeholder="0,00"></div>
+                <div class="field"><label>Outros Custos (mês)</label><input id="rem-extra-outros" type="number" min="0" step="0.01" value="${custosExtra.atual.outros||''}" placeholder="0,00"></div>
+              </div>
+              <div class="rem-beneficios-actions"><button class="btn btn-p btn-sm" onclick="window.remSalvarCustosExtraV3()">💾 Salvar custos do mês</button></div>`;
+            })()}
+          </div>
+        </div>
+
         <div class="rem-grid-2">
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Baseado no histórico real da folha (últimas competências registradas).' : 'Estimativa visual a partir da folha atual — ainda não há histórico mensal real suficiente.'}</p></div></div>
@@ -282,9 +411,14 @@
             </div></div>
           </div>
           <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📊 Distribuição por Tipo de Contrato</h2><p>CLT x PJ na base real de colaboradores ativos.</p></div></div>
+            <div class="rem-card-head"><div><h2>📊 Distribuição por Tipo de Contrato</h2><p>CLT, PJ, Estágio, Aprendiz e Terceirizado na base real de colaboradores ativos.</p></div></div>
             <div class="rem-card-body">
-              ${donutSegmentos([{label:'CLT',valor:s.clt,cor:'#0047FF'},{label:'PJ',valor:s.pj,cor:'#fbbf24'}])}
+              ${(()=>{
+                const CORES_TIPO = {CLT:'#0047FF', PJ:'#fbbf24', 'Estágio':'#22c55e', Aprendiz:'#a855f7', Terceirizado:'#f97316'};
+                const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)));
+                const grupos = TIPOS_CONTRATO_CONHECIDOS.map(t=>({label:t, valor:ativos.filter(c=>c.tipo===t).length, cor:CORES_TIPO[t]})).filter(g=>g.valor>0);
+                return donutSegmentos(grupos.length ? grupos : [{label:'Sem dados',valor:1,cor:'#e2e8f0'}]);
+              })()}
             </div>
           </div>
         </div>
@@ -429,6 +563,19 @@
   };
 
   // ── Estrutura salarial do cargo (derivada dos salários reais, não inventada) ──
+  const ORDEM_NIVEIS = ['Júnior','Pleno','Sênior','Especialista','Coordenação','Gerência','Diretoria'];
+  function faixaDe(lista){
+    const salarios = lista.map(c=>c.salario).sort((a,b)=>a-b);
+    const min = salarios[0], max = salarios[salarios.length-1];
+    const mid = salarios.length % 2 ? salarios[(salarios.length-1)/2] : (salarios[salarios.length/2-1]+salarios[salarios.length/2])/2;
+    return {min,mid,max,n:salarios.length};
+  }
+  // Faixa dinâmica derivada dos salários REAIS por cargo + nível — não são
+  // valores fixos digitados em algum lugar, então se ajustam sozinhos
+  // conforme o cadastro de colaboradores muda (estrutura flexível, sem
+  // números fixos em código, como pedido). Usa o campo `nivel`
+  // (#grh-c-nivel, Júnior…Diretoria) quando presente para segmentar por
+  // nível; sem `nivel` cadastrado, mostra a faixa geral do cargo.
   window.remEstruturaCargoV3 = function(cargo){
     const el = document.getElementById('rem-estrutura-resultado'); if(!el) return;
     if(!cargo){ el.innerHTML = '<div class="empty">Selecione um cargo para ver a faixa salarial.</div>'; return; }
@@ -437,15 +584,24 @@
       el.innerHTML = `<div class="empty">Dados insuficientes para esse cargo (${grupo.length} pessoa${grupo.length===1?'':'s'})${grupo.length?': '+money(grupo[0].salario):''}.</div>`;
       return;
     }
-    const salarios = grupo.map(c=>c.salario).sort((a,b)=>a-b);
-    const min = salarios[0];
-    const max = salarios[salarios.length-1];
-    const mid = salarios.length % 2 ? salarios[(salarios.length-1)/2] : (salarios[salarios.length/2-1]+salarios[salarios.length/2])/2;
+    const comNivel = grupo.filter(c=>c.nivel && ORDEM_NIVEIS.indexOf(c.nivel)!==-1);
+    if(comNivel.length >= 2){
+      const niveisPresentes = ORDEM_NIVEIS.filter(n=>comNivel.some(c=>c.nivel===n));
+      const linhas = niveisPresentes.map(n=>{
+        const doNivel = comNivel.filter(c=>c.nivel===n);
+        const f = faixaDe(doNivel);
+        return `<tr><td>${esc(n)}</td><td>${money(f.min)}</td><td>${money(f.mid)}</td><td>${money(f.max)}</td><td>${f.n}</td></tr>`;
+      }).join('');
+      el.innerHTML = `<table class="rem-table"><thead><tr><th>Nível</th><th>Mínimo</th><th>Midpoint</th><th>Máximo</th><th>Pessoas</th></tr></thead><tbody>${linhas}</tbody></table>
+        <p style="font-size:11px;color:#64748b;margin-top:10px">Faixas calculadas a partir dos salários reais de ${comNivel.length} colaboradores com nível cadastrado neste cargo (${grupo.length-comNivel.length} sem nível informado não entram nesse cálculo).</p>`;
+      return;
+    }
+    const f = faixaDe(grupo);
     el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr">
-      <div class="rem-compare-kpi"><small>Mínimo</small><strong>${money(min)}</strong><span>observado</span></div>
-      <div class="rem-compare-kpi"><small>Médio</small><strong>${money(mid)}</strong><span>observado</span></div>
-      <div class="rem-compare-kpi"><small>Máximo</small><strong>${money(max)}</strong><span>observado</span></div>
-    </div><p style="font-size:11px;color:#64748b;margin-top:10px">Baseado em ${grupo.length} colaboradores ativos com esse cargo.</p>`;
+      <div class="rem-compare-kpi"><small>Mínimo</small><strong>${money(f.min)}</strong><span>observado</span></div>
+      <div class="rem-compare-kpi"><small>Médio</small><strong>${money(f.mid)}</strong><span>observado</span></div>
+      <div class="rem-compare-kpi"><small>Máximo</small><strong>${money(f.max)}</strong><span>observado</span></div>
+    </div><p style="font-size:11px;color:#64748b;margin-top:10px">Baseado em ${grupo.length} colaboradores ativos com esse cargo (nenhum tem "Nível/Senioridade" cadastrado — cadastre em Colaboradores para segmentar por Júnior/Pleno/Sênior).</p>`;
   };
 
   window.remFiltrarV3 = function(){
@@ -524,7 +680,9 @@
         return;
       }
       const serieInfo = await folhaSerieRealOuEstimada();
-      render(serieInfo);
+      const reajustesMes = await reajustesDoMesAtual();
+      const custosExtra = await carregarCustosExtra();
+      render(serieInfo, reajustesMes, custosExtra);
     }
   }
 
