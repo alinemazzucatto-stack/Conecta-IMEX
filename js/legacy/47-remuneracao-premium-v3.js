@@ -40,7 +40,9 @@
   // donut CLT/PJ original (conic-gradient em .rem-donut). Reutilizado pelos
   // widgets de Distribuição por Faixa Salarial e Distribuição por Tipo de
   // Contrato para não duplicar a lógica de cálculo de ângulos.
-  function donutSegmentos(items){
+  // `totalGeral` (opcional) mostra o número total no centro do donut, no
+  // estilo da referência ("50 Total") em vez de uma % de um item só.
+  function donutSegmentos(items, totalGeral){
     const total = items.reduce((s,i)=>s+i.valor,0);
     let acc = 0;
     const stops = items.map(i=>{
@@ -49,11 +51,52 @@
       const ate = total ? (acc/total*100) : 0;
       return `${i.cor} ${de}% ${ate}%`;
     }).join(', ');
-    const principal = items[0];
-    const pctPrincipal = total ? Math.round(principal.valor/total*100) : 0;
-    const legenda = items.map(i=>`<div class="rem-leg"><span><i class="rem-dot" style="background:${i.cor}"></i>${esc(i.label)}</span><strong>${i.valor}</strong></div>`).join('');
-    return `<div class="rem-donut" style="background:conic-gradient(${stops || '#e2e8f0 0 100%'})"><div class="rem-donut-label">${pctPrincipal}%</div></div>
-      <div class="rem-legend">${legenda}</div>`;
+    const centroNum = totalGeral!=null ? totalGeral : total;
+    const centroLbl = totalGeral!=null ? 'Total' : '';
+    const legenda = items.map(i=>{
+      const pct = total ? Math.round(i.valor/total*100) : 0;
+      return `<div class="rem-leg"><span><i class="rem-dot" style="background:${i.cor}"></i>${esc(i.label)}</span><strong>${i.valor} <em>(${pct}%)</em></strong></div>`;
+    }).join('');
+    return `<div class="rem-donut-wrap"><div class="rem-donut" style="background:conic-gradient(${stops || '#e2e8f0 0 100%'})"><div class="rem-donut-label"><b>${centroNum}</b>${centroLbl?`<small>${centroLbl}</small>`:''}</div></div>
+      <div class="rem-legend">${legenda}</div></div>`;
+  }
+
+  // Gráfico de linha/área em SVG puro (sem lib nova) para "Evolução da
+  // Folha", no estilo da referência: linha + preenchimento em degradê +
+  // marcadores + selo com o valor do último ponto.
+  function lineChartRem(labels, serie, cor){
+    cor = cor || '#7c3aed';
+    const W = 640, H = 220, padL = 44, padR = 20, padT = 30, padB = 28;
+    const max = Math.max.apply(null, serie.concat([1]));
+    const min = Math.min.apply(null, serie.concat([0]));
+    const faixa = (max - min) || 1;
+    const n = serie.length;
+    const x = i => padL + (n>1 ? i/(n-1) : 0) * (W-padL-padR);
+    const y = v => padT + (1 - (v-min)/faixa) * (H-padT-padB);
+    const pontos = serie.map((v,i)=>[x(i), y(v)]);
+    const linha = pontos.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    const area = linha + ` L${pontos[pontos.length-1][0].toFixed(1)},${(H-padB).toFixed(1)} L${pontos[0][0].toFixed(1)},${(H-padB).toFixed(1)} Z`;
+    const gid = 'remLineGrad'+Math.random().toString(36).slice(2,8);
+    const grade = [0,0.25,0.5,0.75,1].map(f=>{
+      const v = min + faixa*f;
+      return `<text x="4" y="${(y(v)+4).toFixed(1)}" font-size="10" fill="#94a3b8">${money(v).replace(',00','').replace('R$ ','R$ ')}</text><line x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W-padR}" y2="${y(v).toFixed(1)}" stroke="#eef2ff" stroke-width="1"/>`;
+    }).join('');
+    const marcadores = pontos.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i===n-1?5:4}" fill="#fff" stroke="${cor}" stroke-width="2.5"/>`).join('');
+    const labelsX = labels.map((l,i)=>`<text x="${x(i).toFixed(1)}" y="${H-8}" font-size="10" fill="#64748b" text-anchor="middle">${esc(l)}</text>`).join('');
+    const ultimo = pontos[pontos.length-1];
+    const selo = ultimo ? `<g transform="translate(${ultimo[0]-46},${ultimo[1]-34})"><rect width="92" height="24" rx="12" fill="${cor}"/><text x="46" y="16" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">${money(serie[serie.length-1]).replace(',00','')}</text></g>` : '';
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${cor}" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="${cor}" stop-opacity="0.02"/>
+      </linearGradient></defs>
+      ${grade}
+      <path d="${area}" fill="url(#${gid})"/>
+      <path d="${linha}" fill="none" stroke="${cor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${marcadores}
+      ${labelsX}
+      ${selo}
+    </svg>`;
   }
 
   // Tipos reconhecidos no campo `tipoContrato` (formulário de Colaboradores,
@@ -183,10 +226,16 @@
   // Comparativo Detalhado da Folha tenha um "anterior" real de verdade.
   function competenciaAtualStr(){ const h=new Date(); return h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0'); }
   function competenciaAnteriorStr(comp){ const [a,m]=comp.split('-').map(Number); const d=new Date(a,(m-1)-1,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+  // 6 categorias (antes eram 4: Horas Extras/Bônus/Comissões/Outros) — a
+  // pedido, agora são Horas Extras/Plus Mensal/Plus de Férias/Comissões/
+  // Plantões/Servidores. Docs antigos (campos bonus/outros) continuam
+  // sendo lidos sem erro, só não aparecem mais nos formulários novos.
+  const CAMPOS_CUSTO_EXTRA = ['horasExtras','plusMensal','plusFerias','comissoes','plantoes','servidores'];
+  function custoExtraVazio(){ return {horasExtras:0,plusMensal:0,plusFerias:0,comissoes:0,plantoes:0,servidores:0}; }
   async function carregarCustosExtra(){
     const atual = competenciaAtualStr();
     const anterior = competenciaAnteriorStr(atual);
-    const vazio = {horasExtras:0,bonus:0,comissoes:0,outros:0};
+    const vazio = custoExtraVazio();
     try{
       const [docAtual, docAnterior] = await Promise.all([
         db.collection(col('grh_custos_extra')).doc(atual).get(),
@@ -204,7 +253,7 @@
   }
   window.remSalvarCustosExtraV3 = async function(){
     const g = id => parseFloat(document.getElementById(id)?.value) || 0;
-    const dados = { horasExtras:g('rem-extra-horas'), bonus:g('rem-extra-bonus'), comissoes:g('rem-extra-comissoes'), outros:g('rem-extra-outros'), atualizadoEm:new Date().toISOString() };
+    const dados = { horasExtras:g('rem-extra-horas'), plusMensal:g('rem-extra-plusmensal'), plusFerias:g('rem-extra-plusferias'), comissoes:g('rem-extra-comissoes'), plantoes:g('rem-extra-plantoes'), servidores:g('rem-extra-servidores'), atualizadoEm:new Date().toISOString() };
     try{
       await db.collection(col('grh_custos_extra')).doc(competenciaAtualStr()).set(dados, {merge:true});
       notify('💾 Custos extras salvos para ' + competenciaAtualStr() + '.');
@@ -386,9 +435,29 @@
   // Card KPI com indicador de variação opcional (usado nos cards executivos
   // do topo). `trend` é {pct, favoravel} ou null quando não há comparação
   // real disponível — nesse caso mostra só o valor, sem inventar tendência.
-  function kpiCardRem(icon, label, valor, sub, trend){
-    const trendHTML = trend ? `<div class="rem-kpi-trend ${trend.pct>=0?(trend.favoravel===false?'down':'up'):(trend.favoravel===false?'up':'down')}">${trend.pct>=0?'▲':'▼'} ${Math.abs(trend.pct).toFixed(1)}% vs anterior</div>` : '';
-    return `<div class="rem-kpi"><small>${icon} ${label}</small><strong>${valor}</strong><span>${sub}</span>${trendHTML}</div>`;
+  // `cor` é um hex; `destaque` deixa o 1º card (Folha Salarial) sólido —
+  // resto usa fundo branco + quadrado de ícone colorido, como na referência.
+  function kpiCardRem(icon, label, valor, sub, trend, cor, destaque){
+    cor = cor || '#3b82f6';
+    const seta = trend ? (trend.pct>=0?(trend.favoravel===false?'▼':'▲'):(trend.favoravel===false?'▲':'▼')) : '';
+    const trendCls = trend ? (trend.pct>=0?(trend.favoravel===false?'down':'up'):(trend.favoravel===false?'up':'down')) : '';
+    const trendHTML = trend ? `<div class="rem-kpi2-trend ${trendCls}">${seta} ${Math.abs(trend.pct).toFixed(1)}%</div>` : '';
+    if(destaque){
+      return `<div class="rem-kpi2 rem-kpi2-solida" style="background:linear-gradient(135deg, ${cor}, #4c1d95)">
+        <div class="rem-kpi2-icon-solida">${icon}</div>
+        <div class="rem-kpi2-label-solida">${esc(label)}</div>
+        <div class="rem-kpi2-valor-solida">${valor}</div>
+        <div class="rem-kpi2-sub-solida">${trendHTML || esc(sub)}</div>
+      </div>`;
+    }
+    return `<div class="rem-kpi2">
+      <div class="rem-kpi2-icon" style="background:${cor}1f;color:${cor}">${icon}</div>
+      <div class="rem-kpi2-corpo">
+        <div class="rem-kpi2-label">${esc(label)}</div>
+        <div class="rem-kpi2-valor">${valor}</div>
+        ${trendHTML || (sub?`<div class="rem-kpi2-sub">${esc(sub)}</div>`:'')}
+      </div>
+    </div>`;
   }
 
   function renderRows(list){
@@ -452,7 +521,7 @@
     const s=stats();
     serieInfo = serieInfo || { real:false, labels:meses, serie:folhaSerie() };
     reajustesMes = reajustesMes || 0;
-    custosExtra = custosExtra || { atual:{horasExtras:0,bonus:0,comissoes:0,outros:0}, anterior:{horasExtras:0,bonus:0,comissoes:0,outros:0}, competenciaAtual:competenciaAtualStr(), competenciaAnterior:'' };
+    custosExtra = custosExtra || { atual:custoExtraVazio(), anterior:custoExtraVazio(), competenciaAtual:competenciaAtualStr(), competenciaAnterior:'' };
     alertasInfo = alertasInfo || { alertas:[], dissidio:null };
     budget = budget || { aprovado:0 };
     const serie=serieInfo.serie;
@@ -481,15 +550,15 @@
           </div>
         </div>
 
-        <div class="rem-kpi-grid" style="grid-template-columns:repeat(4,minmax(135px,1fr))">
-          ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha)}
-          ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null)}
-          ${kpiCardRem('📊','Salário Médio', s.mediaGeral?money(s.mediaGeral):'R$ 0,00', `${s.clt} CLT · ${s.pj} PJ`, null)}
-          ${kpiCardRem('🏆','Maior Salário', s.maiorSalario?money(s.maiorSalario):'—', 'na base ativa', null)}
-          ${kpiCardRem('📉','Menor Salário', s.menorSalario?money(s.menorSalario):'—', 'na base ativa', null)}
-          ${kpiCardRem('🎁','Custo dos Benefícios', money(s.benef), 'saúde, odonto, VA e sindicato', null)}
-          ${kpiCardRem('🔄','Reajustes no Mês', String(reajustesMes), 'alterações salariais registradas', null)}
-          ${kpiCardRem('👥','Colaboradores Ativos', String(s.ativos), 'base real de colaboradores', null)}
+        <div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(4,minmax(180px,1fr))">
+          ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha, '#7c3aed', true)}
+          ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null, '#3b82f6')}
+          ${kpiCardRem('📊','Salário Médio', s.mediaGeral?money(s.mediaGeral):'R$ 0,00', `${s.clt} CLT · ${s.pj} PJ`, null, '#10b981')}
+          ${kpiCardRem('🏆','Maior Salário', s.maiorSalario?money(s.maiorSalario):'—', 'na base ativa', null, '#f59e0b')}
+          ${kpiCardRem('📉','Menor Salário', s.menorSalario?money(s.menorSalario):'—', 'na base ativa', null, '#ef4444')}
+          ${kpiCardRem('🎁','Custo dos Benefícios', money(s.benef), 'saúde, odonto, VA e sindicato', null, '#ec4899')}
+          ${kpiCardRem('🔄','Reajustes no Mês', String(reajustesMes), 'alterações salariais registradas', null, '#6366f1')}
+          ${kpiCardRem('👥','Colaboradores Ativos', String(s.ativos), 'base real de colaboradores', null, '#0ea5e9')}
         </div>
 
         <div class="rem-comparativo-grid" id="rem-comparativo-folha-beneficios-imex">
@@ -514,11 +583,10 @@
             <input type="hidden" id="rem-beneficios-json-imex" value="{}">
             <div class="rem-beneficios-form">
               <div class="field"><label>Vale Alimentação</label><input id="rem-beneficio-va" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Vale Refeição</label><input id="rem-beneficio-vr" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
               <div class="field"><label>Plano de Saúde</label><input id="rem-beneficio-saude" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Odontológico</label><input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Wellhub</label><input id="rem-beneficio-wellhub" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Outros</label><input id="rem-beneficio-outros" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
+              <div class="field"><label>Plano Odontológico</label><input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
+              <div class="field"><label>Colab+</label><input id="rem-beneficio-colabmais" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
+              <div class="field"><label>Cartão Sindicato</label><input id="rem-beneficio-sindicato" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
             </div>
             <div class="rem-beneficios-total"><span>Total mensal dos benefícios</span><strong id="rem-beneficios-total-imex">R$ 0,00</strong></div>
             <div class="rem-beneficios-actions"><button class="btn btn-g btn-sm" onclick="remCalcCustosBeneficiosIMEX()">Atualizar total</button></div>
@@ -535,9 +603,11 @@
                 {label:'Benefícios', atual:s.benef, anterior:null},
                 {label:'Encargos (estimado)', atual:encargosAtual, anterior:null},
                 {label:'Horas Extras', atual:custosExtra.atual.horasExtras, anterior:custosExtra.anterior.horasExtras},
-                {label:'Bônus', atual:custosExtra.atual.bonus, anterior:custosExtra.anterior.bonus},
+                {label:'Plus Mensal', atual:custosExtra.atual.plusMensal, anterior:custosExtra.anterior.plusMensal},
+                {label:'Plus de Férias', atual:custosExtra.atual.plusFerias, anterior:custosExtra.anterior.plusFerias},
                 {label:'Comissões', atual:custosExtra.atual.comissoes, anterior:custosExtra.anterior.comissoes},
-                {label:'Outros Custos', atual:custosExtra.atual.outros, anterior:custosExtra.anterior.outros}
+                {label:'Plantões', atual:custosExtra.atual.plantoes, anterior:custosExtra.anterior.plantoes},
+                {label:'Servidores', atual:custosExtra.atual.servidores, anterior:custosExtra.anterior.servidores}
               ];
               const totalAtual = linhas.reduce((s2,l)=>s2+(l.atual||0),0);
               const totalAnterior = linhas.every(l=>l.anterior!=null) ? linhas.reduce((s2,l)=>s2+(l.anterior||0),0) : null;
@@ -552,48 +622,25 @@
                 <tbody>${linhas.map(linhaHTML).join('')}
                 <tr style="font-weight:900"><td>Custo Total com Pessoal</td><td>${money(totalAtual)}</td><td>${totalAnterior!=null?money(totalAnterior):'—'}</td><td>${totalAnterior!=null?money(totalAtual-totalAnterior):'—'}</td><td>${totalAnterior?((totalAtual-totalAnterior)/totalAnterior*100).toFixed(1)+'%':'—'}</td></tr>
                 </tbody></table>
-              <div class="rem-sim-grid" style="margin-top:16px;grid-template-columns:repeat(4,1fr)">
+              <div class="rem-sim-grid" style="margin-top:16px;grid-template-columns:repeat(3,1fr)">
                 <div class="field"><label>Horas Extras (mês)</label><input id="rem-extra-horas" type="number" min="0" step="0.01" value="${custosExtra.atual.horasExtras||''}" placeholder="0,00"></div>
-                <div class="field"><label>Bônus (mês)</label><input id="rem-extra-bonus" type="number" min="0" step="0.01" value="${custosExtra.atual.bonus||''}" placeholder="0,00"></div>
-                <div class="field"><label>Comissões (mês)</label><input id="rem-extra-comissoes" type="number" min="0" step="0.01" value="${custosExtra.atual.comissoes||''}" placeholder="0,00"></div>
-                <div class="field"><label>Outros Custos (mês)</label><input id="rem-extra-outros" type="number" min="0" step="0.01" value="${custosExtra.atual.outros||''}" placeholder="0,00"></div>
+                <div class="field"><label>Plus Mensal</label><input id="rem-extra-plusmensal" type="number" min="0" step="0.01" value="${custosExtra.atual.plusMensal||''}" placeholder="0,00"></div>
+                <div class="field"><label>Plus de Férias</label><input id="rem-extra-plusferias" type="number" min="0" step="0.01" value="${custosExtra.atual.plusFerias||''}" placeholder="0,00"></div>
+                <div class="field"><label>Comissões</label><input id="rem-extra-comissoes" type="number" min="0" step="0.01" value="${custosExtra.atual.comissoes||''}" placeholder="0,00"></div>
+                <div class="field"><label>Plantões</label><input id="rem-extra-plantoes" type="number" min="0" step="0.01" value="${custosExtra.atual.plantoes||''}" placeholder="0,00"></div>
+                <div class="field"><label>Servidores</label><input id="rem-extra-servidores" type="number" min="0" step="0.01" value="${custosExtra.atual.servidores||''}" placeholder="0,00"></div>
               </div>
               <div class="rem-beneficios-actions"><button class="btn btn-p btn-sm" onclick="window.remSalvarCustosExtraV3()">💾 Salvar custos do mês</button></div>`;
             })()}
           </div>
         </div>
 
-        <div class="rem-grid-2">
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Baseado no histórico real da folha (últimas competências registradas).' : 'Estimativa visual a partir da folha atual — ainda não há histórico mensal real suficiente.'}</p></div></div>
-            <div class="rem-card-body"><div class="rem-chart-lines">
-              ${serie.map((v,i)=>`<div class="rem-col"><div class="rem-col-bar" title="${money(v)}" style="height:${Math.max(18,Math.round(v/maxSerie*190))}px"></div><small>${esc(labelsSerie[i]||'')}</small></div>`).join('')}
-            </div></div>
-          </div>
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📊 Distribuição por Tipo de Contrato</h2><p>CLT, PJ, Estágio, Aprendiz e Terceirizado na base real de colaboradores ativos.</p></div></div>
-            <div class="rem-card-body">
-              ${(()=>{
-                const CORES_TIPO = {CLT:'#0047FF', PJ:'#fbbf24', 'Estágio':'#22c55e', Aprendiz:'#a855f7', Terceirizado:'#f97316'};
-                const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)));
-                const grupos = TIPOS_CONTRATO_CONHECIDOS.map(t=>({label:t, valor:ativos.filter(c=>c.tipo===t).length, cor:CORES_TIPO[t]})).filter(g=>g.valor>0);
-                return donutSegmentos(grupos.length ? grupos : [{label:'Sem dados',valor:1,cor:'#e2e8f0'}]);
-              })()}
-            </div>
-          </div>
+        <div class="rem-card" style="margin-bottom:18px">
+          <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Baseado no histórico real da folha (últimas competências registradas).' : 'Estimativa visual a partir da folha atual — ainda não há histórico mensal real suficiente.'}</p></div></div>
+          <div class="rem-card-body">${lineChartRem(labelsSerie, serie, '#7c3aed')}</div>
         </div>
 
-        <div class="rem-grid-2">
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>🏢 Custos por Centro de Custo</h2><p>Somatório dos salários e benefícios informados por área.</p></div></div>
-            <div class="rem-card-body"><div class="rem-bars">
-              ${setores.map(cc=>{
-                const val = colaboradoresRem.filter(c=>(c.cc||c.setor||'Não informado')===cc).reduce((s,c)=>s+c.salario+c.benef,0);
-                const pct = s.custo ? Math.min(100,Math.round(val/s.custo*100)) : 0;
-                return `<div class="rem-bar-row"><span>${esc(cc)}</span><div class="rem-bar-bg"><div class="rem-bar" style="width:${pct}%"></div></div><strong>${money(val)}</strong></div>`;
-              }).join('')}
-            </div></div>
-          </div>
+        <div class="rem-grid-3">
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>📊 Distribuição por Faixa Salarial</h2><p>Colaboradores ativos com salário informado.</p></div></div>
             <div class="rem-card-body">
@@ -605,17 +652,25 @@
                   {label:'R$ 4.001 – 7.000', valor: ativosComSalario.filter(c=>c.salario>4000&&c.salario<=7000).length, cor:'#fbbf24'},
                   {label:'Acima de R$ 7.000', valor: ativosComSalario.filter(c=>c.salario>7000).length, cor:'#f97316'}
                 ];
-                return donutSegmentos(faixas);
+                return donutSegmentos(faixas, ativosComSalario.length);
               })()}
             </div>
           </div>
-        </div>
-
-        <div class="rem-grid-2">
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>📊 Distribuição por Tipo de Contrato</h2><p>CLT, PJ, Estágio, Aprendiz e Terceirizado na base real de colaboradores ativos.</p></div></div>
+            <div class="rem-card-body">
+              ${(()=>{
+                const CORES_TIPO = {CLT:'#0047FF', PJ:'#fbbf24', 'Estágio':'#22c55e', Aprendiz:'#a855f7', Terceirizado:'#f97316'};
+                const ativos = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)));
+                const grupos = TIPOS_CONTRATO_CONHECIDOS.map(t=>({label:t, valor:ativos.filter(c=>c.tipo===t).length, cor:CORES_TIPO[t]})).filter(g=>g.valor>0);
+                return donutSegmentos(grupos.length ? grupos : [{label:'Sem dados',valor:1,cor:'#e2e8f0'}], ativos.length);
+              })()}
+            </div>
+          </div>
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>📋 Remuneração por Setor</h2><p>Média e total salarial por setor, colaboradores ativos.</p></div></div>
             <div class="rem-card-body">
-              <table class="rem-table"><thead><tr><th>Setor</th><th>Colaboradores</th><th>Média Salarial</th><th>Total</th></tr></thead><tbody>
+              <table class="rem-table"><thead><tr><th>Setor</th><th>Colab.</th><th>Média</th><th>Total</th></tr></thead><tbody>
                 ${setoresReais.map(st=>{
                   const doSetor = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (c.setor||'Não informado')===st);
                   const total = doSetor.reduce((s,c)=>s+c.salario,0);
@@ -625,6 +680,9 @@
               </tbody></table>
             </div>
           </div>
+        </div>
+
+        <div class="rem-grid-1">
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>🧮 Simulador de Reajuste</h2><p>Simule o impacto de um reajuste por setor, cargo ou colaborador individual. Não salva nada — é só simulação.</p></div></div>
             <div class="rem-card-body">
@@ -643,50 +701,19 @@
                   ${colaboradoresRem.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${esc(c.nome)}">${esc(c.nome)}</option>`).join('')}
                 </select></div>
               </div>
-              <div class="rem-beneficios-actions"><button class="btn btn-p btn-sm" onclick="window.remSimularReajusteV3()">▶️ Executar simulação</button></div>
+              <div class="rem-beneficios-actions"><button class="rem-btn-gradiente" onclick="window.remSimularReajusteV3()">🧮 Executar simulação</button></div>
               <div id="rem-simulador-resultado" style="margin-top:14px"></div>
             </div>
           </div>
         </div>
 
-        <div class="rem-grid-2">
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📈 Histórico Salarial do Colaborador</h2><p>Alterações salariais registradas por colaborador.</p></div></div>
-            <div class="rem-card-body">
-              <select id="rem-hist-colab" onchange="window.remHistoricoColabV3(this.value)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbe3ef;margin-bottom:14px">
-                <option value="">Selecione um colaborador…</option>
-                ${colaboradoresRem.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${esc(c.nome)}">${esc(c.nome)}</option>`).join('')}
-              </select>
-              <div id="rem-historico-resultado"><div class="empty">Selecione um colaborador para ver o histórico.</div></div>
-            </div>
-          </div>
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>🏗️ Estrutura Salarial do Cargo</h2><p>Faixa real observada por cargo (mínimo, médio, máximo).</p></div></div>
-            <div class="rem-card-body">
-              <select id="rem-estrutura-cargo" onchange="window.remEstruturaCargoV3(this.value)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbe3ef;margin-bottom:14px">
-                <option value="">Selecione um cargo…</option>
-                ${[...new Set(colaboradoresRem.map(c=>c.cargo).filter(Boolean))].sort().map(cg=>`<option value="${esc(cg)}">${esc(cg)}</option>`).join('')}
-              </select>
-              <div id="rem-estrutura-resultado"><div class="empty">Selecione um cargo para ver a faixa salarial.</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="rem-grid-2">
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>🔔 Alertas Inteligentes</h2><p>Calculados automaticamente a partir da base real — sem IA, 100% regra determinística.</p></div></div>
-            <div class="rem-card-body">
-              ${alertasInfo.alertas.length ? `<div class="rem-alertas-lista">${alertasInfo.alertas.map(a=>`<div class="rem-alerta rem-alerta-${a.tipo}"><span>${a.icone}</span><span>${esc(a.texto)}</span></div>`).join('')}</div>` : '<div class="empty">✅ Nenhum alerta no momento.</div>'}
-              <div class="rem-beneficios-form" style="grid-template-columns:2fr 1fr;margin-top:16px;align-items:end">
-                <div class="field"><label>Data prevista do dissídio</label><input id="rem-dissidio-data" type="date" value="${alertasInfo.dissidio&&alertasInfo.dissidio.dataDissidio?esc(alertasInfo.dissidio.dataDissidio):''}"></div>
-                <button class="btn btn-g btn-sm" onclick="window.remSalvarDissidioV3()">💾 Salvar</button>
-              </div>
-            </div>
-          </div>
-          <div class="rem-card">
-            <div class="rem-card-head"><div><h2>🧠 Insights Conecta AI</h2><p>Leitura automática dos números do módulo.</p></div></div>
-            <div class="rem-card-body" id="rem-ia-insights">
-              <div class="empty"><div class="ei">⏳</div>Gerando insights…</div>
+        <div class="rem-card" style="margin-bottom:18px">
+          <div class="rem-card-head"><div><h2>🔔 Alertas Inteligentes</h2><p>Calculados automaticamente a partir da base real — sem IA, 100% regra determinística.</p></div></div>
+          <div class="rem-card-body">
+            ${alertasInfo.alertas.length ? `<div class="rem-alertas-lista">${alertasInfo.alertas.map(a=>`<div class="rem-alerta rem-alerta-${a.tipo}"><span>${a.icone}</span><span>${esc(a.texto)}</span></div>`).join('')}</div>` : '<div class="empty">✅ Nenhum alerta no momento.</div>'}
+            <div class="rem-beneficios-form" style="grid-template-columns:2fr 1fr;margin-top:16px;align-items:end">
+              <div class="field"><label>Data prevista do dissídio</label><input id="rem-dissidio-data" type="date" value="${alertasInfo.dissidio&&alertasInfo.dissidio.dataDissidio?esc(alertasInfo.dissidio.dataDissidio):''}"></div>
+              <button class="btn btn-g btn-sm" onclick="window.remSalvarDissidioV3()">💾 Salvar</button>
             </div>
           </div>
         </div>
@@ -699,11 +726,11 @@
               const utilizado = s.custo*12;
               const disponivel = aprovado - utilizado;
               const pct = aprovado ? Math.min(100, Math.round(utilizado/aprovado*100)) : 0;
-              return `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr 1fr">
-                <div class="rem-compare-kpi"><small>Budget Aprovado</small><strong>${aprovado?money(aprovado):'não definido'}</strong><span>ano ${esc(anoAtualStr())}</span></div>
-                <div class="rem-compare-kpi"><small>Utilizado (estimado)</small><strong>${money(utilizado)}</strong><span>custo mensal × 12</span></div>
-                <div class="rem-compare-kpi"><small>Disponível</small><strong style="color:${disponivel>=0?'#16a34a':'#dc2626'}">${aprovado?money(disponivel):'—'}</strong><span>${aprovado?'estimado':'defina o budget'}</span></div>
-                <div class="rem-compare-kpi"><small>% Consumido</small><strong>${aprovado?pct+'%':'—'}</strong><span>${pct>=100?'⚠️ acima do budget':'dentro do previsto'}</span></div>
+              return `<div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(4,1fr)">
+                ${kpiCardRem('🏦','Budget Aprovado', aprovado?money(aprovado):'não definido', `ano ${esc(anoAtualStr())}`, null, '#7c3aed')}
+                ${kpiCardRem('📉','Utilizado (estimado)', money(utilizado), 'custo mensal × 12', null, '#3b82f6')}
+                ${kpiCardRem(disponivel>=0?'✅':'⚠️','Disponível', aprovado?money(disponivel):'—', aprovado?'estimado':'defina o budget', null, disponivel>=0?'#10b981':'#ef4444')}
+                ${kpiCardRem('📊','% Consumido', aprovado?pct+'%':'—', pct>=100?'acima do budget':'dentro do previsto', null, pct>=100?'#ef4444':pct>=85?'#f59e0b':'#10b981')}
               </div>
               <div class="rem-budget-bar"><div class="rem-budget-bar-fill" style="width:${pct}%;background:${pct>=100?'#dc2626':pct>=85?'#f59e0b':'#16a34a'}"></div></div>
               <div class="rem-beneficios-form" style="grid-template-columns:2fr 1fr;margin-top:16px;align-items:end">
@@ -718,18 +745,19 @@
           <div class="rem-card-head"><div><h2>⚡ Ações Rápidas</h2><p>Exportações e relatórios gerados a partir da base real deste painel.</p></div></div>
           <div class="rem-card-body">
             <div class="rem-acoes-rapidas">
-              <button class="btn btn-g btn-sm" onclick="window.remExportExcelV3()">📊 Exportar Excel</button>
-              <button class="btn btn-g btn-sm" onclick="window.remExportPDFV3()">📄 Exportar PDF</button>
-              <button class="btn btn-g btn-sm" onclick="window.remRelatorioExecutivoV3()">📈 Relatório Executivo</button>
-              <button class="btn btn-g btn-sm" onclick="window.remRelatorioPorSetorV3()">🏢 Relatório por Setor</button>
-              <button class="btn btn-g btn-sm" onclick="window.remHistoricoReajustesV3()">🔄 Histórico de Reajustes</button>
-              <button class="btn btn-g btn-sm" onclick="window.remFaixasSalariaisV3()">📐 Faixas Salariais</button>
+              ${[
+                ['📊','Exportar Excel','#10b981','window.remExportExcelV3()'],
+                ['📄','Exportar PDF','#ef4444','window.remExportPDFV3()'],
+                ['📈','Relatório Executivo','#7c3aed','window.remRelatorioExecutivoV3()'],
+                ['🏢','Relatório por Setor','#3b82f6','window.remRelatorioPorSetorV3()'],
+                ['🔄','Histórico de Reajustes','#f59e0b','window.remHistoricoReajustesV3()'],
+                ['📐','Faixas Salariais','#ec4899','window.remFaixasSalariaisV3()']
+              ].map(a=>`<button class="rem-acao-rapida" onclick="${a[3]}"><span class="rem-acao-rapida-icone" style="background:${a[2]}1f;color:${a[2]}">${a[0]}</span><span>${a[1]}</span></button>`).join('')}
             </div>
           </div>
         </div>
       </div>`;
     window.__remPremiumRenderedV3 = true;
-    setTimeout(()=>{ if(typeof window.remGerarInsightsIAV3==='function') window.remGerarInsightsIAV3(); }, 50);
   }
 
   // ── Simulador de reajuste ──
@@ -765,20 +793,21 @@
     const impactoComEncargos = (aumentoMensalClt*12*(1+TAXA_ENCARGOS_CLT)) + (aumentoMensalPj*12);
     const novaFolha = alvo.reduce((s,c)=>s+c.salario,0) + aumentoMensal;
 
-    let extraColab = '';
+    let linhaColab = '';
     if(colabSel && alvo.length===1){
       const c = alvo[0];
       const novoSalario = c.salario * (1+pct/100);
-      extraColab = `<div class="rem-compare-kpi"><small>Novo Salário</small><strong>${money(novoSalario)}</strong><span>${esc(c.nome)} · era ${money(c.salario)}</span></div>`;
+      linhaColab = `<div class="rem-sim-resultado-linha"><span>Novo Salário (${esc(c.nome)})</span><strong style="color:#7c3aed">${money(novoSalario)}</strong></div>`;
     }
 
-    el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:repeat(${extraColab?4:3},1fr)">
-      <div class="rem-compare-kpi"><small>Aumento da Folha</small><strong>${money(aumentoMensal)}</strong><span>mensal · ${alvo.length} pessoa${alvo.length>1?'s':''}</span></div>
-      <div class="rem-compare-kpi"><small>Impacto Anual</small><strong>${money(impactoAnual)}</strong><span>sem encargos</span></div>
-      <div class="rem-compare-kpi"><small>Impacto com Encargos</small><strong>${money(impactoComEncargos)}</strong><span>CLT +${Math.round(TAXA_ENCARGOS_CLT*100)}%, PJ sem encargo</span></div>
-      ${extraColab}
+    el.innerHTML = `<div class="rem-sim-resultado">
+      <div class="rem-sim-resultado-linha"><span>Aumento da folha (${alvo.length} pessoa${alvo.length>1?'s':''})</span><strong style="color:#16a34a">${money(aumentoMensal)}</strong></div>
+      <div class="rem-sim-resultado-linha"><span>Impacto anual</span><strong style="color:#16a34a">${money(impactoAnual)}</strong></div>
+      <div class="rem-sim-resultado-linha"><span>Impacto com encargos (CLT +${Math.round(TAXA_ENCARGOS_CLT*100)}%)</span><strong style="color:#16a34a">${money(impactoComEncargos)}</strong></div>
+      ${linhaColab}
+      <div class="rem-sim-resultado-linha"><span>Novo custo da folha do grupo</span><strong>${money(novaFolha)}</strong></div>
     </div>
-    <p style="font-size:11px;color:#64748b;margin-top:10px">Novo custo da folha do grupo simulado: <strong>${money(novaFolha)}</strong> (era ${money(alvo.reduce((s,c)=>s+c.salario,0))}). Simulação apenas — nada foi salvo.</p>`;
+    <p style="font-size:11px;color:#94a3b8;margin-top:10px">Era ${money(alvo.reduce((s,c)=>s+c.salario,0))} · Simulação apenas — nada foi salvo.</p>`;
   };
 
   // ── Histórico salarial do colaborador ──
