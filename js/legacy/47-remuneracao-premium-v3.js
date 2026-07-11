@@ -336,6 +336,30 @@
     }
   };
 
+  // ── Budget Salarial ──
+  // Recurso configurável pelo RH: orçamento anual aprovado (por empresa
+  // toda, ou opcionalmente detalhado por setor/centro de custo). Guardado
+  // em col('grh_budget'), 1 documento por ano. "Utilizado" é a folha atual
+  // anualizada (custo mensal × 12) — uma estimativa clara, não uma soma
+  // real de 12 meses fechados (o sistema não tem 12 meses de histórico
+  // ainda), com essa ressalva explícita na tela.
+  function anoAtualStr(){ return String(new Date().getFullYear()); }
+  async function carregarBudget(){
+    try{
+      const doc = await db.collection(col('grh_budget')).doc(anoAtualStr()).get();
+      return doc.exists ? doc.data() : { aprovado:0, porSetor:{} };
+    }catch(e){ return { aprovado:0, porSetor:{} }; }
+  }
+  window.remSalvarBudgetV3 = async function(){
+    const aprovado = parseFloat(document.getElementById('rem-budget-aprovado')?.value) || 0;
+    try{
+      await db.collection(col('grh_budget')).doc(anoAtualStr()).set({aprovado, atualizadoEm:new Date().toISOString()}, {merge:true});
+      notify('💾 Budget salarial salvo para ' + anoAtualStr() + '.');
+      window.__remPremiumRenderedV3 = false;
+      await aplicar();
+    }catch(e){ notify('❌ Erro ao salvar: '+(e.message||e)); }
+  };
+
   window.remSalvarDissidioV3 = async function(){
     const data = document.getElementById('rem-dissidio-data')?.value;
     if(!data){ notify('Informe uma data.'); return; }
@@ -423,13 +447,14 @@
     }
   }
 
-  function render(serieInfo, reajustesMes, custosExtra, alertasInfo){
+  function render(serieInfo, reajustesMes, custosExtra, alertasInfo, budget){
     const p=pane(); if(!p) return;
     const s=stats();
     serieInfo = serieInfo || { real:false, labels:meses, serie:folhaSerie() };
     reajustesMes = reajustesMes || 0;
     custosExtra = custosExtra || { atual:{horasExtras:0,bonus:0,comissoes:0,outros:0}, anterior:{horasExtras:0,bonus:0,comissoes:0,outros:0}, competenciaAtual:competenciaAtualStr(), competenciaAnterior:'' };
     alertasInfo = alertasInfo || { alertas:[], dissidio:null };
+    budget = budget || { aprovado:0 };
     const serie=serieInfo.serie;
     const labelsSerie=serieInfo.labels;
     const maxSerie=Math.max(...serie,1);
@@ -657,6 +682,29 @@
             </div>
           </div>
         </div>
+
+        <div class="rem-card">
+          <div class="rem-card-head"><div><h2>🏦 Budget Salarial ${esc(anoAtualStr())}</h2><p>Orçamento anual configurável pelo RH — "utilizado" é a folha atual anualizada (custo mensal × 12), uma estimativa.</p></div></div>
+          <div class="rem-card-body">
+            ${(()=>{
+              const aprovado = budget.aprovado||0;
+              const utilizado = s.custo*12;
+              const disponivel = aprovado - utilizado;
+              const pct = aprovado ? Math.min(100, Math.round(utilizado/aprovado*100)) : 0;
+              return `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr 1fr">
+                <div class="rem-compare-kpi"><small>Budget Aprovado</small><strong>${aprovado?money(aprovado):'não definido'}</strong><span>ano ${esc(anoAtualStr())}</span></div>
+                <div class="rem-compare-kpi"><small>Utilizado (estimado)</small><strong>${money(utilizado)}</strong><span>custo mensal × 12</span></div>
+                <div class="rem-compare-kpi"><small>Disponível</small><strong style="color:${disponivel>=0?'#16a34a':'#dc2626'}">${aprovado?money(disponivel):'—'}</strong><span>${aprovado?'estimado':'defina o budget'}</span></div>
+                <div class="rem-compare-kpi"><small>% Consumido</small><strong>${aprovado?pct+'%':'—'}</strong><span>${pct>=100?'⚠️ acima do budget':'dentro do previsto'}</span></div>
+              </div>
+              <div class="rem-budget-bar"><div class="rem-budget-bar-fill" style="width:${pct}%;background:${pct>=100?'#dc2626':pct>=85?'#f59e0b':'#16a34a'}"></div></div>
+              <div class="rem-beneficios-form" style="grid-template-columns:2fr 1fr;margin-top:16px;align-items:end">
+                <div class="field"><label>Budget aprovado para ${esc(anoAtualStr())}</label><input id="rem-budget-aprovado" type="number" min="0" step="100" value="${aprovado||''}" placeholder="0,00"></div>
+                <button class="btn btn-g btn-sm" onclick="window.remSalvarBudgetV3()">💾 Salvar</button>
+              </div>`;
+            })()}
+          </div>
+        </div>
       </div>`;
     window.__remPremiumRenderedV3 = true;
     setTimeout(()=>{ if(typeof window.remGerarInsightsIAV3==='function') window.remGerarInsightsIAV3(); }, 50);
@@ -838,7 +886,8 @@
       const reajustesMes = await reajustesDoMesAtual();
       const custosExtra = await carregarCustosExtra();
       const alertasInfo = await calcularAlertasInteligentes();
-      render(serieInfo, reajustesMes, custosExtra, alertasInfo);
+      const budget = await carregarBudget();
+      render(serieInfo, reajustesMes, custosExtra, alertasInfo, budget);
     }
   }
 
