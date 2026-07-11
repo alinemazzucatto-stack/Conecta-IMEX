@@ -197,7 +197,20 @@
   // única fonte de autenticação é `login-auth.js`.
 
   function init(){
-    setRole(selectedLoginRole());
+    // `setRole()` grava o papel em session/localStorage — correto quando é
+    // uma escolha real de login. Mas este `init()` roda em TODO carregamento
+    // de página, mesmo com uma sessão RH/Gestor já autenticada esperando
+    // para ser restaurada (onAuthStateChanged, assíncrono, ainda nem rodou).
+    // Sem esta checagem, o valor padrão da telinha de login ("colaborador")
+    // sobrescrevia o papel real salvo, e um F5 estando logado como RH caía
+    // na visão de Colaborador. Só persiste em storage quando não há sessão
+    // anterior salva (login screen genuinamente vazio).
+    const haSessaoSalva = !!(sessionStorage.getItem('userEmail') || localStorage.getItem('usuarioLogado'));
+    if (haSessaoSalva) {
+      window.role = selectedLoginRole();
+    } else {
+      setRole(selectedLoginRole());
+    }
     renderMenu();
     const btn = $('lBtn');
     if(btn){

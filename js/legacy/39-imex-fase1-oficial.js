@@ -153,13 +153,16 @@
   window.sbNav=navegar; window.switchView=navegar; window.showView=navegar;
   window.buildSidebar=function(){ aplicarMenu(); };
   window.trocarPerfil=function(){
+    // "Visão Colaborador" é só uma pré-visualização temporária dentro da
+    // sessão atual — por isso NÃO grava em sessionStorage/imexPreferredRole
+    // nem mexe em _roleReal (o papel real de login). Antes gravava os dois,
+    // e um F5 depois de usar o botão prendia o RH na visão de colaborador
+    // permanentemente, porque a restauração de sessão lê exatamente esses
+    // valores.
     const r=roleAtual();
     const novoRole = r==='rh' ? 'colaborador' : 'rh';
     window.role = novoRole;
     try{ role = novoRole; }catch(e){}
-    try{ window._roleReal = novoRole; _roleReal = novoRole; }catch(e){}
-    sessionStorage.setItem('userRole', novoRole);
-    try{ sessionStorage.setItem('imexPreferredRole', novoRole); }catch(e){}
     aplicarMenu(); navegar(MENUS[roleAtual()][0]);
   };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{aplicarMenu();},120));
