@@ -1346,9 +1346,55 @@ tbody tr:hover td{background:var(--cream)}
   .rem-ia-fallback{margin-top:10px;font-size:11px;color:#94a3b8;font-style:italic}
   .rem-budget-bar{height:14px;background:#eef2ff;border-radius:999px;overflow:hidden;margin-top:16px}
   .rem-budget-bar-fill{height:100%;border-radius:999px;transition:width .3s ease}
-  .rem-acoes-rapidas{display:flex;flex-wrap:wrap;gap:10px}
-  @media(max-width:1200px){.rem-kpi-grid{grid-template-columns:repeat(3,1fr)}.rem-grid-2{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:760px){.rem-kpi-grid,.rem-filter-row,.rem-form,.rem-info-grid,.rem-sim-grid{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:1fr}}
+
+  /* ── Redesign KPI cards (referência: cards brancos + ícone colorido, 1º card sólido) ── */
+  .rem-premium-wrap .rem-kpi-grid.rem-kpi-grid2{grid-template-columns:repeat(4,minmax(180px,1fr))}
+  .rem-kpi2{background:#fff;border:1px solid #eef2ff;border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(16,24,40,.05);display:flex;gap:14px;align-items:flex-start}
+  .rem-kpi2-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .rem-kpi2-corpo{min-width:0}
+  .rem-kpi2-label{font-size:11px;font-weight:800;color:#64748b;margin-bottom:4px}
+  .rem-kpi2-valor{font-size:21px;font-weight:950;color:#0f172a;line-height:1.15}
+  .rem-kpi2-sub{font-size:11px;color:#94a3b8;margin-top:4px}
+  .rem-kpi2-trend{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:11px;font-weight:900;padding:2px 8px;border-radius:999px}
+  .rem-kpi2-trend.up{background:#dcfce7;color:#15803d}
+  .rem-kpi2-trend.down{background:#fef2f2;color:#dc2626}
+  .rem-kpi2-solida{background:none;border:none;box-shadow:0 12px 28px rgba(124,58,237,.28);color:#fff;flex-direction:column;align-items:flex-start;gap:6px}
+  .rem-kpi2-icon-solida{font-size:26px;margin-bottom:2px}
+  .rem-kpi2-label-solida{font-size:12px;font-weight:800;opacity:.85}
+  .rem-kpi2-valor-solida{font-size:25px;font-weight:950}
+  .rem-kpi2-sub-solida{font-size:11px;opacity:.85}
+  .rem-kpi2-solida .rem-kpi2-trend{background:rgba(255,255,255,.22);color:#fff}
+
+  /* ── Grades auxiliares ── */
+  .rem-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+  .rem-grid-1{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:18px}
+
+  /* ── Donut com total no centro + legenda com % ── */
+  .rem-donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .rem-premium-wrap .rem-donut-wrap .rem-donut{margin:0;flex-shrink:0}
+  .rem-donut-wrap .rem-legend{flex:1;min-width:140px;margin-top:0}
+  .rem-donut-label b{display:block;font-size:26px;line-height:1;color:#0f172a}
+  .rem-donut-label small{display:block;font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+  .rem-leg em{font-style:normal;color:#94a3b8;font-weight:700}
+
+  /* ── Botão gradiente (simulador) ── */
+  .rem-btn-gradiente{border:0;border-radius:14px;padding:13px 20px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 10px 22px rgba(124,58,237,.32)}
+  .rem-btn-gradiente:hover{filter:brightness(1.06)}
+
+  /* ── Resultado do simulador em lista ── */
+  .rem-sim-resultado{background:#f8fafc;border-radius:14px;padding:4px 16px}
+  .rem-sim-resultado-linha{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #e2e8f0;font-size:13px;color:#334155}
+  .rem-sim-resultado-linha:last-child{border-bottom:none}
+  .rem-sim-resultado-linha strong{font-size:15px}
+
+  /* ── Ações Rápidas: grade 2 colunas com ícone ── */
+  .rem-acoes-rapidas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rem-acao-rapida{display:flex;align-items:center;gap:12px;border:1px solid #eef2ff;background:#fff;border-radius:16px;padding:14px 16px;cursor:pointer;font-size:13px;font-weight:800;color:#0f172a;text-align:left}
+  .rem-acao-rapida:hover{border-color:#c7d2fe;transform:translateY(-1px)}
+  .rem-acao-rapida-icone{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+
+  @media(max-width:1200px){.rem-kpi-grid{grid-template-columns:repeat(3,1fr)}.rem-premium-wrap .rem-kpi-grid.rem-kpi-grid2{grid-template-columns:repeat(2,1fr)}.rem-grid-2,.rem-grid-3{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.rem-kpi-grid,.rem-kpi-grid2,.rem-filter-row,.rem-form,.rem-info-grid,.rem-sim-grid,.rem-acoes-rapidas{grid-template-columns:1fr}.rem-footer-grid{grid-template-columns:1fr}}
 
 /* ===== style: movimentacoes-premium-reais-css ===== */
 .mov-wrap{display:grid;gap:20px}
