@@ -548,6 +548,13 @@
 
     p.innerHTML = `
       <div class="rem-premium-wrap">
+        <div class="rem-toolbar-legacy" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end;margin-bottom:16px">
+          <button class="btn btn-g btn-sm" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
+          <button class="btn btn-p btn-sm" onclick="grhAbrirHolerites()">📤 Upload Automático de Holerites</button>
+          <button class="btn btn-p btn-sm" onclick="grhAbrirBeneficiosPdf()">🧾 Importar Benefícios (PDF)</button>
+          <button class="btn btn-g btn-sm" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
+          <button class="btn btn-p btn-sm" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
+        </div>
         <div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(4,minmax(180px,1fr))">
           ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha, '#7c3aed', true)}
           ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null, '#3b82f6')}
