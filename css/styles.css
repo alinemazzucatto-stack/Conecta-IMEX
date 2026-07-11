@@ -1265,6 +1265,9 @@ tbody tr:hover td{background:var(--cream)}
   .rem-kpi small{display:block;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:7px}
   .rem-kpi strong{display:block;font-size:25px;line-height:1;color:#0047FF;font-weight:950}
   .rem-kpi span{display:block;font-size:11px;color:#64748b;margin-top:6px}
+  .rem-kpi-trend{display:inline-block;margin-top:8px;font-size:11px;font-weight:900;padding:3px 8px;border-radius:999px}
+  .rem-kpi-trend.up{background:#dcfce7;color:#15803d}
+  .rem-kpi-trend.down{background:#fef2f2;color:#dc2626}
   .rem-grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
   .rem-card{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 8px 22px rgba(16,24,40,.05);overflow:hidden}
   .rem-card-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
