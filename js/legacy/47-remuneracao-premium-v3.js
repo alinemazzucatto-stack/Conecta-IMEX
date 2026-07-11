@@ -64,9 +64,13 @@
   // Gráfico de linha/área em SVG puro (sem lib nova) para "Evolução da
   // Folha", no estilo da referência: linha + preenchimento em degradê +
   // marcadores + selo com o valor do último ponto.
-  function lineChartRem(labels, serie, cor){
+  // `compacto` reduz altura, número de rótulos e tamanho de fonte pra caber
+  // numa coluna estreita (usado quando este card divide linha com os
+  // donuts, em vez de ficar sozinho ocupando a largura toda).
+  function lineChartRem(labels, serie, cor, compacto){
     cor = cor || '#7c3aed';
-    const W = 640, H = 220, padL = 44, padR = 20, padT = 30, padB = 28;
+    const W = compacto ? 380 : 640, H = compacto ? 160 : 220;
+    const padL = compacto ? 8 : 44, padR = compacto ? 8 : 20, padT = compacto ? 34 : 30, padB = compacto ? 22 : 28;
     const max = Math.max.apply(null, serie.concat([1]));
     const min = Math.min.apply(null, serie.concat([0]));
     const faixa = (max - min) || 1;
@@ -77,14 +81,20 @@
     const linha = pontos.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
     const area = linha + ` L${pontos[pontos.length-1][0].toFixed(1)},${(H-padB).toFixed(1)} L${pontos[0][0].toFixed(1)},${(H-padB).toFixed(1)} Z`;
     const gid = 'remLineGrad'+Math.random().toString(36).slice(2,8);
-    const grade = [0,0.25,0.5,0.75,1].map(f=>{
+    const grade = compacto ? '' : [0,0.25,0.5,0.75,1].map(f=>{
       const v = min + faixa*f;
       return `<text x="4" y="${(y(v)+4).toFixed(1)}" font-size="10" fill="#94a3b8">${money(v).replace(',00','').replace('R$ ','R$ ')}</text><line x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W-padR}" y2="${y(v).toFixed(1)}" stroke="#eef2ff" stroke-width="1"/>`;
     }).join('');
-    const marcadores = pontos.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i===n-1?5:4}" fill="#fff" stroke="${cor}" stroke-width="2.5"/>`).join('');
-    const labelsX = labels.map((l,i)=>`<text x="${x(i).toFixed(1)}" y="${H-8}" font-size="10" fill="#64748b" text-anchor="middle">${esc(l)}</text>`).join('');
+    const marcadores = pontos.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${compacto?2.5:(i===n-1?5:4)}" fill="#fff" stroke="${cor}" stroke-width="2"/>`).join('');
+    const indicesVisiveis = compacto ? new Set([0, Math.floor((n-1)/2), n-1]) : null;
+    const labelsX = labels.map((l,i)=>{
+      if(compacto && !indicesVisiveis.has(i)) return '';
+      return `<text x="${x(i).toFixed(1)}" y="${H-6}" font-size="${compacto?9:10}" fill="#64748b" text-anchor="middle">${esc(l)}</text>`;
+    }).join('');
     const ultimo = pontos[pontos.length-1];
-    const selo = ultimo ? `<g transform="translate(${ultimo[0]-46},${ultimo[1]-34})"><rect width="92" height="24" rx="12" fill="${cor}"/><text x="46" y="16" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">${money(serie[serie.length-1]).replace(',00','')}</text></g>` : '';
+    const seloLargura = compacto ? 74 : 92;
+    const seloX = ultimo ? Math.min(Math.max(ultimo[0]-seloLargura/2, 2), W-seloLargura-2) : 0;
+    const selo = ultimo ? `<g transform="translate(${seloX.toFixed(1)},4)"><rect width="${seloLargura}" height="${compacto?20:24}" rx="10" fill="${cor}"/><text x="${seloLargura/2}" y="${compacto?14:16}" font-size="${compacto?10:11}" font-weight="700" fill="#fff" text-anchor="middle">${money(serie[serie.length-1]).replace(',00','')}</text></g>` : '';
     return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
       <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="${cor}" stop-opacity="0.28"/>
@@ -92,7 +102,7 @@
       </linearGradient></defs>
       ${grade}
       <path d="${area}" fill="url(#${gid})"/>
-      <path d="${linha}" fill="none" stroke="${cor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linha}" fill="none" stroke="${cor}" stroke-width="${compacto?2:2.5}" stroke-linecap="round" stroke-linejoin="round"/>
       ${marcadores}
       ${labelsX}
       ${selo}
@@ -623,12 +633,11 @@
           </div>
         </div>
 
-        <div class="rem-card" style="margin-bottom:18px">
-          <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Baseado no histórico real da folha (últimas competências registradas).' : 'Estimativa visual a partir da folha atual — ainda não há histórico mensal real suficiente.'}</p></div></div>
-          <div class="rem-card-body">${lineChartRem(labelsSerie, serie, '#7c3aed')}</div>
-        </div>
-
-        <div class="rem-grid-2">
+        <div class="rem-grid-3">
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Histórico real (últimas competências).' : 'Estimativa a partir da folha atual.'}</p></div></div>
+            <div class="rem-card-body">${lineChartRem(labelsSerie, serie, '#7c3aed', true)}</div>
+          </div>
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>📊 Distribuição por Faixa Salarial</h2><p>Colaboradores ativos com salário informado.</p></div></div>
             <div class="rem-card-body">
