@@ -548,12 +548,16 @@
 
     p.innerHTML = `
       <div class="rem-premium-wrap">
-        <div class="rem-toolbar-legacy" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end;margin-bottom:16px">
-          <button class="btn btn-g btn-sm" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirHolerites()">📤 Upload Automático de Holerites</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirBeneficiosPdf()">🧾 Importar Benefícios (PDF)</button>
-          <button class="btn btn-g btn-sm" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
+        <div class="rem-toolbar-legacy" style="display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;align-items:center;margin-bottom:16px;padding-bottom:2px">
+          <input id="grh-rem-search" type="text" placeholder="🔍 Buscar colaborador…" style="width:200px;flex:0 0 auto;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px" oninput="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()"/>
+          <input id="grh-rem-mes" type="month" title="Filtrar total da folha por mês" style="width:150px;flex:0 0 auto;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px"/>
+          <button class="btn btn-g btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">🔎 Filtrar mês</button>
+          <button class="btn btn-g btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="document.getElementById('grh-rem-mes').value='';if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">Limpar</button>
+          <button class="btn btn-g btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
+          <button class="btn btn-g btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
+          <button class="btn btn-p btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="grhAbrirBeneficiosPdf()">🧾 Importar Benefícios (PDF)</button>
+          <button class="btn btn-p btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="grhAbrirHolerites()">📤 Upload Automático de Holerites</button>
+          <button class="btn btn-p btn-sm" style="flex:0 0 auto;white-space:nowrap" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
         </div>
         <div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(4,minmax(180px,1fr))">
           ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', `${s.comHolerite}/${s.ativos} com holerite real`, trendFolha, '#7c3aed', true)}
