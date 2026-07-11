@@ -4352,7 +4352,14 @@ auth.onAuthStateChanged(async (user) => {
         udata = { uid: user.uid, nome: user.email.split('@')[0], email: user.email, role: 'colaborador', unidade: 'meta', criadoEm: new Date().toISOString(), criadoPor: 'auto' };
         await db.collection('users').doc(user.uid).set(udata);
       }
-      const preferredRestore = String(sessionStorage.getItem('imexPreferredRole') || '').toLowerCase().trim();
+      // sessionStorage se perde ao fechar a aba/navegador (só sobrevive a um
+      // F5 na mesma aba). Por isso usamos o localStorage.usuarioLogado (salvo
+      // no login com o papel real vindo de grh_colabs) como segundo fallback,
+      // antes do `role` de `users`, que fica desatualizado e causava a volta
+      // para "colaborador" ao reabrir o navegador já logado como RH/Gestor.
+      let usuarioLogadoLS = null;
+      try { usuarioLogadoLS = JSON.parse(localStorage.getItem('usuarioLogado') || 'null'); } catch(e) {}
+      const preferredRestore = String(sessionStorage.getItem('imexPreferredRole') || (usuarioLogadoLS && usuarioLogadoLS.role) || '').toLowerCase().trim();
       role = (preferredRestore || udata.role || 'colaborador').toLowerCase();
       if (!PLBL[role]) role = 'colaborador';
       if (role === 'rh-colaborador') { _roleReal = 'rh-colaborador'; role = 'colaborador'; }
@@ -4360,7 +4367,7 @@ auth.onAuthStateChanged(async (user) => {
       // grh_colabs) sobre o campo `role` salvo em `users`, que pode estar
       // desatualizado de uma sessão de teste anterior e causar inconsistência
       // entre o que aparece na tela e o papel realmente escolhido no login.
-      const roleRealRestore = String(sessionStorage.getItem('imexRoleReal') || '').toLowerCase().trim();
+      const roleRealRestore = String(sessionStorage.getItem('imexRoleReal') || (usuarioLogadoLS && usuarioLogadoLS.role) || '').toLowerCase().trim();
       _roleReal = roleRealRestore || _roleReal || (udata.role || role).toLowerCase();
       // `role`/`_roleReal` são `let` no topo do arquivo — isso NÃO cria
       // propriedade em `window`. Várias funções (effectiveRole, menus,
