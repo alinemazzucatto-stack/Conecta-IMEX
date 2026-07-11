@@ -1008,17 +1008,22 @@
     const p=pane(); if(!p) return;
     const visible=getComputedStyle(p).display!=='none';
     if(visible && !window.__remPremiumRenderedV3){
+      // Evita que o HTML estático antigo do painel fique visível enquanto
+      // os dados carregam (chegava a ficar ~5s por causa dos awaits em série).
+      p.innerHTML = '<div class="rem-premium-wrap" style="padding:40px;text-align:center;color:#94a3b8">⏳ Carregando dados de remuneração…</div>';
       await carregarBaseReal();
       if(!colaboradoresRem || colaboradoresRem.length === 0) {
         console.warn('[remuneracao] Nenhum dado carregado. Verifique Firebase permissions.');
         notify('⚠️ Sem dados de remuneração. Verifique sua conexão.');
         return;
       }
-      const serieInfo = await folhaSerieRealOuEstimada();
-      const reajustesMes = await reajustesDoMesAtual();
-      const custosExtra = await carregarCustosExtra();
-      const alertasInfo = await calcularAlertasInteligentes();
-      const budget = await carregarBudget();
+      const [serieInfo, reajustesMes, custosExtra, alertasInfo, budget] = await Promise.all([
+        folhaSerieRealOuEstimada(),
+        reajustesDoMesAtual(),
+        carregarCustosExtra(),
+        calcularAlertasInteligentes(),
+        carregarBudget()
+      ]);
       render(serieInfo, reajustesMes, custosExtra, alertasInfo, budget);
     }
   }
