@@ -91,6 +91,10 @@
       salarioNovo: extras.salarioNovo ?? null,
       observacao: extras.observacao || `${tipo}: ${valorAntigo || '—'} → ${valorNovo || '—'}`,
       origem: 'automatico',
+      // Quem estava logado ao fazer a alteração — registros anteriores a
+      // esta mudança não têm esse campo (mostrado como "—" na tela).
+      alteradoPor: (window.currentUserData && window.currentUserData.nome) || null,
+      alteradoPorEmail: (window.currentUserData && window.currentUserData.email) || null,
       criadoEm: grhAgoraISO()
     };
 

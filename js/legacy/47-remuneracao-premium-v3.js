@@ -36,6 +36,26 @@
     return isNaN(n) ? 0 : n;
   }
 
+  // Donut genérico (N segmentos) + legenda, no mesmo estilo visual do
+  // donut CLT/PJ original (conic-gradient em .rem-donut). Reutilizado pelos
+  // widgets de Distribuição por Faixa Salarial e Distribuição por Tipo de
+  // Contrato para não duplicar a lógica de cálculo de ângulos.
+  function donutSegmentos(items){
+    const total = items.reduce((s,i)=>s+i.valor,0);
+    let acc = 0;
+    const stops = items.map(i=>{
+      const de = total ? (acc/total*100) : 0;
+      acc += i.valor;
+      const ate = total ? (acc/total*100) : 0;
+      return `${i.cor} ${de}% ${ate}%`;
+    }).join(', ');
+    const principal = items[0];
+    const pctPrincipal = total ? Math.round(principal.valor/total*100) : 0;
+    const legenda = items.map(i=>`<div class="rem-leg"><span><i class="rem-dot" style="background:${i.cor}"></i>${esc(i.label)}</span><strong>${i.valor}</strong></div>`).join('');
+    return `<div class="rem-donut" style="background:conic-gradient(${stops || '#e2e8f0 0 100%'})"><div class="rem-donut-label">${pctPrincipal}%</div></div>
+      <div class="rem-legend">${legenda}</div>`;
+  }
+
   function contratoOf(c){
     const raw = nvl(c.tipo,c.contrato,c.tipoContrato,c.regime,c.clt,c.ehClt,c['É CLT?'],c['CLT']);
     if(typeof raw === 'boolean') return raw ? 'CLT' : 'PJ';
@@ -170,12 +190,45 @@
     return meses.map((m,i)=> Math.round(base * (0.88 + (i*0.012))));
   }
 
-  function render(){
+  // Tenta montar a série de evolução da folha a partir do histórico REAL
+  // (grh_rem tem um campo `competencia` 'YYYY-MM' por registro). Só usa
+  // dado real se houver pelo menos 3 competências distintas nos dados —
+  // com menos que isso o gráfico ficaria enganoso (poucos pontos reais
+  // misturados com meses vazios), então cai no comportamento sintético
+  // já existente (folhaSerie), deixando isso claro na legenda do card.
+  async function folhaSerieRealOuEstimada(){
+    try{
+      if(typeof window.grhGetRem !== 'function') return { real:false, labels:meses, serie:folhaSerie() };
+      const rem = await window.grhGetRem();
+      if(!Array.isArray(rem) || !rem.length) return { real:false, labels:meses, serie:folhaSerie() };
+      const porCompetencia = {};
+      rem.forEach(r=>{
+        const comp = (r.competencia||'').trim();
+        if(!comp) return;
+        const valor = parseMoney(r.custoTotal) || parseMoney(r.salario) || 0;
+        porCompetencia[comp] = (porCompetencia[comp]||0) + valor;
+      });
+      const competencias = Object.keys(porCompetencia).sort();
+      if(competencias.length < 3) return { real:false, labels:meses, serie:folhaSerie() };
+      const ultimas = competencias.slice(-6);
+      const labels = ultimas.map(c=>{ const [ano,mes]=c.split('-'); return (meses[(parseInt(mes,10)||1)-1]||c)+'/'+String(ano||'').slice(-2); });
+      const serie = ultimas.map(c=>Math.round(porCompetencia[c]));
+      return { real:true, labels, serie };
+    }catch(e){
+      console.warn('[remuneracao] Falha ao montar série real da folha, usando estimativa', e);
+      return { real:false, labels:meses, serie:folhaSerie() };
+    }
+  }
+
+  function render(serieInfo){
     const p=pane(); if(!p) return;
     const s=stats();
-    const serie=folhaSerie();
+    serieInfo = serieInfo || { real:false, labels:meses, serie:folhaSerie() };
+    const serie=serieInfo.serie;
+    const labelsSerie=serieInfo.labels;
     const maxSerie=Math.max(...serie,1);
     const setores=[...new Set(colaboradoresRem.map(c=>c.cc || c.setor || 'Não informado'))];
+    const setoresReais=[...new Set(colaboradoresRem.map(c=>c.setor || 'Não informado'))];
 
     p.innerHTML = `
       <div class="rem-premium-wrap">
@@ -223,24 +276,20 @@
 
         <div class="rem-grid-2">
           <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>Projeção visual baseada na folha informada da base.</p></div></div>
+            <div class="rem-card-head"><div><h2>📈 Evolução da Folha</h2><p>${serieInfo.real ? 'Baseado no histórico real da folha (últimas competências registradas).' : 'Estimativa visual a partir da folha atual — ainda não há histórico mensal real suficiente.'}</p></div></div>
             <div class="rem-card-body"><div class="rem-chart-lines">
-              ${serie.map((v,i)=>`<div class="rem-col"><div class="rem-col-bar" title="${money(v)}" style="height:${Math.max(18,Math.round(v/maxSerie*190))}px"></div><small>${meses[i]}</small></div>`).join('')}
+              ${serie.map((v,i)=>`<div class="rem-col"><div class="rem-col-bar" title="${money(v)}" style="height:${Math.max(18,Math.round(v/maxSerie*190))}px"></div><small>${esc(labelsSerie[i]||'')}</small></div>`).join('')}
             </div></div>
           </div>
           <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📊 CLT x PJ</h2><p>Distribuição por tipo de contrato da base real.</p></div></div>
+            <div class="rem-card-head"><div><h2>📊 Distribuição por Tipo de Contrato</h2><p>CLT x PJ na base real de colaboradores ativos.</p></div></div>
             <div class="rem-card-body">
-              <div class="rem-donut" style="background:conic-gradient(#0047FF 0 ${s.ativos ? Math.round(s.clt/s.ativos*100) : 0}%, #fbbf24 ${s.ativos ? Math.round(s.clt/s.ativos*100) : 0}% 100%)"><div class="rem-donut-label">${s.ativos ? Math.round(s.clt/s.ativos*100) : 0}%</div></div>
-              <div class="rem-legend">
-                <div class="rem-leg"><span><i class="rem-dot" style="background:#0047FF"></i>CLT</span><strong>${s.clt}</strong></div>
-                <div class="rem-leg"><span><i class="rem-dot" style="background:#fbbf24"></i>PJ</span><strong>${s.pj}</strong></div>
-              </div>
+              ${donutSegmentos([{label:'CLT',valor:s.clt,cor:'#0047FF'},{label:'PJ',valor:s.pj,cor:'#fbbf24'}])}
             </div>
           </div>
         </div>
 
-        <div class=”rem-grid-2”>
+        <div class="rem-grid-2">
           <div class="rem-card">
             <div class="rem-card-head"><div><h2>🏢 Custos por Centro de Custo</h2><p>Somatório dos salários e benefícios informados por área.</p></div></div>
             <div class="rem-card-body"><div class="rem-bars">
@@ -252,20 +301,152 @@
             </div></div>
           </div>
           <div class="rem-card">
-            <div class="rem-card-head"><div><h2>📊 Distribuição por Faixa Salarial</h2><p>Leitura analítica no rodapé do módulo.</p></div></div>
+            <div class="rem-card-head"><div><h2>📊 Distribuição por Faixa Salarial</h2><p>Colaboradores ativos com salário informado.</p></div></div>
             <div class="rem-card-body">
-              <div class="rem-footer-grid">
-                <div class="rem-faixa"><small>Sem salário informado</small><strong>${colaboradoresRem.filter(c=>!c.salario).length}</strong><span>colaboradores</span></div>
-                <div class="rem-faixa"><small>Até R$ 4.000</small><strong>${colaboradoresRem.filter(c=>c.salario>0&&c.salario<=4000).length}</strong><span>colaboradores</span></div>
-                <div class="rem-faixa"><small>R$ 4.001 a R$ 6.000</small><strong>${colaboradoresRem.filter(c=>c.salario>4000&&c.salario<=6000).length}</strong><span>colaboradores</span></div>
-                <div class="rem-faixa"><small>Acima de R$ 6.000</small><strong>${colaboradoresRem.filter(c=>c.salario>6000).length}</strong><span>colaboradores</span></div>
+              ${(()=>{
+                const ativosComSalario = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && c.salario>0);
+                const faixas = [
+                  {label:'Até R$ 2.000', valor: ativosComSalario.filter(c=>c.salario<=2000).length, cor:'#0047FF'},
+                  {label:'R$ 2.001 – 4.000', valor: ativosComSalario.filter(c=>c.salario>2000&&c.salario<=4000).length, cor:'#22c55e'},
+                  {label:'R$ 4.001 – 7.000', valor: ativosComSalario.filter(c=>c.salario>4000&&c.salario<=7000).length, cor:'#fbbf24'},
+                  {label:'Acima de R$ 7.000', valor: ativosComSalario.filter(c=>c.salario>7000).length, cor:'#f97316'}
+                ];
+                return donutSegmentos(faixas);
+              })()}
+            </div>
+          </div>
+        </div>
+
+        <div class="rem-grid-2">
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>📋 Remuneração por Setor</h2><p>Média e total salarial por setor, colaboradores ativos.</p></div></div>
+            <div class="rem-card-body">
+              <table class="rem-table"><thead><tr><th>Setor</th><th>Colaboradores</th><th>Média Salarial</th><th>Total</th></tr></thead><tbody>
+                ${setoresReais.map(st=>{
+                  const doSetor = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (c.setor||'Não informado')===st);
+                  const total = doSetor.reduce((s,c)=>s+c.salario,0);
+                  const media = doSetor.length ? total/doSetor.length : 0;
+                  return `<tr><td>${esc(st)}</td><td>${doSetor.length}</td><td>${money(media)}</td><td>${money(total)}</td></tr>`;
+                }).join('') || '<tr><td colspan="4" class="rem-table-empty">Sem colaboradores cadastrados.</td></tr>'}
+              </tbody></table>
+            </div>
+          </div>
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>🧮 Simulador de Reajuste</h2><p>Simule o impacto de um reajuste salarial por setor.</p></div></div>
+            <div class="rem-card-body">
+              <div class="rem-sim-grid">
+                <div class="field"><label>Percentual de reajuste</label><input id="rem-sim-pct" type="number" min="0" step="0.1" placeholder="Ex: 8" value="8"></div>
+                <div class="field"><label>Setor</label><select id="rem-sim-setor">
+                  <option value="">Todos os setores</option>
+                  ${setoresReais.map(st=>`<option value="${esc(st)}">${esc(st)}</option>`).join('')}
+                </select></div>
               </div>
+              <div class="rem-beneficios-actions"><button class="btn btn-p btn-sm" onclick="window.remSimularReajusteV3()">▶️ Executar simulação</button></div>
+              <div id="rem-simulador-resultado" style="margin-top:14px"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rem-grid-2">
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>📈 Histórico Salarial do Colaborador</h2><p>Alterações salariais registradas por colaborador.</p></div></div>
+            <div class="rem-card-body">
+              <select id="rem-hist-colab" onchange="window.remHistoricoColabV3(this.value)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbe3ef;margin-bottom:14px">
+                <option value="">Selecione um colaborador…</option>
+                ${colaboradoresRem.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${esc(c.nome)}">${esc(c.nome)}</option>`).join('')}
+              </select>
+              <div id="rem-historico-resultado"><div class="empty">Selecione um colaborador para ver o histórico.</div></div>
+            </div>
+          </div>
+          <div class="rem-card">
+            <div class="rem-card-head"><div><h2>🏗️ Estrutura Salarial do Cargo</h2><p>Faixa real observada por cargo (mínimo, médio, máximo).</p></div></div>
+            <div class="rem-card-body">
+              <select id="rem-estrutura-cargo" onchange="window.remEstruturaCargoV3(this.value)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbe3ef;margin-bottom:14px">
+                <option value="">Selecione um cargo…</option>
+                ${[...new Set(colaboradoresRem.map(c=>c.cargo).filter(Boolean))].sort().map(cg=>`<option value="${esc(cg)}">${esc(cg)}</option>`).join('')}
+              </select>
+              <div id="rem-estrutura-resultado"><div class="empty">Selecione um cargo para ver a faixa salarial.</div></div>
             </div>
           </div>
         </div>
       </div>`;
     window.__remPremiumRenderedV3 = true;
   }
+
+  // ── Simulador de reajuste ──
+  // Taxa de encargos (68%) reaproveitada de custosHTML() neste mesmo
+  // arquivo — é a mesma suposição já usada no restante do painel para
+  // estimar o custo de encargos sobre folha CLT.
+  const TAXA_ENCARGOS_CLT = 0.68;
+  window.remSimularReajusteV3 = function(){
+    const pct = parseFloat(document.getElementById('rem-sim-pct')?.value) || 0;
+    const setorSel = document.getElementById('rem-sim-setor')?.value || '';
+    const alvo = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && (!setorSel || c.setor===setorSel));
+    const folhaClt = alvo.filter(c=>c.tipo==='CLT').reduce((s,c)=>s+c.salario,0);
+    const folhaPj = alvo.filter(c=>c.tipo==='PJ').reduce((s,c)=>s+c.salario,0);
+    const aumentoMensalClt = folhaClt * pct/100;
+    const aumentoMensalPj = folhaPj * pct/100;
+    const aumentoMensal = aumentoMensalClt + aumentoMensalPj;
+    const impactoAnual = aumentoMensal * 12;
+    const impactoComEncargos = (aumentoMensalClt*12*(1+TAXA_ENCARGOS_CLT)) + (aumentoMensalPj*12);
+    const el = document.getElementById('rem-simulador-resultado'); if(!el) return;
+    if(!alvo.length){ el.innerHTML = '<div class="empty">Nenhum colaborador ativo nesse setor.</div>'; return; }
+    el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="rem-compare-kpi"><small>Aumento da folha</small><strong>${money(aumentoMensal)}</strong><span>mensal</span></div>
+      <div class="rem-compare-kpi"><small>Impacto anual</small><strong>${money(impactoAnual)}</strong><span>sem encargos</span></div>
+      <div class="rem-compare-kpi"><small>Impacto com encargos</small><strong>${money(impactoComEncargos)}</strong><span>CLT +${Math.round(TAXA_ENCARGOS_CLT*100)}%, PJ sem encargo</span></div>
+    </div>`;
+  };
+
+  // ── Histórico salarial do colaborador ──
+  window.remHistoricoColabV3 = async function(nome){
+    const el = document.getElementById('rem-historico-resultado'); if(!el) return;
+    if(!nome){ el.innerHTML = '<div class="empty">Selecione um colaborador para ver o histórico.</div>'; return; }
+    el.innerHTML = '<div class="empty"><div class="ei">⏳</div>Carregando…</div>';
+    const c = colaboradoresRem.find(x=>x.nome===nome);
+    try{
+      const mov = typeof window.grhGetMov === 'function' ? await window.grhGetMov() : [];
+      const nomeNorm = norm(nome);
+      const alteracoes = (Array.isArray(mov)?mov:[])
+        .filter(m=>norm(m.nome)===nomeNorm && m.tipo==='Alteração Salarial')
+        .sort((a,b)=>String(a.data||a.criadoEm||'').localeCompare(String(b.data||b.criadoEm||'')));
+      let linhas = alteracoes.map(m=>`<tr>
+        <td>${esc(m.data||'—')}</td>
+        <td>${m.salarioNovo!=null ? money(m.salarioNovo) : '—'}</td>
+        <td>${esc(m.observacao||'—')}</td>
+        <td>${esc(m.alteradoPor||'—')}</td>
+      </tr>`).join('');
+      if(!linhas && c){
+        // Sem histórico de alterações registrado: mostra a admissão com o
+        // salário atual como único ponto conhecido (dado real disponível,
+        // não é um valor inventado — só não há histórico de mudanças).
+        linhas = `<tr><td>${esc(c.adm||'—')}</td><td>${c.salario?money(c.salario):'—'}</td><td>Admissão — salário inicial</td><td>—</td></tr>`;
+      }
+      el.innerHTML = `<table class="rem-table"><thead><tr><th>Data</th><th>Salário</th><th>Motivo</th><th>Responsável</th></tr></thead><tbody>${linhas || '<tr><td colspan="4" class="rem-table-empty">Sem registros.</td></tr>'}</tbody></table>`;
+    }catch(e){
+      el.innerHTML = '<div class="empty">Erro ao carregar histórico: '+esc(e.message||e)+'</div>';
+    }
+  };
+
+  // ── Estrutura salarial do cargo (derivada dos salários reais, não inventada) ──
+  window.remEstruturaCargoV3 = function(cargo){
+    const el = document.getElementById('rem-estrutura-resultado'); if(!el) return;
+    if(!cargo){ el.innerHTML = '<div class="empty">Selecione um cargo para ver a faixa salarial.</div>'; return; }
+    const grupo = colaboradoresRem.filter(c=>!/inativo|deslig/i.test(norm(c.status)) && c.cargo===cargo && c.salario>0);
+    if(grupo.length < 2){
+      el.innerHTML = `<div class="empty">Dados insuficientes para esse cargo (${grupo.length} pessoa${grupo.length===1?'':'s'})${grupo.length?': '+money(grupo[0].salario):''}.</div>`;
+      return;
+    }
+    const salarios = grupo.map(c=>c.salario).sort((a,b)=>a-b);
+    const min = salarios[0];
+    const max = salarios[salarios.length-1];
+    const mid = salarios.length % 2 ? salarios[(salarios.length-1)/2] : (salarios[salarios.length/2-1]+salarios[salarios.length/2])/2;
+    el.innerHTML = `<div class="rem-compare-kpis" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="rem-compare-kpi"><small>Mínimo</small><strong>${money(min)}</strong><span>observado</span></div>
+      <div class="rem-compare-kpi"><small>Médio</small><strong>${money(mid)}</strong><span>observado</span></div>
+      <div class="rem-compare-kpi"><small>Máximo</small><strong>${money(max)}</strong><span>observado</span></div>
+    </div><p style="font-size:11px;color:#64748b;margin-top:10px">Baseado em ${grupo.length} colaboradores ativos com esse cargo.</p>`;
+  };
 
   window.remFiltrarV3 = function(){
     const q=(document.getElementById('remBuscaV3')?.value||'').toLowerCase();
@@ -342,7 +523,8 @@
         notify('⚠️ Sem dados de remuneração. Verifique sua conexão.');
         return;
       }
-      render();
+      const serieInfo = await folhaSerieRealOuEstimada();
+      render(serieInfo);
     }
   }
 
