@@ -333,25 +333,14 @@
       total += soma[key];
     });
 
-    console.log('[PDF] Atualizando KPI - Total:', total, 'Formatado:', fmtBRL(total));
-
     var cards = document.querySelectorAll('.rem-kpi2-corpo');
-    console.log('[PDF] Encontrados', cards.length, 'cards KPI');
-
     for(var i=0; i<cards.length; i++){
       var card = cards[i];
       var label = card.querySelector('.rem-kpi2-label');
-      if(label){
-        console.log('[PDF] Card', i, ':', label.textContent);
-        if(label.textContent.includes('Custo com Benefícios')){
-          var valor = card.querySelector('.rem-kpi2-valor');
-          console.log('[PDF] Encontrado card! Elemento valor:', valor);
-          if(valor){
-            console.log('[PDF] Atualizando valor de', valor.textContent, 'para', fmtBRL(total));
-            valor.textContent = fmtBRL(total);
-          }
-          break;
-        }
+      if(label && label.textContent.includes('Custo com Benefícios')){
+        var valor = card.querySelector('.rem-kpi2-valor');
+        if(valor) valor.textContent = fmtBRL(total);
+        break;
       }
     }
   }
