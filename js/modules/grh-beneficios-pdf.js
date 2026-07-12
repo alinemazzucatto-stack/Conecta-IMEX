@@ -127,6 +127,77 @@
 
   var arquivosProcessados = []; // {nome, categoria, valor, metodo}
 
+  function competenciaAtual(){
+    var h = new Date();
+    return h.getFullYear() + '-' + String(h.getMonth()+1).padStart(2,'0');
+  }
+
+  function salvarBeneficiosFirebase(dados){
+    var comp = competenciaAtual();
+    var docId = 'beneficios_' + comp;
+    var payload = { competencia: comp, dados: dados, data: new Date().toISOString() };
+
+    if(typeof window.db !== 'undefined' && window.db){
+      try{
+        window.db.collection('grh_beneficios_totais').doc(docId).set(payload);
+        console.log('✅ Benefícios salvos no Firebase:', comp, dados);
+      }catch(e){
+        console.warn('Firebase falhou, salvando em localStorage:', e.message);
+        localStorage.setItem('grh_beneficios_' + comp, JSON.stringify(payload));
+      }
+    } else {
+      console.log('Firebase não disponível, salvando em localStorage');
+      localStorage.setItem('grh_beneficios_' + comp, JSON.stringify(payload));
+    }
+  }
+
+  function carregarBeneficiosSalvos(){
+    var comp = competenciaAtual();
+    var docId = 'beneficios_' + comp;
+
+    if(typeof window.db !== 'undefined' && window.db){
+      try{
+        window.db.collection('grh_beneficios_totais').doc(docId).get().then(function(doc){
+          if(doc.exists){
+            var payload = doc.data();
+            preencherCamposBeneficios(payload.dados);
+            console.log('✅ Benefícios carregados do Firebase:', payload.dados);
+          }
+        }).catch(function(e){
+          console.warn('Erro ao carregar do Firebase, tentando localStorage:', e.message);
+          var local = localStorage.getItem('grh_beneficios_' + comp);
+          if(local){
+            var payload = JSON.parse(local);
+            preencherCamposBeneficios(payload.dados);
+          }
+        });
+      }catch(e){
+        console.warn('Erro ao acessar Firebase:', e.message);
+      }
+    } else {
+      var local = localStorage.getItem('grh_beneficios_' + comp);
+      if(local){
+        var payload = JSON.parse(local);
+        preencherCamposBeneficios(payload.dados);
+      }
+    }
+  }
+
+  function preencherCamposBeneficios(dados){
+    CATEGORIAS.forEach(function(c){
+      if(dados[c.key]){
+        var input = document.getElementById(c.campo);
+        if(input){
+          input.value = dados[c.key].toFixed(2);
+          input.dispatchEvent(new Event('input', { bubbles:true }));
+        }
+      }
+    });
+    if(typeof window.remCalcCustosBeneficiosIMEX === 'function'){
+      try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){}
+    }
+  }
+
   window.grhFecharBeneficiosPdf = function(){
     pararVigiaTelaRemuneracao();
     var modal = document.getElementById('grh-modal-beneficios-pdf');
@@ -210,6 +281,7 @@
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = 'none';
     document.getElementById('grh-modal-beneficios-pdf').style.display = 'flex';
+    carregarBeneficiosSalvos();
   };
 
   var PDFJS_BASES = [
@@ -365,13 +437,17 @@
 
     atualizarKpiCustoBeneficios();
 
+    if(aplicados){
+      salvarBeneficiosFirebase(soma);
+    }
+
     var out = document.getElementById('grh-beneficios-pdf-resultado');
     var aviso = document.createElement('div');
     if(aplicados){
       aviso.style.cssText = 'color:#15803d;background:#dcfce7;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
-      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) no painel!</strong> Fechando…';
+      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) e salva(s)!</strong> Fechando…';
       out.appendChild(aviso);
-      if(typeof addNotif === 'function') addNotif('Benefícios importados do PDF e aplicados ao painel.', 'success');
+      if(typeof addNotif === 'function') addNotif('Benefícios importados, aplicados e salvos para ' + competenciaAtual() + '.', 'success');
       setTimeout(function(){ grhFecharBeneficiosPdf(); }, 1500);
     } else {
       aviso.style.cssText = 'color:#b91c1c;background:#fee2e2;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
