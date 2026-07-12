@@ -344,6 +344,10 @@
       try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){}
     }
 
+    if(typeof window.grhRenderRemuneracao === 'function'){
+      try{ window.grhRenderRemuneracao(); }catch(e){}
+    }
+
     var out = document.getElementById('grh-beneficios-pdf-resultado');
     var aviso = document.createElement('div');
     if(aplicados){
