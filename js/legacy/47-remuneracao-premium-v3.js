@@ -593,6 +593,10 @@
               </div>`; })()}
           </div>
 
+          <div id="rem-comparativo-beneficios-card" class="rem-compare-card">
+            <div style="text-align:center;padding:40px;color:var(--ink-60)">⏳ Carregando comparativo de benefícios…</div>
+          </div>
+
           <div class="rem-compare-card">
             <h3>🎁 Custos dos Benefícios</h3>
             <p>Insira os valores mensais dos benefícios para acompanhar o custo total além da folha salarial.</p>
@@ -1034,6 +1038,15 @@
         carregarBudget()
       ]);
       render(serieInfo, reajustesMes, custosExtra, alertasInfo, budget);
+
+      if(typeof window.renderComparativoBeneficios === 'function'){
+        try{
+          window.renderComparativoBeneficios().then(function(html){
+            var card = document.getElementById('rem-comparativo-beneficios-card');
+            if(card) card.innerHTML = html;
+          });
+        }catch(e){ console.warn('Erro ao renderizar comparativo de benefícios:', e); }
+      }
     }
   }
 
