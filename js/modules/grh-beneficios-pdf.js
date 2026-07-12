@@ -145,7 +145,6 @@
     var div = document.createElement('div');
     div.id = 'grh-modal-beneficios-pdf';
     div.style.cssText = 'display:none;position:fixed;inset:0;z-index:6500;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;overflow-y:auto;padding:20px';
-    div.addEventListener('click', function(e){ e.stopPropagation(); }, true);
     div.innerHTML =
       '<div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.2)">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">' +
@@ -209,39 +208,14 @@
     clearInterval(vigiaTelaRemuneracao);
     vigiaTelaRemuneracao = null;
   }
-  // Fecha o vigia sempre que o modal for escondido, não importa por qual
-  // botão (Fechar, X ou outro código que mude o display diretamente).
-  var vigiaModalObserver = null;
-  function observarFechamentoModal(){
-    if (vigiaModalObserver) return;
-    var modal = document.getElementById('grh-modal-beneficios-pdf');
-    if (!modal) return;
-    vigiaModalObserver = new MutationObserver(function(){
-      if (getComputedStyle(modal).display === 'none'){
-        pararVigiaTelaRemuneracao();
-        var viewBen = document.getElementById('view-beneficios');
-        if(viewBen){
-          viewBen.style.removeProperty('display');
-          viewBen.classList.remove('beneficios-force-active');
-        }
-      }
-    });
-    vigiaModalObserver.observe(modal, { attributes: true, attributeFilter: ['style'] });
-  }
 
   window.grhAbrirBeneficiosPdf = function(){
-    garantirTelaRemuneracaoVisivel();
     criarModal();
-    observarFechamentoModal();
     iniciarVigiaTelaRemuneracao();
+    garantirTelaRemuneracaoVisivel();
     arquivosProcessados = [];
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = 'none';
-    var viewBen = document.getElementById('view-beneficios');
-    if(viewBen){
-      viewBen.classList.remove('beneficios-force-active');
-      viewBen.style.setProperty('display', 'none', 'important');
-    }
     document.getElementById('grh-modal-beneficios-pdf').style.display = 'flex';
   };
 
