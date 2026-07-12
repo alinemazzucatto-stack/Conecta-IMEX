@@ -127,16 +127,30 @@
 
   var arquivosProcessados = []; // {nome, categoria, valor, metodo}
 
+  window.grhFecharBeneficiosPdf = function(){
+    pararVigiaTelaRemuneracao();
+    var modal = document.getElementById('grh-modal-beneficios-pdf');
+    if(modal) modal.remove();
+    var viewBen = document.getElementById('view-beneficios');
+    if(viewBen){
+      viewBen.style.removeProperty('display');
+      viewBen.classList.remove('beneficios-force-active');
+    }
+    var paneRem = document.getElementById('grh-pane-remuneracao');
+    if(paneRem) paneRem.style.setProperty('display', 'block', 'important');
+  };
+
   function criarModal(){
     if(document.getElementById('grh-modal-beneficios-pdf')) return;
     var div = document.createElement('div');
     div.id = 'grh-modal-beneficios-pdf';
     div.style.cssText = 'display:none;position:fixed;inset:0;z-index:6500;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;overflow-y:auto;padding:20px';
+    div.addEventListener('click', function(e){ e.stopPropagation(); }, true);
     div.innerHTML =
       '<div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.2)">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">' +
           '<h3 style="font-size:18px;font-weight:700;margin:0">🧾 Importar Benefícios por PDF</h3>' +
-          '<button type="button" onclick="document.getElementById(\'grh-modal-beneficios-pdf\').style.display=\'none\'" style="border:none;background:none;font-size:22px;cursor:pointer;color:var(--ink-60)">✕</button>' +
+          '<button type="button" onclick="grhFecharBeneficiosPdf()" style="border:none;background:none;font-size:22px;cursor:pointer;color:var(--ink-60)">✕</button>' +
         '</div>' +
         '<p style="font-size:13px;color:var(--ink-60);margin:0 0 16px;line-height:1.5">Envie os relatórios em <strong>PDF</strong> (pode selecionar vários de uma vez — ex.: as 3 Unimeds). O sistema lê o <strong>total</strong> de cada um, agrupa por categoria e preenche o painel de custos. Confira os valores antes de aplicar.</p>' +
         '<label for="grh-beneficios-pdf-input" style="display:block;border:2px dashed var(--border);border-radius:12px;padding:36px;text-align:center;cursor:pointer;background:var(--bg-light)">' +
@@ -147,7 +161,7 @@
         '<input id="grh-beneficios-pdf-input" type="file" accept=".pdf" multiple style="display:none" onchange="grhBeneficiosPdfProcessar(this.files)"/>' +
         '<div id="grh-beneficios-pdf-resultado" style="margin-top:16px"></div>' +
         '<div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">' +
-          '<button type="button" class="btn btn-g" onclick="document.getElementById(\'grh-modal-beneficios-pdf\').style.display=\'none\'">Fechar</button>' +
+          '<button type="button" class="btn btn-g" onclick="grhFecharBeneficiosPdf()">Fechar</button>' +
           '<button type="button" id="grh-beneficios-pdf-aplicar" class="btn btn-p" style="display:none" onclick="grhBeneficiosPdfAplicar()">✅ Aplicar aos campos</button>' +
         '</div>' +
       '</div>';
@@ -203,7 +217,14 @@
     var modal = document.getElementById('grh-modal-beneficios-pdf');
     if (!modal) return;
     vigiaModalObserver = new MutationObserver(function(){
-      if (getComputedStyle(modal).display === 'none') pararVigiaTelaRemuneracao();
+      if (getComputedStyle(modal).display === 'none'){
+        pararVigiaTelaRemuneracao();
+        var viewBen = document.getElementById('view-beneficios');
+        if(viewBen){
+          viewBen.style.removeProperty('display');
+          viewBen.classList.remove('beneficios-force-active');
+        }
+      }
     });
     vigiaModalObserver.observe(modal, { attributes: true, attributeFilter: ['style'] });
   }
@@ -216,6 +237,11 @@
     arquivosProcessados = [];
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = 'none';
+    var viewBen = document.getElementById('view-beneficios');
+    if(viewBen){
+      viewBen.classList.remove('beneficios-force-active');
+      viewBen.style.setProperty('display', 'none', 'important');
+    }
     document.getElementById('grh-modal-beneficios-pdf').style.display = 'flex';
   };
 
@@ -334,7 +360,6 @@
   }
 
   window.grhBeneficiosPdfAplicar = function(){
-    garantirTelaRemuneracaoVisivel();
     var soma = totaisPorCategoria();
     var aplicados = 0;
 
@@ -356,13 +381,11 @@
     var aviso = document.createElement('div');
     if(aplicados){
       aviso.style.cssText = 'color:#15803d;background:#dcfce7;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
-      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) no painel!</strong> Feche este modal para conferir o gráfico.';
+      aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) no painel!</strong> Fechando…';
       out.appendChild(aviso);
       if(typeof addNotif === 'function') addNotif('Benefícios importados do PDF e aplicados ao painel.', 'success');
+      setTimeout(function(){ grhFecharBeneficiosPdf(); }, 1500);
     } else {
-      // Antes usava alert() nativo aqui — ele bloqueia a página inteira até
-      // alguém clicar OK, o que parecia (e na prática era) o sistema
-      // travando. Mensagem inline não bloqueia nada.
       aviso.style.cssText = 'color:#b91c1c;background:#fee2e2;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
       aviso.innerHTML = '<strong>⚠️ Não encontrei os campos de benefícios na tela.</strong> Feche este modal, abra o painel de Remuneração e tente novamente.';
       out.appendChild(aviso);
