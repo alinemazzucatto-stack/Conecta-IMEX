@@ -326,6 +326,26 @@
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = '';
   }
 
+  function atualizarKpiCustoBeneficios(){
+    var soma = totaisPorCategoria();
+    var total = 0;
+    Object.keys(soma).forEach(function(key){
+      total += soma[key];
+    });
+
+    var kpiCards = document.querySelectorAll('[class*="kpi"]');
+    for(var i=0; i<kpiCards.length; i++){
+      var card = kpiCards[i];
+      var texto = card.textContent || '';
+      if(texto.includes('Custo com Benefícios')){
+        var span = card.querySelector('strong');
+        if(!span) span = Array.from(card.querySelectorAll('*')).find(el=>el.textContent.match(/^R\$/));
+        if(span) span.textContent = fmtBRL(total);
+        break;
+      }
+    }
+  }
+
   window.grhBeneficiosPdfAplicar = function(){
     var soma = totaisPorCategoria();
     var aplicados = 0;
@@ -344,9 +364,7 @@
       try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){}
     }
 
-    if(typeof window.grhRenderRemuneracao === 'function'){
-      try{ window.grhRenderRemuneracao(); }catch(e){}
-    }
+    atualizarKpiCustoBeneficios();
 
     var out = document.getElementById('grh-beneficios-pdf-resultado');
     var aviso = document.createElement('div');
