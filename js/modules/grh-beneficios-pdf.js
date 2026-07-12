@@ -333,14 +333,13 @@
       total += soma[key];
     });
 
-    var kpiCards = document.querySelectorAll('[class*="kpi"]');
-    for(var i=0; i<kpiCards.length; i++){
-      var card = kpiCards[i];
-      var texto = card.textContent || '';
-      if(texto.includes('Custo com Benefícios')){
-        var span = card.querySelector('strong');
-        if(!span) span = Array.from(card.querySelectorAll('*')).find(el=>el.textContent.match(/^R\$/));
-        if(span) span.textContent = fmtBRL(total);
+    var cards = document.querySelectorAll('.rem-kpi2-corpo');
+    for(var i=0; i<cards.length; i++){
+      var card = cards[i];
+      var label = card.querySelector('.rem-kpi2-label');
+      if(label && label.textContent.includes('Custo com Benefícios')){
+        var valor = card.querySelector('.rem-kpi2-valor');
+        if(valor) valor.textContent = fmtBRL(total);
         break;
       }
     }
