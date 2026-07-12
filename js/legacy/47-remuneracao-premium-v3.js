@@ -207,11 +207,20 @@
     const total = ativos.reduce((s,c)=>s+c.salario,0);
     const clts = ativos.filter(c=>c.tipo==='CLT');
     const pjs = ativos.filter(c=>c.tipo==='PJ');
-    const benef = ativos.reduce((s,c)=>s+c.benef,0);
+    const benefColab = ativos.reduce((s,c)=>s+c.benef,0);
     const provisoes = ativos.reduce((s,c)=>s+(c.provisoes||0),0);
     const comHolerite = ativos.filter(c=>c.temHolerite).length;
     const comSalario = ativos.filter(c=>c.salario>0);
     const salarios = comSalario.map(c=>c.salario);
+
+    // Somar também benefícios totais importados dos PDFs
+    var benefTotal = benefColab;
+    var ids = ['va','saude','odonto','colabmais','sindicato'];
+    ids.forEach(function(id){
+      var el = document.getElementById('rem-beneficio-'+id);
+      benefTotal += Number((el&&el.value)||0);
+    });
+
     return {
       folha:total,
       mediaClt:clts.length ? clts.reduce((s,c)=>s+c.salario,0)/clts.length : 0,
@@ -219,8 +228,8 @@
       mediaGeral: comSalario.length ? total/comSalario.length : 0,
       maiorSalario: salarios.length ? Math.max.apply(null, salarios) : 0,
       menorSalario: salarios.length ? Math.min.apply(null, salarios) : 0,
-      custo:total+benef+provisoes,
-      benef:benef,
+      custo:total+benefTotal+provisoes,
+      benef:benefTotal,
       provisoes:provisoes,
       ativos:ativos.length,
       clt:clts.length,
