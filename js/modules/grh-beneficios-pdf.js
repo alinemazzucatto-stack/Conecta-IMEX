@@ -130,14 +130,7 @@
   window.grhFecharBeneficiosPdf = function(){
     pararVigiaTelaRemuneracao();
     var modal = document.getElementById('grh-modal-beneficios-pdf');
-    if(modal) modal.remove();
-    var viewBen = document.getElementById('view-beneficios');
-    if(viewBen){
-      viewBen.style.removeProperty('display');
-      viewBen.classList.remove('beneficios-force-active');
-    }
-    var paneRem = document.getElementById('grh-pane-remuneracao');
-    if(paneRem) paneRem.style.setProperty('display', 'block', 'important');
+    if(modal) modal.style.display = 'none';
   };
 
   function criarModal(){
