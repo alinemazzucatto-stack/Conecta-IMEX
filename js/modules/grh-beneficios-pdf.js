@@ -155,27 +155,64 @@
   }
 
   // O modal cobre a tela com um fundo semi-transparente — se o painel de
-  // Remuneração não estiver realmente ativo por trás dele (ex.: outra
-  // aba/tela como "Meus Benefícios" do colaborador ficou visível por baixo
-  // por algum motivo), reexibe ele antes de abrir/aplicar. Só alterna
-  // display (sem chamar grhTab/aplicar): isso evitaria um recarregamento
-  // completo de ~4-5s do painel — que pareceria o sistema "travando" bem no
-  // meio do fluxo de importar/aplicar benefícios.
+  // Remuneração não estiver realmente ativo por trás dele (ex.: a tela
+  // "Meus Benefícios" do colaborador é forçada visível por 37/beneficios.js
+  // com display:...!important em algum clique/observador daquele módulo),
+  // reexibe ele. Só alterna display (sem chamar grhTab/aplicar): isso evita
+  // um recarregamento completo de ~4-5s do painel, que pareceria o sistema
+  // "travando" bem no meio do fluxo de importar/aplicar benefícios.
+  // Precisa usar !important e desativar as OUTRAS telas explicitamente,
+  // porque alguns módulos (ex.: js/modules/beneficios.js) forçam
+  // #view-beneficios visível com !important — um display normal não vence
+  // isso, as duas telas ficavam sobrepostas.
   function garantirTelaRemuneracaoVisivel(){
     var paneRem = document.getElementById('grh-pane-remuneracao');
     if (!paneRem) return;
-    if (getComputedStyle(paneRem).display === 'none') {
-      var outerView = document.getElementById('view-gestao-rh');
-      if (outerView) outerView.style.display = 'block';
-      document.querySelectorAll('#view-gestao-rh [id^="grh-pane-"]').forEach(function(p){
-        p.style.display = (p === paneRem) ? 'block' : 'none';
-      });
-    }
+    var precisaCorrigir = getComputedStyle(paneRem).display === 'none';
+    document.querySelectorAll('[id^="view-"]').forEach(function(v){
+      if (v.id !== 'view-gestao-rh' && getComputedStyle(v).display !== 'none') precisaCorrigir = true;
+    });
+    if (!precisaCorrigir) return;
+    document.querySelectorAll('[id^="view-"]').forEach(function(v){
+      if (v.id === 'view-gestao-rh') return;
+      v.classList.remove('active', 'dev-active', 'beneficios-force-active');
+      v.style.setProperty('display', 'none', 'important');
+    });
+    var outerView = document.getElementById('view-gestao-rh');
+    if (outerView) outerView.style.setProperty('display', 'block', 'important');
+    document.querySelectorAll('#view-gestao-rh [id^="grh-pane-"]').forEach(function(p){
+      p.style.setProperty('display', (p === paneRem) ? 'block' : 'none', 'important');
+    });
+  }
+
+  var vigiaTelaRemuneracao = null;
+  function iniciarVigiaTelaRemuneracao(){
+    if (vigiaTelaRemuneracao) return;
+    vigiaTelaRemuneracao = setInterval(garantirTelaRemuneracaoVisivel, 500);
+  }
+  function pararVigiaTelaRemuneracao(){
+    if (!vigiaTelaRemuneracao) return;
+    clearInterval(vigiaTelaRemuneracao);
+    vigiaTelaRemuneracao = null;
+  }
+  // Fecha o vigia sempre que o modal for escondido, não importa por qual
+  // botão (Fechar, X ou outro código que mude o display diretamente).
+  var vigiaModalObserver = null;
+  function observarFechamentoModal(){
+    if (vigiaModalObserver) return;
+    var modal = document.getElementById('grh-modal-beneficios-pdf');
+    if (!modal) return;
+    vigiaModalObserver = new MutationObserver(function(){
+      if (getComputedStyle(modal).display === 'none') pararVigiaTelaRemuneracao();
+    });
+    vigiaModalObserver.observe(modal, { attributes: true, attributeFilter: ['style'] });
   }
 
   window.grhAbrirBeneficiosPdf = function(){
     garantirTelaRemuneracaoVisivel();
     criarModal();
+    observarFechamentoModal();
+    iniciarVigiaTelaRemuneracao();
     arquivosProcessados = [];
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = 'none';
