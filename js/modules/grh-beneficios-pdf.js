@@ -132,8 +132,13 @@
     return h.getFullYear() + '-' + String(h.getMonth()+1).padStart(2,'0');
   }
 
+  function obterCompetenciaSelecionada(){
+    var input = document.getElementById('grh-beneficios-competencia');
+    return input ? input.value : competenciaAtual();
+  }
+
   function salvarBeneficiosFirebase(dados){
-    var comp = competenciaAtual();
+    var comp = obterCompetenciaSelecionada();
     var docId = 'beneficios_' + comp;
     var payload = { competencia: comp, dados: dados, data: new Date().toISOString() };
 
@@ -152,7 +157,7 @@
   }
 
   function carregarBeneficiosSalvos(){
-    var comp = competenciaAtual();
+    var comp = obterCompetenciaSelecionada();
     var docId = 'beneficios_' + comp;
 
     if(typeof window.db !== 'undefined' && window.db){
@@ -209,11 +214,16 @@
     var div = document.createElement('div');
     div.id = 'grh-modal-beneficios-pdf';
     div.style.cssText = 'display:none;position:fixed;inset:0;z-index:6500;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;overflow-y:auto;padding:20px';
+    var mesAtual = competenciaAtual();
     div.innerHTML =
       '<div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:760px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.2)">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">' +
           '<h3 style="font-size:18px;font-weight:700;margin:0">🧾 Importar Benefícios por PDF</h3>' +
           '<button type="button" onclick="grhFecharBeneficiosPdf()" style="border:none;background:none;font-size:22px;cursor:pointer;color:var(--ink-60)">✕</button>' +
+        '</div>' +
+        '<div style="display:flex;gap:10px;margin-bottom:16px;align-items:center">' +
+          '<label style="font-size:13px;font-weight:600;color:var(--ink-60)">📅 Competência (mês/ano):</label>' +
+          '<input id="grh-beneficios-competencia" type="month" value="'+mesAtual+'" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px"/>' +
         '</div>' +
         '<p style="font-size:13px;color:var(--ink-60);margin:0 0 16px;line-height:1.5">Envie os relatórios em <strong>PDF</strong> (pode selecionar vários de uma vez — ex.: as 3 Unimeds). O sistema lê o <strong>total</strong> de cada um, agrupa por categoria e preenche o painel de custos. Confira os valores antes de aplicar.</p>' +
         '<label for="grh-beneficios-pdf-input" style="display:block;border:2px dashed var(--border);border-radius:12px;padding:36px;text-align:center;cursor:pointer;background:var(--bg-light)">' +
@@ -281,6 +291,14 @@
     document.getElementById('grh-beneficios-pdf-resultado').innerHTML = '';
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = 'none';
     document.getElementById('grh-modal-beneficios-pdf').style.display = 'flex';
+
+    var inputComp = document.getElementById('grh-beneficios-competencia');
+    if(inputComp){
+      inputComp.onchange = function(){
+        carregarBeneficiosSalvos();
+      };
+    }
+
     carregarBeneficiosSalvos();
   };
 
@@ -447,7 +465,7 @@
       aviso.style.cssText = 'color:#15803d;background:#dcfce7;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
       aviso.innerHTML = '<strong>✅ '+aplicados+' categoria(s) preenchida(s) e salva(s)!</strong> Fechando…';
       out.appendChild(aviso);
-      if(typeof addNotif === 'function') addNotif('Benefícios importados, aplicados e salvos para ' + competenciaAtual() + '.', 'success');
+      if(typeof addNotif === 'function') addNotif('Benefícios importados, aplicados e salvos para ' + obterCompetenciaSelecionada() + '.', 'success');
       setTimeout(function(){ grhFecharBeneficiosPdf(); }, 1500);
     } else {
       aviso.style.cssText = 'color:#b91c1c;background:#fee2e2;padding:12px;border-radius:8px;font-size:13px;margin-top:12px';
