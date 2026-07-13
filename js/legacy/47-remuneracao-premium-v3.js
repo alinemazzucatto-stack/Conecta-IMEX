@@ -1038,7 +1038,16 @@
 
       // Carregar benefícios salvos para preencher os campos ocultos
       if(typeof window.carregarBeneficiosSalvos === 'function'){
-        try{ window.carregarBeneficiosSalvos(); }catch(e){ console.warn('Erro ao carregar benefícios salvos:', e); }
+        try{
+          window.carregarBeneficiosSalvos();
+          // Aguardar um pouco para que os campos sejam preenchidos, depois recalcular o KPI
+          setTimeout(function(){
+            console.log('[REMUNERACAO] Recalculando KPI após carregamento de benefícios');
+            if(typeof window.atualizarKpiCustoBeneficios === 'function'){
+              try{ window.atualizarKpiCustoBeneficios(); }catch(e){}
+            }
+          }, 500);
+        }catch(e){ console.warn('Erro ao carregar benefícios salvos:', e); }
       }
 
       if(typeof window.renderComparativoBeneficios === 'function'){
