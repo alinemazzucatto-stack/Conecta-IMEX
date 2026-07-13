@@ -423,14 +423,21 @@
       total += soma[key];
     });
 
+    console.log('[BENEFICIOS] Atualizando KPI com total:', total, 'Formatado:', fmtBRL(total));
+
     var cards = document.querySelectorAll('.rem-kpi2-corpo');
+    console.log('[BENEFICIOS] Encontrados', cards.length, 'cards');
+
     for(var i=0; i<cards.length; i++){
       var card = cards[i];
       var label = card.querySelector('.rem-kpi2-label');
-      if(label && label.textContent.includes('Custo com Benefícios')){
-        var valor = card.querySelector('.rem-kpi2-valor');
-        if(valor) valor.textContent = fmtBRL(total);
-        break;
+      if(label){
+        if(label.textContent.includes('Custo com Benefícios')){
+          var valor = card.querySelector('.rem-kpi2-valor');
+          console.log('[BENEFICIOS] Encontrado! Valor atual:', valor.textContent, '-> Novo:', fmtBRL(total));
+          if(valor) valor.textContent = fmtBRL(total);
+          break;
+        }
       }
     }
   }
