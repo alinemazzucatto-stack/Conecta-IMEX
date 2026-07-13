@@ -444,7 +444,7 @@
     document.getElementById('grh-beneficios-pdf-aplicar').style.display = '';
   }
 
-  function atualizarKpiCustoBeneficios(){
+  window.atualizarKpiCustoBeneficios = function(){
     var soma = totaisPorCategoria();
     var total = 0;
     Object.keys(soma).forEach(function(key){
@@ -468,7 +468,7 @@
         }
       }
     }
-  }
+  };
 
   window.grhBeneficiosPdfAplicar = function(){
     console.log('[BENEFICIOS] Iniciando grhBeneficiosPdfAplicar()');
