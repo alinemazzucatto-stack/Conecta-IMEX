@@ -156,7 +156,7 @@
     }
   }
 
-  function carregarBeneficiosSalvos(){
+  window.carregarBeneficiosSalvos = function(){
     var comp = obterCompetenciaSelecionada();
     var docId = 'beneficios_' + comp;
     console.log('[BENEFICIOS] carregarBeneficiosSalvos() chamada com competência:', comp);
@@ -205,7 +205,7 @@
         console.log('[BENEFICIOS] Nenhum dado salvo encontrado para ' + comp);
       }
     }
-  }
+  };
 
   function preencherCamposBeneficios(dados){
     console.log('[BENEFICIOS] preencherCamposBeneficios() chamada com dados:', dados);
