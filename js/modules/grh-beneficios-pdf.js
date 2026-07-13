@@ -159,47 +159,75 @@
   function carregarBeneficiosSalvos(){
     var comp = obterCompetenciaSelecionada();
     var docId = 'beneficios_' + comp;
+    console.log('[BENEFICIOS] carregarBeneficiosSalvos() chamada com competência:', comp);
 
     if(typeof window.db !== 'undefined' && window.db){
+      console.log('[BENEFICIOS] Tentando carregar do Firebase:', docId);
       try{
         window.db.collection('grh_beneficios_totais').doc(docId).get().then(function(doc){
+          console.log('[BENEFICIOS] Resposta Firebase recebida. Doc existe?', doc.exists);
           if(doc.exists){
             var payload = doc.data();
+            console.log('[BENEFICIOS] Dados do Firebase:', payload);
             preencherCamposBeneficios(payload.dados);
             console.log('✅ Benefícios carregados do Firebase:', payload.dados);
+          } else {
+            console.log('[BENEFICIOS] Doc não existe no Firebase, tentando localStorage');
+            var local = localStorage.getItem('grh_beneficios_' + comp);
+            if(local){
+              console.log('[BENEFICIOS] Encontrado em localStorage');
+              var payload = JSON.parse(local);
+              preencherCamposBeneficios(payload.dados);
+            } else {
+              console.log('[BENEFICIOS] Nenhum dado salvo encontrado para ' + comp);
+            }
           }
         }).catch(function(e){
-          console.warn('Erro ao carregar do Firebase, tentando localStorage:', e.message);
+          console.warn('[BENEFICIOS] Erro ao carregar do Firebase:', e.message);
           var local = localStorage.getItem('grh_beneficios_' + comp);
           if(local){
+            console.log('[BENEFICIOS] Carregando do localStorage como fallback');
             var payload = JSON.parse(local);
             preencherCamposBeneficios(payload.dados);
           }
         });
       }catch(e){
-        console.warn('Erro ao acessar Firebase:', e.message);
+        console.warn('[BENEFICIOS] Erro ao acessar Firebase:', e.message);
       }
     } else {
+      console.log('[BENEFICIOS] Firebase não disponível, tentando localStorage');
       var local = localStorage.getItem('grh_beneficios_' + comp);
       if(local){
+        console.log('[BENEFICIOS] Encontrado em localStorage');
         var payload = JSON.parse(local);
         preencherCamposBeneficios(payload.dados);
+      } else {
+        console.log('[BENEFICIOS] Nenhum dado salvo encontrado para ' + comp);
       }
     }
   }
 
   function preencherCamposBeneficios(dados){
+    console.log('[BENEFICIOS] preencherCamposBeneficios() chamada com dados:', dados);
+    var preenchidos = 0;
     CATEGORIAS.forEach(function(c){
+      console.log('[BENEFICIOS]   Verificando ' + c.key + ':', dados[c.key]);
       if(dados[c.key]){
         var input = document.getElementById(c.campo);
+        console.log('[BENEFICIOS]     Campo ' + c.campo + ' encontrado?', !!input);
         if(input){
-          input.value = dados[c.key].toFixed(2);
+          var valor = Number(dados[c.key]).toFixed(2);
+          console.log('[BENEFICIOS]     Preenchendo ' + c.campo + ' com:', valor);
+          input.value = valor;
           input.dispatchEvent(new Event('input', { bubbles:true }));
+          preenchidos++;
         }
       }
     });
+    console.log('[BENEFICIOS] Total de campos preenchidos:', preenchidos);
     if(typeof window.remCalcCustosBeneficiosIMEX === 'function'){
-      try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){}
+      console.log('[BENEFICIOS] Chamando remCalcCustosBeneficiosIMEX()');
+      try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){console.log('[BENEFICIOS] Erro:', e);}
     }
   }
 
