@@ -6,16 +6,16 @@
   var styles = `
     /* Comparativo Cards - Design Moderno */
     .rem-compare-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,1) 100%);
-      border: 1px solid rgba(203,213,225,0.4);
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04);
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,1) 100%) !important;
+      border: 1px solid rgba(203,213,225,0.4) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04) !important;
+      transition: all 0.3s ease !important;
     }
 
     .rem-compare-card:hover {
-      box-shadow: 0 8px 24px rgba(15,23,42,0.1), 0 4px 8px rgba(15,23,42,0.06);
-      border-color: rgba(203,213,225,0.6);
+      box-shadow: 0 8px 24px rgba(15,23,42,0.1), 0 4px 8px rgba(15,23,42,0.06) !important;
+      border-color: rgba(203,213,225,0.6) !important;
     }
 
     .rem-compare-card h3 {
