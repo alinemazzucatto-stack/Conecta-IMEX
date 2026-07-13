@@ -443,23 +443,37 @@
   }
 
   window.grhBeneficiosPdfAplicar = function(){
+    console.log('[BENEFICIOS] Iniciando grhBeneficiosPdfAplicar()');
     var soma = totaisPorCategoria();
+    console.log('[BENEFICIOS] Totais por categoria:', soma);
     var aplicados = 0;
 
     CATEGORIAS.forEach(function(c){
-      if(!soma[c.key]) return;
+      console.log('[BENEFICIOS] Procurando campo:', c.campo, 'com valor:', soma[c.key]);
+      if(!soma[c.key]) {
+        console.log('[BENEFICIOS]   -> Pulando (valor vazio)');
+        return;
+      }
       var input = document.getElementById(c.campo);
+      console.log('[BENEFICIOS]   -> Campo encontrado?', !!input);
       if(input){
+        console.log('[BENEFICIOS]   -> Preenchendo com:', (soma[c.key]).toFixed(2));
         input.value = (soma[c.key]).toFixed(2);
         input.dispatchEvent(new Event('input', { bubbles:true }));
         aplicados++;
+      } else {
+        console.log('[BENEFICIOS]   -> ERRO: Campo NÃO encontrado no DOM!');
       }
     });
 
+    console.log('[BENEFICIOS] Total de campos preenchidos:', aplicados);
+
     if(typeof window.remCalcCustosBeneficiosIMEX === 'function'){
-      try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){}
+      console.log('[BENEFICIOS] Chamando remCalcCustosBeneficiosIMEX()');
+      try{ window.remCalcCustosBeneficiosIMEX(); }catch(e){console.log('[BENEFICIOS] Erro:', e);}
     }
 
+    console.log('[BENEFICIOS] Chamando atualizarKpiCustoBeneficios()');
     atualizarKpiCustoBeneficios();
 
     if(aplicados){
