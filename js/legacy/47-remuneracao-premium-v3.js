@@ -579,14 +579,14 @@
         </div>
 
         <div class="rem-comparativo-grid" id="rem-comparativo-folha-beneficios-imex">
-          <div class="rem-compare-card" style="background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(248,250,252,1));border:1px solid rgba(203,213,225,0.4);box-shadow:0 4px 12px rgba(15,23,42,0.06),0 2px 4px rgba(15,23,42,0.04)">
-            <h3 style="font-size:16px;font-weight:700;color:#1e293b;margin:0 0 6px">📊 Comparativo Folha Atual x Anterior</h3>
+          <div class="rem-compare-card">
+            <h3>📊 Comparativo Folha Atual x Anterior</h3>
             <p>Visão rápida da variação entre a folha atual e a folha anterior para apoiar o acompanhamento mensal do RH.</p>
             ${(()=>{ const atual=s.folha||0; const anterior=Math.round((serie[serie.length-2]||atual*0.94)||0); const variacao=atual-anterior; const perc=anterior?((variacao/anterior)*100):0; const max=Math.max(atual,anterior,1); return `
-              <div class="rem-compare-kpis" style="display:flex;gap:12px">
-                <div class="rem-compare-kpi" style="flex:1;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border:1px solid #e2e8f0;border-left:4px solid #a78bfa;border-radius:12px;padding:14px;text-align:center"><small style="display:block;font-size:11px;color:#64748b;font-weight:600;margin-bottom:6px;text-transform:uppercase">Folha Atual</small><strong style="display:block;font-size:20px;font-weight:800;color:#1e293b;margin-bottom:4px">${money(atual)}</strong><span style="font-size:12px;color:#64748b">Mês vigente</span></div>
-                <div class="rem-compare-kpi" style="flex:1;background:linear-gradient(135deg,#f0fdf4,#f1fce4);border:1px solid #e2e8f0;border-left:4px solid #86efac;border-radius:12px;padding:14px;text-align:center"><small style="display:block;font-size:11px;color:#64748b;font-weight:600;margin-bottom:6px;text-transform:uppercase">Folha Anterior</small><strong style="display:block;font-size:20px;font-weight:800;color:#1e293b;margin-bottom:4px">${money(anterior)}</strong><span style="font-size:12px;color:#64748b">Mês anterior</span></div>
-                <div class="rem-compare-kpi" style="flex:1;background:linear-gradient(135deg,#eff6ff,#f0f9ff);border:1px solid #e2e8f0;border-left:4px solid #60a5fa;border-radius:12px;padding:14px;text-align:center"><small style="display:block;font-size:11px;color:#64748b;font-weight:600;margin-bottom:6px;text-transform:uppercase">Variação</small><strong style="display:block;font-size:20px;font-weight:800;color:${variacao>=0?'#dc2626':'#16a34a'};margin-bottom:4px">${variacao>=0?'+':''}${money(variacao)}</strong><span style="font-size:12px;color:#64748b">${variacao>=0?'+':''}${perc.toFixed(1)}%</span></div>
+              <div class="rem-compare-kpis">
+                <div class="rem-compare-kpi"><small>Folha Atual</small><strong>${money(atual)}</strong><span>Mês vigente</span></div>
+                <div class="rem-compare-kpi"><small>Folha Anterior</small><strong>${money(anterior)}</strong><span>Mês anterior</span></div>
+                <div class="rem-compare-kpi"><small>Variação</small><strong style="color:${variacao>=0?'#dc2626':'#16a34a'}">${variacao>=0?'+':''}${money(variacao)}</strong><span>${variacao>=0?'+':''}${perc.toFixed(1)}%</span></div>
               </div>
               <div class="rem-folha-bars">
                 <div class="rem-folha-col"><div class="rem-folha-bar anterior" style="height:${Math.max(24,Math.round(anterior/max*130))}px"></div><div class="rem-folha-label">Anterior<br>${money(anterior)}</div></div>
@@ -594,7 +594,7 @@
               </div>`; })()}
           </div>
 
-          <div id="rem-comparativo-beneficios-card" class="rem-compare-card" style="background:linear-gradient(135deg,rgba(255,255,255,0.95),rgba(248,250,252,1));border:1px solid rgba(203,213,225,0.4);box-shadow:0 4px 12px rgba(15,23,42,0.06),0 2px 4px rgba(15,23,42,0.04)">
+          <div id="rem-comparativo-beneficios-card" class="rem-compare-card">
             <div style="text-align:center;padding:40px;color:var(--ink-60)">⏳ Carregando comparativo de benefícios…</div>
           </div>
         </div>
