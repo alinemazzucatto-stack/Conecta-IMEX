@@ -1036,6 +1036,11 @@
       ]);
       render(serieInfo, reajustesMes, custosExtra, alertasInfo, budget);
 
+      // Carregar benefícios salvos para preencher os campos ocultos
+      if(typeof window.carregarBeneficiosSalvos === 'function'){
+        try{ window.carregarBeneficiosSalvos(); }catch(e){ console.warn('Erro ao carregar benefícios salvos:', e); }
+      }
+
       if(typeof window.renderComparativoBeneficios === 'function'){
         try{
           window.renderComparativoBeneficios().then(function(html){
