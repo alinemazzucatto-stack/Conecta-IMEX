@@ -597,21 +597,6 @@
           <div id="rem-comparativo-beneficios-card" class="rem-compare-card">
             <div style="text-align:center;padding:40px;color:var(--ink-60)">⏳ Carregando comparativo de benefícios…</div>
           </div>
-
-          <div class="rem-compare-card">
-            <h3>🎁 Custos dos Benefícios</h3>
-            <p>Insira os valores mensais dos benefícios para acompanhar o custo total além da folha salarial.</p>
-            <input type="hidden" id="rem-beneficios-json-imex" value="{}">
-            <div class="rem-beneficios-form">
-              <div class="field"><label>Vale Alimentação</label><input id="rem-beneficio-va" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Plano de Saúde</label><input id="rem-beneficio-saude" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Plano Odontológico</label><input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Colab+</label><input id="rem-beneficio-colabmais" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-              <div class="field"><label>Cartão Sindicato</label><input id="rem-beneficio-sindicato" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()"></div>
-            </div>
-            <div class="rem-beneficios-total"><span>Total mensal dos benefícios</span><strong id="rem-beneficios-total-imex">R$ 0,00</strong></div>
-            <div class="rem-beneficios-actions"><button class="btn btn-g btn-sm" onclick="remCalcCustosBeneficiosIMEX()">Atualizar total</button></div>
-          </div>
         </div>
 
         <div class="rem-card" style="margin-bottom:18px">
