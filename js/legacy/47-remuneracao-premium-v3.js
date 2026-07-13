@@ -565,6 +565,7 @@
           <button class="btn btn-g btn-sm" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
           <button class="btn btn-g btn-sm" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
           <button class="btn btn-p btn-sm" onclick="grhAbrirBeneficiosPdf()">🧾 Importar Benefícios (PDF)</button>
+          <button class="btn btn-g btn-sm" onclick="grhAbrirHistoricoBeneficios()">📅 Histórico de Benefícios</button>
           <button class="btn btn-p btn-sm" onclick="grhAbrirHolerites()">📤 Upload Automático de Holerites</button>
           <button class="btn btn-p btn-sm" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
         </div>
