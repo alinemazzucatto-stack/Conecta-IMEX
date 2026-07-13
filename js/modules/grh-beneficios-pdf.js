@@ -423,30 +423,20 @@
       total += soma[key];
     });
 
-    console.log('[PDF] Atualizando KPI com total:', total);
-
     var cards = document.querySelectorAll('.rem-kpi2-corpo');
-    console.log('[PDF] Encontrados', cards.length, 'cards');
-
     for(var i=0; i<cards.length; i++){
       var card = cards[i];
       var label = card.querySelector('.rem-kpi2-label');
-      if(label){
-        console.log('[PDF] Label:', label.textContent);
-        if(label.textContent.includes('Custo com Benefícios')){
-          var valor = card.querySelector('.rem-kpi2-valor');
-          console.log('[PDF] Encontrado! Atualizando de', valor.textContent, 'para', fmtBRL(total));
-          if(valor) valor.textContent = fmtBRL(total);
-          break;
-        }
+      if(label && label.textContent.includes('Custo com Benefícios')){
+        var valor = card.querySelector('.rem-kpi2-valor');
+        if(valor) valor.textContent = fmtBRL(total);
+        break;
       }
     }
   }
 
   window.grhBeneficiosPdfAplicar = function(){
-    console.log('[PDF] grhBeneficiosPdfAplicar() foi chamada!');
     var soma = totaisPorCategoria();
-    console.log('[PDF] Soma calculada:', soma);
     var aplicados = 0;
 
     CATEGORIAS.forEach(function(c){
