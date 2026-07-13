@@ -597,6 +597,17 @@
           <div id="rem-comparativo-beneficios-card" class="rem-compare-card">
             <div style="text-align:center;padding:40px;color:var(--ink-60)">⏳ Carregando comparativo de benefícios…</div>
           </div>
+
+          <!-- Campos ocultos para funcionalidade de benefícios -->
+          <div style="display:none">
+            <input type="hidden" id="rem-beneficios-json-imex" value="{}">
+            <input id="rem-beneficio-va" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <input id="rem-beneficio-saude" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <input id="rem-beneficio-colabmais" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <input id="rem-beneficio-sindicato" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <div id="rem-beneficios-total-imex">R$ 0,00</div>
+          </div>
         </div>
 
         <div class="rem-card" style="margin-bottom:18px">
