@@ -444,7 +444,9 @@
   }
 
   window.grhBeneficiosPdfAplicar = function(){
+    console.log('[PDF] grhBeneficiosPdfAplicar() foi chamada!');
     var soma = totaisPorCategoria();
+    console.log('[PDF] Soma calculada:', soma);
     var aplicados = 0;
 
     CATEGORIAS.forEach(function(c){
