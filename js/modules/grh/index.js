@@ -11,18 +11,16 @@
 import { grhState } from './core/state.js';
 import { grhNavigation } from './core/navigation.js';
 
-// Importar panes refatoradas (FASE 2)
+// Importar panes refatoradas (FASE 2 - 9 panes)
 import { colaboradoresPane } from './panes/colaboradores/index.js';
 import { remuneracaoPane } from './panes/remuneracao/index.js';
 import { beneficiosPane } from './panes/beneficios/index.js';
-
-// Placeholders para panes a implementar
-// import { movimentacoesPane } from './panes/movimentacoes/index.js';
-// import { desligamentosPane } from './panes/desligamentos/index.js';
-// import { enderecosPane } from './panes/enderecos/index.js';
-// import { feriasPane } from './panes/ferias/index.js';
-// import { admissaoPane } from './panes/admissao/index.js';
-// import { acessosPane } from './panes/acessos/index.js';
+import { admissaoPane } from './panes/admissao/index.js';
+import { acessosPane } from './panes/acessos/index.js';
+import { movimentacoesPane } from './panes/movimentacoes/index.js';
+import { desligamentosPane } from './panes/desligamentos/index.js';
+import { feriasPane } from './panes/ferias/index.js';
+import { enderecosPane } from './panes/enderecos/index.js';
 
 class GestaoRHModule {
   constructor() {
@@ -39,10 +37,16 @@ class GestaoRHModule {
       // Inicializar navegação
       grhNavigation.init('view-gestao-rh');
 
-      // Registrar panes refatoradas (FASE 2)
+      // Registrar panes refatoradas (FASE 2 - 9 panes)
       grhNavigation.registerPane('colaboradores', colaboradoresPane);
       grhNavigation.registerPane('remuneracao', remuneracaoPane);
       grhNavigation.registerPane('beneficios', beneficiosPane);
+      grhNavigation.registerPane('admissao', admissaoPane);
+      grhNavigation.registerPane('acessos', acessosPane);
+      grhNavigation.registerPane('movimentacoes', movimentacoesPane);
+      grhNavigation.registerPane('desligamentos', desligamentosPane);
+      grhNavigation.registerPane('ferias', feriasPane);
+      grhNavigation.registerPane('enderecos', enderecosPane);
 
       // Obter pane ativa do estado
       const activePane = grhState.getState('activePane') || 'colaboradores';
