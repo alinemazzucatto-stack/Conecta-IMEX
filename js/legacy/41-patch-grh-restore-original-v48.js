@@ -207,10 +207,10 @@
   }
 
   function bindHubCards(scope){
-    (scope || document).querySelectorAll('.imex-rh-card-final,.imex-rh-open-final').forEach(el=>{
+    (scope || document).querySelectorAll('.conecta-rh-rh-card-final,.conecta-rh-rh-open-final').forEach(el=>{
       el.onclick = function(ev){
         if(ev){ ev.preventDefault(); ev.stopPropagation(); if(ev.stopImmediatePropagation) ev.stopImmediatePropagation(); }
-        const root = el.closest('.imex-rh-card-final') || el;
+        const root = el.closest('.conecta-rh-rh-card-final') || el;
         const tab = root.getAttribute('data-rh-tab') || el.getAttribute('data-rh-tab');
         return openModule(tab);
       };
@@ -286,7 +286,7 @@
   window.grhTab = function(tab, btn){ return openModule(tab, btn); };
 
   document.addEventListener('click', function(ev){
-    const el = ev.target && ev.target.closest && ev.target.closest('button,a,.imex-rh-card-final,.imex-rh-open-final');
+    const el = ev.target && ev.target.closest && ev.target.closest('button,a,.conecta-rh-rh-card-final,.conecta-rh-rh-open-final');
     if(!el) return;
     const txt = (el.innerText||el.textContent||'').toLowerCase();
     const on = (el.getAttribute('onclick')||'').toLowerCase();
@@ -306,3 +306,4 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
+

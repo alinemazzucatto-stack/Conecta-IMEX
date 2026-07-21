@@ -101,7 +101,7 @@
         sessionStorage.setItem('userName', usuario.nome);
         sessionStorage.setItem('userEmail', usuario.email);
         sessionStorage.setItem('userDocId', usuario.email);
-        sessionStorage.setItem('imexPreferredRole', usuario.perfil);
+        sessionStorage.setItem('connPreferredRole', usuario.perfil);
         sessionStorage.setItem('__lastLoginTime', Date.now().toString());
 
         localStorage.setItem('usuarioLogado', JSON.stringify(window.currentUserData));
@@ -157,3 +157,4 @@
 
   console.log('[LOGIN-INTERCEPTOR] Sistema de fallback ativo. Use os emails de teste para login.');
 })();
+

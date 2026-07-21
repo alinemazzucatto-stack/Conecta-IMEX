@@ -7,13 +7,13 @@
     const st = document.createElement('style');
     st.id = 'style-rh-cards-inteligentes-v1';
     st.textContent = `
-      .imex-rh-grid-final{
+      .conecta-rh-rh-grid-final{
         display:grid;
         grid-template-columns:repeat(3,minmax(260px,1fr));
         gap:18px;
         margin:24px 0 38px;
       }
-      .imex-rh-card-final{
+      .conecta-rh-rh-card-final{
         background:#fff;
         border:1px solid var(--border,#e2e8f0);
         border-radius:22px;
@@ -31,7 +31,7 @@
         overflow:hidden;
         position:relative;
       }
-      .imex-rh-card-final::after{
+      .conecta-rh-rh-card-final::after{
         content:'';
         position:absolute;
         width:150px;
@@ -42,13 +42,13 @@
         background:rgba(0,71,255,.06);
         transition:.22s ease;
       }
-      .imex-rh-card-final:hover{
+      .conecta-rh-rh-card-final:hover{
         transform:translateY(-4px);
         border-color:#0047FF;
         box-shadow:0 18px 42px rgba(0,71,255,.14);
       }
-      .imex-rh-card-final:hover::after{transform:scale(1.18)}
-      .imex-rh-icon-final{
+      .conecta-rh-rh-card-final:hover::after{transform:scale(1.18)}
+      .conecta-rh-rh-icon-final{
         width:58px;
         height:58px;
         border-radius:18px;
@@ -63,7 +63,7 @@
         position:relative;
         z-index:2;
       }
-      .imex-rh-card-final h3{
+      .conecta-rh-rh-card-final h3{
         font-size:18px;
         line-height:1.2;
         margin:0 0 8px;
@@ -72,7 +72,7 @@
         position:relative;
         z-index:2;
       }
-      .imex-rh-card-final p{
+      .conecta-rh-rh-card-final p{
         font-size:13px;
         line-height:1.45;
         color:var(--ink-60,#4a5568);
@@ -80,7 +80,7 @@
         position:relative;
         z-index:2;
       }
-      .imex-rh-metrics-final{
+      .conecta-rh-rh-metrics-final{
         display:grid;
         grid-template-columns:repeat(3,1fr);
         gap:8px;
@@ -88,14 +88,14 @@
         position:relative;
         z-index:2;
       }
-      .imex-rh-metric-final{
+      .conecta-rh-rh-metric-final{
         background:#f8fbff;
         border:1px solid #dbeafe;
         border-radius:14px;
         padding:10px 9px;
         min-height:62px;
       }
-      .imex-rh-metric-final strong{
+      .conecta-rh-rh-metric-final strong{
         display:block;
         font-size:17px;
         line-height:1.1;
@@ -103,7 +103,7 @@
         font-weight:900;
         margin-bottom:4px;
       }
-      .imex-rh-metric-final span{
+      .conecta-rh-rh-metric-final span{
         display:block;
         font-size:10px;
         line-height:1.25;
@@ -112,7 +112,7 @@
         text-transform:uppercase;
         letter-spacing:.03em;
       }
-      .imex-rh-open-final{
+      .conecta-rh-rh-open-final{
         width:100%;
         border:1.5px solid #c7d7fe;
         background:#fff;
@@ -129,19 +129,19 @@
         z-index:2;
         transition:.2s ease;
       }
-      .imex-rh-card-final:hover .imex-rh-open-final{
+      .conecta-rh-rh-card-final:hover .conecta-rh-rh-open-final{
         background:#0047FF;
         color:#fff;
         border-color:#0047FF;
       }
-      .imex-roadmap-mini-final{
+      .conecta-rh-roadmap-mini-final{
         display:grid;
         gap:8px;
         margin:12px 0 16px;
         position:relative;
         z-index:2;
       }
-      .imex-roadmap-row-final{
+      .conecta-rh-roadmap-row-final{
         display:flex;
         justify-content:space-between;
         align-items:center;
@@ -151,11 +151,11 @@
         border-radius:14px;
         padding:9px 11px;
       }
-      .imex-roadmap-row-final b{
+      .conecta-rh-roadmap-row-final b{
         font-size:12px;
         color:#111827;
       }
-      .imex-roadmap-row-final span{
+      .conecta-rh-roadmap-row-final span{
         font-size:10px;
         font-weight:900;
         color:#0047FF;
@@ -164,14 +164,14 @@
         border-radius:999px;
         white-space:nowrap;
       }
-      .imex-rh-card-final.imex-roadmap-card-final{
+      .conecta-rh-rh-card-final.conecta-rh-roadmap-card-final{
         border-color:rgba(0,71,255,.25);
         background:linear-gradient(135deg,#ffffff,#f8fbff);
       }
-      .imex-rh-card-final.imex-benef-card-final{
+      .conecta-rh-rh-card-final.conecta-rh-benef-card-final{
         border-color:rgba(0,71,255,.22);
       }
-      .imex-rh-legend-final{
+      .conecta-rh-rh-legend-final{
         margin-top:18px;
         background:#eef4ff;
         border:1px solid #c7d7fe;
@@ -181,10 +181,10 @@
         font-size:13px;
         line-height:1.55;
       }
-      @media(max-width:1180px){.imex-rh-grid-final{grid-template-columns:repeat(2,minmax(240px,1fr))}}
+      @media(max-width:1180px){.conecta-rh-rh-grid-final{grid-template-columns:repeat(2,minmax(240px,1fr))}}
       @media(max-width:760px){
-        .imex-rh-grid-final{grid-template-columns:1fr}
-        .imex-rh-metrics-final{grid-template-columns:1fr}
+        .conecta-rh-rh-grid-final{grid-template-columns:1fr}
+        .conecta-rh-rh-metrics-final{grid-template-columns:1fr}
       }
     `;
     document.head.appendChild(st);
@@ -346,11 +346,11 @@
   }
 
   function bindGestaoCards(scope){
-    scope.querySelectorAll('.imex-rh-card-final,.imex-rh-open-final').forEach(el=>{
+    scope.querySelectorAll('.conecta-rh-rh-card-final,.conecta-rh-rh-open-final').forEach(el=>{
       el.onclick = function(ev){
         ev.preventDefault();
         ev.stopPropagation();
-        const root = el.closest('.imex-rh-card-final') || el;
+        const root = el.closest('.conecta-rh-rh-card-final') || el;
         const target = root.getAttribute('data-target') || 'gestao-rh';
         const tab = root.getAttribute('data-rh-tab');
         if(target === 'beneficios'){
@@ -431,3 +431,4 @@
     },300);
   }
 })();
+

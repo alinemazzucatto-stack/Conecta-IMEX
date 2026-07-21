@@ -495,7 +495,7 @@
     heroEl.innerHTML =
       '<div class="tl-hero-wrap" style="min-width:0;width:100%;box-sizing:border-box;position:relative;justify-content:flex-start !important">' +
         '<div style="min-width:0;flex:0 0 auto">' +
-          '<div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#c4b5fd;margin-bottom:4px;white-space:nowrap">Portal Conecta IMEX</div>' +
+          '<div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#c4b5fd;margin-bottom:4px;white-space:nowrap">Portal Conecta RH</div>' +
           '<div class="tl-hero-greeting" style="white-space:nowrap">' + saud + ", " + nomePrimeiro + "! 👋</div>" +
           '<div class="tl-hero-sub" style="white-space:nowrap">' + dataCap + "</div>" +
         "</div>" +

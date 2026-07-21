@@ -44,7 +44,7 @@
     if(!box.querySelector(".tl-login-brand")) {
       var brand = document.createElement("span");
       brand.className = "tl-login-brand";
-      brand.textContent = "Portal Conecta IMEX";
+      brand.textContent = "Portal Conecta RH";
       box.insertBefore(brand, box.firstChild);
     }
 
@@ -66,4 +66,5 @@
   // (removed redundant setInterval that was causing render oscillation)
   setTimeout(buildParticles, 300);
 })();
+
 

@@ -12,7 +12,7 @@ window.__conectaAiV2 = true;
 // function isRH(){ return typeof role!=='undefined' && (role==='rh'||role==='rh-colaborador'); }
 // function isGestor(){ return typeof role!=='undefined' && role==='gestor'; }
 
-// AGORA: Usa as funções globais de 02-legacy.js que também verificam window.__IMEX_STATE
+// AGORA: Usa as funções globais de 02-legacy.js que também verificam window.__CONECTA_RH_STATE
 // if isRH e isGestor não existem globalmente, isto falhará - é proposital
 // para forçar que o desenvolvedor saiba que está usando estado global
 
@@ -251,4 +251,5 @@ function tentarInicializar(){
 // setInterval(tentarInicializar, 700);
 setTimeout(window.conectaAIAtualizarTemas, 200);
 })();
+
 

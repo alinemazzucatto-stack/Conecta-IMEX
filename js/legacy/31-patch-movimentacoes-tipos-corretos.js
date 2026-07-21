@@ -238,3 +238,4 @@
     if(typeof grhRenderMovimentacoes === 'function') grhRenderMovimentacoes();
   }, 600);
 })();
+

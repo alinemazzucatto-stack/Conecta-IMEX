@@ -520,3 +520,4 @@
   // A injeção dos botões é centralizada no injetor único em index.html
   // (id="grh-botoes-injetor"), que os posiciona ao lado de "Importar holerites".
 })();
+

@@ -90,3 +90,4 @@
   // setInterval(aplicar,700);
   document.addEventListener('click',()=>setTimeout(aplicar,60),true);
 })();
+

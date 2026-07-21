@@ -106,7 +106,7 @@ function fmtN(n){return Number(n).toLocaleString('pt-BR');}
 // getEmail() - DESATIVADA - usar window.currentUserData.email ou sessionStorage.getItem('userEmail')
 // isRH() - DESATIVADA - usar isRH() global de 02-legacy.js
 // ANTES:
-// function getEmail(){return(typeof emailUsuario==='function'?emailUsuario():'')||sessionStorage.getItem('imexEmail')||'';}
+// function getEmail(){return(typeof emailUsuario==='function'?emailUsuario():'')||sessionStorage.getItem('connEmail')||'';}
 // function isRH(){return(window.role||'').toLowerCase().includes('rh');}
 
 function getNome(){return(typeof getNomeUsuario==='function'?getNomeUsuario():'')||(document.getElementById('pLabel')||{}).textContent||'';}
@@ -1048,4 +1048,5 @@ if(typeof _orig==='function'){
 },900);*/
 setTimeout(init,1000);
 })();
+
 

@@ -8,3 +8,4 @@
     if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; btn.textContent = '⚠️ Servidor HTTP necessário'; }
   }
 })();
+

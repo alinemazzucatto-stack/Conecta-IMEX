@@ -395,3 +395,4 @@ Antes de fazer commit, verificar:
 ---
 
 ## Aprovação: Colaborador (2026-07-09)
+

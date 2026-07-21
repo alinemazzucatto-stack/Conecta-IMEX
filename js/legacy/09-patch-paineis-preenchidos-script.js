@@ -1,7 +1,7 @@
 // ===== script: patch-paineis-preenchidos-script =====
 (function(){
   // REMOVED: Consolidated in 000-core-functions.js
-  // function roleAtual(){ return (window.role || localStorage.getItem('conecta-imex_role') || '').toLowerCase(); }
+  // function roleAtual(){ return (window.role || localStorage.getItem('conecta-rh_role') || '').toLowerCase(); }
   // REMOVED: Consolidated in 000-core-functions.js
   // function isRH(){ const r=roleAtual(); return r==='rh' || r==='rh-colaborador' || r.includes('rh'); }
   function moveIntranetTop(){
@@ -68,3 +68,4 @@
     window.switchView=function(v){ const r=old.apply(this,arguments); setTimeout(run,60); return r; };
   }
 })();
+

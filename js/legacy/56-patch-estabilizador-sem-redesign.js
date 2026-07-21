@@ -82,3 +82,4 @@
   function stabilize(){ applyMenu(); const active=document.querySelector('[id^="view-"].active'); if(!active) window.switchView('intranet'); }
   document.addEventListener('DOMContentLoaded', function(){ setTimeout(stabilize,50); setTimeout(stabilize,300); setTimeout(stabilize,1000); });
 })();
+

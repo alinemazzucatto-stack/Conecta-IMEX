@@ -170,7 +170,7 @@ window.doLogin = async function(){
       ? colab.perfis.map(function(p){ return String(p).toLowerCase().trim(); }).filter(Boolean)
       : [String(colab.perfil || colab.roleAcesso || 'colaborador').toLowerCase().trim()];
 
-    var preferido = String((window.loginRole) || sessionStorage.getItem('imexPreferredRole') || 'colaborador').toLowerCase().trim();
+    var preferido = String((window.loginRole) || sessionStorage.getItem('connPreferredRole') || 'colaborador').toLowerCase().trim();
     var podeUsar = preferido === 'colaborador' || perfis.indexOf(preferido) !== -1;
     var roleBase = podeUsar ? preferido : (perfis.indexOf('rh') !== -1 ? 'rh' : (perfis.indexOf('gestor') !== -1 ? 'gestor' : 'colaborador'));
 
@@ -215,8 +215,8 @@ window.doLogin = async function(){
     };
     window.currentUnidade = window.currentUserData.unidade;
 
-    try{ sessionStorage.setItem('imexPreferredRole', roleBase); }catch(e){}
-    try{ sessionStorage.setItem('imexRoleReal', window._roleReal); }catch(e){}
+    try{ sessionStorage.setItem('connPreferredRole', roleBase); }catch(e){}
+    try{ sessionStorage.setItem('connRoleReal', window._roleReal); }catch(e){}
     sessionStorage.setItem('userRole', roleBase);
     sessionStorage.setItem('userPerfis', JSON.stringify(perfis));
     sessionStorage.setItem('userName', window.currentUserData.nome);
@@ -283,7 +283,7 @@ window.doLogin = async function(){
     log2('Usuário de teste encontrado: ' + (usuarioTeste ? usuarioTeste.email : 'NÃO'));
     if(usuarioTeste && usuarioTeste.senha === pass){
       log2('Firebase falhou, usando fallback local para ' + email);
-      var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('imexPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
+      var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('connPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
       var perfisDisponiveisFallback = [usuarioTeste.perfil];
       var roleFallback = (preferidoFallback === usuarioTeste.perfil || perfisDisponiveisFallback.indexOf(preferidoFallback) !== -1) ? preferidoFallback : usuarioTeste.perfil;
       window.currentUserData = {
@@ -307,7 +307,7 @@ window.doLogin = async function(){
       sessionStorage.setItem('userName',usuarioTeste.nome);
       sessionStorage.setItem('userEmail',email);
       sessionStorage.setItem('userDocId',email);
-      sessionStorage.setItem('imexPreferredRole',roleBase);
+      sessionStorage.setItem('connPreferredRole',roleBase);
       sessionStorage.setItem('__lastLoginTime',Date.now().toString());
       localStorage.setItem('usuarioLogado',JSON.stringify(window.currentUserData));
 
@@ -423,7 +423,7 @@ setInterval(function(){
 //
 // // Inicializa com o papel salvo na sessão (login direto), não só com
 // // trocas de perfil explícitas — protege também quem nunca usou "Minha Visão".
-// window.__perfilAlvo = (sessionStorage.getItem('imexPreferredRole') || sessionStorage.getItem('userRole') || null);
+// window.__perfilAlvo = (sessionStorage.getItem('connPreferredRole') || sessionStorage.getItem('userRole') || null);
 //
 // var origTrocarPerfil = window.trocarPerfil;
 // window.trocarPerfil = function(){
@@ -440,7 +440,7 @@ setInterval(function(){
 //   if(atual === window.__perfilAlvo) return;
 //   window.role = window.__perfilAlvo;
 //   try{ sessionStorage.setItem('userRole', window.__perfilAlvo); }catch(e){}
-//   try{ sessionStorage.setItem('imexPreferredRole', window.__perfilAlvo); }catch(e){}
+//   try{ sessionStorage.setItem('connPreferredRole', window.__perfilAlvo); }catch(e){}
 //   document.body.classList.remove('role-rh','role-gestor','role-colaborador');
 //   document.body.classList.add('role-' + window.__perfilAlvo);
 //   var pLabel = document.getElementById('pLabel');
@@ -515,4 +515,5 @@ setInterval(function(){
 // setInterval(observarTudo, 1000); // cobre views criadas dinamicamente depois do load inicial
 // setInterval(corrigir, 200);
 // })();
+
 

@@ -1,4 +1,4 @@
-# TEST CHECKLIST - Conecta IMEX/RH
+# TEST CHECKLIST - Conecta RH
 
 ## 📋 Matriz de Testes por Perfil e Módulo
 
@@ -196,3 +196,4 @@
 **Status:** [ ] APROVADO [ ] REPROVADO
 **Observações:** 
 ___________________________________________________________________________
+

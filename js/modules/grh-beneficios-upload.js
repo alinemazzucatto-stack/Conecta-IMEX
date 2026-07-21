@@ -171,3 +171,4 @@
 
   // A injeção do botão é centralizada no injetor único em index.html.
 })();
+

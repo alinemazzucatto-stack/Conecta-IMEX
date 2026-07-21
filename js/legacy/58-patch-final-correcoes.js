@@ -133,3 +133,4 @@
   // REMOVED: Performance optimization - 1500ms setInterval polling
   // setInterval(guardLoop, 1500);
 })();
+
