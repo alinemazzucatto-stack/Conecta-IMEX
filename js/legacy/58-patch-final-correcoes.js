@@ -51,7 +51,7 @@
       + '<div class="sc"><div class="sc-lbl">Evolução</div><div class="sc-num">80%</div><div class="sc-sub">Competências mapeadas</div></div>'
       + '</div>'
       + '<div class="cg">'
-      + '<div class="card"><div class="card-head"><div class="cht"><h2>🏢 Organograma</h2><p>Gestor direto, equipe, departamento e estrutura hierárquica.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Gestor direto</div><div class="ri-meta"><span class="ri-m">Departamento: <strong>Recursos Humanos</strong></span><span class="ri-m">Equipe: <strong>Time IMEX</strong></span></div></div><div class="ri-item"><div class="ri-name">Estrutura hierárquica</div><div class="ri-meta"><span class="ri-m">Nível: <strong>Pleno / Analista</strong></span></div></div></div></div>'
+      + '<div class="card"><div class="card-head"><div class="cht"><h2>🏢 Organograma</h2><p>Gestor direto, equipe, departamento e estrutura hierárquica.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Gestor direto</div><div class="ri-meta"><span class="ri-m">Departamento: <strong>Recursos Humanos</strong></span><span class="ri-m">Equipe: <strong>Time RH</strong></span></div></div><div class="ri-item"><div class="ri-name">Estrutura hierárquica</div><div class="ri-meta"><span class="ri-m">Nível: <strong>Pleno / Analista</strong></span></div></div></div></div>'
       + '<div class="card"><div class="card-head"><div class="cht"><h2>🚀 Trilhas de Carreira</h2><p>Cargo atual, próximo cargo, competências necessárias, cursos recomendados e evolução de carreira.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Competências necessárias</div><div class="ri-meta"><span class="ri-m">Comunicação</span><span class="ri-m">Liderança</span><span class="ri-m">Gestão de processos</span></div></div><div class="ri-item"><div class="ri-name">Cursos recomendados</div><div class="ri-meta"><span class="ri-m">Excel aplicado</span><span class="ri-m">People Analytics</span></div></div><div class="ri-item"><div class="ri-name">Evolução de carreira</div><div class="ri-meta"><span class="ri-m">Status: <strong>80% concluído</strong></span></div></div></div></div>'
       + '</div>';
   }
@@ -133,5 +133,6 @@
   // REMOVED: Performance optimization - 1500ms setInterval polling
   // setInterval(guardLoop, 1500);
 })();
+
 
 

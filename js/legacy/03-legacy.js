@@ -3583,3 +3583,4 @@ function selecaoStats(){
 async function selecaoCarregar(){try{const snap=await db.collection(col('selecao_analises')).orderBy('criadoEm','desc').get();selecaoLista=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){selecaoLista=[];}selecaoRender();selecaoStats();}
 
 
+
