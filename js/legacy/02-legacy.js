@@ -248,7 +248,7 @@ const PDOT = {colaborador:'👤',gestor:'👔',rh:'🏢','rh-colaborador':'🏢'
 
 // ── ESTADO CENTRALIZADO DO USUÁRIO (FONTE ÚNICA DE VERDADE) ──
 // Qualquer mudança aqui é refletida em sessionStorage + window + variáveis locais
-window.__IMEX_STATE = {
+window.__rh_STATE = {
   user: null,           // Objeto de usuário completo
   email: null,          // Email do usuário
   role: 'colaborador',  // Role: colaborador, gestor, rh
@@ -261,8 +261,8 @@ window.__IMEX_STATE = {
 
 // Proxy para manter em sync com sessionStorage
 function setUserState(key, value) {
-  window.__IMEX_STATE[key] = value;
-  sessionStorage.setItem('__IMEX_STATE_' + key, JSON.stringify(value));
+  window.__rh_STATE[key] = value;
+  sessionStorage.setItem('__rh_STATE_' + key, JSON.stringify(value));
   if (key === 'role') sessionStorage.setItem('userRole', String(value));
   if (key === 'email') sessionStorage.setItem('userEmail', String(value));
   if (key === 'roleReal') sessionStorage.setItem('imexRoleReal', String(value));
@@ -270,20 +270,20 @@ function setUserState(key, value) {
 }
 
 function getUserState(key) {
-  const val = window.__IMEX_STATE[key];
-  return val !== undefined ? val : sessionStorage.getItem('__IMEX_STATE_' + key);
+  const val = window.__rh_STATE[key];
+  return val !== undefined ? val : sessionStorage.getItem('__rh_STATE_' + key);
 }
 
 function syncUserState() {
-  // Sincroniza estado do sessionStorage para __IMEX_STATE
+  // Sincroniza estado do sessionStorage para __rh_STATE
   const keys = ['user', 'email', 'role', 'roleReal', 'unidade', 'isAuthenticated'];
   keys.forEach(key => {
-    const stored = sessionStorage.getItem('__IMEX_STATE_' + key);
+    const stored = sessionStorage.getItem('__rh_STATE_' + key);
     if (stored) {
       try {
-        window.__IMEX_STATE[key] = JSON.parse(stored);
+        window.__rh_STATE[key] = JSON.parse(stored);
       } catch(e) {
-        window.__IMEX_STATE[key] = stored;
+        window.__rh_STATE[key] = stored;
       }
     }
   });
@@ -315,8 +315,8 @@ function hasPerfil(perfil) {
 // Consolidada de 3 implementações diferentes (antes havia conflitos)
 // Prioridade: estado centralizado > currentUserData > sessionStorage > fallback
 function getEmail() {
-  if (window.__IMEX_STATE && window.__IMEX_STATE.email) {
-    return window.__IMEX_STATE.email;
+  if (window.__rh_STATE && window.__rh_STATE.email) {
+    return window.__rh_STATE.email;
   }
   if (window.currentUserData && window.currentUserData.email) {
     return window.currentUserData.email;
@@ -803,13 +803,13 @@ async function doLogout() {
   window.role=null; window._roleReal=null; window.currentUserData=null; window.currentUnidade=null;
 
   // Limpar estado centralizado se disponível
-  if (window.__IMEX_STATE) {
-    window.__IMEX_STATE.user = null;
-    window.__IMEX_STATE.email = null;
-    window.__IMEX_STATE.role = 'colaborador';
-    window.__IMEX_STATE.roleReal = null;
-    window.__IMEX_STATE.isAuthenticated = false;
-    window.__IMEX_STATE.sessionStartTime = null;
+  if (window.__rh_STATE) {
+    window.__rh_STATE.user = null;
+    window.__rh_STATE.email = null;
+    window.__rh_STATE.role = 'colaborador';
+    window.__rh_STATE.roleReal = null;
+    window.__rh_STATE.isAuthenticated = false;
+    window.__rh_STATE.sessionStartTime = null;
   }
 
   _cacheReqs=null; _cacheAudit=null; _cacheNotif=null;
@@ -997,8 +997,8 @@ function perfilAtivoSeguro() {
   let r = null;
 
   // 1. Tentar estado centralizado
-  if (window.__IMEX_STATE && window.__IMEX_STATE.role) {
-    r = String(window.__IMEX_STATE.role).toLowerCase().trim();
+  if (window.__rh_STATE && window.__rh_STATE.role) {
+    r = String(window.__rh_STATE.role).toLowerCase().trim();
   }
 
   // 2. Fallback para sessionStorage
@@ -1599,7 +1599,7 @@ async function exportarExcel() {
   
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Férias");
-  XLSX.writeFile(wb, "Conecta IMEX_Relatorio.xlsx");
+  XLSX.writeFile(wb, "Conecta rh_Relatorio.xlsx");
   addNotif('Relatório Excel gerado com sucesso!', 'success');
 }
 
@@ -7320,3 +7320,4 @@ async function adminRemoverUsuario(uid, email) {
     alert('Erro ao remover: ' + e.message);
   }
 }
+

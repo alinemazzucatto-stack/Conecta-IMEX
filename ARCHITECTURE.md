@@ -1,4 +1,4 @@
-# ARCHITECTURE - Conecta IMEX/RH
+# ARCHITECTURE - Conecta RH
 
 ## 🏗️ Visão Geral da Arquitetura
 
@@ -181,7 +181,7 @@ window.forceView = function(viewId) {
 sessionStorage.getItem('userRole')           // 'colaborador' | 'gestor' | 'rh'
 sessionStorage.getItem('userEmail')          // 'user@teste.com'
 sessionStorage.getItem('userPerfis')         // JSON array ['gestor', 'colaborador']
-sessionStorage.getItem('imexPreferredRole')  // Papel selecionado no login
+sessionStorage.getItem('connPreferredRole')  // Papel selecionado no login
 sessionStorage.getItem('userName')           // Nome do usuário
 sessionStorage.getItem('userDocId')          // ID do doc no Firestore
 ```
@@ -295,3 +295,4 @@ window.__loginEmAndamento      // Flag para evitar race conditions
 - **Produção:** Firebase com dados reais
 - **Desenvolvimento:** Fallback sem internet
 - **Robustez:** Sistema funciona mesmo se Firebase cair
+

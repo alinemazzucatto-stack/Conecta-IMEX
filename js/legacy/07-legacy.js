@@ -132,3 +132,4 @@
   document.addEventListener('DOMContentLoaded', ()=>setTimeout(window.aplicarPermissoesIntranetAI, 300));
   setTimeout(window.aplicarPermissoesIntranetAI, 800);
 })();
+

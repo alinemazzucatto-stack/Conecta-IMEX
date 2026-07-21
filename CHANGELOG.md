@@ -1,4 +1,4 @@
-# CHANGELOG - Conecta IMEX/RH
+# CHANGELOG - Conecta RH
 
 ## [2026-07-09] - Auditoria Técnica e Refatoração Crítica
 
@@ -29,7 +29,7 @@
 var roleBase = usuarioTeste.perfil;
 
 // DEPOIS: Verifica loginRole antes de usar perfil padrão
-var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('imexPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
+var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('connPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
 var roleFallback = (preferidoFallback === usuarioTeste.perfil || perfisDisponiveisFallback.indexOf(preferidoFallback) !== -1) ? preferidoFallback : usuarioTeste.perfil;
 ```
 - **Arquivo:** `js/modules/login-auth.js` (linhas 251-253)
@@ -143,3 +143,4 @@ window.irPara = window.forceView;       // Alias
 - Menu incompleto para alguns perfis
 - 30+ timers de polling consumindo CPU
 - 45+ definições de função duplicadas
+

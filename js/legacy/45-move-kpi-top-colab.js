@@ -11,3 +11,4 @@ function move(){
 // REMOVED: Performance optimization - 1000ms setInterval polling
 // setInterval(move,1000);
 })();
+

@@ -36,13 +36,13 @@ var BENEFICIOS = [
    passos:['Consulte os canais de atendimento divulgados pelo RH.','Informe que faz parte do benefício corporativo IMEX.','Escolha o tipo de orientação desejada.','Em caso de dúvida, peça apoio ao RH.'],
    servicos:['Atendimento regular de segunda a sexta','Emergência 24 horas, 7 dias por semana','Orientação jurídica preliminar','Consultoria financeira'],
    dependentes:'Permite até 2 dependentes.',
-   botoes:[['🌐 Site Optum','https://www.optum.com.br/'],['📩 Falar com RH','mailto:rh@imex.com.br?subject=D%C3%BAvida%20sobre%20Optum']]},
+   botoes:[['🌐 Site Optum','https://www.optum.com.br/'],['📩 Falar com RH','mailto:rh@empresa.com?subject=D%C3%BAvida%20sobre%20Optum']]},
   {ico:'🩺', nome:'Unimed', pill:'Plano de saúde',
    desc:'Plano de saúde corporativo, guia médico, coparticipação, carências e dependentes.',
    passos:['Consulte a carteirinha e dados do plano.','Use o guia médico para localizar atendimento.','Acompanhe coparticipação quando houver.','Solicite orientação ao RH para inclusão de dependentes.'],
    servicos:['Plano nacional coparticipativo','Mensalidade do colaborador custeada pela empresa','Dependentes não custeados pela empresa','Carência de obstetrícia: 300 dias'],
    dependentes:'Dependentes podem ser incluídos conforme regra do plano e custo vigente.',
-   botoes:[['🌐 Guia médico Unimed','https://www.unimed.coop.br/'],['📩 Falar com RH','mailto:rh@imex.com.br?subject=D%C3%BAvida%20sobre%20Unimed']]}
+   botoes:[['🌐 Guia médico Unimed','https://www.unimed.coop.br/'],['📩 Falar com RH','mailto:rh@empresa.com?subject=D%C3%BAvida%20sobre%20Unimed']]}
 ];
 
 function buildCard(b){
@@ -170,4 +170,5 @@ document.addEventListener('click', function(ev){
   window.open(link.href, '_blank', 'noopener');
 }, true);
 })();
+
 

@@ -7,7 +7,7 @@
 
 ## 📋 Resumo de Integração
 
-O módulo de auditoria foi completamente integrado ao sistema Conecta IMEX/RH com as seguintes funcionalidades:
+O módulo de auditoria foi completamente integrado ao sistema Conecta RH com as seguintes funcionalidades:
 
 ```
 Localização: js/modules/
@@ -443,4 +443,5 @@ AuditPermissionValidator.validateAllProfiles()
 **Data:** 2026-07-09  
 **Versão:** 1.0  
 **Assinado por:** Aline Mazzucatto
+
 

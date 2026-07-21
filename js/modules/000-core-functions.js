@@ -27,7 +27,7 @@
 
   window.getRoleReal = function() {
     return (window._roleReal ||
-            sessionStorage.getItem('imexRoleReal') ||
+            sessionStorage.getItem('connRoleReal') ||
             window.getRoleOrDefault()).toLowerCase().trim();
   };
 
@@ -170,3 +170,4 @@
   console.log('[CORE-FUNCTIONS] Consolidação central carregada');
 
 })();
+

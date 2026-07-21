@@ -3,7 +3,7 @@
   if(window.__remBeneficiosHelperIMEX) return;
   window.__remBeneficiosHelperIMEX = true;
   function money(v){return (Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
-  window.remCalcCustosBeneficiosIMEX = function(){
+  window.remCalcCustosBeneficiosRH = function(){
     // Campos atualizados a pedido: Vale Alimentação / Plano de Saúde /
     // Plano Odontológico / Colab+ / Cartão Sindicato (antes tinha Vale
     // Refeição, Wellhub e Outros no lugar de Colab+/Sindicato).
@@ -20,3 +20,4 @@
     if(hidden) hidden.value=JSON.stringify(dados);
   };
 })();
+

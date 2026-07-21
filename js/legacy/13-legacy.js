@@ -52,3 +52,4 @@
   setTimeout(aplicarPermissoesPesquisas, 500);
   setTimeout(aplicarPermissoesPesquisas, 1500);
 })();
+

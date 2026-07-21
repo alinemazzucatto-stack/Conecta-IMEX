@@ -316,7 +316,7 @@ Escalação de Violação?
 ## ✅ Status Final
 
 ```
-GOVERNANÇA CONECTA IMEX/RH v1.0
+GOVERNANÇA Conecta RH v1.0
 
 Documentação:        ✅ 4500+ linhas
 Git Hooks:          ✅ Implementados
@@ -351,3 +351,4 @@ Aprovado por: **Aline Mazzucatto**
 Data: **2026-07-09**  
 Status: **✅ EFETIVO IMEDIATAMENTE**  
 Próxima Revisão: **2026-10-09** (3 meses)
+

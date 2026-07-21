@@ -321,3 +321,4 @@ Auditoria: ${window.AuditEngine ? '✅ Ativa' : '❌ Inativa'}
 
   console.log('[AUDIT-REPORT-GENERATOR] Carregado');
 })();
+

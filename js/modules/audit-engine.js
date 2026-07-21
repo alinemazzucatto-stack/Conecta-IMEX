@@ -500,3 +500,4 @@
 
   console.log('[AUDIT] Engine carregado e pronto');
 })();
+

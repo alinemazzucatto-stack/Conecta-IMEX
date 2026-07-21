@@ -1,8 +1,8 @@
 // ===== script: patch-rh-menu-reorganizado-js =====
 (function(){
   'use strict';
-  if(window.__IMEX_RH_MENU_REORGANIZADO__) return;
-  window.__IMEX_RH_MENU_REORGANIZADO__ = true;
+  if(window.__rh_RH_MENU_REORGANIZADO__) return;
+  window.__rh_RH_MENU_REORGANIZADO__ = true;
 
   const RH_ORDER_FINAL = ['gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
   const META_RH_FINAL = {
@@ -108,7 +108,7 @@
     return true;
   }
 
-  window.imexRenderRhMenuFinal = renderRhMenuFinal;
+  window.connRenderRhMenuFinal = renderRhMenuFinal;
 
   const oldBuild = window.buildSidebar;
   window.buildSidebar = function(){
@@ -159,3 +159,4 @@
     setTimeout(renderRhMenuFinal, 500);
   });
 })();
+

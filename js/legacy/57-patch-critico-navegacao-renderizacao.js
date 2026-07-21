@@ -128,3 +128,4 @@
   // DESABILITADO: setInterval estava causando loop de renderização durante login
   // setInterval(guard, 1200);
 })();
+

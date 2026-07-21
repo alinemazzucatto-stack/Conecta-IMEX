@@ -695,7 +695,7 @@ tbody tr:hover td{background:var(--cream)}
 .sb-item#sb-gestao-rh span{filter:none}
 
 
-/* PATCH REAL IMEX — Remuneração: comparativo folha + custos benefícios */
+/* PATCH REAL RH — Remuneração: comparativo folha + custos benefícios */
 .rem-comparativo-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin:0 0 18px}
 .rem-compare-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 8px 22px rgba(16,24,40,.05)}
 .rem-compare-card h3{font-size:15px;font-weight:900;margin:0 0 6px;color:var(--ink)}
@@ -1130,18 +1130,18 @@ tbody tr:hover td{background:var(--cream)}
   .beneficios-colab-note-final{background:#fff;border:1px solid var(--border,#e2e8f0);border-radius:16px;padding:16px 18px;color:var(--ink-60,#4a5568);font-size:13px;line-height:1.6;margin-top:18px}
   @media(max-width:720px){.beneficios-colab-grid-final{grid-template-columns:1fr}.beneficios-hero-final{padding:28px!important}.beneficios-hero-final h1{font-size:30px!important}}
 
-/* ===== style: imex-fase1-oficial-css ===== */
-.beneficios-imex-v5{font-family:Inter,Montserrat,sans-serif;color:#111827;background:radial-gradient(circle at 6% 7%,rgba(0,92,254,.12),transparent 28%),radial-gradient(circle at 92% 9%,rgba(0,208,132,.14),transparent 26%),linear-gradient(135deg,#ffffff 0%,#f3fbf7 48%,#fff8f4 100%);border-radius:26px;padding:28px;min-height:calc(100vh - 120px)}
-  .beneficios-imex-v5 *{box-sizing:border-box}.beneficios-imex-v5 .wrap{max-width:1120px;margin:0 auto;display:grid;gap:22px}
-  .beneficios-imex-v5 .hero-benef{background:linear-gradient(135deg,#fff,#f8fffb 54%,#fff6f1);border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 45px rgba(0,0,0,.10);border-radius:34px;padding:36px;text-align:center;overflow:hidden;position:relative}
-  .beneficios-imex-v5 .kicker{display:inline-flex;gap:8px;align-items:center;border-radius:999px;padding:9px 13px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
-  .beneficios-imex-v5 h1{font-family:Poppins,Inter,Montserrat,sans-serif;font-size:clamp(34px,4.7vw,58px);line-height:1;letter-spacing:-.055em;margin:0;color:#000}.beneficios-imex-v5 .hero-benef p{max-width:820px;margin:16px auto 0;color:#5f6875;line-height:1.72;font-size:16px}
-  .beneficios-imex-v5 .tip-strip{display:flex;justify-content:space-between;gap:18px;background:linear-gradient(135deg,#000,#2b2b2b);color:#fff;border-radius:26px;padding:20px 22px;box-shadow:0 18px 45px rgba(0,0,0,.10);overflow:hidden}.beneficios-imex-v5 .tip-strip strong{color:#77a8ff;font-weight:900;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px}.beneficios-imex-v5 .tip-strip span{color:rgba(255,255,255,.78);font-size:14px;line-height:1.55}
-  .beneficios-imex-v5 .progress-section{background:linear-gradient(135deg,#000,#1f2937);color:#fff;border-radius:28px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.10)}.beneficios-imex-v5 .progress-section h2{font-size:25px;letter-spacing:-.03em;margin:0 0 8px}.beneficios-imex-v5 .progress-section p{color:rgba(255,255,255,.75);margin:0 0 16px;line-height:1.6}.beneficios-imex-v5 .progress-list{display:flex;flex-wrap:wrap;gap:10px}.beneficios-imex-v5 .progress-chip{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-weight:900;font-size:12px;border:1px solid rgba(255,255,255,.12)}.beneficios-imex-v5 .progress-chip.done{background:rgba(0,92,254,.25);color:#fff;border-color:rgba(119,168,255,.45)}
-  .beneficios-imex-v5 .benefits-section,.beneficios-imex-v5 .general-faq,.beneficios-imex-v5 .satisfaction{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.86);border-radius:34px;padding:28px;box-shadow:0 18px 45px rgba(0,0,0,.10);backdrop-filter:blur(14px)}.beneficios-imex-v5 .section-head{text-align:center;max-width:760px;margin:0 auto 24px}.beneficios-imex-v5 .section-head h2,.beneficios-imex-v5 .general-faq h2,.beneficios-imex-v5 .satisfaction h2{font-size:32px;letter-spacing:-.04em;margin:0 0 8px}.beneficios-imex-v5 .section-head p,.beneficios-imex-v5 .general-faq>p,.beneficios-imex-v5 .satisfaction p{margin:0;color:#6b7280;line-height:1.7}.beneficios-imex-v5 .search-row{max-width:640px;margin:0 auto 24px;position:relative}.beneficios-imex-v5 .search-row span{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:#6b7280}.beneficios-imex-v5 .search-row input{width:100%;border:1px solid #e9edf2;background:#fff;border-radius:20px;padding:16px 18px 16px 46px;outline:none;font-weight:800;box-shadow:0 10px 24px rgba(26,26,26,.05)}
-  .beneficios-imex-v5 .benefit-list{display:grid;gap:16px;max-width:940px;margin:0 auto}.beneficios-imex-v5 .benefit-item{background:#fff;border:1px solid #e9edf2;border-radius:30px;box-shadow:0 12px 30px rgba(26,26,26,.06);overflow:hidden;transition:.25s}.beneficios-imex-v5 .benefit-item.active{border-color:rgba(0,92,254,.38);box-shadow:0 24px 58px rgba(0,92,254,.16)}.beneficios-imex-v5 .benefit-toggle{width:100%;border:0;background:#fff;padding:22px;display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center;cursor:pointer;text-align:left}.beneficios-imex-v5 .benefit-icon{width:70px;height:70px;border-radius:26px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#edf4ff,#fff);box-shadow:inset 0 0 0 1px rgba(0,92,254,.12)}.beneficios-imex-v5 .benefit-main h3{font-family:Poppins,Inter,sans-serif;font-size:22px;letter-spacing:-.03em;margin:0 0 6px;color:#000}.beneficios-imex-v5 .benefit-main p{margin:0;color:#6b7280;font-size:14px;line-height:1.55}.beneficios-imex-v5 .benefit-meta{display:flex;align-items:center;gap:12px}.beneficios-imex-v5 .pill{padding:10px 13px;border-radius:999px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;white-space:nowrap}.beneficios-imex-v5 .plus{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:#edf4ff;color:#0047c7;font-size:22px;font-weight:900;transition:.2s}.beneficios-imex-v5 .benefit-item.active .plus{transform:rotate(45deg);background:#005cfe;color:#fff}.beneficios-imex-v5 .detail-panel{display:none;padding:0 22px 24px}.beneficios-imex-v5 .benefit-item.active .detail-panel{display:block;animation:imexOpenPanel .25s ease both}@keyframes imexOpenPanel{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}.beneficios-imex-v5 .detail-shell{background:linear-gradient(135deg,#fff,#fbfffd);border:1px solid #e9edf2;border-radius:26px;padding:22px}.beneficios-imex-v5 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.beneficios-imex-v5 .info-card{background:#fff;border:1px solid #e9edf2;border-radius:24px;padding:21px;box-shadow:0 10px 24px rgba(26,26,26,.05)}.beneficios-imex-v5 .info-card h3{font-size:17px;margin:0 0 12px;display:flex;gap:8px;align-items:center}.beneficios-imex-v5 .info-card p,.beneficios-imex-v5 .info-card li{color:#6b7280;line-height:1.72;font-size:14px}.beneficios-imex-v5 .info-card ul,.beneficios-imex-v5 .info-card ol{margin:0;padding-left:20px}.beneficios-imex-v5 .span-4{grid-column:span 4}.beneficios-imex-v5 .span-5{grid-column:span 5}.beneficios-imex-v5 .span-6{grid-column:span 6}.beneficios-imex-v5 .span-7{grid-column:span 7}.beneficios-imex-v5 .span-8{grid-column:span 8}.beneficios-imex-v5 .span-12{grid-column:span 12}.beneficios-imex-v5 .black-card{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);color:#fff;border:0}.beneficios-imex-v5 .black-card p,.beneficios-imex-v5 .black-card li{color:rgba(255,255,255,.78)}.beneficios-imex-v5 .chips,.beneficios-imex-v5 .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.beneficios-imex-v5 .chip{padding:10px 13px;border-radius:999px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;border:1px solid rgba(0,92,254,.12)}.beneficios-imex-v5 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:0;border-radius:17px;padding:13px 17px;font-size:14px;font-weight:900;cursor:pointer;transition:.2s}.beneficios-imex-v5 .btn:hover{transform:translateY(-2px)}.beneficios-imex-v5 .btn-green{background:linear-gradient(135deg,#005cfe,#28e9a4);color:#fff;box-shadow:0 14px 28px rgba(0,208,132,.18)}.beneficios-imex-v5 .btn-orange{background:linear-gradient(135deg,#005cfe,#ff8b5d);color:#fff;box-shadow:0 14px 28px rgba(255,107,53,.18)}.beneficios-imex-v5 .btn-dark{background:linear-gradient(135deg,#000,#343434);color:#fff;box-shadow:0 14px 28px rgba(26,26,26,.16)}.beneficios-imex-v5 .notice{margin-top:14px;padding:16px;border-radius:22px;background:#edf4ff;border:1px solid rgba(0,92,254,.16);color:#173b7a;line-height:1.6;font-size:14px}.beneficios-imex-v5 .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.beneficios-imex-v5 .mini{padding:16px;border-radius:22px;border:1px solid #e9edf2;background:#fbfdfc}.beneficios-imex-v5 .mini strong{display:block;font-weight:900;margin-bottom:5px}.beneficios-imex-v5 .mini span{color:#6b7280;font-size:13px;line-height:1.5}.beneficios-imex-v5 .accordion{display:grid;gap:10px}.beneficios-imex-v5 .acc-item{background:#fff;border:1px solid #e9edf2;border-radius:21px;overflow:hidden}.beneficios-imex-v5 .acc-btn{width:100%;border:0;background:#fff;padding:18px;display:flex;justify-content:space-between;gap:12px;text-align:left;color:#000;font-weight:900;cursor:pointer}.beneficios-imex-v5 .acc-btn::after{content:'+';width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:#edf4ff;color:#0047c7;flex:0 0 auto;font-size:18px}.beneficios-imex-v5 .acc-item.open .acc-btn::after{content:'–'}.beneficios-imex-v5 .acc-content{display:none;padding:0 18px 18px;color:#6b7280;font-size:14px;line-height:1.7}.beneficios-imex-v5 .acc-item.open .acc-content{display:block}.beneficios-imex-v5 .footer-rh{background:linear-gradient(135deg,#005cfe,#0047c7);border-radius:30px;padding:30px;color:white;box-shadow:0 20px 50px rgba(0,0,0,.12)}.beneficios-imex-v5 .footer-rh h2{text-align:center;font-size:30px;margin:0 0 8px}.beneficios-imex-v5 .footer-rh>p{text-align:center;opacity:.9}.beneficios-imex-v5 .contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px}.beneficios-imex-v5 .contact-card{background:white;color:#1a1a1a;border-radius:22px;padding:20px}.beneficios-imex-v5 .contact-card h3{margin:0 0 6px}.beneficios-imex-v5 .contact-card p{margin:0 0 10px;color:#666}.beneficios-imex-v5 .contact-card a{color:#005cfe;text-decoration:none;font-weight:800}.beneficios-imex-v5 .satisfaction{text-align:center}.beneficios-imex-v5 .satisfaction-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}.beneficios-imex-v5 .empty-state{display:none;text-align:center;padding:22px;border-radius:24px;background:#fff;border:1px dashed #d8e2eb;color:#6b7280;font-weight:800;max-width:920px;margin:0 auto}
-  .imex-equipe-grid{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-top:16px}.imex-equipe-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(16,24,40,.05)}.imex-equipe-card strong{display:block;font-size:24px;margin-bottom:4px;color:#0047FF}.imex-equipe-card span{font-size:12px;color:var(--ink-60)}
-  @media(max-width:920px){.beneficios-imex-v5{padding:18px}.beneficios-imex-v5 .benefit-toggle{grid-template-columns:58px 1fr;gap:14px}.beneficios-imex-v5 .benefit-meta{grid-column:1/-1;justify-content:space-between}.beneficios-imex-v5 .span-4,.beneficios-imex-v5 .span-5,.beneficios-imex-v5 .span-6,.beneficios-imex-v5 .span-7,.beneficios-imex-v5 .span-8{grid-column:span 12}.beneficios-imex-v5 .mini-grid{grid-template-columns:1fr}.imex-equipe-grid{grid-template-columns:1fr}}
+/* ===== style: conecta-rh-fase1-oficial-css ===== */
+.beneficios-rh-v5{font-family:Inter,Montserrat,sans-serif;color:#111827;background:radial-gradient(circle at 6% 7%,rgba(0,92,254,.12),transparent 28%),radial-gradient(circle at 92% 9%,rgba(0,208,132,.14),transparent 26%),linear-gradient(135deg,#ffffff 0%,#f3fbf7 48%,#fff8f4 100%);border-radius:26px;padding:28px;min-height:calc(100vh - 120px)}
+  .beneficios-rh-v5 *{box-sizing:border-box}.beneficios-rh-v5 .wrap{max-width:1120px;margin:0 auto;display:grid;gap:22px}
+  .beneficios-rh-v5 .hero-benef{background:linear-gradient(135deg,#fff,#f8fffb 54%,#fff6f1);border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 45px rgba(0,0,0,.10);border-radius:34px;padding:36px;text-align:center;overflow:hidden;position:relative}
+  .beneficios-rh-v5 .kicker{display:inline-flex;gap:8px;align-items:center;border-radius:999px;padding:9px 13px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+  .beneficios-rh-v5 h1{font-family:Poppins,Inter,Montserrat,sans-serif;font-size:clamp(34px,4.7vw,58px);line-height:1;letter-spacing:-.055em;margin:0;color:#000}.beneficios-rh-v5 .hero-benef p{max-width:820px;margin:16px auto 0;color:#5f6875;line-height:1.72;font-size:16px}
+  .beneficios-rh-v5 .tip-strip{display:flex;justify-content:space-between;gap:18px;background:linear-gradient(135deg,#000,#2b2b2b);color:#fff;border-radius:26px;padding:20px 22px;box-shadow:0 18px 45px rgba(0,0,0,.10);overflow:hidden}.beneficios-rh-v5 .tip-strip strong{color:#77a8ff;font-weight:900;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px}.beneficios-rh-v5 .tip-strip span{color:rgba(255,255,255,.78);font-size:14px;line-height:1.55}
+  .beneficios-rh-v5 .progress-section{background:linear-gradient(135deg,#000,#1f2937);color:#fff;border-radius:28px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.10)}.beneficios-rh-v5 .progress-section h2{font-size:25px;letter-spacing:-.03em;margin:0 0 8px}.beneficios-rh-v5 .progress-section p{color:rgba(255,255,255,.75);margin:0 0 16px;line-height:1.6}.beneficios-rh-v5 .progress-list{display:flex;flex-wrap:wrap;gap:10px}.beneficios-rh-v5 .progress-chip{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-weight:900;font-size:12px;border:1px solid rgba(255,255,255,.12)}.beneficios-rh-v5 .progress-chip.done{background:rgba(0,92,254,.25);color:#fff;border-color:rgba(119,168,255,.45)}
+  .beneficios-rh-v5 .benefits-section,.beneficios-rh-v5 .general-faq,.beneficios-rh-v5 .satisfaction{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.86);border-radius:34px;padding:28px;box-shadow:0 18px 45px rgba(0,0,0,.10);backdrop-filter:blur(14px)}.beneficios-rh-v5 .section-head{text-align:center;max-width:760px;margin:0 auto 24px}.beneficios-rh-v5 .section-head h2,.beneficios-rh-v5 .general-faq h2,.beneficios-rh-v5 .satisfaction h2{font-size:32px;letter-spacing:-.04em;margin:0 0 8px}.beneficios-rh-v5 .section-head p,.beneficios-rh-v5 .general-faq>p,.beneficios-rh-v5 .satisfaction p{margin:0;color:#6b7280;line-height:1.7}.beneficios-rh-v5 .search-row{max-width:640px;margin:0 auto 24px;position:relative}.beneficios-rh-v5 .search-row span{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:#6b7280}.beneficios-rh-v5 .search-row input{width:100%;border:1px solid #e9edf2;background:#fff;border-radius:20px;padding:16px 18px 16px 46px;outline:none;font-weight:800;box-shadow:0 10px 24px rgba(26,26,26,.05)}
+  .beneficios-rh-v5 .benefit-list{display:grid;gap:16px;max-width:940px;margin:0 auto}.beneficios-rh-v5 .benefit-item{background:#fff;border:1px solid #e9edf2;border-radius:30px;box-shadow:0 12px 30px rgba(26,26,26,.06);overflow:hidden;transition:.25s}.beneficios-rh-v5 .benefit-item.active{border-color:rgba(0,92,254,.38);box-shadow:0 24px 58px rgba(0,92,254,.16)}.beneficios-rh-v5 .benefit-toggle{width:100%;border:0;background:#fff;padding:22px;display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center;cursor:pointer;text-align:left}.beneficios-rh-v5 .benefit-icon{width:70px;height:70px;border-radius:26px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#edf4ff,#fff);box-shadow:inset 0 0 0 1px rgba(0,92,254,.12)}.beneficios-rh-v5 .benefit-main h3{font-family:Poppins,Inter,sans-serif;font-size:22px;letter-spacing:-.03em;margin:0 0 6px;color:#000}.beneficios-rh-v5 .benefit-main p{margin:0;color:#6b7280;font-size:14px;line-height:1.55}.beneficios-rh-v5 .benefit-meta{display:flex;align-items:center;gap:12px}.beneficios-rh-v5 .pill{padding:10px 13px;border-radius:999px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;white-space:nowrap}.beneficios-rh-v5 .plus{width:36px;height:36px;border-radius:999px;display:grid;place-items:center;background:#edf4ff;color:#0047c7;font-size:22px;font-weight:900;transition:.2s}.beneficios-rh-v5 .benefit-item.active .plus{transform:rotate(45deg);background:#005cfe;color:#fff}.beneficios-rh-v5 .detail-panel{display:none;padding:0 22px 24px}.beneficios-rh-v5 .benefit-item.active .detail-panel{display:block;animation:imexOpenPanel .25s ease both}@keyframes imexOpenPanel{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}.beneficios-rh-v5 .detail-shell{background:linear-gradient(135deg,#fff,#fbfffd);border:1px solid #e9edf2;border-radius:26px;padding:22px}.beneficios-rh-v5 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.beneficios-rh-v5 .info-card{background:#fff;border:1px solid #e9edf2;border-radius:24px;padding:21px;box-shadow:0 10px 24px rgba(26,26,26,.05)}.beneficios-rh-v5 .info-card h3{font-size:17px;margin:0 0 12px;display:flex;gap:8px;align-items:center}.beneficios-rh-v5 .info-card p,.beneficios-rh-v5 .info-card li{color:#6b7280;line-height:1.72;font-size:14px}.beneficios-rh-v5 .info-card ul,.beneficios-rh-v5 .info-card ol{margin:0;padding-left:20px}.beneficios-rh-v5 .span-4{grid-column:span 4}.beneficios-rh-v5 .span-5{grid-column:span 5}.beneficios-rh-v5 .span-6{grid-column:span 6}.beneficios-rh-v5 .span-7{grid-column:span 7}.beneficios-rh-v5 .span-8{grid-column:span 8}.beneficios-rh-v5 .span-12{grid-column:span 12}.beneficios-rh-v5 .black-card{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);color:#fff;border:0}.beneficios-rh-v5 .black-card p,.beneficios-rh-v5 .black-card li{color:rgba(255,255,255,.78)}.beneficios-rh-v5 .chips,.beneficios-rh-v5 .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.beneficios-rh-v5 .chip{padding:10px 13px;border-radius:999px;background:#edf4ff;color:#0047c7;font-size:12px;font-weight:900;border:1px solid rgba(0,92,254,.12)}.beneficios-rh-v5 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:0;border-radius:17px;padding:13px 17px;font-size:14px;font-weight:900;cursor:pointer;transition:.2s}.beneficios-rh-v5 .btn:hover{transform:translateY(-2px)}.beneficios-rh-v5 .btn-green{background:linear-gradient(135deg,#005cfe,#28e9a4);color:#fff;box-shadow:0 14px 28px rgba(0,208,132,.18)}.beneficios-rh-v5 .btn-orange{background:linear-gradient(135deg,#005cfe,#ff8b5d);color:#fff;box-shadow:0 14px 28px rgba(255,107,53,.18)}.beneficios-rh-v5 .btn-dark{background:linear-gradient(135deg,#000,#343434);color:#fff;box-shadow:0 14px 28px rgba(26,26,26,.16)}.beneficios-rh-v5 .notice{margin-top:14px;padding:16px;border-radius:22px;background:#edf4ff;border:1px solid rgba(0,92,254,.16);color:#173b7a;line-height:1.6;font-size:14px}.beneficios-rh-v5 .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.beneficios-rh-v5 .mini{padding:16px;border-radius:22px;border:1px solid #e9edf2;background:#fbfdfc}.beneficios-rh-v5 .mini strong{display:block;font-weight:900;margin-bottom:5px}.beneficios-rh-v5 .mini span{color:#6b7280;font-size:13px;line-height:1.5}.beneficios-rh-v5 .accordion{display:grid;gap:10px}.beneficios-rh-v5 .acc-item{background:#fff;border:1px solid #e9edf2;border-radius:21px;overflow:hidden}.beneficios-rh-v5 .acc-btn{width:100%;border:0;background:#fff;padding:18px;display:flex;justify-content:space-between;gap:12px;text-align:left;color:#000;font-weight:900;cursor:pointer}.beneficios-rh-v5 .acc-btn::after{content:'+';width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:#edf4ff;color:#0047c7;flex:0 0 auto;font-size:18px}.beneficios-rh-v5 .acc-item.open .acc-btn::after{content:'–'}.beneficios-rh-v5 .acc-content{display:none;padding:0 18px 18px;color:#6b7280;font-size:14px;line-height:1.7}.beneficios-rh-v5 .acc-item.open .acc-content{display:block}.beneficios-rh-v5 .footer-rh{background:linear-gradient(135deg,#005cfe,#0047c7);border-radius:30px;padding:30px;color:white;box-shadow:0 20px 50px rgba(0,0,0,.12)}.beneficios-rh-v5 .footer-rh h2{text-align:center;font-size:30px;margin:0 0 8px}.beneficios-rh-v5 .footer-rh>p{text-align:center;opacity:.9}.beneficios-rh-v5 .contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:22px}.beneficios-rh-v5 .contact-card{background:white;color:#1a1a1a;border-radius:22px;padding:20px}.beneficios-rh-v5 .contact-card h3{margin:0 0 6px}.beneficios-rh-v5 .contact-card p{margin:0 0 10px;color:#666}.beneficios-rh-v5 .contact-card a{color:#005cfe;text-decoration:none;font-weight:800}.beneficios-rh-v5 .satisfaction{text-align:center}.beneficios-rh-v5 .satisfaction-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}.beneficios-rh-v5 .empty-state{display:none;text-align:center;padding:22px;border-radius:24px;background:#fff;border:1px dashed #d8e2eb;color:#6b7280;font-weight:800;max-width:920px;margin:0 auto}
+  .rh-equipe-grid{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-top:16px}.rh-equipe-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 8px 20px rgba(16,24,40,.05)}.rh-equipe-card strong{display:block;font-size:24px;margin-bottom:4px;color:#0047FF}.rh-equipe-card span{font-size:12px;color:var(--ink-60)}
+  @media(max-width:920px){.beneficios-rh-v5{padding:18px}.beneficios-rh-v5 .benefit-toggle{grid-template-columns:58px 1fr;gap:14px}.beneficios-rh-v5 .benefit-meta{grid-column:1/-1;justify-content:space-between}.beneficios-rh-v5 .span-4,.beneficios-rh-v5 .span-5,.beneficios-rh-v5 .span-6,.beneficios-rh-v5 .span-7,.beneficios-rh-v5 .span-8{grid-column:span 12}.beneficios-rh-v5 .mini-grid{grid-template-columns:1fr}.rh-equipe-grid{grid-template-columns:1fr}}
 
 /* ===== style: enderecos-premium-v2-css ===== */
 .end-premium-stats{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:14px;margin:0 0 22px}
@@ -1748,7 +1748,7 @@ body.role-rh #sb-pesquisas,
   @media(max-width:1100px){.trilha-current-card{grid-template-columns:1fr}.trilha-next-grid,.trilha-detail-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:720px){.trilha-next-grid,.trilha-detail-grid,.trilha-current-metrics{grid-template-columns:1fr}.trilha-current-title{font-size:24px}.trilha-detail-head{flex-direction:column}}
 
-/* ===== style: imex-hero-compacto-final ===== */
+/* ===== style: conecta-rh-hero-compacto-final ===== */
 /* Redução definitiva da caixa roxa dos módulos */
   .hero,
   .module-hero,
@@ -1883,25 +1883,25 @@ body.role-rh #sb-pesquisas,
     }
   }
 
-/* ===== style: imex-v84-colab-remu-style ===== */
+/* ===== style: conecta-rh-v84-colab-remu-style ===== */
 /* Remuneração agora é dashboard, sem tabela/cadastro de colaboradores */
   #imex-remuneracao-dashboard-v84{
     margin-top:16px;
   }
-  .imex-remu-v84-kpis{
+  .rh-remu-v84-kpis{
     display:grid;
     grid-template-columns:repeat(6,minmax(140px,1fr));
     gap:12px;
     margin-bottom:16px;
   }
-  .imex-remu-v84-kpi{
+  .rh-remu-v84-kpi{
     background:#fff;
     border:1px solid var(--border);
     border-radius:16px;
     padding:15px;
     box-shadow:0 8px 20px rgba(16,24,40,.05);
   }
-  .imex-remu-v84-kpi small{
+  .rh-remu-v84-kpi small{
     display:block;
     font-size:10px;
     text-transform:uppercase;
@@ -1910,22 +1910,22 @@ body.role-rh #sb-pesquisas,
     color:var(--ink-30);
     margin-bottom:7px;
   }
-  .imex-remu-v84-kpi strong{
+  .rh-remu-v84-kpi strong{
     display:block;
     font-size:21px;
     line-height:1.15;
     color:var(--ink);
   }
-  .imex-remu-v84-kpi span{
+  .rh-remu-v84-kpi span{
     font-size:11px;
     color:var(--ink-60);
   }
-  .imex-remu-v84-grid{
+  .rh-remu-v84-grid{
     display:grid;
     grid-template-columns:1.2fr .8fr;
     gap:16px;
   }
-  .imex-remu-v84-panel{
+  .rh-remu-v84-panel{
     background:#fff;
     border:1px solid var(--border);
     border-radius:16px;
@@ -1933,56 +1933,56 @@ body.role-rh #sb-pesquisas,
     box-shadow:0 8px 20px rgba(16,24,40,.04);
     margin-bottom:16px;
   }
-  .imex-remu-v84-panel h3{
+  .rh-remu-v84-panel h3{
     margin:0 0 12px;
     font-size:15px;
     font-weight:800;
     color:var(--ink);
   }
-  .imex-remu-v84-bars{
+  .rh-remu-v84-bars{
     display:flex;
     align-items:flex-end;
     gap:22px;
     height:155px;
     padding:8px 8px 0;
   }
-  .imex-remu-v84-barbox{
+  .rh-remu-v84-barbox{
     flex:1;
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:8px;
   }
-  .imex-remu-v84-bar{
+  .rh-remu-v84-bar{
     width:80%;
     max-width:92px;
     min-height:18px;
     border-radius:12px 12px 4px 4px;
     background:linear-gradient(180deg,#0047FF,#0B1F5B);
   }
-  .imex-remu-v84-bar.prev{
+  .rh-remu-v84-bar.prev{
     opacity:.42;
   }
-  .imex-remu-v84-label{
+  .rh-remu-v84-label{
     text-align:center;
     font-size:11px;
     color:var(--ink-60);
     font-weight:700;
   }
-  .imex-remu-v84-table{
+  .rh-remu-v84-table{
     width:100%;
     border-collapse:collapse;
   }
-  .imex-remu-v84-table td{
+  .rh-remu-v84-table td{
     padding:9px 4px;
     border-bottom:1px solid var(--border);
     font-size:13px;
   }
-  .imex-remu-v84-table td:last-child{
+  .rh-remu-v84-table td:last-child{
     text-align:right;
     font-weight:800;
   }
-  .imex-remu-v84-note{
+  .rh-remu-v84-note{
     background:#f8fafc;
     border:1px dashed var(--border);
     border-radius:14px;
@@ -1994,12 +1994,12 @@ body.role-rh #sb-pesquisas,
   }
 
   /* Esconder blocos antigos de Remuneração com tabela de colaboradores */
-  .imex-remu-antigo-oculto{
+  .rh-remu-antigo-oculto{
     display:none!important;
   }
 
   /* Formulário mestre de Colaboradores */
-  .imex-colab-master-box{
+  .rh-colab-master-box{
     background:#fff;
     border:1px solid var(--border);
     border-radius:16px;
@@ -2007,21 +2007,21 @@ body.role-rh #sb-pesquisas,
     margin:16px 0;
     box-shadow:0 8px 20px rgba(16,24,40,.04);
   }
-  .imex-colab-master-box h3{
+  .rh-colab-master-box h3{
     margin:0 0 12px;
     color:var(--pur);
     font-size:16px;
     font-weight:900;
   }
-  .imex-colab-master-grid{
+  .rh-colab-master-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:12px;
   }
-  .imex-colab-master-grid .field.full{
+  .rh-colab-master-grid .field.full{
     grid-column:1/-1;
   }
-  .imex-colab-subtitle{
+  .rh-colab-subtitle{
     grid-column:1/-1;
     margin:10px 0 0;
     font-size:12px;
@@ -2032,7 +2032,7 @@ body.role-rh #sb-pesquisas,
     border-top:1px solid var(--border);
     padding-top:14px;
   }
-  .imex-colab-history{
+  .rh-colab-history{
     margin-top:12px;
     max-height:160px;
     overflow:auto;
@@ -2041,23 +2041,23 @@ body.role-rh #sb-pesquisas,
     padding:10px;
     background:#f8fafc;
   }
-  .imex-colab-history div{
+  .rh-colab-history div{
     font-size:12px;
     color:var(--ink-60);
     padding:5px 0;
     border-bottom:1px solid #e5e7eb;
   }
-  .imex-colab-history div:last-child{
+  .rh-colab-history div:last-child{
     border-bottom:none;
   }
 
   @media(max-width:1100px){
-    .imex-remu-v84-kpis{grid-template-columns:repeat(3,1fr)}
-    .imex-remu-v84-grid{grid-template-columns:1fr}
-    .imex-colab-master-grid{grid-template-columns:repeat(2,1fr)}
+    .rh-remu-v84-kpis{grid-template-columns:repeat(3,1fr)}
+    .rh-remu-v84-grid{grid-template-columns:1fr}
+    .rh-colab-master-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media(max-width:700px){
-    .imex-remu-v84-kpis,.imex-colab-master-grid{grid-template-columns:1fr}
+    .rh-remu-v84-kpis,.rh-colab-master-grid{grid-template-columns:1fr}
   }
 
 /* ===== style: patch-docs-hero-compacto-css ===== */
@@ -3564,4 +3564,5 @@ body.docs-rh-open #view-gestao-rh{padding-top:0!important}
 .ap-radio:hover input[type="radio"]{border-color:var(--pur)}
 .ap-radio input[type="radio"]:checked{border-color:var(--pur);background:var(--pur);box-shadow:0 0 0 4px rgba(0,71,255,.12)}
 .ap-radio input[type="radio"]:checked::after{content:'';position:absolute;inset:4px;border-radius:50%;background:#fff}
+
 

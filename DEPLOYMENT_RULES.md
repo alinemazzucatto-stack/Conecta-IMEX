@@ -2,7 +2,7 @@
 
 ## 🔐 Princípios de Proteção do Sistema
 
-O sistema Conecta IMEX/RH passou por refatoração crítica (2026-07-09) para resolver oscilações, bugs de autenticação e performance. Este documento establece regras para EVITAR que os mesmos erros retornem.
+O sistema Conecta RH passou por refatoração crítica (2026-07-09) para resolver oscilações, bugs de autenticação e performance. Este documento establece regras para EVITAR que os mesmos erros retornem.
 
 ---
 
@@ -340,7 +340,7 @@ Regra: Nenhuma (liberdade total)
 
 ### Ambiente Test (Staging)
 ```
-URL: https://test.conecta-imex.com.br
+URL: https://test.conecta-rh.com.br
 Firebase: test-project (dados de teste)
 Usuários: QA + Product Owner
 
@@ -356,7 +356,7 @@ Aprovação: Apenas QA
 
 ### Ambiente Produção
 ```
-URL: https://conecta-imex.com.br
+URL: https://conecta-rh.com.br
 Firebase: prod-project (dados reais)
 Usuários: Todos os colaboradores (500+)
 
@@ -498,3 +498,4 @@ Ao fazer deploy, você concorda que:
 
 Assinado: _______________________ Data: ___/___/_____
 ```
+

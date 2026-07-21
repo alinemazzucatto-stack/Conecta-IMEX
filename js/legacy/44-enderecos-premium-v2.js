@@ -446,3 +446,4 @@
     /* REMOVED: Performance optimization */ /* setInterval(aplicar,1500); */
   }
 })();
+

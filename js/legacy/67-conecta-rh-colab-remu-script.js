@@ -1,10 +1,10 @@
 // ===== script: imex-v84-colab-remu-script =====
 (function(){
-  if(window.__IMEX_V84_COLAB_REMU__) return;
-  window.__IMEX_V84_COLAB_REMU__ = true;
+  if(window.__rh_V84_COLAB_REMU__) return;
+  window.__rh_V84_COLAB_REMU__ = true;
 
-  const STORAGE_KEY = 'imex_colaboradores_base_v84';
-  const HIST_KEY = 'imex_colaboradores_historico_v84';
+  const STORAGE_KEY = 'rh_colaboradores_base_v84';
+  const HIST_KEY = 'rh_colaboradores_historico_v84';
 
   function money(v){
     return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
@@ -108,7 +108,7 @@
       if(typeof grhAtualizarTudoIntegrado === 'function') await grhAtualizarTudoIntegrado();
 
       const atualizado = await ref.get();
-      document.dispatchEvent(new CustomEvent('imex:colaboradoresAtualizados',{}));
+      document.dispatchEvent(new CustomEvent('conecta:colaboradoresAtualizados',{}));
       return normalizeColab({ _id:id, ...atualizado.data() });
     }catch(e){
       console.error('Erro ao atualizar cadastro mestre:', e);
@@ -124,7 +124,7 @@
     const pj = ativos.filter(c => c.tipoContrato === 'PJ');
     const est = ativos.filter(c => /estag/i.test(c.tipoContrato||''));
     const folhaAtual = ativos.reduce((s,c)=>s+Number(c.salarioAtual||0),0);
-    const folhaAnterior = Number(localStorage.getItem('imex_folha_anterior_v84') || Math.round(folhaAtual*0.94));
+    const folhaAnterior = Number(localStorage.getItem('rh_folha_anterior_v84') || Math.round(folhaAtual*0.94));
     const beneficios = ativos.reduce((s,c)=>{
       const b = c.beneficios || {};
       return s + Object.values(b).reduce((a,v)=>a+Number(v||0),0);
@@ -138,9 +138,9 @@
     };
   }
 
-  window.imexColaboradores = {
+  window.connColaboradores = {
     listar: getBase,
-    salvar: async function(){ console.warn('imexColaboradores.salvar foi desativado nesta versão — edite cada colaborador individualmente (Cadastro Mestre ou Gestão RH → Colaboradores) para manter o histórico de Movimentações correto.'); },
+    salvar: async function(){ console.warn('connColaboradores.salvar foi desativado nesta versão — edite cada colaborador individualmente (Cadastro Mestre ou Gestão RH → Colaboradores) para manter o histórico de Movimentações correto.'); },
     atualizar: atualizarColaborador,
     totais,
     historico: async function(nomeFiltro){
@@ -251,7 +251,7 @@
     let target = null;
 
     const panes = Array.from(scope.querySelectorAll('[id*="remuneracao" i],[id*="remun" i],[data-pane*="remun" i],[data-module*="remun" i]'));
-    target = panes.find(el => !el.closest('#imex-remuneracao-dashboard-v84'));
+    target = panes.find(el => !el.closest('#conecta-rh-remuneracao-dashboard-v84'));
 
     if(!target){
       const cards = Array.from(scope.querySelectorAll('.card,section,div')).filter(el => /remunera/i.test(el.textContent||''));
@@ -267,7 +267,7 @@
     colab = colab || (await getBase())[0] || {};
     const b = colab.beneficios || {};
     const f = colab.ferias || {};
-    const hist = (await window.imexColaboradores.historico(colab.nome)).slice(0,8);
+    const hist = (await window.connColaboradores.historico(colab.nome)).slice(0,8);
     const statusReal = colab.status === 'Inativo' ? 'Desligado' : (colab.status || 'Ativo');
 
     return `
@@ -319,7 +319,7 @@
           <div class="field"><label>Status férias</label><input id="imex-colab-ferias-status" value="${f.status||''}"></div>
 
           <div class="field full">
-            <button class="btn btn-p" type="button" onclick="imexSalvarCadastroMestreColaborador('${colab.id}')">Salvar cadastro mestre</button>
+            <button class="btn btn-p" type="button" onclick="connSalvarCadastroMestreColaborador('${colab.id}')">Salvar cadastro mestre</button>
           </div>
         </div>
 
@@ -329,7 +329,7 @@
       </div>`;
   }
 
-  window.imexSalvarCadastroMestreColaborador = async function(id){
+  window.connSalvarCadastroMestreColaborador = async function(id){
     const statusForm = val('imex-colab-status');
     const dados = {
       nome: val('imex-colab-nome'),
@@ -411,7 +411,7 @@
     }
   }, true);
 
-  document.addEventListener('imex:colaboradoresAtualizados', function(){
+  document.addEventListener('conecta:colaboradoresAtualizados', function(){
     const old = document.getElementById('imex-remuneracao-dashboard-v84');
     if(old) old.remove();
     setTimeout(garantirDashboardRemuneracao,80);
@@ -436,3 +436,4 @@
     setTimeout(()=>{ocultarTabelaRemuneracaoAntiga(); garantirCamposColaboradores();},500);
   });
 })();
+

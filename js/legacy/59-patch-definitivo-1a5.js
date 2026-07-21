@@ -121,3 +121,4 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
   [150,500,1200,2500].forEach(t=>setTimeout(boot,t));
 })();
+

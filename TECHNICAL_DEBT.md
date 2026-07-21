@@ -169,3 +169,4 @@ Este documento estabelece **prioridades claras** entre:
 Aprovado por: **Aline Mazzucatto**  
 Data: **2026-07-09**  
 Status: **EFETIVO IMEDIATAMENTE**
+

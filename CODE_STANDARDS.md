@@ -395,3 +395,4 @@ Antes de fazer commit, verificar:
 ---
 
 ## Aprovação: Aline Mazzucatto (2026-07-09)
+

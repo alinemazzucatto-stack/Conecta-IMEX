@@ -58,3 +58,4 @@
     setTimeout(garantirItemSidebar, 1800);
   });
 })();
+
