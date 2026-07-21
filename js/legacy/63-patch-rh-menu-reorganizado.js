@@ -64,7 +64,7 @@
     if(!logo){
       logo = document.createElement('div');
       logo.className = 'sb-logo';
-      logo.textContent = 'IMEX';
+      logo.textContent = 'Conecta RH';
     }
 
     const frag = document.createDocumentFragment();
@@ -159,5 +159,7 @@
     setTimeout(renderRhMenuFinal, 500);
   });
 })();
+
+
 
 
