@@ -39,3 +39,4 @@
   window.connCompactarHeroes = compactarHeroes;
 })();
 
+

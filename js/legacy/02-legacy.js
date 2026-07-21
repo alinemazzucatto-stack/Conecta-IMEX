@@ -5285,8 +5285,8 @@ function grhBaixarModeloHolerites() {
   if (typeof XLSX === 'undefined') { alert('Biblioteca XLSX não carregada.'); return; }
   const ws = XLSX.utils.aoa_to_sheet([
     ['E-mail do Colaborador', 'Mês (AAAA-MM)', 'Remuneração Bruta', 'Remuneração Líquida', 'Desconto INSS', 'Desconto IRRF', 'Desconto Plano de Saúde', 'Desconto Odontológico', 'Desconto Farmácia', 'Outros Descontos', 'Provisão 13º', 'Provisão Férias'],
-    ['maria.silva@imex.com.br', '2026-05', 4500.00, 3700.00, 495.00, 120.00, 350.00, 40.00, 0, 0, 375.00, 416.67],
-    ['joao.costa@imex.com.br',  '2026-05', 2800.00, 2450.00, 280.00, 0,      0, 0, 0, 0, 233.33, 259.26],
+    ['maria.silva@empresa.com', '2026-05', 4500.00, 3700.00, 495.00, 120.00, 350.00, 40.00, 0, 0, 375.00, 416.67],
+    ['joao.costa@empresa.com',  '2026-05', 2800.00, 2450.00, 280.00, 0,      0, 0, 0, 0, 233.33, 259.26],
   ]);
   ws['!cols'] = [{wch:30},{wch:16},{wch:18},{wch:20},{wch:14},{wch:14},{wch:18},{wch:16},{wch:14},{wch:16},{wch:14},{wch:16}];
   const wb = XLSX.utils.book_new();
@@ -7125,5 +7125,6 @@ async function adminRemoverUsuario(uid, email) {
     alert('Erro ao remover: ' + e.message);
   }
 }
+
 
 

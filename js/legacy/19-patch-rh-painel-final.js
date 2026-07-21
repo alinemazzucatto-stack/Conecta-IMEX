@@ -82,3 +82,4 @@
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(aplicarMenu,200); setTimeout(()=>{if(roleAtual()==='rh') patchGestaoRHTabs();},900);});
 })();
 
+

@@ -29,3 +29,4 @@
   window.ajustarPesquisasPorPerfil = ajustarPesquisasPorPerfil;
 })();
 
+

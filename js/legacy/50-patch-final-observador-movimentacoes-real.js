@@ -91,3 +91,4 @@
   document.addEventListener('click',()=>setTimeout(aplicar,60),true);
 })();
 
+

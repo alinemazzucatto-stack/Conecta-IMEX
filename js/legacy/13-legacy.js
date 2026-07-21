@@ -53,3 +53,4 @@
   setTimeout(aplicarPermissoesPesquisas, 1500);
 })();
 
+
