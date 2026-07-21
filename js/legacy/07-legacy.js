@@ -133,3 +133,4 @@
   setTimeout(window.aplicarPermissoesIntranetAI, 800);
 })();
 
+

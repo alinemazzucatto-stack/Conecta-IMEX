@@ -251,3 +251,4 @@ window.trilhaMudarSetor = function(setor){
 
 })();
 
+
