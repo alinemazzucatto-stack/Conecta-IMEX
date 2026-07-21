@@ -164,6 +164,42 @@
   window.irPara = function(viewId) { window.forceView(viewId); };
 
   // ──────────────────────────────────────────────────────────────────────────────
+  // Tab switching for GRH module - Integra com grhModule ES6
+  // ──────────────────────────────────────────────────────────────────────────────
+
+  window.grhTab = function(tabName, btnElement) {
+    try {
+      // Remover classe 'active' de todos os tabs
+      var tabs = document.querySelectorAll('#grh-tabs .tab');
+      tabs.forEach(function(tab) { tab.classList.remove('active'); });
+
+      // Adicionar classe 'active' ao botão clicado
+      if (btnElement) btnElement.classList.add('active');
+
+      // Salvar em sessionStorage para restaurar depois
+      try { sessionStorage.setItem('grhUltimaAba', tabName); } catch(e) {}
+
+      console.log('[grhTab] Abrindo módulo:', tabName);
+
+      // ✅ Chamar grhModule.goToPane() com tabName correto
+      if (typeof window.grhModule !== 'undefined' && typeof window.grhModule.goToPane === 'function') {
+        console.log('[grhTab] Navegando para pane:', tabName);
+        window.grhModule.goToPane(tabName);
+      } else if (typeof window.grhState !== 'undefined' && typeof window.grhState.setState === 'function') {
+        console.log('[grhTab] Usando grhState.setState()');
+        window.grhState.setState('activePane', tabName);
+      } else {
+        console.warn('[grhTab] grhModule/grhState não disponíveis, fallback sbNav');
+        if (typeof window.sbNav === 'function') {
+          window.sbNav('gestao-rh');
+        }
+      }
+    } catch(e) {
+      console.error('[grhTab] Erro:', e.message);
+    }
+  };
+
+  // ──────────────────────────────────────────────────────────────────────────────
   // 5. INICIALIZAÇÃO
   // ──────────────────────────────────────────────────────────────────────────────
 
