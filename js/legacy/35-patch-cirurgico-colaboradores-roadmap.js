@@ -4,7 +4,7 @@
       {nome:'ABIMAEL DA CRUZ MENDES',matricula:'--',email:'abimael.mendes@imex.com.br',clt:'Não',nascimento:'1997-05-13',admissao:'2024-07-08',funcao:'Programador',setor:'Prog. PDV',salario:null,status:'Ativo'},
       {nome:'ABRANH AM JOÃO RESQUE VELOSO NETO',matricula:'231',email:'neto.veloso@imex.com.br',clt:'Sim',nascimento:'1993-09-22',admissao:'2023-11-27',funcao:'Analista de suporte',setor:'Suporte',salario:2985.21,status:'Ativo'},
       {nome:'ADAN LUCAS PEREIRA DE OLIVEIRA',matricula:'194',email:'adan.oliveira@imex.com.br',clt:'Sim',nascimento:'1992-10-18',admissao:'2021-08-22',funcao:'Programador',setor:'Prog. PDV',salario:3980.02,status:'Ativo'},
-      {nome:'ALINE DE LIMA MAZZUCATTO',matricula:'203',email:'aline.mazzucatto@imex.com.br',clt:'Sim',nascimento:'1990-08-17',admissao:'2021-11-25',funcao:'Analista de RH',setor:'Recursos Humanos',salario:2582.63,status:'Ativo'},
+      {nome:'ALINE DE LIMA MAZZUCATTO',matricula:'203',email:'aline.mazzucatto@empresa.com',clt:'Sim',nascimento:'1990-08-17',admissao:'2021-11-25',funcao:'Analista de RH',setor:'Recursos Humanos',salario:2582.63,status:'Ativo'},
       {nome:'BRUNO CESAR CASADO VILA VERDE',matricula:'--',email:'bruno.casado@imex.com.br',clt:'Não',nascimento:'1982-12-14',admissao:'2025-10-01',funcao:'Executivo de canais',setor:'Comercial',salario:null,status:'Ativo'},
       {nome:'BRUNO DE OLIVEIRA',matricula:'231',email:'bruno.oliveira@imex.com.br',clt:'Sim',nascimento:'1988-09-18',admissao:'2016-08-17',funcao:'Programador',setor:'Prog. Financeiro',salario:4266.19,status:'Ativo'},
       {nome:'BRUNO DE PAULA SILVA',matricula:'194',email:'bruno.silva@imex.com.br',clt:'Sim',nascimento:'1996-10-31',admissao:'2024-04-26',funcao:'Analista de suporte',setor:'Suporte',salario:2717.47,status:'Ativo'},
@@ -281,4 +281,5 @@
     setTimeout(inserirBotaoVoltarRoadmap, 800);
   });
 })();
+
 
