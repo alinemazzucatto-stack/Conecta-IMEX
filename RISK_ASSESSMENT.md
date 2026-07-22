@@ -430,3 +430,4 @@ Impacto: BAIXO (risco extremo mas improvável)
 3. **Escalabilidade:** Com 1000+ colaboradores, sistema pode ficar lento. Planejamento de performance agora economiza refactor depois.
 
 4. **Segurança:** Validar papéis em AMBOS frontend (UX) e backend (Firebase Rules) - nunca confiar só no frontend.
+

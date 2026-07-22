@@ -133,3 +133,6 @@
   window.addEventListener('load', function(){ setTimeout(start,500); });
   window._corrigirTelasBrancasV3 = function(id){ return id==='beneficios-rh' ? renderGestaoRHBeneficiosDireto() : (id ? navegar(id) : renderBeneficiosDireto()); };
 })();
+
+
+

@@ -36,5 +36,8 @@
     window.sbNav = wrapped;
   }
 
-  window.imexCompactarHeroes = compactarHeroes;
+  window.connCompactarHeroes = compactarHeroes;
 })();
+
+
+

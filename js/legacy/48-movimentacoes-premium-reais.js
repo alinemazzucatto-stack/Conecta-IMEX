@@ -164,3 +164,6 @@
   document.addEventListener('click',e=>{const el=e.target&&e.target.closest&&e.target.closest('button,a,div'); if(!el)return; const txt=(el.innerText||'').toLowerCase(); const attrs=((el.getAttribute('onclick')||'')+' '+(el.getAttribute('data-rh-tab')||'')+' '+(el.getAttribute('data-target')||'')).toLowerCase(); if(txt.includes('moviment')||attrs.includes('moviment')){window.__movRealRendered=false;setTimeout(aplicar,250);}},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(aplicar,900)); else setTimeout(aplicar,900);
 })();
+
+
+

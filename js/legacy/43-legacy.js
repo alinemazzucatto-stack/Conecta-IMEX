@@ -4,3 +4,6 @@ window.ENDERECOS_PREMIUM_V1 = {
   status: "implantado"
 };
 console.log("Endereços Premium V1 habilitado");
+
+
+

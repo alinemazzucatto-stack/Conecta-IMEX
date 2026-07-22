@@ -28,3 +28,6 @@
   // Monitora continuamente enquanto a view puder ficar ativa
   // setInterval(fixEstruturaView, 400);
 })();
+
+
+

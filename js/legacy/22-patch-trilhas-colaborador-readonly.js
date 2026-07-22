@@ -103,3 +103,6 @@
   };
   document.addEventListener('DOMContentLoaded',function(){setTimeout(aplicarBloqueioColaborador,400);setTimeout(aplicarBloqueioColaborador,1200);});
 })();
+
+
+

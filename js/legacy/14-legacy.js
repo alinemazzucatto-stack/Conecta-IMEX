@@ -28,3 +28,6 @@
   setTimeout(ajustarPesquisasPorPerfil, 2500);
   window.ajustarPesquisasPorPerfil = ajustarPesquisasPorPerfil;
 })();
+
+
+

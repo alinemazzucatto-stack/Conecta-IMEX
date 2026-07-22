@@ -462,7 +462,7 @@ function intraOrgNormKey(v) {
 }
 
 // Estrutura padrão de setores com hierarquia por ordem
-const IMEX_SETORES_DEFAULT = [
+const rh_SETORES_DEFAULT = [
   { id:'dev_web', nome:'Desenvolvimento de Software', area:'Tecnologia / Desenvolvimento', trilha:'Desenvolvimento de Software', cor:'#0047FF', ordem:1, lider:'Gerente de Tecnologia',
     cargos:[
       {nome:'Desenvolvedor Web Júnior', nivel:2, ordem:1},
@@ -576,23 +576,23 @@ async function intraOrgGetSetores(force) {
     const snap = await db.collection(col('org_setores')).orderBy('ordem').get();
     if (snap.empty) {
       const batch = db.batch();
-      IMEX_SETORES_DEFAULT.forEach(s => batch.set(db.collection(col('org_setores')).doc(s.id), s));
+      rh_SETORES_DEFAULT.forEach(s => batch.set(db.collection(col('org_setores')).doc(s.id), s));
       await batch.commit();
-      _intraOrgSetores = IMEX_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s}));
+      _intraOrgSetores = rh_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s}));
     } else {
       const docs = snap.docs.map(d => intraOrgNormalizarSetor({...d.data(), id: d.id}));
       const temBaseOficial = docs.some(s => s.id === 'dev_web') && docs.some(s => s.id === 'rh_trilha');
       if (!temBaseOficial) {
         // Migração: substitui a estrutura antiga pela base oficial cadastrada pelo RH.
         const batch = db.batch();
-        IMEX_SETORES_DEFAULT.forEach(s => batch.set(db.collection(col('org_setores')).doc(s.id), s));
+        rh_SETORES_DEFAULT.forEach(s => batch.set(db.collection(col('org_setores')).doc(s.id), s));
         await batch.commit();
-        _intraOrgSetores = IMEX_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s}));
+        _intraOrgSetores = rh_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s}));
       } else {
-        _intraOrgSetores = docs.filter(s => IMEX_SETORES_DEFAULT.some(d => d.id === s.id));
+        _intraOrgSetores = docs.filter(s => rh_SETORES_DEFAULT.some(d => d.id === s.id));
       }
     }
-  } catch(e) { _intraOrgSetores = IMEX_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s})); }
+  } catch(e) { _intraOrgSetores = rh_SETORES_DEFAULT.map(s => intraOrgNormalizarSetor({...s})); }
   return _intraOrgSetores;
 }
 
@@ -903,7 +903,7 @@ function intraOrgResolverProximo(cargos, cargo, idx) {
 function intraOrgPopularProximos(setorId, cargoNome, selecionado) {
   const select = document.getElementById('intra-org-cargo-proximo');
   if (!select) return;
-  const setores = _intraOrgSetores || IMEX_SETORES_DEFAULT;
+  const setores = _intraOrgSetores || rh_SETORES_DEFAULT;
   const setor = setores.find(s => s.id === setorId);
   const cargos = [...(setor?.cargos || [])].map(intraOrgNormalizarCargo).sort((a,b)=>(a.ordem||99)-(b.ordem||99));
   const atualKey = intraOrgNormKey(cargoNome);
@@ -2516,7 +2516,7 @@ function orgResetZoom() {
 }
 
 // Estrutura hierárquica REAL da IMEX (do organograma oficial)
-const IMEX_ORG = {
+const rh_ORG = {
   conselho: {
     label: 'PRESIDENTE',
     nome: 'Gilberto Gallina',
@@ -2628,8 +2628,8 @@ async function orgRenderOrganograma() {
   }
 
   // Construir HTML separado para cada seção
-  const htmlConselho    = orgBuildTree(IMEX_ORG.conselho, setores);
-  const htmlOperacional = orgBuildTree(IMEX_ORG.operacional, setores);
+  const htmlConselho    = orgBuildTree(rh_ORG.conselho, setores);
+  const htmlOperacional = orgBuildTree(rh_ORG.operacional, setores);
 
   wrap.innerHTML =
     '<div class="org-tree" style="padding-bottom:40px">' +
@@ -3581,3 +3581,6 @@ function selecaoStats(){
   if(t)t.textContent=selecaoLista.length; if(a)a.textContent=selecaoLista.filter(x=>x.status==='Aprovado').length; if(m)m.textContent=media+'%';
 }
 async function selecaoCarregar(){try{const snap=await db.collection(col('selecao_analises')).orderBy('criadoEm','desc').get();selecaoLista=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){selecaoLista=[];}selecaoRender();selecaoStats();}
+
+
+

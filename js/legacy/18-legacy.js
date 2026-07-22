@@ -183,3 +183,6 @@ function benEnviarSolicitacao() {
     alert(`✅ Solicitação de ${tipoLabel} — ${benLabel} registrada!\n\n(Modo offline — será processada ao reconectar)`);
   }
 }
+
+
+

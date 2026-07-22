@@ -214,3 +214,6 @@
     setTimeout(trocarAcoes,800);/* REMOVED: Performance optimization */ /* setInterval(trocarAcoes,1500); */
   }
 })();
+
+
+

@@ -226,3 +226,4 @@
     XLSX.writeFile(wb, 'historico_beneficios.xlsx');
   };
 })();
+

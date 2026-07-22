@@ -108,3 +108,6 @@
     const btn=document.getElementById('disc-btn-iniciar'); if(btn) btn.textContent='🔄 Refazer Test DISC';
   };
 })();
+
+
+

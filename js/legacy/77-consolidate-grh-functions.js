@@ -52,3 +52,6 @@
 
   console.log('[GRH CONSOLIDATION] Initialized - funções grhGet são única fonte de verdade');
 })();
+
+
+

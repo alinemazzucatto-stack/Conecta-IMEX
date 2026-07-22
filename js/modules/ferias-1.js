@@ -27,3 +27,4 @@ function aplicarBadges(){
 setTimeout(aplicarBadges, 300);
 })();
 
+

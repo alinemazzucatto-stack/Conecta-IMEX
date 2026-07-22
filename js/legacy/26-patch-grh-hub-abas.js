@@ -80,3 +80,6 @@
   document.addEventListener('DOMContentLoaded',()=>setTimeout(iniciarHub,1200));
   setTimeout(iniciarHub,1800);
 })();
+
+
+

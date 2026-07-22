@@ -115,3 +115,4 @@
 
   console.log('[AUTH-FIX] Proteção contra race condition ativada');
 })();
+

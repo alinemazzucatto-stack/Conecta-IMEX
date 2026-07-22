@@ -250,3 +250,6 @@ window.trilhaMudarSetor = function(setor){
 })();
 
 })();
+
+
+

@@ -88,7 +88,7 @@ fix(login): respect loginRole selection in fallback authentication
 Problem: Fallback authentication was ignoring window.loginRole and using 
 the hardcoded perfil from test users array instead.
 
-Solution: Added logic to check window.loginRole and imexPreferredRole 
+Solution: Added logic to check window.loginRole and connPreferredRole 
 before falling back to usuarioTeste.perfil.
 
 Impact: Gestor users can now login with correct role when Firebase fails.
@@ -185,7 +185,7 @@ git push origin tag v1.2.3
 ### Arquivo RELEASES.md (Automático)
 
 ```markdown
-# Releases - Conecta IMEX/RH
+# Releases - Conecta RH
 
 ## [1.2.3] - 2026-07-10
 
@@ -917,3 +917,4 @@ Objetivo NÃO é punir, é MANTER ESTABILIDADE.
 **Aprovado por:** Aline Mazzucatto  
 **Data:** 2026-07-09  
 **Efetivo:** IMEDIATAMENTE para todos os commits
+

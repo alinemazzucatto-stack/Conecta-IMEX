@@ -65,3 +65,4 @@ console.log('userRole:', sessionStorage.getItem('userRole'), 'email:', sessionSt
 **Tente agora com `colaborador@teste.com` / `123456`**
 
 Se ainda não funcionar → Abra F12, Cole no console e me envie o resultado.
+

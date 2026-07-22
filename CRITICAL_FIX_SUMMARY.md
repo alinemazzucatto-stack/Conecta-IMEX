@@ -344,3 +344,4 @@ Se após implementar estas correções o login AINDA não funcionar:
 4. Verificar Network tab para respostas do Firebase
 5. Contatar suporte técnico com screenshots do console
 
+

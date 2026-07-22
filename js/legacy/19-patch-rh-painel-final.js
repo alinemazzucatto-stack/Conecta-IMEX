@@ -81,3 +81,6 @@
   window.switchView=function(v){navegar(v);}; window.sbNav=function(v){navegar(v);};
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(aplicarMenu,200); setTimeout(()=>{if(roleAtual()==='rh') patchGestaoRHTabs();},900);});
 })();
+
+
+

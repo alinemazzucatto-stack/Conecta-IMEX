@@ -601,11 +601,11 @@
           <!-- Campos ocultos para funcionalidade de benefícios -->
           <div style="display:none">
             <input type="hidden" id="rem-beneficios-json-imex" value="{}">
-            <input id="rem-beneficio-va" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
-            <input id="rem-beneficio-saude" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
-            <input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
-            <input id="rem-beneficio-colabmais" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
-            <input id="rem-beneficio-sindicato" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosIMEX()">
+            <input id="rem-beneficio-va" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosRH()">
+            <input id="rem-beneficio-saude" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosRH()">
+            <input id="rem-beneficio-odonto" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosRH()">
+            <input id="rem-beneficio-colabmais" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosRH()">
+            <input id="rem-beneficio-sindicato" type="number" min="0" step="0.01" placeholder="0,00" oninput="remCalcCustosBeneficiosRH()">
             <div id="rem-beneficios-total-imex">R$ 0,00</div>
           </div>
         </div>
@@ -1083,3 +1083,6 @@
   },true);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(aplicar,900)); else setTimeout(aplicar,900);
 })();
+
+
+

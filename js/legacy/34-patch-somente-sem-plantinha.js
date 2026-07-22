@@ -9,3 +9,6 @@
   document.addEventListener('DOMContentLoaded',()=>{removerPlantinha();setTimeout(removerPlantinha,500);setTimeout(removerPlantinha,1500);});
   window.addEventListener('load',removerPlantinha);
 })();
+
+
+

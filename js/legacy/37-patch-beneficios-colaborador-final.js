@@ -120,3 +120,6 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', conferir);
   else setTimeout(conferir, 100);
 })();
+
+
+

@@ -93,7 +93,7 @@
     if(!logo){
       logo = document.createElement('div');
       logo.className = 'sb-logo';
-      logo.textContent = 'IMEX';
+      logo.textContent = 'Conecta RH';
     }
 
     let spacer = s.querySelector('.sb-spacer');
@@ -142,7 +142,7 @@
     }
     if(id === 'estrutura-carreira'){
       const v = ensureView(id);
-      v.innerHTML = '<div class="hero"><div><div class="h-eyebrow">Estrutura & Carreira · Fase 1</div><h1>ESTRUTURA E CARREIRA</h1><p>Visualize o organograma, sua equipe e trilhas de carreira. Os demais recursos ficam na Fase 2 do Roadmap.</p></div></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px"><div class="card"><div class="card-head"><div class="cht"><h2>🏢 Organograma</h2><p>Estrutura hierárquica, gestor direto, diretoria, departamento e unidade.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Gestor direto</div><div class="ri-meta"><span class="ri-m">Departamento: <strong>Recursos Humanos</strong></span><span class="ri-m">Unidade: <strong>IMEX</strong></span></div></div></div></div><div class="card"><div class="card-head"><div class="cht"><h2>👥 Minha Equipe</h2><p>Gestor imediato, integrantes, cargos, e-mails e ramais.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Equipe</div><div class="ri-meta"><span class="ri-m">Integrantes e contatos internos</span></div></div></div></div><div class="card"><div class="card-head"><div class="cht"><h2>🚀 Trilhas de Carreira</h2><p>Cargo atual, próximo cargo, competências, cursos e evolução.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Analista de RH Jr → Pleno</div><div class="ri-meta"><span class="ri-m">Evolução: <strong>80%</strong></span></div></div></div></div></div>';
+      v.innerHTML = '<div class="hero"><div><div class="h-eyebrow">Estrutura & Carreira · Fase 1</div><h1>ESTRUTURA E CARREIRA</h1><p>Visualize o organograma, sua equipe e trilhas de carreira. Os demais recursos ficam na Fase 2 do Roadmap.</p></div></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px"><div class="card"><div class="card-head"><div class="cht"><h2>🏢 Organograma</h2><p>Estrutura hierárquica, gestor direto, diretoria, departamento e unidade.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Gestor direto</div><div class="ri-meta"><span class="ri-m">Departamento: <strong>Recursos Humanos</strong></span><span class="ri-m">Unidade: <strong>Corporativa</strong></span></div></div></div></div><div class="card"><div class="card-head"><div class="cht"><h2>👥 Minha Equipe</h2><p>Gestor imediato, integrantes, cargos, e-mails e ramais.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Equipe</div><div class="ri-meta"><span class="ri-m">Integrantes e contatos internos</span></div></div></div></div><div class="card"><div class="card-head"><div class="cht"><h2>🚀 Trilhas de Carreira</h2><p>Cargo atual, próximo cargo, competências, cursos e evolução.</p></div></div><div class="card-body"><div class="ri-item"><div class="ri-name">Analista de RH Jr → Pleno</div><div class="ri-meta"><span class="ri-m">Evolução: <strong>80%</strong></span></div></div></div></div></div>';
     }
   }
 
@@ -226,3 +226,7 @@
   setTimeout(init, 100);
   setTimeout(init, 500);
 })();
+
+
+
+

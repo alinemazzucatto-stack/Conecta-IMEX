@@ -127,3 +127,6 @@
   // window.switchView/sbNav (definidos em 000-core-functions.js) com
   // `navegar`, que não existe mais neste arquivo.
 })();
+
+
+
