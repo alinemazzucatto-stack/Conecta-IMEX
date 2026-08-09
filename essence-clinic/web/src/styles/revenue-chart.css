@@ -1,0 +1,272 @@
+/* Revenue Chart Component */
+.revenue-chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Chart Header */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.chart-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-color.actual {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.legend-color.target {
+  background: #d1d5db;
+}
+
+/* Chart Wrapper */
+.chart-wrapper {
+  display: flex;
+  gap: 12px;
+  height: 300px;
+  position: relative;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 60px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.y-label {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Main Chart Area */
+.chart {
+  flex: 1;
+  position: relative;
+  background: white;
+  border-left: 2px solid #e5e7eb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Grid Lines */
+.chart-grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.grid-line {
+  border-top: 1px dashed #e5e7eb;
+  width: 100%;
+}
+
+/* Bars Container */
+.bars-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 100%;
+  padding: 16px 8px 0 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bars {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: calc(100% - 36px);
+  min-width: 32px;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bar.actual {
+  background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.bar.actual:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.bar.target {
+  background: #d1d5db;
+  opacity: 0.6;
+}
+
+.bar.target:hover {
+  opacity: 0.8;
+}
+
+.month-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Chart Footer */
+.chart-footer {
+  display: flex;
+  justify-content: space-around;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.footer-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.stat-value.growth {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .revenue-chart-container {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chart-legend {
+    width: 100%;
+    gap: 16px;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+    gap: 8px;
+  }
+
+  .chart-y-axis {
+    width: 50px;
+    font-size: 11px;
+  }
+
+  .bars-container {
+    padding: 12px 4px 0 4px;
+  }
+
+  .month-label {
+    font-size: 11px;
+  }
+
+  .chart-footer {
+    gap: 12px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-wrapper {
+    height: 200px;
+  }
+
+  .chart-y-axis {
+    width: 45px;
+    font-size: 10px;
+  }
+
+  .bars {
+    min-width: 24px;
+  }
+
+  .bar {
+    min-width: 10px;
+  }
+
+  .month-label {
+    font-size: 10px;
+  }
+}
