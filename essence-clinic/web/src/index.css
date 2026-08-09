@@ -3,6 +3,7 @@
 @import './styles/layout.css';
 @import './styles/stat-card.css';
 @import './styles/revenue-chart.css';
+@import './styles/clients.css';
 
 @tailwind base;
 @tailwind components;
