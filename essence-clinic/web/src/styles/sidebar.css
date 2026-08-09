@@ -1,0 +1,246 @@
+/* Essence Clinic Sidebar Styles */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f5ff 100%);
+  border-right: 2px solid #e9d5ff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(124, 58, 237, 0.08);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Logo Section */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+  border-bottom: 2px solid #e9d5ff;
+  margin-bottom: 8px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+/* Navigation Menu */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.sidebar-item:hover {
+  background: rgba(124, 58, 237, 0.08);
+  color: #7c3aed;
+  transform: translateX(4px);
+}
+
+.sidebar-item.active {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0.08) 100%);
+  color: #7c3aed;
+  font-weight: 600;
+  box-shadow: inset 0 0 10px rgba(124, 58, 237, 0.1);
+}
+
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 24px;
+  background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Icon Wrapper */
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  transition: all 0.3s ease;
+}
+
+.sidebar-item:hover .icon-wrapper {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+}
+
+/* Label */
+.sidebar-item .label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chevron */
+.sidebar-item .chevron {
+  color: #7c3aed;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.3s ease;
+}
+
+.sidebar-item.active .chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Footer Section */
+.sidebar-footer {
+  padding: 16px;
+  border-top: 2px solid #e9d5ff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar Styling */
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.5);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .sidebar-item .label {
+    font-size: 13px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+    box-shadow: 2px 0 8px rgba(124, 58, 237, 0.1);
+  }
+
+  .sidebar-logo {
+    padding: 16px 12px;
+    gap: 8px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  .sidebar-nav {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .sidebar-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .sidebar-footer {
+    padding: 12px;
+  }
+
+  .logout-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

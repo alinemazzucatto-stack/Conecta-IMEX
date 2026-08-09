@@ -1,0 +1,65 @@
+/* Layout Wrapper */
+.layout-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: #f8f7ff;
+}
+
+/* Main Content Area */
+.layout-content {
+  flex: 1;
+  margin-left: 260px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #f8f7ff 0%, #faf8ff 100%);
+}
+
+/* Content Padding */
+.layout-content > * {
+  min-height: 100%;
+}
+
+/* Scrollbar Styling */
+.layout-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.layout-content::-webkit-scrollbar-track {
+  background: #f0ebff;
+}
+
+.layout-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8b4fe 0%, #c084fc 100%);
+  border-radius: 4px;
+}
+
+.layout-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c084fc 0%, #a78bfa 100%);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .layout-content {
+    margin-left: 240px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .layout-wrapper {
+    flex-direction: column;
+  }
+
+  .layout-content {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  /* Hide sidebar on very small screens */
+  @media (max-width: 640px) {
+    .layout-content {
+      margin-left: 200px;
+    }
+  }
+}

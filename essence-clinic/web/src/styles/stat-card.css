@@ -1,0 +1,125 @@
+/* Stat Card Component - Balanced Design */
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle backgrounds - mostly white with slight tint */
+.stat-card.bg-purple-50,
+.stat-card.bg-blue-50,
+.stat-card.bg-green-50,
+.stat-card.bg-pink-50,
+.stat-card.bg-orange-50,
+.stat-card.bg-indigo-50 {
+  background: white;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+  border-color: #d1d5db;
+}
+
+/* Header Section */
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Icon - Azul único para todos */
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  background: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  flex-shrink: 0;
+}
+
+.stat-card:hover .stat-icon {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Trend Badge */
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.stat-trend.positive {
+  background: #f0fdf4;
+  color: #059669;
+}
+
+.stat-trend.negative {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Content Section */
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+}
