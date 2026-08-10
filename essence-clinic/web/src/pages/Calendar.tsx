@@ -38,11 +38,14 @@ const COLORS = {
   '8996d973-8106-4eb7-9ceb-6d144f3e5d18': '#00D4FF',
 };
 
+type ViewType = 'day' | 'week' | 'month';
+
 export default function Calendar() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 30));
   const [selectedDate, setSelectedDate] = useState('30/07/2026');
+  const [viewType, setViewType] = useState<ViewType>('month');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [filterProfessional, setFilterProfessional] = useState<string | null>(null);
@@ -336,6 +339,40 @@ export default function Calendar() {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
+  const getWeekDates = () => {
+    const date = new Date(currentDate);
+    const day = date.getDay();
+    const diff = date.getDate() - (day === 0 ? 6 : day - 1);
+    const weekStart = new Date(date.setDate(diff));
+    const weekDates = [];
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(weekStart);
+      d.setDate(d.getDate() + i);
+      weekDates.push(d);
+    }
+    return weekDates;
+  };
+
+  const formatDateString = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const getAppointmentsForWeek = () => {
+    const weekDates = getWeekDates();
+    const weekAppointments: Record<string, Appointment[]> = {};
+
+    weekDates.forEach(date => {
+      const dateStr = formatDateString(date);
+      weekAppointments[dateStr] = getAppointmentsForDay(dateStr);
+    });
+
+    return { weekDates, weekAppointments };
+  };
+
   const dayAppointments = getAppointmentsForDay(selectedDate);
 
   if (loading) {
@@ -379,6 +416,28 @@ export default function Calendar() {
         </button>
       </div>
 
+      {/* View Selector */}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+        {(['day', 'week', 'month'] as ViewType[]).map((view) => (
+          <button
+            key={view}
+            onClick={() => setViewType(view)}
+            style={{
+              padding: '0.5rem 1.5rem',
+              background: viewType === view ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#f1f5f9',
+              color: viewType === view ? 'white' : '#0f172a',
+              border: 'none',
+              borderRadius: '0.5rem',
+              cursor: 'pointer',
+              fontWeight: 600,
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {view === 'day' ? '📅 Dia' : view === 'week' ? '📆 Semana' : '📋 Mês'}
+          </button>
+        ))}
+      </div>
+
       {/* Filtro por Profissional */}
       <div style={{ marginBottom: '2rem' }}>
         <label style={{ marginRight: '1rem', fontWeight: 600 }}>Filtrar por profissional:</label>
@@ -403,123 +462,205 @@ export default function Calendar() {
 
       {/* Navegação */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <button onClick={previousMonth} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
+        <button
+          onClick={() => {
+            const newDate = new Date(currentDate);
+            if (viewType === 'day') newDate.setDate(newDate.getDate() - 1);
+            else if (viewType === 'week') newDate.setDate(newDate.getDate() - 7);
+            else newDate.setMonth(newDate.getMonth() - 1);
+            setCurrentDate(newDate);
+          }}
+          style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
           ← Anterior
         </button>
         <h2 style={{ margin: 0, fontSize: '1.25rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          {currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+          {viewType === 'day'
+            ? currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+            : viewType === 'week'
+            ? `Semana de ${getWeekDates()[0].toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })} a ${getWeekDates()[6].toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}`
+            : currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
         </h2>
-        <button onClick={nextMonth} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
+        <button
+          onClick={() => {
+            const newDate = new Date(currentDate);
+            if (viewType === 'day') newDate.setDate(newDate.getDate() + 1);
+            else if (viewType === 'week') newDate.setDate(newDate.getDate() + 7);
+            else newDate.setMonth(newDate.getMonth() + 1);
+            setCurrentDate(newDate);
+          }}
+          style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
           Próximo →
         </button>
       </div>
 
-      {/* Cabeçalho Dias */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', marginBottom: '1rem' }}>
-        {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day) => (
-          <div key={day} style={{ textAlign: 'center', fontWeight: 700, padding: '0.75rem', color: '#64748b', fontSize: '0.875rem' }}>
-            {day}
+      {/* MONTH VIEW */}
+      {viewType === 'month' && (
+        <>
+          {/* Cabeçalho Dias */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', marginBottom: '1rem' }}>
+            {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day) => (
+              <div key={day} style={{ textAlign: 'center', fontWeight: 700, padding: '0.75rem', color: '#64748b', fontSize: '0.875rem' }}>
+                {day}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Calendário Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', marginBottom: '2rem' }}>
-        {renderCalendar()}
-      </div>
-
-      {/* Legenda */}
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', padding: '1.5rem', background: 'rgba(0, 82, 204, 0.05)', borderRadius: '0.5rem', marginBottom: '2rem' }}>
-        {PROFESSIONALS.map((prof) => (
-          <div key={prof.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ width: '12px', height: '12px', background: COLORS[prof.id as keyof typeof COLORS], borderRadius: '2px' }}></div>
-            <span style={{ fontSize: '0.875rem' }}>{prof.name}</span>
+          {/* Calendário Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem', marginBottom: '2rem' }}>
+            {renderCalendar()}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
-      {/* Agendamentos do Dia */}
-      <div style={{ padding: '1.5rem', background: 'rgba(0, 82, 204, 0.03)', borderRadius: '0.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 style={{ margin: 0 }}>📅 Agendamentos - {selectedDate}</h3>
-          <button
-            onClick={() => openNewAppointmentModal(selectedDate)}
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-              fontWeight: 600
-            }}
-          >
-            + Adicionar
-          </button>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {dayAppointments.length > 0 ? (
-            dayAppointments.map((apt) => {
-              const prof = PROFESSIONALS.find((p) => p.id === apt.professional_id);
+      {/* WEEK VIEW */}
+      {viewType === 'week' && (
+        <div style={{ marginBottom: '2rem', overflowX: 'auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem' }}>
+            {getWeekDates().map((date, idx) => {
+              const dateStr = formatDateString(date);
+              const dayAppts = getAppointmentsForDay(dateStr);
+              const dayName = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'][date.getDay() === 0 ? 6 : date.getDay() - 1];
+
               return (
                 <div
-                  key={apt.id}
-                  onClick={() => openEditModal(apt)}
-                  style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    padding: '1rem',
-                    background: 'white',
-                    borderRadius: '0.5rem',
-                    borderLeft: `3px solid ${COLORS[apt.professional_id as keyof typeof COLORS]}`,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    opacity: 0.8
+                  key={idx}
+                  onClick={() => {
+                    setSelectedDate(dateStr);
+                    setViewType('day');
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
-                  onMouseOut={(e) => (e.currentTarget.style.opacity = '0.8')}
+                  style={{
+                    padding: '1rem',
+                    background: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '0.5rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    minHeight: '150px',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)')}
+                  onMouseOut={(e) => (e.currentTarget.style.boxShadow = 'none')}
                 >
-                  <div style={{ width: '12px', background: COLORS[apt.professional_id as keyof typeof COLORS], borderRadius: '2px' }}></div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600 }}>{apt.notes || 'Agendamento'}</div>
-                    <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
-                      {apt.time} - {prof?.name} • {prof?.specialty}
-                    </div>
+                  <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '0.5rem' }}>
+                    {dayName} {date.getDate()}
                   </div>
-                  <span
-                    style={{
-                      padding: '0.25rem 0.75rem',
-                      background:
-                        apt.status === 'confirmed' ? '#dcfce7' :
-                        apt.status === 'scheduled' ? '#fef3c7' :
-                        apt.status === 'cancelled' ? '#fee2e2' :
-                        '#dbeafe',
-                      color:
-                        apt.status === 'confirmed' ? '#065f46' :
-                        apt.status === 'scheduled' ? '#92400e' :
-                        apt.status === 'cancelled' ? '#991b1b' :
-                        '#0c4a6e',
-                      borderRadius: '20px',
-                      fontSize: '0.875rem',
-                      fontWeight: 600
-                    }}
-                  >
-                    {apt.status === 'confirmed' ? '✓ Confirmado' :
-                     apt.status === 'scheduled' ? '⏳ Pendente' :
-                     apt.status === 'cancelled' ? '✕ Cancelado' :
-                     '✓ Realizado'}
-                  </span>
+                  {dayAppts.length > 0 && (
+                    <div style={{
+                      display: 'inline-block',
+                      padding: '0.25rem 0.5rem',
+                      background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
+                      color: 'white',
+                      borderRadius: '12px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      marginBottom: '0.5rem',
+                      width: 'fit-content'
+                    }}>
+                      {dayAppts.length} agend.
+                    </div>
+                  )}
+                  {dayAppts.length > 0 ? (
+                    dayAppts.slice(0, 3).map((apt, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '0.25rem 0.5rem',
+                          background: COLORS[apt.professional_id as keyof typeof COLORS],
+                          color: 'white',
+                          borderRadius: '3px',
+                          marginBottom: '0.25rem',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                      >
+                        {apt.time}
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>✓ Livre</div>
+                  )}
                 </div>
               );
-            })
-          ) : (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
-              <p>Nenhum agendamento para este dia</p>
-            </div>
-          )}
+            })}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* DAY VIEW */}
+      {viewType === 'day' && (
+        <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'rgba(0, 82, 204, 0.03)', borderRadius: '0.5rem' }}>
+          <h3 style={{ margin: '0 0 1rem 0' }}>📅 Agendamentos - {currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {(() => {
+              const dayStr = formatDateString(currentDate);
+              const dayAppts = getAppointmentsForDay(dayStr);
+              return dayAppts.length > 0 ? (
+                dayAppts.map((apt) => {
+                  const prof = PROFESSIONALS.find((p) => p.id === apt.professional_id);
+                  return (
+                    <div
+                      key={apt.id}
+                      onClick={() => openEditModal(apt)}
+                      style={{
+                        display: 'flex',
+                        gap: '1rem',
+                        padding: '1rem',
+                        background: 'white',
+                        borderRadius: '0.5rem',
+                        borderLeft: `3px solid ${COLORS[apt.professional_id as keyof typeof COLORS]}`,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        opacity: 0.8
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.opacity = '1')}
+                      onMouseOut={(e) => (e.currentTarget.style.opacity = '0.8')}
+                    >
+                      <div style={{ width: '12px', background: COLORS[apt.professional_id as keyof typeof COLORS], borderRadius: '2px' }}></div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600 }}>{apt.notes || 'Agendamento'}</div>
+                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                          {apt.time} - {prof?.name} • {prof?.specialty}
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          padding: '0.25rem 0.75rem',
+                          background:
+                            apt.status === 'confirmed' ? '#dcfce7' :
+                            apt.status === 'scheduled' ? '#fef3c7' :
+                            apt.status === 'cancelled' ? '#fee2e2' :
+                            '#dbeafe',
+                          color:
+                            apt.status === 'confirmed' ? '#065f46' :
+                            apt.status === 'scheduled' ? '#92400e' :
+                            apt.status === 'cancelled' ? '#991b1b' :
+                            '#0c4a6e',
+                          borderRadius: '20px',
+                          fontSize: '0.875rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        {apt.status === 'confirmed' ? '✓ Confirmado' :
+                         apt.status === 'scheduled' ? '⏳ Pendente' :
+                         apt.status === 'cancelled' ? '✕ Cancelado' :
+                         '✓ Realizado'}
+                      </span>
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+                  <p>Nenhum agendamento para este dia</p>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
 
       {/* Modal */}
       {showModal && (
