@@ -103,30 +103,71 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-icon">💎</div>
-        <h1 className="logo-text">Essence Clinic</h1>
+        <div>
+          <h1 className="logo-text">Essence Clinic</h1>
+          <p className="logo-subtitle">Healthcare Platform</p>
+        </div>
+      </div>
+
+      {/* User Status */}
+      <div className="sidebar-user">
+        <div className="user-avatar">
+          <span className="user-initial">A</span>
+          <span className="user-status-dot"></span>
+        </div>
+        <div className="user-info">
+          <p className="user-name">Test User</p>
+          <p className="user-status">🟢 Online</p>
+        </div>
       </div>
 
       {/* Menu Items */}
       <nav className="sidebar-nav">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.path);
+        <div className="nav-section">
+          <p className="nav-label">NAVEGAÇÃO</p>
+          {menuItems.slice(0, 3).map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.path);
 
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`sidebar-item ${active ? 'active' : ''}`}
-              title={item.label}
-            >
-              <div className={`icon-wrapper bg-gradient-to-br ${item.color}`}>
-                <Icon size={20} />
-              </div>
-              <span className="label">{item.label}</span>
-              {active && <ChevronRight size={16} className="chevron" />}
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`sidebar-item ${active ? 'active' : ''}`}
+                title={item.label}
+              >
+                <div className={`icon-wrapper bg-gradient-to-br ${item.color}`}>
+                  <Icon size={20} />
+                </div>
+                <span className="label">{item.label}</span>
+                {active && <ChevronRight size={16} className="chevron" />}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="nav-section">
+          <p className="nav-label">MÓDULOS</p>
+          {menuItems.slice(3).map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.path);
+
+            return (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`sidebar-item ${active ? 'active' : ''}`}
+                title={item.label}
+              >
+                <div className={`icon-wrapper bg-gradient-to-br ${item.color}`}>
+                  <Icon size={20} />
+                </div>
+                <span className="label">{item.label}</span>
+                {active && <ChevronRight size={16} className="chevron" />}
+              </button>
+            );
+          })}
+        </div>
       </nav>
 
       {/* Logout Button */}
