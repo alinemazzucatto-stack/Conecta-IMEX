@@ -19,17 +19,8 @@ export default function StatCard({ icon, label, value, trend, color }: StatCardP
     indigo: 'from-indigo-500 to-indigo-600',
   };
 
-  const bgMap = {
-    purple: 'bg-purple-50',
-    blue: 'bg-blue-50',
-    green: 'bg-green-50',
-    pink: 'bg-pink-50',
-    orange: 'bg-orange-50',
-    indigo: 'bg-indigo-50',
-  };
-
   return (
-    <div className={`stat-card ${bgMap[color]}`}>
+    <div className="stat-card">
       <div className="stat-header">
         <div className={`stat-icon bg-gradient-to-br ${colorMap[color]}`}>
           {icon}
