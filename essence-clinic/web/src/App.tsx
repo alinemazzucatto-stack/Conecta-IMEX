@@ -14,6 +14,9 @@ import MedicalRecords from '@/pages/MedicalRecords';
 import Packages from '@/pages/Packages';
 import Integrations from '@/pages/Integrations';
 import Commissions from '@/pages/Commissions';
+import Reports from '@/pages/Reports';
+import Marketing from '@/pages/Marketing';
+import Roles from '@/pages/Roles';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore();
@@ -121,6 +124,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Commissions />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Reports />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/marketing"
+          element={
+            <ProtectedRoute>
+              <Marketing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/roles"
+          element={
+            <ProtectedRoute>
+              <Roles />
             </ProtectedRoute>
           }
         />
