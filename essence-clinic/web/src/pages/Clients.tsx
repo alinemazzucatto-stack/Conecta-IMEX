@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Plus, X, Camera, Clock, FileText } from 'lucide-react';
+import { Search, Plus, X, Camera, Clock, FileText, Users, TrendingUp, Calendar } from 'lucide-react';
 import client from '@/api/client';
 import '../styles/clients.css';
 
@@ -28,12 +28,14 @@ interface Client {
   custom_fields?: CustomField[];
   anamneses?: Anamnesis[];
   created_at?: string;
+  status?: 'active' | 'inactive' | 'prospect';
 }
 
 export default function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'prospect'>('all');
   const [showForm, setShowForm] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,10 +68,59 @@ export default function Clients() {
     }
   };
 
-  const filteredClients = clients.filter(c =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.phone.includes(searchQuery)
-  );
+  const filteredClients = clients.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.phone.includes(searchQuery) ||
+      c.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const stats = {
+    total: clients.length,
+    active: clients.filter(c => c.status === 'active' || !c.status).length,
+    newThisMonth: clients.filter(c => {
+      if (!c.created_at) return false;
+      const createdDate = new Date(c.created_at);
+      const today = new Date();
+      return createdDate.getMonth() === today.getMonth() &&
+             createdDate.getFullYear() === today.getFullYear();
+    }).length,
+    inactive: clients.filter(c => c.status === 'inactive').length,
+  };
+
+  const getClientStatus = (c: Client) => {
+    return c.status || 'active';
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return '#10b981';
+      case 'inactive': return '#ef4444';
+      case 'prospect': return '#f59e0b';
+      default: return '#64748b';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'active': return '🟢 Ativo';
+      case 'inactive': return '🔴 Inativo';
+      case 'prospect': return '🟡 Prospect';
+      default: return '⚪ Sem status';
+    }
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '-';
+    try {
+      return new Date(dateString).toLocaleDateString('pt-BR');
+    } catch {
+      return dateString;
+    }
+  };
 
   const openNewClientForm = () => {
     setEditingClient(null);
@@ -174,6 +225,38 @@ export default function Clients() {
 
   return (
     <div className="clients-container">
+      {/* Top Stats */}
+      <div className="clients-stats-bar">
+        <div className="stat-card">
+          <Users size={20} />
+          <div>
+            <p className="stat-value">{stats.total}</p>
+            <p className="stat-label">Total de Clientes</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <TrendingUp size={20} />
+          <div>
+            <p className="stat-value">{stats.active}</p>
+            <p className="stat-label">Clientes Ativos</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <Calendar size={20} />
+          <div>
+            <p className="stat-value">{stats.newThisMonth}</p>
+            <p className="stat-label">Novos este Mês</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <Clock size={20} />
+          <div>
+            <p className="stat-value">{stats.inactive}</p>
+            <p className="stat-label">Inativos</p>
+          </div>
+        </div>
+      </div>
+
       {/* Left Panel - Clients List */}
       <div className="clients-panel-left">
         <div className="clients-header">
@@ -191,10 +274,23 @@ export default function Clients() {
           <Search size={18} />
           <input
             type="text"
-            placeholder="Buscar por nome ou telefone..."
+            placeholder="Buscar por nome, email ou telefone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+        </div>
+
+        {/* Status Filters */}
+        <div className="clients-filters">
+          {(['all', 'active', 'inactive', 'prospect'] as const).map((status) => (
+            <button
+              key={status}
+              onClick={() => setStatusFilter(status)}
+              className={`filter-btn ${statusFilter === status ? 'active' : ''}`}
+            >
+              {status === 'all' ? 'Todos' : status === 'active' ? 'Ativos' : status === 'inactive' ? 'Inativos' : 'Prospects'}
+            </button>
+          ))}
         </div>
 
         <div className="clients-list">
@@ -218,7 +314,14 @@ export default function Clients() {
                 </div>
                 <div className="clients-item-info">
                   <div className="clients-item-name">{c.name}</div>
+                  <div className="clients-item-email">{c.email}</div>
                   <div className="clients-item-phone">{c.phone}</div>
+                  <div className="clients-item-date">
+                    📅 {formatDate(c.created_at)}
+                  </div>
+                </div>
+                <div className="clients-item-status" style={{ background: getStatusColor(getClientStatus(c)) }}>
+                  {getStatusLabel(getClientStatus(c))}
                 </div>
               </button>
             ))
@@ -237,20 +340,45 @@ export default function Clients() {
               >
                 <X size={20} />
               </button>
-              <h2>{selectedClient.name}</h2>
+              <div className="client-detail-title">
+                <h2>{selectedClient.name}</h2>
+                <span className="client-status-badge" style={{ background: getStatusColor(getClientStatus(selectedClient)) }}>
+                  {getStatusLabel(getClientStatus(selectedClient))}
+                </span>
+              </div>
               <div className="client-detail-actions">
                 <button
                   onClick={() => openEditForm(selectedClient)}
                   className="btn-edit"
                 >
-                  Editar
+                  ✏️ Editar
                 </button>
                 <button
                   onClick={() => handleDeleteClient(selectedClient.id)}
                   className="btn-delete"
                 >
-                  Deletar
+                  🗑️ Deletar
                 </button>
+              </div>
+            </div>
+
+            {/* Client Info Card */}
+            <div className="client-info-card">
+              <div className="info-item">
+                <span className="info-label">📧 Email:</span>
+                <span className="info-value">{selectedClient.email || '-'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">📱 Telefone:</span>
+                <span className="info-value">{selectedClient.phone || '-'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">🎂 Data de Nascimento:</span>
+                <span className="info-value">{formatDate(selectedClient.birth_date) || '-'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">📅 Cadastro:</span>
+                <span className="info-value">{formatDate(selectedClient.created_at) || '-'}</span>
               </div>
             </div>
 
