@@ -2,6 +2,7 @@
 @import './styles/sidebar.css';
 @import './styles/layout.css';
 @import './styles/dashboard.css';
+@import './styles/booking-admin.css';
 @import './styles/stat-card.css';
 @import './styles/revenue-chart.css';
 @import './styles/clients.css';
