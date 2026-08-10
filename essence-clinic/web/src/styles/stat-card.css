@@ -1,30 +1,43 @@
-/* Stat Card Component - Ultra Clean */
+/* Stat Card Component - Balanced Design */
 .stat-card {
-  background: transparent;
-  border-radius: 4px;
-  padding: 6px 0;
-  box-shadow: none;
-  border: none;
-  transition: all 0.2s ease;
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 3px;
+  gap: 12px;
   cursor: default;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   min-height: auto;
-  word-wrap: break-word;
 }
 
-/* Subtle backgrounds - mostly white with slight tint */
-.stat-card.bg-purple-50,
-.stat-card.bg-blue-50,
-.stat-card.bg-green-50,
-.stat-card.bg-pink-50,
-.stat-card.bg-orange-50,
+/* Subtle backgrounds - soft pastels */
+.stat-card.bg-purple-50 {
+  background: #faf5ff;
+}
+
+.stat-card.bg-blue-50 {
+  background: #f0f9ff;
+}
+
+.stat-card.bg-green-50 {
+  background: #f0fdf4;
+}
+
+.stat-card.bg-pink-50 {
+  background: #fdf2f8;
+}
+
+.stat-card.bg-orange-50 {
+  background: #fffbeb;
+}
+
 .stat-card.bg-indigo-50 {
-  background: white;
+  background: #f0f4ff;
 }
 
 .stat-card:hover {
@@ -44,16 +57,16 @@
 
 /* Icon - Azul único para todos */
 .stat-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 10px;
+  font-size: 24px;
   background: #3b82f6;
-  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
   flex-shrink: 0;
 }
 
@@ -66,9 +79,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1px 4px;
-  border-radius: 3px;
-  font-size: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -93,18 +106,17 @@
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  color: #6b7280;
-  text-transform: capitalize;
-  letter-spacing: 0;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin: 0;
   line-height: 1.3;
-  word-break: break-word;
 }
 
 .stat-value {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
