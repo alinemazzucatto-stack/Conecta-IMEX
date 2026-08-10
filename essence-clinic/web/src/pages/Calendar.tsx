@@ -404,7 +404,7 @@ export default function Calendar() {
           onClick={() => openNewAppointmentModal(selectedDate)}
           style={{
             padding: '0.5rem 1rem',
-            background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
+            background: '#10b981',
             color: 'white',
             border: 'none',
             borderRadius: '0.5rem',
@@ -418,24 +418,51 @@ export default function Calendar() {
 
       {/* View Selector */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-        {(['day', 'week', 'month'] as ViewType[]).map((view) => (
-          <button
-            key={view}
-            onClick={() => setViewType(view)}
-            style={{
-              padding: '0.5rem 1.5rem',
-              background: viewType === view ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#f1f5f9',
-              color: viewType === view ? 'white' : '#0f172a',
-              border: 'none',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              fontWeight: 600,
-              transition: 'all 0.3s ease'
-            }}
-          >
-            {view === 'day' ? '📅 Dia' : view === 'week' ? '📆 Semana' : '📋 Mês'}
-          </button>
-        ))}
+        <button
+          onClick={() => setViewType('day')}
+          style={{
+            padding: '0.5rem 1.5rem',
+            background: viewType === 'day' ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#f1f5f9',
+            color: viewType === 'day' ? 'white' : '#0f172a',
+            border: 'none',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontWeight: 600,
+            transition: 'all 0.3s ease'
+          }}
+        >
+          📅 Dia {viewType === 'day' && '✓'}
+        </button>
+        <button
+          onClick={() => setViewType('week')}
+          style={{
+            padding: '0.5rem 1.5rem',
+            background: viewType === 'week' ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#f1f5f9',
+            color: viewType === 'week' ? 'white' : '#0f172a',
+            border: 'none',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontWeight: 600,
+            transition: 'all 0.3s ease'
+          }}
+        >
+          📆 Semana {viewType === 'week' && '✓'}
+        </button>
+        <button
+          onClick={() => setViewType('month')}
+          style={{
+            padding: '0.5rem 1.5rem',
+            background: viewType === 'month' ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#f1f5f9',
+            color: viewType === 'month' ? 'white' : '#0f172a',
+            border: 'none',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontWeight: 600,
+            transition: 'all 0.3s ease'
+          }}
+        >
+          📋 Mês {viewType === 'month' && '✓'}
+        </button>
       </div>
 
       {/* Filtro por Profissional */}
