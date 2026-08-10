@@ -11,6 +11,7 @@ import Settings from '@/pages/Settings';
 import BookingAdmin from '@/pages/BookingAdmin';
 import PublicBooking from '@/pages/PublicBooking';
 import MedicalRecords from '@/pages/MedicalRecords';
+import Packages from '@/pages/Packages';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore();
@@ -94,6 +95,14 @@ function App() {
           element={
             <ProtectedRoute>
               <MedicalRecords />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/packages"
+          element={
+            <ProtectedRoute>
+              <Packages />
             </ProtectedRoute>
           }
         />
