@@ -118,7 +118,7 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
           icon={<Users size={24} />}
           label="Clientes Ativos"
@@ -150,7 +150,7 @@ export default function Dashboard() {
       </div>
 
       {/* Additional Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <StatCard
           icon={<Clock size={24} />}
           label="Pendentes de Confirmação"
@@ -175,7 +175,7 @@ export default function Dashboard() {
       </div>
 
       {/* Revenue Chart */}
-      <div className="mb-12">
+      <div className="mb-8">
         <RevenueChart />
       </div>
 
