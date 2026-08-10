@@ -1,14 +1,14 @@
 /* Stat Card Component - Ultra Compact Design */
 .stat-card {
   background: white !important;
-  border-radius: 12px;
-  padding: 8px;
-  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.05);
-  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 8px;
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.04);
+  border: 1px solid #e5e7eb;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 4px;
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -63,17 +63,18 @@
 
 /* Icon - Colorido baseado no padrão de comissões */
 .stat-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   background: #3b82f6;
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.08);
   flex-shrink: 0;
+  min-width: 24px;
 }
 
 .stat-card:hover .stat-icon {
