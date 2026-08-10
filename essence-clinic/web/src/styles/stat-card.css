@@ -2,20 +2,19 @@
 .stat-card {
   background: white !important;
   border-radius: 12px;
-  padding: 4px 12px !important;
+  padding: 10px 12px !important;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
   border: 2px solid #e2e8f0;
   transition: all 0.3s ease;
   display: flex !important;
-  flex-direction: column !important;
-  gap: 1px !important;
+  flex-direction: row !important;
+  gap: 12px !important;
   cursor: default;
   position: relative;
   overflow: hidden;
   min-height: auto;
   animation: slideUp 0.3s ease-out backwards;
   align-items: center !important;
-  text-align: center !important;
 }
 
 @keyframes slideUp {
@@ -57,9 +56,9 @@
 .stat-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
+  justify-content: flex-start;
+  gap: 0;
+  flex-shrink: 0;
 }
 
 /* Icon - Colorido baseado no padrão de comissões */
@@ -108,32 +107,34 @@
 .stat-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  width: 100%;
+  gap: 0px;
+  flex: 1;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .stat-label {
-  font-size: 17px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   color: #94a3b8 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.4px !important;
   margin: 0 !important;
-  line-height: 1.06 !important;
+  line-height: 1.1 !important;
   padding: 0 !important;
   display: block !important;
+  text-align: left !important;
 }
 
 .stat-value {
-  font-size: 32px !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
   color: #1e293b !important;
   margin: 0 !important;
-  line-height: 1.13 !important;
+  line-height: 1.1 !important;
   padding: 0 !important;
   display: block !important;
+  text-align: left !important;
 }
 
 /* Responsive */
