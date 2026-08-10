@@ -28,7 +28,10 @@
 .clients-header h1 {
   margin: 0;
   font-size: 1.5rem;
-  color: #1e40af;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
 
@@ -124,15 +127,15 @@
 }
 
 .clients-item.active {
-  background: #e0f2fe;
-  border-color: #0284c7;
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00D4FF;
 }
 
 .clients-item-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  background: linear-gradient(135deg, #00D4FF, #0052CC);
   color: white;
   display: flex;
   align-items: center;
@@ -250,13 +253,14 @@
 }
 
 .btn-edit {
-  background: #3b82f6;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
   color: white;
 }
 
 .btn-edit:hover {
-  background: #2563eb;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
 }
 
 .btn-delete {
@@ -314,8 +318,8 @@
 }
 
 .tab.active {
-  color: #0284c7;
-  border-bottom-color: #0284c7;
+  color: #0052CC;
+  border-bottom-color: #0052CC;
 }
 
 /* Content Area */
@@ -393,14 +397,14 @@
 }
 
 .anamnesis-form textarea:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #0052CC;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
 }
 
 .btn-add-anamnesis {
   align-self: flex-end;
   padding: 0.5rem 1.5rem;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -410,8 +414,9 @@
 }
 
 .btn-add-anamnesis:hover {
-  background: #2563eb;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
 }
 
 .anamnesis-list {
@@ -423,7 +428,7 @@
 .anamnesis-item {
   padding: 1rem;
   background: #f8fafc;
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid #0052CC;
   border-radius: 0.5rem;
 }
 
@@ -443,8 +448,8 @@
 }
 
 .anamnesis-professional {
-  background: #dbeafe;
-  color: #1e40af;
+  background: rgba(0, 212, 255, 0.15);
+  color: #0052CC;
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -564,8 +569,8 @@
 }
 
 .form-group input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #0052CC;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
 }
 
 .photo-upload {
@@ -593,14 +598,14 @@
   border-radius: 0.5rem;
   cursor: pointer;
   font-weight: 600;
-  color: #3b82f6;
+  color: #0052CC;
   transition: all 0.2s;
   font-size: 0.875rem;
 }
 
 .upload-label:hover {
-  background: #e0f2fe;
-  border-color: #3b82f6;
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #0052CC;
 }
 
 .custom-fields-section {
@@ -639,8 +644,8 @@
 }
 
 .custom-field-input input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #0052CC;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.1);
 }
 
 .modal-footer {
