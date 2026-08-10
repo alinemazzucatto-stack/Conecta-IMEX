@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Link2,
   FileText,
+  Package,
 } from 'lucide-react';
 import '../styles/sidebar.css';
 
@@ -60,6 +61,12 @@ export default function Sidebar() {
       icon: DollarSign,
       path: '/financial',
       color: 'from-orange-500 to-orange-600',
+    },
+    {
+      label: 'Pacotes',
+      icon: Package,
+      path: '/packages',
+      color: 'from-violet-500 to-violet-600',
     },
     {
       label: 'Configurações',
