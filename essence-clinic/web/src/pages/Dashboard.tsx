@@ -118,7 +118,7 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Stats Grid - Linha 1: 3 cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-6">
         <StatCard
           icon={<Users size={24} />}
           label="Clientes Ativos"
@@ -143,7 +143,7 @@ export default function Dashboard() {
       </div>
 
       {/* Additional Stats - Linha 2: 1 + 2 layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
         <StatCard
           icon={<DollarSign size={24} />}
           label="Receita do Mês"
@@ -168,7 +168,7 @@ export default function Dashboard() {
       </div>
 
       {/* Agendamentos Este Mês - Linha 3 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
         <StatCard
           icon={<Calendar size={24} />}
           label="Agendamentos Este Mês"
