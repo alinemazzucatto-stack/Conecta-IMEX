@@ -1,6 +1,7 @@
 /* Essence Clinic Styles - Import BEFORE Tailwind */
 @import './styles/sidebar.css';
 @import './styles/layout.css';
+@import './styles/dashboard.css';
 @import './styles/stat-card.css';
 @import './styles/revenue-chart.css';
 @import './styles/clients.css';

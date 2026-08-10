@@ -75,19 +75,27 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="p-8">
+    <div className="p-8 dashboard-container">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Bem-vindo, {user?.name}! 👋
-        </h1>
-        <p className="text-gray-600">
-          Aqui está o resumo da sua clínica Essence Clinic
-        </p>
+      <div className="mb-10 pb-6 border-b border-purple-100 dashboard-header">
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              Bem-vindo, {user?.name}! 👋
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Aqui está o resumo da sua clínica Essence Clinic
+            </p>
+          </div>
+          <div className="text-sm text-gray-500 text-right">
+            <p className="font-medium">Hoje</p>
+            <p>{new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="mb-8 flex flex-wrap gap-3">
+      <div className="mb-10 flex flex-wrap gap-3">
         {quickActions.map((action, idx) => {
           const Icon = action.icon;
           return (
@@ -173,7 +181,7 @@ export default function Dashboard() {
 
       {/* Booking Feature */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="section-header">
           Agendamento Online
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,20 +199,20 @@ export default function Dashboard() {
               <button
                 key={idx}
                 onClick={() => navigate(feature.href)}
-                className="bg-white rounded-12 p-6 border border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all text-left group"
+                className="feature-card"
               >
-                <div className={`bg-gradient-to-br ${colorMap[feature.color]} w-12 h-12 rounded-10 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`feature-icon bg-gradient-to-br ${colorMap[feature.color]}`}>
                   <Icon size={24} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <h3 className="feature-title">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="feature-description">
                   {feature.description}
                 </p>
-                <span className="text-purple-600 font-semibold text-sm group-hover:text-purple-700">
+                <a className="feature-link">
                   Acessar →
-                </span>
+                </a>
               </button>
             );
           })}
@@ -213,7 +221,7 @@ export default function Dashboard() {
 
       {/* Medical Records Feature */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="section-header">
           Fichas Clínicas
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -231,20 +239,20 @@ export default function Dashboard() {
               <button
                 key={idx}
                 onClick={() => navigate(feature.href)}
-                className="bg-white rounded-12 p-6 border border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all text-left group"
+                className="feature-card"
               >
-                <div className={`bg-gradient-to-br ${colorMap[feature.color]} w-12 h-12 rounded-10 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`feature-icon bg-gradient-to-br ${colorMap[feature.color]}`}>
                   <Icon size={24} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <h3 className="feature-title">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="feature-description">
                   {feature.description}
                 </p>
-                <span className="text-purple-600 font-semibold text-sm group-hover:text-purple-700">
+                <a className="feature-link">
                   Acessar →
-                </span>
+                </a>
               </button>
             );
           })}
@@ -253,7 +261,7 @@ export default function Dashboard() {
 
       {/* Features Grid */}
       <div className="mb-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="section-header">
           Acesso Rápido
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -270,20 +278,20 @@ export default function Dashboard() {
               <button
                 key={idx}
                 onClick={() => navigate(feature.href)}
-                className="bg-white rounded-12 p-6 border border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all text-left group"
+                className="feature-card"
               >
-                <div className={`bg-gradient-to-br ${colorMap[feature.color]} w-12 h-12 rounded-10 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`feature-icon bg-gradient-to-br ${colorMap[feature.color]}`}>
                   <Icon size={24} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <h3 className="feature-title">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="feature-description">
                   {feature.description}
                 </p>
-                <span className="text-purple-600 font-semibold text-sm group-hover:text-purple-700">
+                <a className="feature-link">
                   Acessar →
-                </span>
+                </a>
               </button>
             );
           })}
