@@ -1,14 +1,15 @@
-/* Stat Card Component - Balanced Design */
+/* Stat Card Component - Ultra Clean */
 .stat-card {
-  background: white;
-  border-radius: 6px;
-  padding: 6px 8px;
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.04);
-  border: 1px solid #f0f0f0;
-  transition: all 0.3s ease;
+  background: transparent;
+  border-radius: 4px;
+  padding: 4px 0;
+  box-shadow: none;
+  border: none;
+  transition: all 0.2s ease;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6px;
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -35,21 +36,22 @@
 .stat-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 4px;
 }
 
 /* Icon - Azul único para todos */
 .stat-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   background: #3b82f6;
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.08);
+  box-shadow: none;
   flex-shrink: 0;
 }
 
@@ -62,9 +64,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 8px;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -83,22 +85,23 @@
 .stat-content {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
+  flex: 1;
 }
 
 .stat-label {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 500;
-  color: #9ca3af;
+  color: #b0b7c3;
   text-transform: uppercase;
-  letter-spacing: 0.1px;
+  letter-spacing: 0;
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .stat-value {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   color: #1f2937;
   margin: 0;
   line-height: 1;
