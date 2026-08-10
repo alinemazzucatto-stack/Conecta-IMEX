@@ -1,0 +1,3431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conecta Essence - Healthcare Management Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #eab308;
+            --dark: #0f172a;
+            --dark-secondary: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideInLeft 0.4s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: rgba(30, 64, 175, 0.05);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(8, 145, 178, 0.1));
+            border-radius: 0.5rem;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1.25rem;
+            left: 1rem;
+            right: 1rem;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 9999px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+
+        .btn-icon:hover {
+            background: rgba(30, 64, 175, 0.1);
+            color: var(--primary);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 99;
+            animation: slideInLeft 0.4s ease;
+            margin-top: 73px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            padding-left: 0.75rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 0.75rem;
+            color: var(--gray);
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: var(--transition);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(30, 64, 175, 0.08);
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(30, 64, 175, 0.15), rgba(8, 145, 178, 0.08));
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-item i {
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            margin-left: 280px;
+            margin-top: 73px;
+            padding: 2rem;
+            min-height: calc(100vh - 73px);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* HEADER SECTION */
+        .page-header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .page-header-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .page-header-content p {
+            color: var(--gray);
+            font-size: 0.9375rem;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(30, 64, 175, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(30, 64, 175, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(30, 64, 175, 0.15);
+            border-color: rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(30, 64, 175, 0.05);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(30, 64, 175, 0.2);
+        }
+
+        .card-compact {
+            padding: 1.5rem;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .kpi-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .kpi-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .kpi-label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray);
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .kpi-change {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .kpi-change.positive {
+            color: var(--success);
+        }
+
+        .kpi-change.negative {
+            color: var(--danger);
+        }
+
+        /* FORMS */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label.required::after {
+            content: '*';
+            color: var(--danger);
+            margin-left: 0.25rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.9375rem;
+            color: var(--dark);
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-input.error,
+        .form-select.error,
+        .form-textarea.error {
+            border-color: var(--danger);
+        }
+
+        .form-input.error:focus,
+        .form-select.error:focus,
+        .form-textarea.error:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-error {
+            color: var(--danger);
+            font-size: 0.8125rem;
+            margin-top: 0.375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* TABLES */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: rgba(15, 23, 42, 0.04);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: rgba(30, 64, 175, 0.02);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #b45309;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: rgba(8, 145, 178, 0.1);
+            color: #0369a1;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--dark);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: var(--transition);
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .main-container {
+                margin-left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .sidebar {
+                position: absolute;
+                width: 240px;
+                left: -240px;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-container {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .navbar-nav {
+                display: none;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                width: 95%;
+                max-height: 95vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1.125rem;
+            }
+
+            .page-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* UTILITY */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--gray);
+        }
+
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .align-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        /* AVATAR */
+        .avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .avatar-lg {
+            width: 4rem;
+            height: 4rem;
+            font-size: 1.5rem;
+        }
+
+        /* STATUS INDICATOR */
+        .status-indicator {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-indicator.online {
+            background: var(--success);
+        }
+
+        .status-indicator.offline {
+            background: var(--gray-light);
+        }
+
+        .status-indicator.busy {
+            background: var(--warning);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-hospital"></i> Conecta Essence
+        </div>
+        <ul class="navbar-nav">
+            <li><a class="nav-link active" onclick="navigateTo('dashboard')">Dashboard</a></li>
+            <li><a class="nav-link" onclick="navigateTo('agendamentos')">Agendamentos</a></li>
+            <li><a class="nav-link" onclick="navigateTo('profissionais')">Profissionais</a></li>
+            <li><a class="nav-link" onclick="navigateTo('clientes')">Clientes</a></li>
+            <li><a class="nav-link" onclick="navigateTo('financeiro')">Financeiro</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <button class="btn-icon"><i class="fas fa-bell"></i></button>
+            <button class="btn-icon"><i class="fas fa-cog"></i></button>
+            <div class="avatar" style="width: 2.25rem; height: 2.25rem;">AB</div>
+        </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Menu Principal</div>
+            <a class="sidebar-item active" onclick="navigateTo('dashboard')">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a class="sidebar-item" onclick="navigateTo('agendamentos')">
+                <i class="fas fa-calendar-check"></i> Agendamentos
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Gestão</div>
+            <a class="sidebar-item" onclick="navigateTo('especialidades')">
+                <i class="fas fa-stethoscope"></i> Especialidades
+            </a>
+            <a class="sidebar-item" onclick="navigateTo('profissionais')">
+                <i class="fas fa-user-md"></i> Profissionais
+            </a>
+            <a class="sidebar-item" onclick="navigateTo('clientes')">
+                <i class="fas fa-users"></i> Clientes
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Financeiro</div>
+            <a class="sidebar-item" onclick="navigateTo('financeiro')">
+                <i class="fas fa-chart-pie"></i> Financeiro
+            </a>
+            <a class="sidebar-item" onclick="navigateTo('relatorios')">
+                <i class="fas fa-file-pdf"></i> Relatórios
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">Configurações</div>
+            <a class="sidebar-item" onclick="navigateTo('configuracoes')">
+                <i class="fas fa-sliders-h"></i> Preferências
+            </a>
+            <a class="sidebar-item" onclick="navigateTo('seguranca')">
+                <i class="fas fa-lock"></i> Segurança
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+
+        <!-- ESPECIALIDADES PAGE -->
+        <div id="especialidades" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Especialidades</h1>
+                    <p>Gerencie todas as especialidades disponíveis na clínica</p>
+                </div>
+                <button class="btn btn-primary" onclick="showModal('nova-especialidade-modal')">
+                    <i class="fas fa-plus"></i> Nova Especialidade
+                </button>
+            </div>
+
+            <div class="card">
+                <div style="margin-bottom: 2rem;">
+                    <input type="text" class="form-input" placeholder="Buscar especialidade...">
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Especialidade</th>
+                                <th>Descrição</th>
+                                <th>Profissionais</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">Clínica Geral</div>
+                                </td>
+                                <td>Atendimento geral e consultas de rotina</td>
+                                <td>5</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-especialidade-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">Estética</div>
+                                </td>
+                                <td>Procedimentos estéticos e cosméticos</td>
+                                <td>3</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-especialidade-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="font-weight: 600;">Cardiologia</div>
+                                </td>
+                                <td>Especialidade em cardiopatias</td>
+                                <td>2</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-especialidade-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboard" class="page active">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Dashboard</h1>
+                    <p>Bem-vindo! Aqui está o resumo de sua clínica</p>
+                </div>
+                <button class="btn btn-primary" onclick="showModal('novo-agendamento-modal')">
+                    <i class="fas fa-plus"></i> Novo Agendamento
+                </button>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Pacientes Ativos</div>
+                    <div class="kpi-value">1.243</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 12% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Consultas Este Mês</div>
+                    <div class="kpi-value">487</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Receita Total</div>
+                    <div class="kpi-value">R$ 45.3k</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 15% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Taxa de Ocupação</div>
+                    <div class="kpi-value">87%</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 5% vs mês anterior
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem;">
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">Agendamentos Recentes</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="padding: 1rem; border-left: 3px solid var(--primary); background: rgba(30, 64, 175, 0.02); border-radius: 0.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <strong>João Silva</strong>
+                                <span class="badge badge-success">Confirmado</span>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Clínica Geral • 30/07/2026 às 14:00</div>
+                        </div>
+                        <div style="padding: 1rem; border-left: 3px solid var(--secondary); background: rgba(8, 145, 178, 0.02); border-radius: 0.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <strong>Maria Santos</strong>
+                                <span class="badge badge-info">Pendente</span>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Cardiologia • 31/07/2026 às 10:00</div>
+                        </div>
+                        <div style="padding: 1rem; border-left: 3px solid var(--warning); background: rgba(245, 158, 11, 0.02); border-radius: 0.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <strong>Carlos Oliveira</strong>
+                                <span class="badge badge-warning">Lembrá-lo</span>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Oftalmologia • 01/08/2026 às 16:00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">Profissionais Disponíveis</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: rgba(16, 185, 129, 0.03); border-radius: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="avatar">DR</div>
+                                <div>
+                                    <div style="font-weight: 600;">Dr. Roberto</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Clínica Geral</div>
+                                </div>
+                            </div>
+                            <span class="status-indicator online"></span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: rgba(16, 185, 129, 0.03); border-radius: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="avatar">DM</div>
+                                <div>
+                                    <div style="font-weight: 600;">Dra. Mônica</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Dermatologia</div>
+                                </div>
+                            </div>
+                            <span class="status-indicator online"></span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: rgba(245, 158, 11, 0.03); border-radius: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="avatar">DP</div>
+                                <div>
+                                    <div style="font-weight: 600;">Dr. Pedro</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Cardiologia</div>
+                                </div>
+                            </div>
+                            <span class="status-indicator busy"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS SECTION -->
+            <div style="margin-top: 2rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--dark);">📊 Analytics & Relatórios</h2>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+                    <!-- Gráfico de Receita -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 1.5rem;">💰 Receita Mensal</h3>
+                        <canvas id="chartReceita" style="max-height: 300px;"></canvas>
+                    </div>
+
+                    <!-- Gráfico de Procedimentos -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 1.5rem;">🏥 Procedimentos Mais Populares</h3>
+                        <canvas id="chartProcedimentos" style="max-height: 300px;"></canvas>
+                    </div>
+
+                    <!-- Gráfico de Ocupação -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 1.5rem;">👨‍⚕️ Taxa de Ocupação por Profissional</h3>
+                        <canvas id="chartOcupacao" style="max-height: 300px;"></canvas>
+                    </div>
+
+                    <!-- Top Clientes -->
+                    <div class="card">
+                        <h3 style="margin-bottom: 1.5rem;">⭐ Top 5 Clientes (Faturamento)</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(30, 64, 175, 0.05); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar" style="width: 36px; height: 36px; font-size: 0.75rem;">JS</div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">João Silva</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">28 consultas</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--success);">R$ 4.200</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">15% da receita</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(16, 185, 129, 0.05); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar" style="width: 36px; height: 36px; font-size: 0.75rem;">MS</div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">Maria Santos</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">24 consultas</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--success);">R$ 3.850</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">13% da receita</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(251, 146, 60, 0.05); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar" style="width: 36px; height: 36px; font-size: 0.75rem;">CO</div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">Carlos Oliveira</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">19 consultas</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--success);">R$ 3.200</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">11% da receita</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(59, 130, 246, 0.05); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar" style="width: 36px; height: 36px; font-size: 0.75rem;">AO</div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">Ana oliveira</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">18 consultas</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--success);">R$ 2.950</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">10% da receita</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(168, 85, 247, 0.05); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="avatar" style="width: 36px; height: 36px; font-size: 0.75rem;">PG</div>
+                                    <div>
+                                        <div style="font-weight: 600; font-size: 0.9rem;">Paula Gomes</div>
+                                        <div style="font-size: 0.75rem; color: var(--gray);">15 consultas</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700; color: var(--success);">R$ 2.500</div>
+                                    <div style="font-size: 0.75rem; color: var(--gray);">8% da receita</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFISSIONAIS PAGE -->
+        <div id="profissionais" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Profissionais</h1>
+                    <p>Gerencie todos os profissionais de saúde cadastrados</p>
+                </div>
+                <button class="btn btn-primary" onclick="showModal('novo-profissional-modal')">
+                    <i class="fas fa-plus"></i> Novo Profissional
+                </button>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <input type="text" class="form-input" placeholder="Buscar por nome ou CRM...">
+                    </div>
+                    <select class="form-select" style="min-width: 200px;">
+                        <option>Todas as especialidades</option>
+                        <option>Clínica Geral</option>
+                        <option>Cardiologia</option>
+                        <option>Dermatologia</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Profissional</th>
+                                <th>Especialidade</th>
+                                <th>CRM/COREM</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="avatar">DR</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Dr. Roberto Silva</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray);">Ativo desde 2020</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Clínica Geral</td>
+                                <td>CRM SP 123456</td>
+                                <td>
+                                    <div style="font-size: 0.875rem;">
+                                        <div>(11) 99999-8888</div>
+                                        <div style="color: var(--gray);">roberto@email.com</div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-profissional-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="avatar">DM</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Dra. Mônica Costa</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray);">Ativo desde 2019</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Dermatologia</td>
+                                <td>CRM SP 654321</td>
+                                <td>
+                                    <div style="font-size: 0.875rem;">
+                                        <div>(11) 98888-7777</div>
+                                        <div style="color: var(--gray);">monica@email.com</div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-profissional-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="avatar">DP</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Dr. Pedro Santos</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray);">Ativo desde 2021</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Cardiologia</td>
+                                <td>CRM SP 789012</td>
+                                <td>
+                                    <div style="font-size: 0.875rem;">
+                                        <div>(11) 97777-6666</div>
+                                        <div style="color: var(--gray);">pedro@email.com</div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-warning">Pendente Doc</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('editar-profissional-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLIENTES PAGE -->
+        <div id="clientes" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Clientes</h1>
+                    <p>Gestão completa de pacientes e clientes</p>
+                </div>
+                <button class="btn btn-primary" onclick="showModal('novo-cliente-modal')">
+                    <i class="fas fa-plus"></i> Novo Cliente
+                </button>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <input type="text" class="form-input" placeholder="Buscar por nome ou CPF...">
+                    </div>
+                    <select class="form-select" style="min-width: 200px;">
+                        <option>Todos os status</option>
+                        <option>Ativo</option>
+                        <option>Inativo</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>CPF/Email</th>
+                                <th>Telefone</th>
+                                <th>Última Consulta</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="avatar">JS</div>
+                                        <div>
+                                            <div style="font-weight: 600;">João Silva</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray);">Membro desde 2023</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-size: 0.875rem;">
+                                        <div>123.456.789-00</div>
+                                        <div style="color: var(--gray);">joao@email.com</div>
+                                    </div>
+                                </td>
+                                <td>(11) 99999-1111</td>
+                                <td>28/07/2026</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('visualizar-cliente-modal')" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <div class="avatar">MS</div>
+                                        <div>
+                                            <div style="font-weight: 600;">Maria Santos</div>
+                                            <div style="font-size: 0.875rem; color: var(--gray);">Membro desde 2022</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-size: 0.875rem;">
+                                        <div>987.654.321-11</div>
+                                        <div style="color: var(--gray);">maria@email.com</div>
+                                    </div>
+                                </td>
+                                <td>(11) 98888-2222</td>
+                                <td>25/07/2026</td>
+                                <td><span class="badge badge-success">Ativo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-secondary" style="background: transparent; border: none; padding: 0.25rem; color: var(--primary);" onclick="showModal('visualizar-cliente-modal')" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- AGENDAMENTOS PAGE -->
+        <div id="agendamentos" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Agendamentos</h1>
+                    <p>Gerencie todos os agendamentos de consultas</p>
+                </div>
+                <button class="btn btn-primary" onclick="showModal('novo-agendamento-modal')">
+                    <i class="fas fa-plus"></i> Novo Agendamento
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('agenda-calendar')">Calendário</button>
+                    <button class="tab" onclick="switchTab('agenda-list')">Lista</button>
+                    <button class="tab" onclick="switchTab('agenda-timeline')">Timeline</button>
+                </div>
+
+                <div id="agenda-calendar" style="display: block; padding: 2rem;">
+                    <!-- Calendário Interativo -->
+                    <div style="max-width: 100%;">
+                        <!-- Navegação de Mês -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <button class="btn btn-sm btn-secondary" onclick="previousMonth()" style="padding: 0.5rem 1rem;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <h2 id="currentMonth" style="font-size: 1.25rem; margin: 0;">Julho 2026</h2>
+                            <button class="btn btn-sm btn-secondary" onclick="nextMonth()" style="padding: 0.5rem 1rem;">
+                                Próximo <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Calendário Grid -->
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 2rem;">
+                            <!-- Cabeçalho dos Dias da Semana -->
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Seg</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Ter</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Qua</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Qui</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Sex</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Sab</div>
+                            <div style="text-align: center; font-weight: 700; padding: 0.75rem; color: var(--gray); font-size: 0.875rem;">Dom</div>
+
+                            <!-- Dias do Calendário -->
+                            <div id="calendarDays" style="display: contents;"></div>
+                        </div>
+
+                        <!-- Legenda de Cores -->
+                        <div style="display: flex; gap: 2rem; flex-wrap: wrap; padding: 1.5rem; background: rgba(30, 64, 175, 0.03); border-radius: 0.5rem; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; background: var(--primary); border-radius: 2px;"></div>
+                                <span style="font-size: 0.875rem;">Dr. Roberto</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; background: var(--secondary); border-radius: 2px;"></div>
+                                <span style="font-size: 0.875rem;">Dra. Mônica</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; background: var(--accent); border-radius: 2px;"></div>
+                                <span style="font-size: 0.875rem;">Dr. Pedro</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; background: var(--success); border-radius: 2px;"></div>
+                                <span style="font-size: 0.875rem;">Disponível</span>
+                            </div>
+                        </div>
+
+                        <!-- Agendamentos do Dia -->
+                        <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.05); border-radius: 0.5rem;">
+                            <h3 style="margin-bottom: 1rem;">📅 Agendamentos - <span id="selectedDate">30/07/2026</span></h3>
+                            <div id="dayAppointments" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div style="display: flex; gap: 1rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid var(--primary);">
+                                    <div style="width: 12px; background: var(--primary); border-radius: 2px;"></div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600;">João Silva</div>
+                                        <div style="font-size: 0.875rem; color: var(--gray);">14:00 - Dr. Roberto • Clínica Geral</div>
+                                    </div>
+                                    <span class="badge badge-success">Confirmado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="agenda-list" style="display: none;">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Profissional</th>
+                                    <th>Data/Hora</th>
+                                    <th>Especialidade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>João Silva</td>
+                                    <td>Dr. Roberto</td>
+                                    <td>30/07/2026 14:00</td>
+                                    <td>Clínica Geral</td>
+                                    <td><span class="badge badge-success">Confirmado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="agenda-timeline" style="display: none; text-align: center; padding: 2rem; background: rgba(30, 64, 175, 0.02); border-radius: 0.75rem;">
+                    <p style="color: var(--gray);">Visualização timeline dos agendamentos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FINANCEIRO PAGE -->
+        <div id="financeiro" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Financeiro</h1>
+                    <p>Gestão completa de receitas, despesas e movimentações financeiras</p>
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showModal('lançamento-receita-modal')">
+                        <i class="fas fa-plus-circle"></i> Entrada
+                    </button>
+                    <button class="btn btn-secondary" onclick="showModal('lançamento-despesa-modal')">
+                        <i class="fas fa-minus-circle"></i> Despesa
+                    </button>
+                </div>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Receita Bruta</div>
+                    <div class="kpi-value">R$ 52.3k</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 18% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Lucro Líquido</div>
+                    <div class="kpi-value">R$ 38.2k</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 22% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Despesas</div>
+                    <div class="kpi-value">R$ 14.1k</div>
+                    <div class="kpi-change negative">
+                        <i class="fas fa-arrow-down"></i> 5% vs mês anterior
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Margem de Lucro</div>
+                    <div class="kpi-value">73.1%</div>
+                    <div class="kpi-change positive">
+                        <i class="fas fa-arrow-up"></i> 3% vs mês anterior
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">Movimentações Financeiras</h3>
+
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <select class="form-select" style="min-width: 200px;">
+                        <option>Todas as transações</option>
+                        <option>Entradas</option>
+                        <option>Despesas</option>
+                        <option>Cartão</option>
+                        <option>Dinheiro</option>
+                        <option>PIX</option>
+                        <option>Transferência</option>
+                    </select>
+                    <input type="date" class="form-input" style="min-width: 150px;">
+                    <input type="date" class="form-input" style="min-width: 150px;">
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Tipo</th>
+                                <th>Método</th>
+                                <th>Valor</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>30/07/2026 14:30</td>
+                                <td>Consulta - João Silva</td>
+                                <td><span class="badge badge-success">Receita</span></td>
+                                <td>Entrada</td>
+                                <td><i class="fas fa-credit-card" style="color: var(--primary);"></i> Cartão</td>
+                                <td style="color: var(--success); font-weight: 600;">+R$ 150,00</td>
+                                <td>
+                                    <button class="btn btn-sm" style="background: transparent; border: none; color: var(--primary); cursor: pointer;" onclick="showModal('editar-transacao-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>29/07/2026 10:00</td>
+                                <td>Aluguel Consultório</td>
+                                <td><span class="badge badge-danger">Despesa</span></td>
+                                <td>Saída</td>
+                                <td><i class="fas fa-money-bill" style="color: var(--warning);"></i> Dinheiro</td>
+                                <td style="color: var(--danger); font-weight: 600;">-R$ 3.500,00</td>
+                                <td>
+                                    <button class="btn btn-sm" style="background: transparent; border: none; color: var(--primary); cursor: pointer;" onclick="showModal('editar-transacao-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>28/07/2026 16:45</td>
+                                <td>Consulta - Maria Santos</td>
+                                <td><span class="badge badge-success">Receita</span></td>
+                                <td>Entrada</td>
+                                <td><i class="fas fa-money-bill" style="color: var(--warning);"></i> Dinheiro</td>
+                                <td style="color: var(--success); font-weight: 600;">+R$ 200,00</td>
+                                <td>
+                                    <button class="btn btn-sm" style="background: transparent; border: none; color: var(--primary); cursor: pointer;" onclick="showModal('editar-transacao-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>27/07/2026 14:20</td>
+                                <td>Procedimento Estético - Ana</td>
+                                <td><span class="badge badge-success">Receita</span></td>
+                                <td>Entrada</td>
+                                <td><i class="fas fa-mobile-alt" style="color: #9c27b0;"></i> PIX</td>
+                                <td style="color: var(--success); font-weight: 600;">+R$ 350,00</td>
+                                <td>
+                                    <button class="btn btn-sm" style="background: transparent; border: none; color: var(--primary); cursor: pointer;" onclick="showModal('editar-transacao-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>27/07/2026 09:15</td>
+                                <td>Materiais Médicos</td>
+                                <td><span class="badge badge-danger">Despesa</span></td>
+                                <td>Saída</td>
+                                <td><i class="fas fa-credit-card" style="color: var(--primary);"></i> Cartão</td>
+                                <td style="color: var(--danger); font-weight: 600;">-R$ 1.200,00</td>
+                                <td>
+                                    <button class="btn btn-sm" style="background: transparent; border: none; color: var(--primary); cursor: pointer;" onclick="showModal('editar-transacao-modal')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIGURAÇÕES PAGE -->
+        <div id="configuracoes" class="page">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1>Configurações</h1>
+                    <p>Personalize suas preferências e configurações do sistema</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 2rem; font-size: 1.125rem;">⚙️ Preferências do Sistema</h3>
+                <div class="form-group">
+                    <label class="form-label required">Tema</label>
+                    <select class="form-select" id="theme-select">
+                        <option value="light">Claro</option>
+                        <option value="dark">Escuro</option>
+                        <option value="auto">Automático</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Idioma</label>
+                    <select class="form-select" id="language-select">
+                        <option value="pt-br">Português (Brasil)</option>
+                        <option value="pt-pt">Português (Portugal)</option>
+                        <option value="en">Inglês</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                    <button class="btn btn-primary" onclick="savePreferences()">
+                        <i class="fas fa-save"></i> Salvar Preferências
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetPreferences()">
+                        <i class="fas fa-undo"></i> Restaurar Padrão
+                    </button>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">📋 Outras Configurações</h3>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Notificações por Email</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Receba alertas sobre atividades importantes</div>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" checked>
+                            <span style="font-size: 0.875rem;">Ativado</span>
+                        </label>
+                    </div>
+
+                    <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Notificações do Sistema</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Exibir notificações toast no navegador</div>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" checked>
+                            <span style="font-size: 0.875rem;">Ativado</span>
+                        </label>
+                    </div>
+
+                    <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Lembretes de Agendamento</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Receber lembretes 24h antes das consultas</div>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" checked>
+                            <span style="font-size: 0.875rem;">Ativado</span>
+                        </label>
+                    </div>
+
+                    <div style="padding: 1rem; border: 1px solid var(--border); border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Modo Compacto da Interface</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Exibir interface mais enxuta e compacta</div>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox">
+                            <span style="font-size: 0.875rem;">Desativado</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.125rem;">🔐 Segurança</h3>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;" onclick="showModal('alterar-senha-modal')">
+                        <i class="fas fa-key"></i> Alterar Senha
+                    </button>
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;" onclick="showModal('2fa-modal')">
+                        <i class="fas fa-shield-alt"></i> Autenticação de Dois Fatores
+                    </button>
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;" onclick="showModal('historico-login-modal')">
+                        <i class="fas fa-history"></i> Histórico de Login
+                    </button>
+                    <button class="btn btn-danger" style="width: 100%; justify-content: flex-start;" onclick="if(confirm('Tem certeza que deseja fazer logout?')) { alert('✅ Logout realizado com sucesso!'); }">
+                        <i class="fas fa-sign-out-alt"></i> Fazer Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL - Novo Profissional -->
+    <div class="modal-overlay" id="novo-profissional-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Cadastrar Profissional</h2>
+                <button class="modal-close" onclick="closeModal('novo-profissional-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchModalTab('prof-pessoal')">Pessoal</button>
+                    <button class="tab" onclick="switchModalTab('prof-profissional')">Profissional</button>
+                    <button class="tab" onclick="switchModalTab('prof-especialidades')">Especialidades</button>
+                    <button class="tab" onclick="switchModalTab('prof-disponibilidade')">Disponibilidade</button>
+                </div>
+
+                <!-- Tab Pessoal -->
+                <div id="prof-pessoal" style="display: block;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nome Completo</label>
+                            <input type="text" class="form-input" placeholder="Ex: Dr. Roberto Silva">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Data de Nascimento</label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">CPF</label>
+                            <input type="text" class="form-input" placeholder="000.000.000-00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">RG</label>
+                            <input type="text" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Telefone</label>
+                            <input type="tel" class="form-input" placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Profissional -->
+                <div id="prof-profissional" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">CRM/COREM</label>
+                            <input type="text" class="form-input" placeholder="CRM SP 123456">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Emissão</label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Anos de Experiência</label>
+                            <input type="number" class="form-input" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Idiomas</label>
+                            <input type="text" class="form-input" placeholder="Português, Inglês">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Upload de Documento (CRM)</label>
+                        <input type="file" class="form-input" accept=".pdf,.jpg,.png">
+                    </div>
+                </div>
+
+                <!-- Tab Especialidades -->
+                <div id="prof-especialidades" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label required">Selecione as Especialidades</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.background='transparent'">
+                                <input type="checkbox" checked>
+                                <div>
+                                    <div style="font-weight: 600;">Clínica Geral</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Atendimento geral e consultas de rotina</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.background='transparent'">
+                                <input type="checkbox">
+                                <div>
+                                    <div style="font-weight: 600;">Cardiologia</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Especialidade em cardiopatias</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.background='transparent'">
+                                <input type="checkbox">
+                                <div>
+                                    <div style="font-weight: 600;">Dermatologia</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Cuidados com a pele e tratamentos</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.background='transparent'">
+                                <input type="checkbox">
+                                <div>
+                                    <div style="font-weight: 600;">Estética</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Procedimentos estéticos e cosméticos</div>
+                                </div>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition);" onmouseover="this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.background='transparent'">
+                                <input type="checkbox">
+                                <div>
+                                    <div style="font-weight: 600;">Oftalmologia</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Cuidados com os olhos e visão</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Disponibilidade -->
+                <div id="prof-disponibilidade" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Horário de Atendimento</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                            <div>
+                                <label style="font-size: 0.875rem; color: var(--gray);">Início</label>
+                                <input type="time" class="form-input" value="08:00">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.875rem; color: var(--gray);">Fim</label>
+                                <input type="time" class="form-input" value="18:00">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dias da Semana</label>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" checked> Segunda
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" checked> Terça
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" checked> Quarta
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" checked> Quinta
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" checked> Sexta
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox"> Sábado
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox"> Domingo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('novo-profissional-modal')">Cancelar</button>
+                <button class="btn btn-primary">Salvar Profissional</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Novo Cliente -->
+    <div class="modal-overlay" id="novo-cliente-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Cadastrar Cliente</h2>
+                <button class="modal-close" onclick="closeModal('novo-cliente-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchModalTab('client-pessoal')">Pessoal</button>
+                    <button class="tab" onclick="switchModalTab('client-medico')">Médico</button>
+                    <button class="tab" onclick="switchModalTab('client-estetica')">Estética</button>
+                    <button class="tab" onclick="switchModalTab('client-profissional')">Profissional</button>
+                </div>
+
+                <!-- Tab Pessoal -->
+                <div id="client-pessoal" style="display: block;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nome Completo</label>
+                            <input type="text" class="form-input" placeholder="Ex: João Silva">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Data de Nascimento</label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Sexo/Gênero</label>
+                            <select class="form-select">
+                                <option>Selecione...</option>
+                                <option>Masculino</option>
+                                <option>Feminino</option>
+                                <option>Outro</option>
+                                <option>Prefiro não informar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">CPF</label>
+                            <input type="text" class="form-input" placeholder="000.000.000-00">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Telefone</label>
+                            <input type="tel" class="form-input" placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" class="form-input" placeholder="Rua/Av. e número">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Cidade</label>
+                            <input type="text" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CEP</label>
+                            <input type="text" class="form-input" placeholder="00000-000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Médico -->
+                <div id="client-medico" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Alergias</label>
+                        <textarea class="form-textarea" rows="3" placeholder="Liste as alergias conhecidas..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Medicações em Uso</label>
+                        <textarea class="form-textarea" rows="3" placeholder="Medicações em uso contínuo..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Sangue</label>
+                            <select class="form-select">
+                                <option>Selecione...</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Plano de Saúde</label>
+                            <input type="text" class="form-input" placeholder="Nome do plano">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contato de Emergência</label>
+                        <input type="text" class="form-input" placeholder="Nome e telefone">
+                    </div>
+                </div>
+
+                <!-- Tab Estética -->
+                <div id="client-estetica" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Quantidade de Sessões Contratadas</label>
+                        <input type="number" class="form-input" placeholder="Ex: 10" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sessões Realizadas</label>
+                        <input type="number" class="form-input" placeholder="Ex: 0" value="0" readonly style="background: rgba(30,64,175,0.05);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sessões Restantes</label>
+                        <input type="number" class="form-input" placeholder="Ex: 10" value="0" readonly style="background: rgba(16,185,129,0.05); color: var(--success); font-weight: 600;">
+                    </div>
+
+                    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                        <h4 style="margin-bottom: 1rem; font-size: 1rem;">Fotos e Medidas</h4>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Foto Antes</label>
+                                <div style="border: 2px dashed var(--border); border-radius: 0.5rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: var(--transition);" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.borderColor='var(--border)'; this.style.background='transparent'">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary); display: block; margin-bottom: 0.5rem;"></i>
+                                    <input type="file" class="form-input" accept="image/*" style="display: none;">
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Clique para upload</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Foto Depois</label>
+                                <div style="border: 2px dashed var(--border); border-radius: 0.5rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: var(--transition);" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='rgba(30,64,175,0.05)'" onmouseout="this.style.borderColor='var(--border)'; this.style.background='transparent'">
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary); display: block; margin-bottom: 0.5rem;"></i>
+                                    <input type="file" class="form-input" accept="image/*" style="display: none;">
+                                    <div style="font-size: 0.875rem; color: var(--gray);">Clique para upload</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(30,64,175,0.05); border-radius: 0.75rem;">
+                            <h5 style="margin-bottom: 1rem; font-size: 0.9375rem; font-weight: 600;">Medidas Corporais</h5>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Peso (kg)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 65" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Altura (cm)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 165">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Cintura (cm)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 70">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Quadril (cm)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 95">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Busto (cm)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 90">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Coxa (cm)</label>
+                                    <input type="number" class="form-input" placeholder="Ex: 55">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">IMC Calculado</label>
+                                <input type="number" class="form-input" placeholder="Calculado automaticamente" readonly style="background: rgba(16,185,129,0.05);">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(245,158,11,0.05); border-radius: 0.75rem;">
+                            <h5 style="margin-bottom: 1rem; font-size: 0.9375rem; font-weight: 600;">Registrar Sessão Realizada</h5>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Data da Sessão</label>
+                                    <input type="date" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Horário</label>
+                                    <input type="time" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Observações sobre a Sessão</label>
+                                <textarea class="form-textarea" rows="2" placeholder="Descreva como foi a sessão, resultados, reações..."></textarea>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-check"></i> Confirmar Sessão e Debitar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Profissional -->
+                <div id="client-profissional" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Profissão</label>
+                            <input type="text" class="form-input" placeholder="Ex: Engenheiro">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Empresa</label>
+                            <input type="text" class="form-input" placeholder="Nome da empresa">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('novo-cliente-modal')">Cancelar</button>
+                <button class="btn btn-primary">Salvar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Lançamento de Receita -->
+    <div class="modal-overlay" id="lançamento-receita-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-plus-circle" style="color: var(--success); margin-right: 0.5rem;"></i>Registrar Entrada</h2>
+                <button class="modal-close" onclick="closeModal('lançamento-receita-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Descrição</label>
+                    <input type="text" class="form-input" placeholder="Ex: Consulta - João Silva, Procedimento estético">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Valor (R$)</label>
+                        <input type="number" class="form-input" placeholder="0,00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Data</label>
+                        <input type="date" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Método de Pagamento</label>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-receita" value="cartao" checked>
+                            <i class="fas fa-credit-card" style="color: var(--primary); font-size: 1.25rem;"></i>
+                            <span>Cartão</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--warning)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-receita" value="dinheiro">
+                            <i class="fas fa-money-bill" style="color: var(--warning); font-size: 1.25rem;"></i>
+                            <span>Dinheiro</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='#9c27b0'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-receita" value="pix">
+                            <i class="fas fa-mobile-alt" style="color: #9c27b0; font-size: 1.25rem;"></i>
+                            <span>PIX</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--secondary)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-receita" value="transferencia">
+                            <i class="fas fa-exchange-alt" style="color: var(--secondary); font-size: 1.25rem;"></i>
+                            <span>Transferência</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Profissional Responsável</label>
+                    <select class="form-select">
+                        <option>Selecione um profissional</option>
+                        <option>Dr. Roberto Silva</option>
+                        <option>Dra. Mônica Costa</option>
+                        <option>Dr. Pedro Santos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select">
+                        <option>Consulta</option>
+                        <option>Procedimento</option>
+                        <option>Produto/Venda</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-textarea" rows="2" placeholder="Adicione notas sobre o lançamento..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('lançamento-receita-modal')">Cancelar</button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-check"></i> Registrar Entrada
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Lançamento de Despesa -->
+    <div class="modal-overlay" id="lançamento-despesa-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-minus-circle" style="color: var(--danger); margin-right: 0.5rem;"></i>Registrar Despesa</h2>
+                <button class="modal-close" onclick="closeModal('lançamento-despesa-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Descrição</label>
+                    <input type="text" class="form-input" placeholder="Ex: Aluguel, Água, Energia, Materiais">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Valor (R$)</label>
+                        <input type="number" class="form-input" placeholder="0,00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Data</label>
+                        <input type="date" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Método de Pagamento</label>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-despesa" value="cartao" checked>
+                            <i class="fas fa-credit-card" style="color: var(--primary); font-size: 1.25rem;"></i>
+                            <span>Cartão</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--warning)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-despesa" value="dinheiro">
+                            <i class="fas fa-money-bill" style="color: var(--warning); font-size: 1.25rem;"></i>
+                            <span>Dinheiro</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='#9c27b0'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-despesa" value="pix">
+                            <i class="fas fa-mobile-alt" style="color: #9c27b0; font-size: 1.25rem;"></i>
+                            <span>PIX</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 0.5rem; transition: var(--transition);" onmouseover="this.style.borderColor='var(--secondary)'" onmouseout="this.style.borderColor='var(--border)'">
+                            <input type="radio" name="metodo-despesa" value="transferencia">
+                            <i class="fas fa-exchange-alt" style="color: var(--secondary); font-size: 1.25rem;"></i>
+                            <span>Transferência</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Categoria de Despesa</label>
+                    <select class="form-select">
+                        <option>Selecione uma categoria</option>
+                        <option>Aluguel/Imóvel</option>
+                        <option>Folha de Pagamento</option>
+                        <option>Materiais Médicos</option>
+                        <option>Utilidades (Água, Luz, Internet)</option>
+                        <option>Manutenção/Reparos</option>
+                        <option>Marketing/Publicidade</option>
+                        <option>Seguros</option>
+                        <option>Impostos/Taxas</option>
+                        <option>Outro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Fornecedor/Beneficiário</label>
+                    <input type="text" class="form-input" placeholder="Nome do fornecedor ou pessoa">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-textarea" rows="2" placeholder="Adicione notas sobre o lançamento..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('lançamento-despesa-modal')">Cancelar</button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-check"></i> Registrar Despesa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Alterar Senha -->
+    <div class="modal-overlay" id="alterar-senha-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-key" style="color: var(--primary); margin-right: 0.5rem;"></i>Alterar Senha</h2>
+                <button class="modal-close" onclick="closeModal('alterar-senha-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Senha Atual</label>
+                    <input type="password" class="form-input" placeholder="Digite sua senha atual">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Nova Senha</label>
+                    <input type="password" class="form-input" placeholder="Digite a nova senha">
+                    <div style="font-size: 0.875rem; color: var(--gray); margin-top: 0.5rem;">
+                        ✓ Mínimo 8 caracteres | ✓ Números e símbolos
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Confirmar Nova Senha</label>
+                    <input type="password" class="form-input" placeholder="Confirme a nova senha">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('alterar-senha-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Senha alterada com sucesso!'); closeModal('alterar-senha-modal');">
+                    <i class="fas fa-check"></i> Alterar Senha
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Autenticação de Dois Fatores -->
+    <div class="modal-overlay" id="2fa-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-shield-alt" style="color: var(--success); margin-right: 0.5rem;"></i>Autenticação de Dois Fatores (2FA)</h2>
+                <button class="modal-close" onclick="closeModal('2fa-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.75rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle" style="font-size: 1.5rem; color: var(--success);"></i>
+                        <div>
+                            <div style="font-weight: 600;">2FA está ATIVADO ✅</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Sua conta está protegida com autenticação de dois fatores</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 1rem; font-weight: 600;">Método 2FA Ativo:</h4>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-mobile-alt" style="color: var(--primary); font-size: 1.5rem;"></i>
+                    <div>
+                        <div style="font-weight: 600;">Aplicativo Autenticador</div>
+                        <div style="font-size: 0.875rem; color: var(--gray);">Google Authenticator • Authy • Microsoft Authenticator</div>
+                        <div style="font-size: 0.875rem; color: var(--gray); margin-top: 0.5rem;">Último acesso: 30/07/2026 às 14:30</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 1rem; font-weight: 600;">Códigos de Backup:</h4>
+                <div style="padding: 1rem; background: var(--light); border-radius: 0.5rem; font-family: monospace; font-size: 0.875rem; margin-bottom: 1.5rem;">
+                    <div>🔴 XXXX-XXXX-XXXX (usado em 15/07)</div>
+                    <div style="color: var(--gray);">⚪ XXXX-XXXX-XXXX</div>
+                    <div style="color: var(--gray);">⚪ XXXX-XXXX-XXXX</div>
+                    <div style="color: var(--gray);">⚪ XXXX-XXXX-XXXX</div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-download"></i> Download Códigos
+                    </button>
+                    <button class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-sync"></i> Regenerar
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('2fa-modal')">Fechar</button>
+                <button class="btn btn-danger">
+                    <i class="fas fa-times"></i> Desativar 2FA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Histórico de Login -->
+    <div class="modal-overlay" id="historico-login-modal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-history" style="color: var(--primary); margin-right: 0.5rem;"></i>Histórico de Login</h2>
+                <button class="modal-close" onclick="closeModal('historico-login-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="form-label">Filtrar por período</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <select class="form-select" style="flex: 1;">
+                            <option>Últimos 7 dias</option>
+                            <option>Últimos 30 dias</option>
+                            <option>Últimos 90 dias</option>
+                            <option>Todo período</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <div style="border-bottom: 1px solid var(--border); padding: 1rem 0; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">Login bem-sucedido ✅</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">30/07/2026 às 14:30</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">📍 São Paulo, SP • 192.168.1.100</div>
+                        </div>
+                        <span class="badge badge-success">Desktop</span>
+                    </div>
+
+                    <div style="border-bottom: 1px solid var(--border); padding: 1rem 0; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">Login bem-sucedido ✅</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">29/07/2026 às 09:15</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">📍 São Paulo, SP • 192.168.1.100</div>
+                        </div>
+                        <span class="badge badge-success">Mobile</span>
+                    </div>
+
+                    <div style="border-bottom: 1px solid var(--border); padding: 1rem 0; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">Login bem-sucedido ✅</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">28/07/2026 às 16:45</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">📍 Rio de Janeiro, RJ • 189.45.201.50</div>
+                        </div>
+                        <span class="badge badge-info">Tablet</span>
+                    </div>
+
+                    <div style="border-bottom: 1px solid var(--border); padding: 1rem 0; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">Falha de login ❌</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">27/07/2026 às 14:20</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">📍 Desconhecido • 123.45.67.89</div>
+                        </div>
+                        <span class="badge badge-danger">Bloqueado</span>
+                    </div>
+
+                    <div style="padding: 1rem 0; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <div style="font-weight: 600;">Login bem-sucedido ✅</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">26/07/2026 às 10:00</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">📍 São Paulo, SP • 192.168.1.100</div>
+                        </div>
+                        <span class="badge badge-success">Desktop</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('historico-login-modal')">Fechar</button>
+                <button class="btn btn-danger">
+                    <i class="fas fa-times"></i> Fazer Logout em Todos os Dispositivos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Evolução Estética -->
+    <div class="modal-overlay" id="evolucao-estetica-modal">
+        <div class="modal" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-chart-line" style="color: var(--success); margin-right: 0.5rem;"></i>Evolução Estética - João Silva</h2>
+                <button class="modal-close" onclick="closeModal('evolucao-estetica-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Slider Antes/Depois -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 1rem;">📸 Comparação Antes & Depois</h3>
+                    <div class="image-comparison-slider" id="comparisonSlider" style="position: relative; max-width: 100%; overflow: hidden; border-radius: 0.75rem; background: #f0f0f0;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23e0e7ff' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%236366f1' font-family='Arial'%3EANTES%3C/text%3E%3C/svg%3E" alt="Antes" style="display: block; width: 100%; height: auto;">
+                        <div class="comparison-handle" id="comparisonHandle" style="position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background: var(--primary); cursor: col-resize; transform: translateX(-50%);"></div>
+                        <div class="comparison-after" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23d1fae5' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='16' fill='%2310b981' font-family='Arial'%3EDEPOIS%3C/text%3E%3C/svg%3E" alt="Depois" style="display: block; width: 100%; height: auto;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.75rem; font-size: 0.875rem; color: var(--gray);">
+                        <span>ANTES (Inicial)</span>
+                        <span>DEPOIS (Atual)</span>
+                    </div>
+                </div>
+
+                <!-- Progresso de Sessões -->
+                <div style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.05); border-radius: 0.75rem;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 1rem;">📊 Progresso de Sessões</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--success);">8</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Sessões Realizadas</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">10</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Total Contratado</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">2</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Sessões Restantes</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: var(--accent);">80%</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Progresso</div>
+                        </div>
+                    </div>
+                    <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                        <div style="width: 80%; height: 100%; background: linear-gradient(90deg, var(--success), var(--primary)); border-radius: 4px;"></div>
+                    </div>
+                </div>
+
+                <!-- Timeline de Evolução -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 1rem;">📅 Timeline de Evolução</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem;">
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="width: 40px; height: 40px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; margin: 0 auto; margin-bottom: 0.5rem;">1</div>
+                                <div style="font-size: 0.75rem; color: var(--gray);">15/06</div>
+                            </div>
+                            <div style="flex: 1; padding: 1rem; background: rgba(16, 185, 129, 0.05); border-radius: 0.5rem;">
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Sessão Inicial</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Limpeza profunda + Análise de pele • Fotos de referência</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; margin: 0 auto; margin-bottom: 0.5rem;">4</div>
+                                <div style="font-size: 0.75rem; color: var(--gray);">22/06</div>
+                            </div>
+                            <div style="flex: 1; padding: 1rem; background: rgba(30, 64, 175, 0.05); border-radius: 0.5rem;">
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Progresso Notável ✨</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Redução de manchas • Melhora na textura</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; margin: 0 auto; margin-bottom: 0.5rem;">8</div>
+                                <div style="font-size: 0.75rem; color: var(--gray);">30/07</div>
+                            </div>
+                            <div style="flex: 1; padding: 1rem; background: rgba(245, 158, 11, 0.05); border-radius: 0.5rem;">
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Resultado Excelente 🎯</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Pele mais luminosa e uniforme • Hidratação otimizada</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Próximas Recomendações -->
+                <div style="padding: 1.5rem; background: rgba(251, 146, 60, 0.05); border-left: 4px solid var(--accent); border-radius: 0.5rem;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 1rem;">💡 Próximas Recomendações</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.25rem; flex-shrink: 0;"></i>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.9rem;">Microagulhamento</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Para potencializar os resultados e melhorar cicatrizes superficiais</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.25rem; flex-shrink: 0;"></i>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.9rem;">Peeling Químico</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Renovação celular profunda para manutenção dos resultados</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                            <i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.25rem; flex-shrink: 0;"></i>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.9rem;">Manutenção Mensal</div>
+                                <div style="font-size: 0.875rem; color: var(--gray);">Sessões de manutenção a cada 30 dias para preservar os ganhos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('evolucao-estetica-modal')">Fechar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Protocolo de recomendações enviado para o cliente!'); closeModal('evolucao-estetica-modal');">
+                    <i class="fas fa-paper-plane"></i> Enviar Recomendações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Visualizar Cliente -->
+    <div class="modal-overlay" id="visualizar-cliente-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-user" style="color: var(--primary); margin-right: 0.5rem;"></i>Perfil do Cliente</h2>
+                <button class="modal-close" onclick="closeModal('visualizar-cliente-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border);">
+                    <div class="avatar avatar-lg">JS</div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">João Silva</h3>
+                        <div style="color: var(--gray); font-size: 0.9375rem;">Membro desde 28/07/2023</div>
+                        <div style="margin-top: 0.75rem;">
+                            <span class="badge badge-success">Ativo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div>
+                        <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">CPF</div>
+                        <div style="font-weight: 600;">123.456.789-00</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">Tipo de Sangue</div>
+                        <div style="font-weight: 600;">O+</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">Telefone</div>
+                        <div style="font-weight: 600;">(11) 99999-1111</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: var(--gray); margin-bottom: 0.5rem;">Plano de Saúde</div>
+                        <div style="font-weight: 600;">Bradesco Saúde</div>
+                    </div>
+                </div>
+
+                <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 0.5rem; margin-bottom: 2rem;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">📊 Histórico</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Consultas</div>
+                            <div style="font-weight: 600; font-size: 1.25rem;">28</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Última Consulta</div>
+                            <div style="font-weight: 600;">28/07/2026</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Total Gasto</div>
+                            <div style="font-weight: 600;">R$ 4.200</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('visualizar-cliente-modal')">Fechar</button>
+                <button class="btn btn-primary" onclick="closeModal('visualizar-cliente-modal'); showModal('evolucao-estetica-modal');">
+                    <i class="fas fa-chart-line"></i> Ver Evolução
+                </button>
+                <button class="btn btn-primary" onclick="closeModal('visualizar-cliente-modal'); showModal('editar-cliente-modal');">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Editar Transação Financeira -->
+    <div class="modal-overlay" id="editar-transacao-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-edit" style="color: var(--primary); margin-right: 0.5rem;"></i>Editar Transação</h2>
+                <button class="modal-close" onclick="closeModal('editar-transacao-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Descrição</label>
+                    <input type="text" class="form-input" value="Consulta - João Silva">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Valor (R$)</label>
+                        <input type="number" class="form-input" value="150.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Data</label>
+                        <input type="date" class="form-input" value="2026-07-30">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Método de Pagamento</label>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="metodo-editar" value="cartao" checked>
+                            <i class="fas fa-credit-card" style="color: var(--primary);"></i> Cartão
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="metodo-editar" value="dinheiro">
+                            <i class="fas fa-money-bill" style="color: var(--warning);"></i> Dinheiro
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="metodo-editar" value="pix">
+                            <i class="fas fa-mobile-alt" style="color: #9c27b0;"></i> PIX
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-textarea" rows="3" placeholder="Adicione notas sobre a transação..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editar-transacao-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Transação atualizada com sucesso!'); closeModal('editar-transacao-modal');">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Editar Especialidade -->
+    <div class="modal-overlay" id="editar-especialidade-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-edit" style="color: var(--primary); margin-right: 0.5rem;"></i>Editar Especialidade</h2>
+                <button class="modal-close" onclick="closeModal('editar-especialidade-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Nome da Especialidade</label>
+                    <input type="text" class="form-input" value="Clínica Geral">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-textarea" rows="3">Atendimento geral e consultas de rotina</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Código da Especialidade</label>
+                    <input type="text" class="form-input" value="CLG001">
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span>Especialidade ativa</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editar-especialidade-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Especialidade atualizada com sucesso!'); closeModal('editar-especialidade-modal');">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Editar Profissional -->
+    <div class="modal-overlay" id="editar-profissional-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-edit" style="color: var(--primary); margin-right: 0.5rem;"></i>Editar Profissional</h2>
+                <button class="modal-close" onclick="closeModal('editar-profissional-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchModalTab('prof-edit-pessoal')">Pessoal</button>
+                    <button class="tab" onclick="switchModalTab('prof-edit-profissional')">Profissional</button>
+                    <button class="tab" onclick="switchModalTab('prof-edit-disponibilidade')">Disponibilidade</button>
+                </div>
+
+                <div id="prof-edit-pessoal" style="display: block;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nome Completo</label>
+                            <input type="text" class="form-input" value="Dr. Roberto Silva">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" value="roberto@email.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Telefone</label>
+                            <input type="tel" class="form-input" value="(11) 99999-8888">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Data de Nascimento</label>
+                            <input type="date" class="form-input" value="1985-06-15">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="prof-edit-profissional" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">CRM/COREM</label>
+                            <input type="text" class="form-input" value="CRM SP 123456">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Especialidade</label>
+                            <select class="form-select">
+                                <option selected>Clínica Geral</option>
+                                <option>Cardiologia</option>
+                                <option>Dermatologia</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Anos de Experiência</label>
+                        <input type="number" class="form-input" value="15">
+                    </div>
+                </div>
+
+                <div id="prof-edit-disponibilidade" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Horário de Início</label>
+                            <input type="time" class="form-input" value="08:00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Horário de Término</label>
+                            <input type="time" class="form-input" value="18:00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editar-profissional-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Profissional atualizado com sucesso!'); closeModal('editar-profissional-modal');">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Editar Cliente -->
+    <div class="modal-overlay" id="editar-cliente-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-edit" style="color: var(--primary); margin-right: 0.5rem;"></i>Editar Cliente</h2>
+                <button class="modal-close" onclick="closeModal('editar-cliente-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchModalTab('client-edit-pessoal')">Pessoal</button>
+                    <button class="tab" onclick="switchModalTab('client-edit-medico')">Médico</button>
+                </div>
+
+                <div id="client-edit-pessoal" style="display: block;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nome Completo</label>
+                            <input type="text" class="form-input" value="João Silva">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" value="joao@email.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Telefone</label>
+                            <input type="tel" class="form-input" value="(11) 99999-1111">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">CPF</label>
+                            <input type="text" class="form-input" value="123.456.789-00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" class="form-input" value="Rua das Flores, 123">
+                    </div>
+                </div>
+
+                <div id="client-edit-medico" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Sangue</label>
+                            <select class="form-select">
+                                <option>Selecione...</option>
+                                <option selected>O+</option>
+                                <option>A+</option>
+                                <option>B+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Plano de Saúde</label>
+                            <input type="text" class="form-input" value="Bradesco Saúde">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alergias</label>
+                        <textarea class="form-textarea" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editar-cliente-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="alert('✅ Cliente atualizado com sucesso!'); closeModal('editar-cliente-modal');">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Excluir Profissional -->
+    <div class="modal-overlay" id="excluir-profissional-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 0.5rem;"></i>Excluir Profissional</h2>
+                <button class="modal-close" onclick="closeModal('excluir-profissional-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 0.75rem; margin-bottom: 1.5rem; border-left: 4px solid var(--danger);">
+                    <div style="font-weight: 600; color: var(--danger); margin-bottom: 0.5rem;">⚠️ Atenção!</div>
+                    <div style="font-size: 0.9375rem; color: var(--dark);">
+                        Você está prestes a excluir o profissional <strong>Dr. Roberto Silva</strong>. Esta ação é irreversível e afetará:
+                    </div>
+                </div>
+
+                <div style="background: var(--light); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <i class="fas fa-calendar-times" style="color: var(--danger);"></i>
+                        <div>
+                            <div style="font-weight: 600;">15 agendamentos futuros</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Será necessário reagendar ou cancelar</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-chart-bar" style="color: var(--danger);"></i>
+                        <div>
+                            <div style="font-weight: 600;">Histórico de 124 consultas</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Serão removidos do relatório de desempenho</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Digite o nome do profissional para confirmar</label>
+                    <input type="text" class="form-input" placeholder="Ex: Dr. Roberto Silva">
+                </div>
+
+                <div style="padding: 1rem; background: rgba(239, 68, 68, 0.05); border-radius: 0.5rem; font-size: 0.875rem; color: var(--gray);">
+                    <i class="fas fa-info-circle"></i> Esta ação não pode ser desfeita. Todos os dados serão permanentemente excluídos.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('excluir-profissional-modal')">Cancelar</button>
+                <button class="btn btn-danger" onclick="alert('✅ Profissional excluído com sucesso!'); closeModal('excluir-profissional-modal');">
+                    <i class="fas fa-trash"></i> Excluir Permanentemente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Excluir Cliente -->
+    <div class="modal-overlay" id="excluir-cliente-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 0.5rem;"></i>Excluir Cliente</h2>
+                <button class="modal-close" onclick="closeModal('excluir-cliente-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 0.75rem; margin-bottom: 1.5rem; border-left: 4px solid var(--danger);">
+                    <div style="font-weight: 600; color: var(--danger); margin-bottom: 0.5rem;">⚠️ Atenção!</div>
+                    <div style="font-size: 0.9375rem; color: var(--dark);">
+                        Você está prestes a excluir o cliente <strong>João Silva</strong>. Esta ação é irreversível e afetará:
+                    </div>
+                </div>
+
+                <div style="background: var(--light); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <i class="fas fa-calendar-times" style="color: var(--danger);"></i>
+                        <div>
+                            <div style="font-weight: 600;">3 agendamentos futuros</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Será necessário cancelar automaticamente</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <i class="fas fa-file-medical" style="color: var(--danger);"></i>
+                        <div>
+                            <div style="font-weight: 600;">Prontuário completo (45 registros)</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Histórico médico será permanentemente removido</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-shopping-cart" style="color: var(--danger);"></i>
+                        <div>
+                            <div style="font-weight: 600;">2 pacotes de sessões restantes</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">Serão canceladas sem reembolso</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Digite o nome do cliente para confirmar</label>
+                    <input type="text" class="form-input" placeholder="Ex: João Silva">
+                </div>
+
+                <div style="padding: 1rem; background: rgba(239, 68, 68, 0.05); border-radius: 0.5rem; font-size: 0.875rem; color: var(--gray);">
+                    <i class="fas fa-info-circle"></i> Esta ação não pode ser desfeita. Todos os dados serão permanentemente excluídos.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('excluir-cliente-modal')">Cancelar</button>
+                <button class="btn btn-danger" onclick="alert('✅ Cliente excluído com sucesso!'); closeModal('excluir-cliente-modal');">
+                    <i class="fas fa-trash"></i> Excluir Permanentemente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Nova Especialidade -->
+    <div class="modal-overlay" id="nova-especialidade-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Nova Especialidade</h2>
+                <button class="modal-close" onclick="closeModal('nova-especialidade-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Nome da Especialidade</label>
+                    <input type="text" class="form-input" placeholder="Ex: Estética, Acupuntura">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-textarea" rows="3" placeholder="Descreva brevemente a especialidade..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Código da Especialidade</label>
+                    <input type="text" class="form-input" placeholder="Ex: EST001">
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+                        <input type="checkbox" checked>
+                        <span>Especialidade ativa</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('nova-especialidade-modal')">Cancelar</button>
+                <button class="btn btn-primary">Criar Especialidade</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL - Novo Agendamento -->
+    <div class="modal-overlay" id="novo-agendamento-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Novo Agendamento</h2>
+                <button class="modal-close" onclick="closeModal('novo-agendamento-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label required">Paciente</label>
+                    <select class="form-select">
+                        <option>Selecione um paciente</option>
+                        <option>João Silva</option>
+                        <option>Maria Santos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Especialidade</label>
+                    <select class="form-select">
+                        <option>Selecione uma especialidade</option>
+                        <option>Clínica Geral</option>
+                        <option>Cardiologia</option>
+                        <option>Dermatologia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Profissional</label>
+                    <select class="form-select">
+                        <option>Selecione um profissional</option>
+                        <option>Dr. Roberto Silva</option>
+                        <option>Dra. Mônica Costa</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Data</label>
+                        <input type="date" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Hora</label>
+                        <input type="time" class="form-input">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Observações</label>
+                    <textarea class="form-textarea" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('novo-agendamento-modal')">Cancelar</button>
+                <button class="btn btn-primary">Confirmar Agendamento</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+
+            event.target.closest('.nav-link, .sidebar-item')?.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function switchTab(tabId) {
+            const tabs = event.target.parentElement;
+            tabs.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const parent = event.target.closest('.card') || tabs.nextElementSibling?.parentElement;
+            if (parent) {
+                parent.querySelectorAll('[id^="agenda-"], [id^="prof-"], [id^="client-"]').forEach(el => {
+                    if (el.id.includes('agenda-') || el.id.includes('prof-') || el.id.includes('client-')) {
+                        el.style.display = 'none';
+                    }
+                });
+                document.getElementById(tabId).style.display = 'block';
+            }
+        }
+
+        function switchModalTab(tabId) {
+            const tabs = event.target.parentElement;
+            tabs.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const modal = event.target.closest('.modal');
+            if (modal) {
+                modal.querySelectorAll('[id^="prof-"], [id^="client-"]').forEach(el => {
+                    el.style.display = 'none';
+                });
+                document.getElementById(tabId).style.display = 'block';
+            }
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // PREFERENCES
+        function savePreferences() {
+            const theme = document.getElementById('theme-select').value;
+            const language = document.getElementById('language-select').value;
+
+            localStorage.setItem('theme', theme);
+            localStorage.setItem('language', language);
+
+            alert('✅ Preferências salvas com sucesso!');
+            applyTheme(theme);
+        }
+
+        function resetPreferences() {
+            document.getElementById('theme-select').value = 'light';
+            document.getElementById('language-select').value = 'pt-br';
+
+            localStorage.removeItem('theme');
+            localStorage.removeItem('language');
+
+            alert('✅ Preferências restauradas ao padrão!');
+            applyTheme('light');
+        }
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            if (theme === 'dark') {
+                root.style.filter = 'invert(1) hue-rotate(180deg)';
+            } else {
+                root.style.filter = 'none';
+            }
+        }
+
+        // Calendar Management
+        let currentDate = new Date(2026, 6, 30); // Julho 2026
+
+        const appointments = {
+            '30/07/2026': [
+                { patient: 'João Silva', time: '14:00', doctor: 'Dr. Roberto', specialty: 'Clínica Geral', status: 'Confirmado', color: 'var(--primary)' }
+            ],
+            '31/07/2026': [
+                { patient: 'Maria Santos', time: '10:00', doctor: 'Dra. Mônica', specialty: 'Cardiologia', status: 'Pendente', color: 'var(--secondary)' }
+            ],
+            '01/08/2026': [
+                { patient: 'Carlos Oliveira', time: '16:00', doctor: 'Dr. Pedro', specialty: 'Oftalmologia', status: 'Confirmado', color: 'var(--accent)' },
+                { patient: 'Ana Silva', time: '09:00', doctor: 'Dra. Mônica', specialty: 'Dermatologia', status: 'Confirmado', color: 'var(--secondary)' }
+            ]
+        };
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
+            document.getElementById('currentMonth').textContent = currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            const calendarDaysDiv = document.getElementById('calendarDays');
+            calendarDaysDiv.innerHTML = '';
+
+            // Empty cells for days before month starts
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.style.cssText = 'padding: 1rem; background: transparent; border-radius: 0.5rem;';
+                calendarDaysDiv.appendChild(emptyDay);
+            }
+
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayDiv = document.createElement('div');
+                const dateStr = `${String(day).padStart(2, '0')}/${String(month + 1).padStart(2, '0')}/${year}`;
+                const hasAppointments = appointments[dateStr];
+
+                dayDiv.style.cssText = `padding: 1rem; background: var(--light); border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; transition: var(--transition); min-height: 100px; display: flex; flex-direction: column;`;
+                dayDiv.onmouseover = () => dayDiv.style.boxShadow = 'var(--shadow-md)';
+                dayDiv.onmouseout = () => dayDiv.style.boxShadow = 'none';
+                dayDiv.onclick = () => selectDay(dateStr);
+
+                const dayNum = document.createElement('div');
+                dayNum.style.cssText = 'font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;';
+                dayNum.textContent = day;
+                dayDiv.appendChild(dayNum);
+
+                if (hasAppointments) {
+                    hasAppointments.forEach(apt => {
+                        const aptDiv = document.createElement('div');
+                        aptDiv.style.cssText = `font-size: 0.75rem; padding: 0.25rem 0.5rem; background: ${apt.color}; color: white; border-radius: 3px; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`;
+                        aptDiv.textContent = `${apt.time} ${apt.doctor}`;
+                        dayDiv.appendChild(aptDiv);
+                    });
+                } else {
+                    const availDiv = document.createElement('div');
+                    availDiv.style.cssText = 'font-size: 0.75rem; color: var(--success); font-weight: 600;';
+                    availDiv.textContent = '✓ Disponível';
+                    dayDiv.appendChild(availDiv);
+                }
+
+                calendarDaysDiv.appendChild(dayDiv);
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function selectDay(dateStr) {
+            document.getElementById('selectedDate').textContent = dateStr;
+            const dayAppointmentsDiv = document.getElementById('dayAppointments');
+            dayAppointmentsDiv.innerHTML = '';
+
+            if (appointments[dateStr]) {
+                appointments[dateStr].forEach(apt => {
+                    const aptDiv = document.createElement('div');
+                    aptDiv.style.cssText = 'display: flex; gap: 1rem; padding: 1rem; background: white; border-radius: 0.5rem; border-left: 3px solid ' + apt.color + ';';
+                    aptDiv.innerHTML = `
+                        <div style="width: 12px; background: ${apt.color}; border-radius: 2px;"></div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">${apt.patient}</div>
+                            <div style="font-size: 0.875rem; color: var(--gray);">${apt.time} - ${apt.doctor} • ${apt.specialty}</div>
+                        </div>
+                        <span class="badge badge-${apt.status === 'Confirmado' ? 'success' : 'info'}">${apt.status}</span>
+                    `;
+                    dayAppointmentsDiv.appendChild(aptDiv);
+                });
+            } else {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.cssText = 'text-align: center; padding: 2rem; color: var(--gray);';
+                emptyDiv.innerHTML = '<i class="fas fa-calendar-check" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i><p>Nenhum agendamento para este dia. Clique em "Novo Agendamento" para criar um.</p>';
+                dayAppointmentsDiv.appendChild(emptyDiv);
+            }
+        }
+
+        // Initialize Image Comparison Slider
+        function initializeImageComparison() {
+            const slider = document.getElementById('comparisonSlider');
+            const handle = document.getElementById('comparisonHandle');
+            const afterDiv = document.querySelector('.comparison-after');
+
+            if (!slider || !handle) return;
+
+            let isActive = false;
+
+            const updateSlider = (e) => {
+                if (!isActive) return;
+                const rect = slider.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                if (e.touches) x = e.touches[0].clientX - rect.left;
+
+                x = Math.max(0, Math.min(x, rect.width));
+                const percentage = (x / rect.width) * 100;
+
+                handle.style.left = percentage + '%';
+                afterDiv.style.width = percentage + '%';
+            };
+
+            handle.addEventListener('mousedown', () => { isActive = true; });
+            document.addEventListener('mouseup', () => { isActive = false; });
+            document.addEventListener('mousemove', updateSlider);
+
+            handle.addEventListener('touchstart', () => { isActive = true; });
+            document.addEventListener('touchend', () => { isActive = false; });
+            document.addEventListener('touchmove', updateSlider);
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Chart 1: Receita Mensal (Linha)
+            const ctxReceita = document.getElementById('chartReceita')?.getContext('2d');
+            if (ctxReceita) {
+                new Chart(ctxReceita, {
+                    type: 'line',
+                    data: {
+                        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                        datasets: [{
+                            label: 'Receita (R$)',
+                            data: [10200, 12500, 11800, 13200],
+                            borderColor: 'var(--primary)',
+                            backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 5,
+                            pointBackgroundColor: 'var(--primary)',
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: true, position: 'top' } },
+                        scales: { y: { beginAtZero: true, ticks: { callback: v => 'R$ ' + v.toLocaleString('pt-BR') } } }
+                    }
+                });
+            }
+
+            // Chart 2: Procedimentos Mais Populares (Pizza)
+            const ctxProcedimentos = document.getElementById('chartProcedimentos')?.getContext('2d');
+            if (ctxProcedimentos) {
+                new Chart(ctxProcedimentos, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Limpeza de Pele', 'Aplicação Botox', 'Preenchimento', 'Microagulhamento', 'Outros'],
+                        datasets: [{
+                            data: [28, 22, 18, 15, 17],
+                            backgroundColor: ['#1e40af', '#0891b2', '#10b981', '#f59e0b', '#8b5cf6']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            // Chart 3: Taxa de Ocupação (Barras)
+            const ctxOcupacao = document.getElementById('chartOcupacao')?.getContext('2d');
+            if (ctxOcupacao) {
+                new Chart(ctxOcupacao, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Dr. Roberto', 'Dra. Mônica', 'Dr. Pedro', 'Dra. Ana'],
+                        datasets: [{
+                            label: 'Taxa de Ocupação (%)',
+                            data: [92, 87, 78, 95],
+                            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+                    }
+                });
+            }
+        }
+
+        // Load preferences on page load
+        window.addEventListener('load', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedLanguage = localStorage.getItem('language') || 'pt-br';
+
+            document.getElementById('theme-select').value = savedTheme;
+            document.getElementById('language-select').value = savedLanguage;
+
+            // Initialize charts and sliders after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                initializeCharts();
+                initializeImageComparison();
+                renderCalendar();
+                selectDay('30/07/2026');
+            }, 100);
+        });
+    </script>
+</body>
+</html>

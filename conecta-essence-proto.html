@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conecta Essence - Plataforma Integrada de Saúde</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e40af;
+            --secondary: #0891b2;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            line-height: 1.6;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .navbar-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* PAGE */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== LANDING PAGE ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary);
+        }
+
+        .card.primary {
+            border-left-color: var(--primary);
+        }
+
+        .card.success {
+            border-left-color: var(--success);
+        }
+
+        .card.warning {
+            border-left-color: var(--accent);
+        }
+
+        .card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .card h3 {
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .card-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .card-change.positive {
+            color: var(--success);
+        }
+
+        .card-change.negative {
+            color: var(--danger);
+        }
+
+        /* CHART */
+        .chart {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .chart h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-label {
+            width: 120px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            background: var(--light);
+            border-radius: 0.5rem;
+            height: 30px;
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+
+        .chart-value {
+            width: 60px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* ===== AGENDAMENTO ===== */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .calendar {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .calendar h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .weekday {
+            text-align: center;
+            font-weight: 600;
+            color: var(--gray);
+            padding: 0.5rem;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            background: var(--light);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .day:hover {
+            background: var(--border);
+        }
+
+        .day.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .day.today {
+            border: 2px solid var(--secondary);
+        }
+
+        .appointment-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .time-slot {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+
+        .time-slot.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== FINANCEIRO ===== */
+        .financial-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .financial-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .financial-card h3 {
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .financial-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .transactions {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .transactions h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .transaction-item:hover {
+            background: var(--light);
+        }
+
+        .transaction-info h4 {
+            margin-bottom: 0.25rem;
+            color: var(--dark);
+        }
+
+        .transaction-info p {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .transaction-amount.income {
+            color: var(--success);
+        }
+
+        .transaction-amount.expense {
+            color: var(--danger);
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: var(--light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #cffafe;
+            color: #164e63;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                gap: 1rem;
+            }
+
+            .navbar-nav a {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .hero h1 {
+                font-size: 1.875rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.up {
+            color: var(--success);
+        }
+
+        .stat-change.down {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏥</span> Conecta Essence
+        </div>
+        <ul class="navbar-nav">
+            <li><a onclick="showPage('landing')" class="nav-link">Home</a></li>
+            <li><a onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+            <li><a onclick="showPage('agendamento')" class="nav-link">Agendamento</a></li>
+            <li><a onclick="showPage('financeiro')" class="nav-link">Financeiro</a></li>
+        </ul>
+    </nav>
+
+    <!-- LANDING PAGE -->
+    <div id="landing" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>Bem-vindo ao Conecta Essence</h1>
+                <p>Plataforma integrada de gestão de saúde para clínicas e consultórios modernos</p>
+                <button class="btn btn-primary" onclick="showPage('dashboard')">Acessar Dashboard</button>
+                <button class="btn btn-secondary">Saber Mais</button>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Agendamento Inteligente</h3>
+                    <p>Sistema de agendamento automático com sincronização de calendário em tempo real</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Dashboard Avançado</h3>
+                    <p>Visualize todos os dados da sua clínica com gráficos e relatórios detalhados</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Gestão Financeira</h3>
+                    <p>Controle de receitas, despesas e lucros com análise de rentabilidade</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍⚕️</div>
+                    <h3>Prontuário Eletrônico</h3>
+                    <p>Armazenamento seguro de informações de pacientes com histórico completo</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Acesso Mobile</h3>
+                    <p>Aplicativo nativo para iOS e Android com sincronização perfeita</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Segurança Enterprise</h3>
+                    <p>Criptografia de ponta a ponta e conformidade com LGPD e HIPAA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="page">
+        <div class="container">
+            <h2 class="section-title">Dashboard Administrativo</h2>
+
+            <div class="dashboard-grid">
+                <div class="card primary">
+                    <h3>Pacientes Ativos</h3>
+                    <div class="card-value">1.243</div>
+                    <div class="card-change positive">↑ 12% vs mês anterior</div>
+                </div>
+                <div class="card success">
+                    <h3>Consultas Este Mês</h3>
+                    <div class="card-value">487</div>
+                    <div class="card-change positive">↑ 8% vs mês anterior</div>
+                </div>
+                <div class="card warning">
+                    <h3>Receita Total</h3>
+                    <div class="card-value">R$ 45.3k</div>
+                    <div class="card-change positive">↑ 15% vs mês anterior</div>
+                </div>
+                <div class="card danger">
+                    <h3>Agendamentos Pendentes</h3>
+                    <div class="card-value">23</div>
+                    <div class="card-change negative">↑ 5 novos hoje</div>
+                </div>
+            </div>
+
+            <div class="chart">
+                <h3>📈 Consultas por Especialidade</h3>
+                <div class="chart-bar">
+                    <div class="chart-label">Clínica Geral</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: 85%;"></div>
+                    </div>
+                    <div class="chart-value">156</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Cardiologia</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: 72%;"></div>
+                    </div>
+                    <div class="chart-value">132</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Oftalmologia</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: 68%;"></div>
+                    </div>
+                    <div class="chart-value">125</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Dermatologia</div>
+                    <div class="chart-bar-container">
+                        <div class="chart-bar-fill" style="width: 55%;"></div>
+                    </div>
+                    <div class="chart-value">74</div>
+                </div>
+            </div>
+
+            <div class="chart">
+                <h3>📊 Performance Mensal</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Médico</th>
+                            <th>Consultas</th>
+                            <th>Taxa Ocupação</th>
+                            <th>Avaliação</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dr. João Silva</td>
+                            <td>45</td>
+                            <td>92%</td>
+                            <td>⭐⭐⭐⭐⭐ 4.8</td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dra. Maria Santos</td>
+                            <td>38</td>
+                            <td>88%</td>
+                            <td>⭐⭐⭐⭐ 4.6</td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Carlos Oliveira</td>
+                            <td>52</td>
+                            <td>95%</td>
+                            <td>⭐⭐⭐⭐⭐ 4.9</td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                        </tr>
+                        <tr>
+                            <td>Dra. Ana Costa</td>
+                            <td>28</td>
+                            <td>65%</td>
+                            <td>⭐⭐⭐ 3.8</td>
+                            <td><span class="badge badge-warning">Atenção</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENDAMENTO -->
+    <div id="agendamento" class="page">
+        <div class="container">
+            <h2 class="section-title">Sistema de Agendamento</h2>
+
+            <div class="schedule-grid">
+                <div class="calendar">
+                    <h3>Calendário</h3>
+                    <div class="calendar-header">
+                        <button onclick="previousMonth()">← Anterior</button>
+                        <h4 id="monthYear">Julho 2026</h4>
+                        <button onclick="nextMonth()">Próximo →</button>
+                    </div>
+                    <div class="weekdays">
+                        <div class="weekday">Dom</div>
+                        <div class="weekday">Seg</div>
+                        <div class="weekday">Ter</div>
+                        <div class="weekday">Qua</div>
+                        <div class="weekday">Qui</div>
+                        <div class="weekday">Sex</div>
+                        <div class="weekday">Sab</div>
+                    </div>
+                    <div class="days" id="calendarDays"></div>
+                </div>
+
+                <div class="appointment-form">
+                    <h3>Agendar Consulta</h3>
+                    <div class="form-group">
+                        <label>Nome do Paciente *</label>
+                        <input type="text" placeholder="Ex: João da Silva">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" placeholder="Ex: joao@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone *</label>
+                        <input type="tel" placeholder="Ex: (11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidade *</label>
+                        <select>
+                            <option>Selecione uma especialidade</option>
+                            <option>Clínica Geral</option>
+                            <option>Cardiologia</option>
+                            <option>Oftalmologia</option>
+                            <option>Dermatologia</option>
+                            <option>Psicologia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Médico Preferido *</label>
+                        <select>
+                            <option>Selecione um médico</option>
+                            <option>Dr. João Silva</option>
+                            <option>Dra. Maria Santos</option>
+                            <option>Dr. Carlos Oliveira</option>
+                            <option>Dra. Ana Costa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Horários Disponíveis</label>
+                        <div class="time-slots">
+                            <div class="time-slot" onclick="selectTime(this)">08:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">09:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">10:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">11:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">14:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">15:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">16:00</div>
+                            <div class="time-slot" onclick="selectTime(this)">17:00</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Observações</label>
+                        <textarea placeholder="Adicione observações importantes..." rows="3"></textarea>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;">Confirmar Agendamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div id="financeiro" class="page">
+        <div class="container">
+            <h2 class="section-title">Gestão Financeira</h2>
+
+            <div class="financial-summary">
+                <div class="financial-card">
+                    <h3>Receita Bruta</h3>
+                    <div class="value">R$ 52.340</div>
+                    <p>Este mês</p>
+                </div>
+                <div class="financial-card" style="background: linear-gradient(135deg, var(--success) 0%, #059669 100%);">
+                    <h3>Lucro Líquido</h3>
+                    <div class="value">R$ 38.250</div>
+                    <p>Este mês</p>
+                </div>
+                <div class="financial-card" style="background: linear-gradient(135deg, var(--accent) 0%, #dc2626 100%);">
+                    <h3>Despesas</h3>
+                    <div class="value">R$ 14.090</div>
+                    <p>Este mês</p>
+                </div>
+                <div class="financial-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <h3>Saldo Disponível</h3>
+                    <div class="value">R$ 126.580</div>
+                    <p>Conta principal</p>
+                </div>
+            </div>
+
+            <div class="transactions">
+                <h3>📋 Últimas Transações</h3>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Consulta - João Silva</h4>
+                        <p>30/07/2026 - Clínica Geral</p>
+                    </div>
+                    <div class="transaction-amount income">+R$ 150,00</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Aluguel do Consultório</h4>
+                        <p>29/07/2026 - Despesa</p>
+                    </div>
+                    <div class="transaction-amount expense">-R$ 3.500,00</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Consulta - Maria Santos</h4>
+                        <p>28/07/2026 - Cardiologia</p>
+                    </div>
+                    <div class="transaction-amount income">+R$ 250,00</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Materiais Médicos</h4>
+                        <p>27/07/2026 - Fornecimento</p>
+                    </div>
+                    <div class="transaction-amount expense">-R$ 1.200,00</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Consulta - Carlos Oliveira</h4>
+                        <p>26/07/2026 - Oftalmologia</p>
+                    </div>
+                    <div class="transaction-amount income">+R$ 200,00</div>
+                </div>
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <h4>Salários - Equipe</h4>
+                        <p>25/07/2026 - Folha Mensal</p>
+                    </div>
+                    <div class="transaction-amount expense">-R$ 8.900,00</div>
+                </div>
+            </div>
+
+            <div class="chart" style="margin-top: 2rem;">
+                <h3>💹 Receita vs Despesa</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Período</th>
+                            <th>Receita</th>
+                            <th>Despesa</th>
+                            <th>Lucro</th>
+                            <th>Margem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Maio 2026</td>
+                            <td>R$ 48.500</td>
+                            <td>R$ 13.200</td>
+                            <td>R$ 35.300</td>
+                            <td><span class="badge badge-success">72.8%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Junho 2026</td>
+                            <td>R$ 51.200</td>
+                            <td>R$ 14.050</td>
+                            <td>R$ 37.150</td>
+                            <td><span class="badge badge-success">72.6%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Julho 2026</td>
+                            <td>R$ 52.340</td>
+                            <td>R$ 14.090</td>
+                            <td>R$ 38.250</td>
+                            <td><span class="badge badge-success">73.1%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PAGE NAVIGATION
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        // CALENDAR
+        let currentDate = new Date(2026, 6, 30);
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            const monthYear = document.getElementById('monthYear');
+            monthYear.textContent = currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
+
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                calendarDays.appendChild(emptyDay);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.textContent = day;
+
+                if (day === 30 && month === 6 && year === 2026) {
+                    dayElement.classList.add('today');
+                }
+
+                dayElement.onclick = function() {
+                    document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+                    this.classList.add('selected');
+                };
+
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        function selectTime(element) {
+            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // INIT
+        generateCalendar();
+    </script>
+</body>
+</html>
