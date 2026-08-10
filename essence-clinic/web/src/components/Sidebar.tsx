@@ -13,6 +13,7 @@ import {
   FileText,
   Package,
   Zap,
+  BarChart3,
 } from 'lucide-react';
 import '../styles/sidebar.css';
 
@@ -62,6 +63,12 @@ export default function Sidebar() {
       icon: DollarSign,
       path: '/financial',
       color: 'from-orange-500 to-orange-600',
+    },
+    {
+      label: 'Comissões',
+      icon: BarChart3,
+      path: '/commissions',
+      color: 'from-emerald-500 to-emerald-600',
     },
     {
       label: 'Pacotes',
