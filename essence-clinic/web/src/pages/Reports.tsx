@@ -7,10 +7,10 @@ export default function Reports() {
   const [dateRange, setDateRange] = useState({ start: '2026-01-01', end: '2026-08-31' });
 
   const reports = [
-    { id: 'revenue', name: 'Faturamento', icon: '💰', color: 'from-green-500 to-green-600' },
-    { id: 'clients', name: 'Crescimento Clientes', icon: '👥', color: 'from-blue-500 to-blue-600' },
-    { id: 'appointments', name: 'Agendamentos', icon: '📅', color: 'from-purple-500 to-purple-600' },
-    { id: 'professionals', name: 'Performance Profissionais', icon: '⭐', color: 'from-pink-500 to-pink-600' },
+    { id: 'revenue', name: 'Faturamento', icon: '💰', color: 'from-cyan-400 to-blue-600' },
+    { id: 'clients', name: 'Crescimento Clientes', icon: '👥', color: 'from-cyan-400 to-blue-600' },
+    { id: 'appointments', name: 'Agendamentos', icon: '📅', color: 'from-cyan-400 to-blue-600' },
+    { id: 'professionals', name: 'Performance Profissionais', icon: '⭐', color: 'from-cyan-400 to-blue-600' },
   ];
 
   const revenueData = [
