@@ -39,6 +39,7 @@ export default function Clients() {
   const [showForm, setShowForm] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeMainTab, setActiveMainTab] = useState<'list' | 'details'>('list');
   const [activeTab, setActiveTab] = useState<'details' | 'anamnesis' | 'custom'>('details');
 
   const [formData, setFormData] = useState({
@@ -257,84 +258,104 @@ export default function Clients() {
         </div>
       </div>
 
-      {/* Main Content Container */}
-      <div className="clients-main-content">
-        {/* Left Panel - Clients List */}
-        <div className="clients-panel-left">
-        <div className="clients-header">
-          <h1>👥 Clientes</h1>
-          <button
-            onClick={openNewClientForm}
-            className="btn-new-client"
-          >
-            <Plus size={18} />
-            Novo
-          </button>
-        </div>
-
-        <div className="clients-search">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder="Buscar por nome, email ou telefone..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        {/* Status Filters */}
-        <div className="clients-filters">
-          {(['all', 'active', 'inactive', 'prospect'] as const).map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={`filter-btn ${statusFilter === status ? 'active' : ''}`}
-            >
-              {status === 'all' ? 'Todos' : status === 'active' ? 'Ativos' : status === 'inactive' ? 'Inativos' : 'Prospects'}
-            </button>
-          ))}
-        </div>
-
-        <div className="clients-list">
-          {filteredClients.length === 0 ? (
-            <div className="clients-empty">
-              <p>Nenhum paciente encontrado</p>
-            </div>
-          ) : (
-            filteredClients.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedClient(c)}
-                className={`clients-item ${selectedClient?.id === c.id ? 'active' : ''}`}
-              >
-                <div className="clients-item-avatar">
-                  {c.photo_url ? (
-                    <img src={c.photo_url} alt={c.name} />
-                  ) : (
-                    <span>{c.name[0]}</span>
-                  )}
-                </div>
-                <div className="clients-item-info">
-                  <div className="clients-item-name">{c.name}</div>
-                  <div className="clients-item-email">{c.email}</div>
-                  <div className="clients-item-phone">{c.phone}</div>
-                  <div className="clients-item-date">
-                    📅 {formatDate(c.created_at)}
-                  </div>
-                </div>
-                <div className="clients-item-status" style={{ background: getStatusColor(getClientStatus(c)) }}>
-                  {getStatusLabel(getClientStatus(c))}
-                </div>
-              </button>
-            ))
-          )}
-        </div>
+      {/* Tabs Header */}
+      <div className="clients-tabs-header">
+        <h1 style={{ margin: 0, marginRight: 'auto' }}>👥 Clientes</h1>
+        <button onClick={openNewClientForm} className="btn-new-client">
+          <Plus size={18} />
+          Novo
+        </button>
       </div>
 
-      {/* Right Panel - Client Details */}
-      <div className="clients-panel-right">
-        {selectedClient ? (
-          <>
+      {/* Main Tabs Navigation */}
+      <div className="clients-main-tabs">
+        <button
+          onClick={() => setActiveMainTab('list')}
+          className={`main-tab ${activeMainTab === 'list' ? 'active' : ''}`}
+        >
+          📋 Clientes
+        </button>
+        {selectedClient && (
+          <button
+            onClick={() => setActiveMainTab('details')}
+            className={`main-tab ${activeMainTab === 'details' ? 'active' : ''}`}
+          >
+            👤 Detalhes de {selectedClient.name}
+          </button>
+        )}
+      </div>
+
+      {/* Tab Content */}
+      <div className="clients-tab-content">
+        {/* Clients List View */}
+        {activeMainTab === 'list' && (
+          <div className="clients-list-view">
+            <div className="clients-search">
+              <Search size={18} />
+              <input
+                type="text"
+                placeholder="Buscar por nome, email ou telefone..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            {/* Status Filters */}
+            <div className="clients-filters">
+              {(['all', 'active', 'inactive', 'prospect'] as const).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setStatusFilter(status)}
+                  className={`filter-btn ${statusFilter === status ? 'active' : ''}`}
+                >
+                  {status === 'all' ? 'Todos' : status === 'active' ? 'Ativos' : status === 'inactive' ? 'Inativos' : 'Prospects'}
+                </button>
+              ))}
+            </div>
+
+            <div className="clients-list">
+              {filteredClients.length === 0 ? (
+                <div className="clients-empty">
+                  <p>Nenhum paciente encontrado</p>
+                </div>
+              ) : (
+                filteredClients.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => {
+                      setSelectedClient(c);
+                      setActiveMainTab('details');
+                    }}
+                    className={`clients-item ${selectedClient?.id === c.id ? 'active' : ''}`}
+                  >
+                    <div className="clients-item-avatar">
+                      {c.photo_url ? (
+                        <img src={c.photo_url} alt={c.name} />
+                      ) : (
+                        <span>{c.name[0]}</span>
+                      )}
+                    </div>
+                    <div className="clients-item-info">
+                      <div className="clients-item-name">{c.name}</div>
+                      <div className="clients-item-email">{c.email}</div>
+                      <div className="clients-item-phone">{c.phone}</div>
+                      <div className="clients-item-date">
+                        📅 {formatDate(c.created_at)}
+                      </div>
+                    </div>
+                    <div className="clients-item-status" style={{ background: getStatusColor(getClientStatus(c)) }}>
+                      {getStatusLabel(getClientStatus(c))}
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Details View */}
+        {activeMainTab === 'details' && selectedClient && (
+          <div className="clients-details-view">
             <div className="client-detail-header">
               <button
                 onClick={() => setSelectedClient(null)}
@@ -493,13 +514,8 @@ export default function Clients() {
                 </div>
               )}
             </div>
-          </>
-        ) : (
-          <div className="client-empty-state">
-            <p>Selecione um paciente para ver detalhes</p>
           </div>
         )}
-      </div>
       </div>
 
       {/* Form Modal */}

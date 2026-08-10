@@ -5,39 +5,49 @@
   background: #f8fafc;
   gap: 0;
   overflow: hidden;
+  padding: 1.5rem;
 }
 
-/* Stats Bar */
+/* Stats Bar - Enhanced */
 .clients-stats-bar {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
   flex-shrink: 0;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 82, 204, 0.05));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: white;
   border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   color: #0052CC;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.1);
 }
 
 .stat-card svg {
   flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: #0052CC;
 }
 
 .stat-value {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #0052CC;
+  color: #1e293b;
+  line-height: 1;
 }
 
 .stat-label {
@@ -46,17 +56,98 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-top: 0.5rem;
 }
 
-/* Flex Container for Panels */
-.clients-panels-wrapper {
+/* Tabs Header */
+.clients-tabs-header {
   display: flex;
-  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.clients-tabs-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Main Tabs Navigation */
+.clients-main-tabs {
+  display: flex;
   gap: 0;
+  padding: 0 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.clients-main-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.clients-main-tabs::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.main-tab {
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.main-tab:hover {
+  color: #0052CC;
+}
+
+.main-tab.active {
+  color: #0052CC;
+  border-bottom-color: #0052CC;
+}
+
+/* Tab Content Container */
+.clients-tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
   overflow: hidden;
 }
 
-/* Flex Container for Panels */
+/* Clients List View */
+.clients-list-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Clients Details View */
+.clients-details-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+/* Flex Container for Panels (Legacy - kept for compatibility) */
 .clients-main-content {
   display: flex;
   flex: 1;
@@ -116,12 +207,13 @@
 
 /* Search Bar */
 .clients-search {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   background: #f1f5f9;
   flex-shrink: 0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .clients-search svg {
