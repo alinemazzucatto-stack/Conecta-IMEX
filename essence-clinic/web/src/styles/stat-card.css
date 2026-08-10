@@ -113,23 +113,23 @@
 }
 
 .stat-label {
-  font-size: 10px !important;
+  font-size: 17px !important;
   font-weight: 600 !important;
   color: #94a3b8 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.2px !important;
+  letter-spacing: 0.3px !important;
   margin: 0 !important;
-  line-height: 1 !important;
+  line-height: 1.06 !important;
   padding: 0 !important;
   display: block !important;
 }
 
 .stat-value {
-  font-size: 18px !important;
+  font-size: 32px !important;
   font-weight: 700 !important;
   color: #1e293b !important;
   margin: 0 !important;
-  line-height: 1 !important;
+  line-height: 1.13 !important;
   padding: 0 !important;
   display: block !important;
 }
