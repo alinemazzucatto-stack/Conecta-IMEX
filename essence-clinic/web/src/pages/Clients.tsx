@@ -257,8 +257,10 @@ export default function Clients() {
         </div>
       </div>
 
-      {/* Left Panel - Clients List */}
-      <div className="clients-panel-left">
+      {/* Main Content Container */}
+      <div className="clients-main-content">
+        {/* Left Panel - Clients List */}
+        <div className="clients-panel-left">
         <div className="clients-header">
           <h1>👥 Clientes</h1>
           <button
@@ -497,6 +499,7 @@ export default function Clients() {
             <p>Selecione um paciente para ver detalhes</p>
           </div>
         )}
+      </div>
       </div>
 
       {/* Form Modal */}
