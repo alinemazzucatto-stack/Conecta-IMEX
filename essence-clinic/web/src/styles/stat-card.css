@@ -91,17 +91,17 @@
 
 .stat-label {
   font-size: 8px;
-  font-weight: 500;
-  color: #b0b7c3;
-  text-transform: uppercase;
+  font-weight: 400;
+  color: #9ca3af;
+  text-transform: capitalize;
   letter-spacing: 0;
   margin: 0;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .stat-value {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: #1f2937;
   margin: 0;
   line-height: 1;
