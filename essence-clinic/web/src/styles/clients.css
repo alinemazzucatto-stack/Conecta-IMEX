@@ -1,7 +1,57 @@
 .clients-container {
   display: flex;
+  flex-direction: column;
   height: calc(100vh - 80px);
   background: #f8fafc;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* Stats Bar */
+.clients-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 82, 204, 0.05));
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  color: #0052CC;
+}
+
+.stat-card svg {
+  flex-shrink: 0;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0052CC;
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Flex Container for Panels */
+.clients-panels-wrapper {
+  display: flex;
+  flex: 1;
   gap: 0;
   overflow: hidden;
 }
@@ -166,12 +216,78 @@
   text-overflow: ellipsis;
 }
 
+.clients-item-email {
+  font-size: 0.75rem;
+  color: #0052CC;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
 .clients-item-phone {
   font-size: 0.75rem;
   color: #64748b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.clients-item-date {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.25rem;
+}
+
+.clients-item-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: #10b981;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Filters */
+.clients-filters {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  overflow-x: auto;
+  flex-shrink: 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.filter-btn:hover {
+  border-color: #0052CC;
+  color: #0052CC;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
+  color: white;
+  border-color: transparent;
 }
 
 .clients-empty {
@@ -227,6 +343,29 @@
 .btn-close:hover {
   background: #f1f5f9;
   color: #1e293b;
+}
+
+.client-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.client-detail-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.client-status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #10b981;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .client-detail-header h2 {
@@ -285,6 +424,40 @@
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #e2e8f0;
+}
+
+/* Client Info Card */
+.client-info-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.03), rgba(0, 82, 204, 0.03));
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  margin: 1.5rem;
+  flex-shrink: 0;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #1e293b;
+  font-weight: 500;
+  word-break: break-word;
 }
 
 /* Tabs */
