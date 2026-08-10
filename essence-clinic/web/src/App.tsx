@@ -13,6 +13,7 @@ import PublicBooking from '@/pages/PublicBooking';
 import MedicalRecords from '@/pages/MedicalRecords';
 import Packages from '@/pages/Packages';
 import Integrations from '@/pages/Integrations';
+import Commissions from '@/pages/Commissions';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore();
@@ -112,6 +113,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Integrations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/commissions"
+          element={
+            <ProtectedRoute>
+              <Commissions />
             </ProtectedRoute>
           }
         />

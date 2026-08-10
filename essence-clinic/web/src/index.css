@@ -7,6 +7,7 @@
 @import './styles/medical-records.css';
 @import './styles/packages.css';
 @import './styles/integrations.css';
+@import './styles/commissions.css';
 
 @tailwind base;
 @tailwind components;
