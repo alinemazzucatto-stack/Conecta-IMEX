@@ -27,30 +27,6 @@
   }
 }
 
-/* Subtle backgrounds - soft pastels */
-.stat-card.bg-purple-50 {
-  background: #faf5ff;
-}
-
-.stat-card.bg-blue-50 {
-  background: #f0f9ff;
-}
-
-.stat-card.bg-green-50 {
-  background: #f0fdf4;
-}
-
-.stat-card.bg-pink-50 {
-  background: #fdf2f8;
-}
-
-.stat-card.bg-orange-50 {
-  background: #fffbeb;
-}
-
-.stat-card.bg-indigo-50 {
-  background: #f0f4ff;
-}
 
 .stat-card::before {
   content: '';
