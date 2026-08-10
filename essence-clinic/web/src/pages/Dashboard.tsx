@@ -10,11 +10,18 @@ import {
   Clock,
   TrendingUp,
   FileText,
+  Plus,
 } from 'lucide-react';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+
+  const quickActions = [
+    { label: '+ Novo agendamento', icon: Calendar, href: '/calendar', primary: true },
+    { label: '+ Novo cliente', icon: Users, href: '/clients', primary: false },
+    { label: '+ Nova ficha', icon: FileText, href: '/medical-records', primary: false },
+  ];
 
   const features = [
     {
@@ -70,13 +77,36 @@ export default function Dashboard() {
   return (
     <div className="p-8">
       {/* Welcome Section */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Bem-vindo, {user?.name}! 👋
         </h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-gray-600">
           Aqui está o resumo da sua clínica Essence Clinic
         </p>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mb-8 flex flex-wrap gap-3">
+        {quickActions.map((action, idx) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={idx}
+              onClick={() => navigate(action.href)}
+              className={`
+                flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all
+                ${action.primary
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-lg hover:scale-105'
+                  : 'bg-white text-blue-600 border-2 border-blue-500 hover:bg-blue-50'
+                }
+              `}
+            >
+              <Icon size={18} />
+              {action.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Quick Stats Grid */}
