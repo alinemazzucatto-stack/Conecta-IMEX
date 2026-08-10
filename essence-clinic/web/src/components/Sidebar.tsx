@@ -68,13 +68,13 @@ export default function Sidebar() {
       label: 'Comissões',
       icon: BarChart3,
       path: '/commissions',
-      color: 'from-emerald-500 to-emerald-600',
+      color: 'from-cyan-400 to-blue-600',
     },
     {
       label: 'Pacotes',
       icon: Package,
       path: '/packages',
-      color: 'from-violet-500 to-violet-600',
+      color: 'from-cyan-400 to-blue-600',
     },
     {
       label: 'Configurações',
@@ -86,13 +86,13 @@ export default function Sidebar() {
       label: 'Integrações',
       icon: Zap,
       path: '/integrations',
-      color: 'from-yellow-500 to-yellow-600',
+      color: 'from-cyan-400 to-blue-600',
     },
     {
       label: 'Agendamento Online',
       icon: Link2,
       path: '/booking-admin',
-      color: 'from-cyan-500 to-cyan-600',
+      color: 'from-cyan-400 to-blue-600',
     },
   ];
 
