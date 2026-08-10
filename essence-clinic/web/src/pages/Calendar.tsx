@@ -43,8 +43,11 @@ type ViewType = 'day' | 'week' | 'month';
 export default function Calendar() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 6, 30));
-  const [selectedDate, setSelectedDate] = useState('30/07/2026');
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(
+    `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`
+  );
   const [viewType, setViewType] = useState<ViewType>('month');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
