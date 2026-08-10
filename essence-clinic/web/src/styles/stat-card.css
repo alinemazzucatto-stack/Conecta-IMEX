@@ -64,13 +64,13 @@
 /* Icon - Colorido baseado no padrão de comissões */
 .stat-icon {
   width: 44px;
-  height: 58px;
+  height: 48px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 24px;
+  font-size: 22px;
   background: #3b82f6;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
   flex-shrink: 0;
