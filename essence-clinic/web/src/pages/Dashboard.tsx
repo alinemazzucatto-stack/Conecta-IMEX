@@ -193,10 +193,10 @@ export default function Dashboard() {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
               blue: 'from-cyan-400 to-blue-600',
-              green: 'from-green-500 to-green-600',
-              pink: 'from-pink-500 to-pink-600',
-              orange: 'from-orange-500 to-orange-600',
-              indigo: 'from-indigo-500 to-indigo-600',
+              green: 'from-cyan-400 to-blue-600',
+              pink: 'from-cyan-400 to-blue-600',
+              orange: 'from-cyan-400 to-blue-600',
+              indigo: 'from-cyan-400 to-blue-600',
             };
 
             return (
@@ -233,10 +233,10 @@ export default function Dashboard() {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
               blue: 'from-cyan-400 to-blue-600',
-              green: 'from-green-500 to-green-600',
-              pink: 'from-pink-500 to-pink-600',
-              orange: 'from-orange-500 to-orange-600',
-              indigo: 'from-indigo-500 to-indigo-600',
+              green: 'from-cyan-400 to-blue-600',
+              pink: 'from-cyan-400 to-blue-600',
+              orange: 'from-cyan-400 to-blue-600',
+              indigo: 'from-cyan-400 to-blue-600',
             };
 
             return (
@@ -273,9 +273,9 @@ export default function Dashboard() {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
               blue: 'from-cyan-400 to-blue-600',
-              green: 'from-green-500 to-green-600',
-              pink: 'from-pink-500 to-pink-600',
-              orange: 'from-orange-500 to-orange-600',
+              green: 'from-cyan-400 to-blue-600',
+              pink: 'from-cyan-400 to-blue-600',
+              orange: 'from-cyan-400 to-blue-600',
             };
 
             return (

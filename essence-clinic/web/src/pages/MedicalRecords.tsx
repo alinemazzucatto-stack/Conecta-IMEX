@@ -39,7 +39,7 @@ const TEMPLATES: Template[] = [
     id: 'anamnesis',
     name: 'Anamnese',
     description: 'Entrevista inicial com histórico médico completo',
-    color: 'from-blue-500 to-blue-600',
+    color: 'from-cyan-400 to-blue-600',
     icon: '📋',
     fields: [
       { id: 'chief_complaint', name: 'chief_complaint', type: 'text', label: 'Queixa Principal', required: true },
@@ -54,7 +54,7 @@ const TEMPLATES: Template[] = [
     id: 'evaluation',
     name: 'Avaliação',
     description: 'Avaliação clínica e exame físico',
-    color: 'from-green-500 to-green-600',
+    color: 'from-cyan-400 to-blue-600',
     icon: '🔍',
     fields: [
       { id: 'vital_signs', name: 'vital_signs', type: 'textarea', label: 'Sinais Vitais (PA, FC, Temp, FR)', required: true },
@@ -68,7 +68,7 @@ const TEMPLATES: Template[] = [
     id: 'evolution',
     name: 'Evolução',
     description: 'Anotação de evolução do tratamento',
-    color: 'from-purple-500 to-purple-600',
+    color: 'from-cyan-400 to-blue-600',
     icon: '📈',
     fields: [
       { id: 'current_status', name: 'current_status', type: 'textarea', label: 'Estado Atual', required: true },
@@ -81,7 +81,7 @@ const TEMPLATES: Template[] = [
     id: 'procedure',
     name: 'Procedimento',
     description: 'Registro de procedimento realizado',
-    color: 'from-pink-500 to-pink-600',
+    color: 'from-cyan-400 to-blue-600',
     icon: '💉',
     fields: [
       { id: 'procedure_name', name: 'procedure_name', type: 'text', label: 'Procedimento Realizado', required: true },
