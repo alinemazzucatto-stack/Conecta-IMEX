@@ -1,6 +1,6 @@
 /* Stat Card Component - Balanced Design */
 .stat-card {
-  background: white;
+  background: white !important;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);

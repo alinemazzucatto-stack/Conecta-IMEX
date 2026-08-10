@@ -10,7 +10,7 @@ interface StatCardProps {
 }
 
 export default function StatCard({ icon, label, value, trend, color }: StatCardProps) {
-  const colorMap = {
+  const colorMap: Record<string, string> = {
     purple: 'from-purple-500 to-purple-600',
     blue: 'from-blue-500 to-blue-600',
     green: 'from-green-500 to-green-600',
