@@ -8,6 +8,9 @@
 @import './styles/packages.css';
 @import './styles/integrations.css';
 @import './styles/commissions.css';
+@import './styles/reports.css';
+@import './styles/marketing.css';
+@import './styles/roles.css';
 
 @tailwind base;
 @tailwind components;
