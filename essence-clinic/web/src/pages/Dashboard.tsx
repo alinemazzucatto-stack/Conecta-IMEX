@@ -23,7 +23,21 @@ export default function Dashboard() {
     { label: '+ Nova ficha', icon: FileText, href: '/medical-records', primary: false },
   ];
 
-  const features = [
+  const quickAccessFeatures = [
+    {
+      icon: Calendar,
+      title: 'Agendamento Online',
+      description: 'Configure link público e horários',
+      color: 'blue',
+      href: '/booking-admin',
+    },
+    {
+      icon: FileText,
+      title: 'Fichas Clínicas',
+      description: 'Crie e gerencie fichas médicas',
+      color: 'blue',
+      href: '/medical-records',
+    },
     {
       icon: Calendar,
       title: 'Agenda',
@@ -35,42 +49,22 @@ export default function Dashboard() {
       icon: Users,
       title: 'Clientes',
       description: 'Cadastre e gerencie pacientes',
-      color: 'green',
+      color: 'blue',
       href: '/clients',
     },
     {
       icon: Stethoscope,
       title: 'Profissionais',
       description: 'Gerencie profissionais e especialidades',
-      color: 'pink',
+      color: 'blue',
       href: '/professionals',
     },
     {
       icon: DollarSign,
       title: 'Financeiro',
       description: 'Controle receitas e relatórios',
-      color: 'orange',
-      href: '/financial',
-    },
-  ];
-
-  const bookingFeatures = [
-    {
-      icon: Calendar,
-      title: 'Agendamento Online',
-      description: 'Configure link público e horários',
-      color: 'indigo',
-      href: '/booking-admin',
-    },
-  ];
-
-  const recordsFeatures = [
-    {
-      icon: FileText,
-      title: 'Fichas Clínicas',
-      description: 'Crie e gerencie fichas médicas',
       color: 'blue',
-      href: '/medical-records',
+      href: '/financial',
     },
   ];
 
@@ -183,93 +177,13 @@ export default function Dashboard() {
         <RevenueChart />
       </div>
 
-      {/* Booking Feature */}
-      <div className="mb-12">
-        <h2 className="section-header">
-          Agendamento Online
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {bookingFeatures.map((feature, idx) => {
-            const Icon = feature.icon;
-            const colorMap: Record<string, string> = {
-              blue: 'from-cyan-400 to-blue-600',
-              green: 'from-cyan-400 to-blue-600',
-              pink: 'from-cyan-400 to-blue-600',
-              orange: 'from-cyan-400 to-blue-600',
-              indigo: 'from-cyan-400 to-blue-600',
-            };
-
-            return (
-              <button
-                key={idx}
-                onClick={() => navigate(feature.href)}
-                className="feature-card"
-              >
-                <div className={`feature-icon bg-gradient-to-br ${colorMap[feature.color]}`}>
-                  <Icon size={24} />
-                </div>
-                <h3 className="feature-title">
-                  {feature.title}
-                </h3>
-                <p className="feature-description">
-                  {feature.description}
-                </p>
-                <a className="feature-link">
-                  Acessar →
-                </a>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Medical Records Feature */}
-      <div className="mb-12">
-        <h2 className="section-header">
-          Fichas Clínicas
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {recordsFeatures.map((feature, idx) => {
-            const Icon = feature.icon;
-            const colorMap: Record<string, string> = {
-              blue: 'from-cyan-400 to-blue-600',
-              green: 'from-cyan-400 to-blue-600',
-              pink: 'from-cyan-400 to-blue-600',
-              orange: 'from-cyan-400 to-blue-600',
-              indigo: 'from-cyan-400 to-blue-600',
-            };
-
-            return (
-              <button
-                key={idx}
-                onClick={() => navigate(feature.href)}
-                className="feature-card"
-              >
-                <div className={`feature-icon bg-gradient-to-br ${colorMap[feature.color]}`}>
-                  <Icon size={24} />
-                </div>
-                <h3 className="feature-title">
-                  {feature.title}
-                </h3>
-                <p className="feature-description">
-                  {feature.description}
-                </p>
-                <a className="feature-link">
-                  Acessar →
-                </a>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Features Grid */}
+      {/* Acesso Rápido - Unified Section */}
       <div className="mb-12">
         <h2 className="section-header">
           Acesso Rápido
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {features.map((feature, idx) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {quickAccessFeatures.map((feature, idx) => {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
               blue: 'from-cyan-400 to-blue-600',
