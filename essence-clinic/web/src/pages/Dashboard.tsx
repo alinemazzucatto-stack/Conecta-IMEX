@@ -80,7 +80,7 @@ export default function Dashboard() {
       <div className="mb-10 pb-6 border-b border-purple-100 dashboard-header">
         <div className="flex items-end justify-between mb-4">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent mb-2">
               Bem-vindo, {user?.name}! 👋
             </h1>
             <p className="text-gray-600 text-lg">
@@ -105,8 +105,8 @@ export default function Dashboard() {
               className={`
                 flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all
                 ${action.primary
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-lg hover:scale-105'
-                  : 'bg-white text-blue-600 border-2 border-blue-500 hover:bg-blue-50'
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-600 text-white hover:shadow-lg hover:scale-105'
+                  : 'bg-white text-cyan-400 border-2 border-cyan-400 hover:bg-cyan-50'
                 }
               `}
             >
@@ -192,7 +192,7 @@ export default function Dashboard() {
           {bookingFeatures.map((feature, idx) => {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
-              blue: 'from-blue-500 to-blue-600',
+              blue: 'from-cyan-400 to-blue-600',
               green: 'from-green-500 to-green-600',
               pink: 'from-pink-500 to-pink-600',
               orange: 'from-orange-500 to-orange-600',
@@ -232,7 +232,7 @@ export default function Dashboard() {
           {recordsFeatures.map((feature, idx) => {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
-              blue: 'from-blue-500 to-blue-600',
+              blue: 'from-cyan-400 to-blue-600',
               green: 'from-green-500 to-green-600',
               pink: 'from-pink-500 to-pink-600',
               orange: 'from-orange-500 to-orange-600',
@@ -272,7 +272,7 @@ export default function Dashboard() {
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
-              blue: 'from-blue-500 to-blue-600',
+              blue: 'from-cyan-400 to-blue-600',
               green: 'from-green-500 to-green-600',
               pink: 'from-pink-500 to-pink-600',
               orange: 'from-orange-500 to-orange-600',
