@@ -33,9 +33,9 @@ const PROFESSIONALS: Professional[] = [
 ];
 
 const COLORS = {
-  '999405ac-b258-48ce-9085-c64c3731a526': '#1e40af',
-  'f8b2086c-18ab-4d04-adc7-4defa95a1832': '#0891b2',
-  '8996d973-8106-4eb7-9ceb-6d144f3e5d18': '#f59e0b',
+  '999405ac-b258-48ce-9085-c64c3731a526': '#0052CC',
+  'f8b2086c-18ab-4d04-adc7-4defa95a1832': '#00A8D8',
+  '8996d973-8106-4eb7-9ceb-6d144f3e5d18': '#00D4FF',
 };
 
 export default function Calendar() {
@@ -287,7 +287,7 @@ export default function Calendar() {
             <div style={{
               display: 'inline-block',
               padding: '0.25rem 0.5rem',
-              background: '#1e40af',
+              background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
               color: 'white',
               borderRadius: '12px',
               fontSize: '0.75rem',
@@ -350,7 +350,7 @@ export default function Calendar() {
         style={{
           marginBottom: '1.5rem',
           padding: '0.5rem 1rem',
-          background: '#0891b2',
+          background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
           color: 'white',
           border: 'none',
           borderRadius: '0.5rem',
@@ -362,12 +362,12 @@ export default function Calendar() {
       </button>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 style={{ margin: 0, color: '#1e40af' }}>📅 Calendário de Agendamentos</h1>
+        <h1 style={{ margin: 0, background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>📅 Calendário de Agendamentos</h1>
         <button
           onClick={() => openNewAppointmentModal(selectedDate)}
           style={{
             padding: '0.5rem 1rem',
-            background: '#10b981',
+            background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '0.5rem',
@@ -403,13 +403,13 @@ export default function Calendar() {
 
       {/* Navegação */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <button onClick={previousMonth} style={{ padding: '0.5rem 1rem', background: '#0891b2', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer' }}>
+        <button onClick={previousMonth} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
           ← Anterior
         </button>
-        <h2 style={{ margin: 0, fontSize: '1.25rem' }}>
+        <h2 style={{ margin: 0, fontSize: '1.25rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           {currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
         </h2>
-        <button onClick={nextMonth} style={{ padding: '0.5rem 1rem', background: '#0891b2', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer' }}>
+        <button onClick={nextMonth} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
           Próximo →
         </button>
       </div>
@@ -429,7 +429,7 @@ export default function Calendar() {
       </div>
 
       {/* Legenda */}
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', padding: '1.5rem', background: 'rgba(30, 64, 175, 0.03)', borderRadius: '0.5rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', padding: '1.5rem', background: 'rgba(0, 82, 204, 0.05)', borderRadius: '0.5rem', marginBottom: '2rem' }}>
         {PROFESSIONALS.map((prof) => (
           <div key={prof.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ width: '12px', height: '12px', background: COLORS[prof.id as keyof typeof COLORS], borderRadius: '2px' }}></div>
@@ -439,19 +439,20 @@ export default function Calendar() {
       </div>
 
       {/* Agendamentos do Dia */}
-      <div style={{ padding: '1.5rem', background: 'rgba(16, 185, 129, 0.05)', borderRadius: '0.5rem' }}>
+      <div style={{ padding: '1.5rem', background: 'rgba(0, 82, 204, 0.03)', borderRadius: '0.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
           <h3 style={{ margin: 0 }}>📅 Agendamentos - {selectedDate}</h3>
           <button
             onClick={() => openNewAppointmentModal(selectedDate)}
             style={{
               padding: '0.5rem 1rem',
-              background: '#10b981',
+              background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '0.5rem',
               cursor: 'pointer',
-              fontSize: '0.875rem'
+              fontSize: '0.875rem',
+              fontWeight: 600
             }}
           >
             + Adicionar
@@ -627,7 +628,7 @@ export default function Calendar() {
                         flex: 1,
                         minWidth: '80px',
                         padding: '0.75rem',
-                        background: '#10b981',
+                        background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
                         color: 'white',
                         border: 'none',
                         borderRadius: '0.5rem',
@@ -647,7 +648,7 @@ export default function Calendar() {
                       flex: 1,
                       minWidth: '80px',
                       padding: '0.75rem',
-                      background: '#f59e0b',
+                      background: '#FA8500',
                       color: 'white',
                       border: 'none',
                       borderRadius: '0.5rem',
@@ -663,7 +664,7 @@ export default function Calendar() {
                       flex: 1,
                       minWidth: '80px',
                       padding: '0.75rem',
-                      background: '#ef4444',
+                      background: '#E81123',
                       color: 'white',
                       border: 'none',
                       borderRadius: '0.5rem',
@@ -681,7 +682,7 @@ export default function Calendar() {
                   flex: 1,
                   minWidth: '80px',
                   padding: '0.75rem',
-                  background: '#3b82f6',
+                  background: 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '0.5rem',
@@ -718,7 +719,7 @@ export default function Calendar() {
             width: '90%',
             boxShadow: '0 20px 25px rgba(0,0,0,0.1)'
           }}>
-            <h2 style={{ marginTop: 0, color: '#f59e0b' }}>⚠️ Cancelar Agendamento</h2>
+            <h2 style={{ marginTop: 0, color: '#FA8500' }}>⚠️ Cancelar Agendamento</h2>
             <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>
               Tem certeza que deseja cancelar este agendamento?
             </p>
@@ -767,7 +768,7 @@ export default function Calendar() {
                 style={{
                   flex: 1,
                   padding: '0.75rem',
-                  background: '#f59e0b',
+                  background: '#FA8500',
                   color: 'white',
                   border: 'none',
                   borderRadius: '0.5rem',
@@ -788,7 +789,7 @@ export default function Calendar() {
           position: 'fixed',
           top: '20px',
           right: '20px',
-          background: toast.type === 'success' ? '#10b981' : '#ef4444',
+          background: toast.type === 'success' ? 'linear-gradient(135deg, #00D4FF 0%, #0052CC 100%)' : '#E81123',
           color: 'white',
           padding: '1rem 1.5rem',
           borderRadius: '0.5rem',
