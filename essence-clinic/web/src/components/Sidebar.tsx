@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronRight,
   Link2,
+  FileText,
 } from 'lucide-react';
 import '../styles/sidebar.css';
 
@@ -41,6 +42,12 @@ export default function Sidebar() {
       icon: Users,
       path: '/clients',
       color: 'from-green-500 to-green-600',
+    },
+    {
+      label: 'Fichas Clínicas',
+      icon: FileText,
+      path: '/medical-records',
+      color: 'from-red-500 to-red-600',
     },
     {
       label: 'Profissionais',
