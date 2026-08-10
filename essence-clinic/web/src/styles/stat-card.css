@@ -14,7 +14,8 @@
   overflow: hidden;
   min-height: auto;
   animation: slideUp 0.3s ease-out backwards;
-  align-items: flex-start !important;
+  align-items: center !important;
+  text-align: center !important;
 }
 
 @keyframes slideUp {
@@ -56,7 +57,7 @@
 .stat-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 8px;
   width: 100%;
 }
@@ -110,6 +111,7 @@
   gap: 4px;
   width: 100%;
   justify-content: center;
+  align-items: center;
 }
 
 .stat-label {
