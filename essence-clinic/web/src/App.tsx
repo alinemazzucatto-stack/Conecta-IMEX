@@ -10,6 +10,7 @@ import Financial from '@/pages/Financial';
 import Settings from '@/pages/Settings';
 import BookingAdmin from '@/pages/BookingAdmin';
 import PublicBooking from '@/pages/PublicBooking';
+import MedicalRecords from '@/pages/MedicalRecords';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore();
@@ -87,6 +88,14 @@ function App() {
         <Route
           path="/booking/:customUrl"
           element={<PublicBooking />}
+        />
+        <Route
+          path="/medical-records"
+          element={
+            <ProtectedRoute>
+              <MedicalRecords />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </Router>

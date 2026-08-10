@@ -9,6 +9,7 @@ import {
   DollarSign,
   Clock,
   TrendingUp,
+  FileText,
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -53,6 +54,16 @@ export default function Dashboard() {
       description: 'Configure link público e horários',
       color: 'indigo',
       href: '/booking-admin',
+    },
+  ];
+
+  const recordsFeatures = [
+    {
+      icon: FileText,
+      title: 'Fichas Clínicas',
+      description: 'Crie e gerencie fichas médicas',
+      color: 'blue',
+      href: '/medical-records',
     },
   ];
 
@@ -137,6 +148,46 @@ export default function Dashboard() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {bookingFeatures.map((feature, idx) => {
+            const Icon = feature.icon;
+            const colorMap: Record<string, string> = {
+              blue: 'from-blue-500 to-blue-600',
+              green: 'from-green-500 to-green-600',
+              pink: 'from-pink-500 to-pink-600',
+              orange: 'from-orange-500 to-orange-600',
+              indigo: 'from-indigo-500 to-indigo-600',
+            };
+
+            return (
+              <button
+                key={idx}
+                onClick={() => navigate(feature.href)}
+                className="bg-white rounded-12 p-6 border border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all text-left group"
+              >
+                <div className={`bg-gradient-to-br ${colorMap[feature.color]} w-12 h-12 rounded-10 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                  <Icon size={24} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  {feature.description}
+                </p>
+                <span className="text-purple-600 font-semibold text-sm group-hover:text-purple-700">
+                  Acessar →
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Medical Records Feature */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Fichas Clínicas
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {recordsFeatures.map((feature, idx) => {
             const Icon = feature.icon;
             const colorMap: Record<string, string> = {
               blue: 'from-blue-500 to-blue-600',
