@@ -3,9 +3,9 @@
 @import './styles/layout.css';
 @import './styles/dashboard.css';
 @import './styles/booking-admin.css';
+@import './styles/clients-enhanced.css';
 @import './styles/stat-card.css';
 @import './styles/revenue-chart.css';
-@import './styles/clients.css';
 @import './styles/medical-records.css';
 @import './styles/packages.css';
 @import './styles/integrations.css';
