@@ -91,26 +91,26 @@
 }
 
 .quick-action-btn.primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #00D4FF 0%, #0052CC 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);
 }
 
 .quick-action-btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 82, 204, 0.4);
 }
 
 .quick-action-btn.secondary {
   background: white;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
+  color: #0052CC;
+  border: 2px solid #0052CC;
 }
 
 .quick-action-btn.secondary:hover {
-  background: #f0f9ff;
-  border-color: #2563eb;
-  color: #2563eb;
+  background: #E8F4FF;
+  border-color: #00D4FF;
+  color: #00D4FF;
 }
 
 /* Stats Grid */

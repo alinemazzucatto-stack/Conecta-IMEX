@@ -19,15 +19,15 @@
 @tailwind utilities;
 
 :root {
-  /* Essence Clinic Color Palette */
-  --primary: #7c3aed;
-  --primary-dark: #6d28d9;
-  --primary-light: #a78bfa;
-  --secondary: #ec4899;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --error: #ef4444;
+  /* Essence Clinic Color Palette - Cyan to Blue Gradient */
+  --primary: #0052CC;
+  --primary-dark: #003A99;
+  --primary-light: #00D4FF;
+  --secondary: #00A8D8;
+  --success: #00D4FF;
+  --warning: #0078D4;
+  --info: #00A8D8;
+  --error: #E81123;
 
   /* Neutral Colors */
   --text-dark: #1f2937;
