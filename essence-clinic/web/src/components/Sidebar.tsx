@@ -12,6 +12,7 @@ import {
   Link2,
   FileText,
   Package,
+  Zap,
 } from 'lucide-react';
 import '../styles/sidebar.css';
 
@@ -73,6 +74,12 @@ export default function Sidebar() {
       icon: Settings,
       path: '/settings',
       color: 'from-indigo-500 to-indigo-600',
+    },
+    {
+      label: 'Integrações',
+      icon: Zap,
+      path: '/integrations',
+      color: 'from-yellow-500 to-yellow-600',
     },
     {
       label: 'Agendamento Online',
