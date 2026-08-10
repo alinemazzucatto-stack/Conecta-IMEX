@@ -56,9 +56,18 @@
   overflow: hidden;
 }
 
+/* Flex Container for Panels */
+.clients-main-content {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  overflow: hidden;
+}
+
 /* Left Panel - Clients List */
 .clients-panel-left {
-  width: 320px;
+  width: 45%;
+  min-width: 400px;
   background: white;
   border-right: 1px solid #e2e8f0;
   display: flex;
