@@ -7,12 +7,12 @@
 @import './styles/medical-records-enhanced.css';
 @import './styles/stat-card.css';
 @import './styles/revenue-chart.css';
-@import './styles/packages.css';
-@import './styles/integrations.css';
-@import './styles/commissions.css';
-@import './styles/reports.css';
-@import './styles/marketing.css';
-@import './styles/roles.css';
+@import './styles/packages-enhanced.css';
+@import './styles/integrations-enhanced.css';
+@import './styles/commissions-enhanced.css';
+@import './styles/reports-enhanced.css';
+@import './styles/marketing-enhanced.css';
+@import './styles/roles-enhanced.css';
 
 @tailwind base;
 @tailwind components;

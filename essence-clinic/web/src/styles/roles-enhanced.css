@@ -1,0 +1,269 @@
+/* Essence Clinic Roles Enhanced Styles */
+
+.roles-container {
+  display: flex;
+  height: calc(100vh - 80px);
+  background: #f8fafc;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.roles-panel-left {
+  width: 320px;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 0 3px rgba(15, 23, 42, 0.08);
+}
+
+.roles-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%);
+}
+
+.roles-header h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.btn-new-role {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-new-role:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.roles-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.role-card {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.2s ease;
+}
+
+.role-card:hover {
+  border-color: #6366f1;
+  background: #f0f4ff;
+  transform: translateX(4px);
+}
+
+.role-card.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
+  border-color: #6366f1;
+}
+
+.role-card.active::before {
+  transform: scaleY(1);
+}
+
+.role-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  font-weight: 600;
+}
+
+.role-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.role-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 13px;
+}
+
+.role-description {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.roles-panel-right {
+  flex: 1;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.roles-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+}
+
+.role-detail-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%);
+}
+
+.role-detail-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.role-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit-role,
+.btn-delete-role {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit-role {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-edit-role:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-delete-role {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-delete-role:hover {
+  background: #fecaca;
+}
+
+.role-detail-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: #f8fafc;
+}
+
+.permission-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.permission-group {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  animation: slideUp 0.3s ease-out backwards;
+}
+
+.permission-group h4 {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.permission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.permission-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.permission-checkbox input {
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.permission-name {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.permission-desc {
+  font-size: 11px;
+  color: #94a3b8;
+}
