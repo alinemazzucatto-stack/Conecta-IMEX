@@ -7,14 +7,14 @@
   border: 2px solid #e2e8f0;
   transition: all 0.3s ease;
   display: flex;
-  flex-direction: row;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   cursor: default;
   position: relative;
   overflow: hidden;
   min-height: auto;
   animation: slideUp 0.3s ease-out backwards;
-  align-items: center;
+  align-items: flex-start;
 }
 
 @keyframes slideUp {
@@ -56,9 +56,9 @@
 .stat-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  flex-shrink: 0;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
 }
 
 /* Icon - Colorido baseado no padrão de comissões */
@@ -107,8 +107,8 @@
 .stat-content {
   display: flex;
   flex-direction: column;
-  gap: 0px;
-  flex-shrink: 1;
+  gap: 4px;
+  width: 100%;
   justify-content: center;
 }
 
