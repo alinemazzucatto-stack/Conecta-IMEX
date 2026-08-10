@@ -6,6 +6,7 @@
 @import './styles/clients.css';
 @import './styles/medical-records.css';
 @import './styles/packages.css';
+@import './styles/integrations.css';
 
 @tailwind base;
 @tailwind components;

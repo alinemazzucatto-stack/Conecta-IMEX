@@ -12,6 +12,7 @@ import BookingAdmin from '@/pages/BookingAdmin';
 import PublicBooking from '@/pages/PublicBooking';
 import MedicalRecords from '@/pages/MedicalRecords';
 import Packages from '@/pages/Packages';
+import Integrations from '@/pages/Integrations';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore();
@@ -103,6 +104,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Packages />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/integrations"
+          element={
+            <ProtectedRoute>
+              <Integrations />
             </ProtectedRoute>
           }
         />
