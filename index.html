@@ -560,6 +560,7 @@ function verificarKeyAntes() {
 <script src="js/modules/audit-engine.js"></script>
 <script src="js/modules/audit-report-generator.js"></script>
 <script src="js/modules/audit-dashboard.js"></script>
+<script src="js/modules/modal-system.js"></script>
 
 <!-- ══ TOPBAR ══ -->
 <div class="app-shell" id="appShell" style="display:none">
@@ -5506,6 +5507,17 @@ Desenvolvimento, Movimentações e Auditoria.
   }, 2000);
 })();
 </script>
+
+<!-- ══ MODAL SYSTEM - ESSENCE CLINIC ══ -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModal(event)"></div>
+<div id="modal-container" class="modal-container">
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="modal-title">Modal Title</h2>
+  </div>
+  <div class="modal-tabs" id="modal-tabs-container"></div>
+  <div class="modal-content" id="modal-content"></div>
+</div>
 
 </body>
 </html>
