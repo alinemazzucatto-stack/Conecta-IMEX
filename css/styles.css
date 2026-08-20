@@ -72,14 +72,9 @@ body{font-family:'Inter','Montserrat',sans-serif;background:var(--bg);color:var(
 @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.8}}
 
-/* ── LOGIN ── */
-/* DESATIVADO - Conflita com layout de duas colunas definido no HTML
-   O HTML usa order: para ordenar visual-panel e login-box lado a lado
-   Esta definição centraliza a caixa, causando oscilação na carga da página
-   Ver: index.html linhas 57-90 (login-split-redesign-early-css)
-#loginScreen{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--side),var(--side-2));display:flex;align-items:center;justify-content:center}
-*/
-.login-box{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.3);border-radius:28px;padding:48px 44px;width:100%;max-width:440px;box-shadow:0 32px 80px rgba(139,107,157,0.15);text-align:center;transition:.3s}
+/* ── LOGIN - ESSENCE CLINIC ── */
+#loginScreen{background:linear-gradient(135deg,#005cfe 0%,#6b42c7 100%);position:fixed;inset:0;z-index:9999}
+.login-box{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.4);border-radius:32px;padding:52px 48px;width:100%;max-width:460px;box-shadow:0 40px 100px rgba(0,0,0,0.15);text-align:center;transition:.3s}
 .login-logo{font-size:44px;margin-bottom:14px}
 .login-box h1{font-family:'Cormorant Garamond',serif;font-size:32px;margin-bottom:8px;color:var(--ink);font-weight:600;letter-spacing:-0.8px}
 .login-box>p{color:var(--ink-60);font-size:14px;margin-bottom:24px}
@@ -117,11 +112,8 @@ body{font-family:'Inter','Montserrat',sans-serif;background:var(--bg);color:var(
 /* Conteúdo preenche a tela toda — sem respiro lateral, em todos os módulos/perfis */
 .main-area{margin-left:64px;padding:0 0 24px;flex:1;display:flex;flex-direction:column;min-height:100vh;width:calc(100vw - 64px);max-width:none;box-sizing:border-box}
 
-/* ── TOPBAR - MATCH SIDEBAR ── */
-/* Era um gradiente, mas a regra .topbar de baixo (linha ~392) define
-   background:#0047FF !important e sempre venceu a cascata — o gradiente
-   nunca chegou a ser exibido. Alinhado aqui à cor que está de fato ativa. */
-.topbar{height:64px;background:#0047FF;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(0,0,0,0.08)}
+/* ── TOPBAR - ESSENCE CLINIC ── */
+.topbar{height:64px;background:linear-gradient(90deg,#005cfe 0%,#6b42c7 100%);border-bottom:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,92,254,0.12)}
 .topbar-brand{display:flex;align-items:center;gap:10px}
 .t-page-icon{font-size:18px}
 .t-title{font-size:16px;font-weight:700;color:#fff}
