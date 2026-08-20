@@ -1,32 +1,33 @@
 /* ===== style: (sem id) ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Paleta SaaS Premium */
-  --bg:#f4f7fa; 
+  /* Paleta Essence Clinic */
+  --bg:#f8f9fa;
   --card:#ffffff;
   --border:#e2e8f0;
   --ink:#1a202c;
   --ink-60:#4a5568;
   --ink-30:#a0aec0;
 
-  /* Primary: Vibrant Purple & Neon Pink (Convenia Style) */
-  --pur:#0047FF; 
-  --pur-vibrant:#0047FF; /* Roxo vibrante da imagem */
-  --pur-hero:#9613f7; /* Cor exata solicitada para a caixa hero */
-  --pur-dark:#1A0B3B;
-  --pur-soft:#f9f5ff;
-  --pur-mid:#DBEAFE;
-  --neon-pink:#0099ff; /* Rosa neon do botão da imagem */
-  
-  /* Accent Colors */
-  --t-pink:var(--neon-pink);
-  --t-orange:#ffb800;
-  --t-green:#00e699;
-  --t-blue:#0099ff;
+  /* Primary: Essence Clinic (Azul + Roxo) */
+  --pur:#005cfe;
+  --secondary:#6b42c7; /* Roxo Essence */
+  --pur-vibrant:#005cfe;
+  --pur-hero:#6b42c7; /* Roxo Essence */
+  --pur-dark:#4a2e7f;
+  --pur-soft:#f3e8ff;
+  --pur-mid:#ddd6fe;
+  --neon-pink:#28e9a4; /* Verde Essence */
 
-  /* Sidebar */
-  --side:#ffffff;
-  --side-active:#f9f5ff;
+  /* Accent Colors */
+  --t-pink:#28e9a4;
+  --t-orange:#ffb800;
+  --t-green:#28e9a4;
+  --t-blue:#005cfe;
+
+  /* Sidebar - Roxo Essence */
+  --side:#6b42c7;
+  --side-active:#f3e8ff;
   --shadow-premium:0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06);
 
   /* Status colours - UX Standard */
@@ -100,7 +101,7 @@ body{font-family:'Inter','Montserrat',sans-serif;background:var(--bg);color:var(
 
 /* Sidebar - Colored & Professional */
 .sidebar{
-  width:64px;background:#0B1F5B;display:flex;flex-direction:column;
+  width:64px;background:#6b42c7;display:flex;flex-direction:column;
   align-items:center;padding:18px 0;gap:12px;position:fixed;top:0;left:0;bottom:0;z-index:200;
   box-shadow:4px 0 20px rgba(0,0,0,0.1);
 }
@@ -348,7 +349,7 @@ tbody tr:hover td{background:rgba(245,241,250,0.6);backdrop-filter:blur(8px)}
 
 
 /* ── ADMIN MASTER ── */
-#adminScreen{position:fixed;inset:0;z-index:9998;background:#0B1F5B;display:none;align-items:center;justify-content:center}
+#adminScreen{position:fixed;inset:0;z-index:9998;background:#6b42c7;display:none;align-items:center;justify-content:center}
 .admin-box{background:#fff;border-radius:24px;padding:40px;width:100%;max-width:860px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.4)}
 .admin-box h2{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:800;color:var(--pur-dark);margin-bottom:4px}
 .admin-box p{font-size:13px;color:var(--ink-60);margin-bottom:24px}
@@ -367,7 +368,7 @@ tbody tr:hover td{background:rgba(245,241,250,0.6);backdrop-filter:blur(8px)}
 
 /* ── INITIATE BUTTON (top right, like screenshot) ── */
 .btn-initiate{background:var(--neon-pink);color:#fff;border-radius:999px;padding:12px 24px;font-size:12px;font-weight:700;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 20px rgba(255,92,184,0.3);transition:.2s;text-transform:uppercase;letter-spacing:0.5px}
-.btn-initiate:hover{background:#0B1F5B;transform:translateY(-2px);box-shadow:0 10px 25px rgba(123,47,247,0.3)}
+.btn-initiate:hover{background:#6b42c7;transform:translateY(-2px);box-shadow:0 10px 25px rgba(123,47,247,0.3)}
 .btn-initiate::before{content:'+';font-size:18px;font-weight:400;margin-right:2px}
 
 @media(max-width:1100px){.cg,.two-col{grid-template-columns:1fr}}
@@ -619,7 +620,7 @@ tbody tr:hover td{background:var(--cream)}
 .intra-quick{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 12px;text-align:left;cursor:pointer;transition:.2s;box-shadow:0 1px 2px rgba(16,24,40,.04)}
 .intra-quick:hover{transform:translateY(-2px);border-color:var(--pur-vibrant);box-shadow:0 10px 22px rgba(0,71,255,.10)}
 .intra-quick span{display:block;font-size:20px;margin-bottom:6px}.intra-quick strong{font-size:12px;color:var(--ink)}.intra-quick small{display:block;font-size:10px;color:var(--ink-60);margin-top:2px}
-.intra-notif-card{background:#0B1F5B;border-radius:20px;padding:20px;color:#fff;box-shadow:0 14px 34px rgba(11,31,91,.22);position:relative;overflow:hidden}
+.intra-notif-card{background:#6b42c7;border-radius:20px;padding:20px;color:#fff;box-shadow:0 14px 34px rgba(11,31,91,.22);position:relative;overflow:hidden}
 .intra-notif-card::after{content:'🔔';position:absolute;right:16px;top:12px;font-size:58px;opacity:.08}
 .intra-notif-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
 .intra-notif-head h3{font-size:16px;font-weight:800;margin:0}.intra-notif-pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800}
@@ -1600,7 +1601,7 @@ html,body{max-width:100vw!important;overflow-x:hidden!important;}
 
 /* ===== style: patch-sidebar-freeze-final-css ===== */
 /* PATCH FINAL: estabiliza a sidebar e remove transições que pareciam "piscar" */
-  #sidebar.sidebar{width:64px!important;min-width:64px!important;max-width:64px!important;left:0!important;top:0!important;bottom:0!important;position:fixed!important;background:#0B1F5B!important;z-index:999!important;}
+  #sidebar.sidebar{width:64px!important;min-width:64px!important;max-width:64px!important;left:0!important;top:0!important;bottom:0!important;position:fixed!important;background:#6b42c7!important;z-index:999!important;}
   #sidebar .sb-item{display:flex!important;align-items:center!important;justify-content:center!important;width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important;flex:0 0 44px!important;transition:none!important;animation:none!important;transform:none!important;}
   #sidebar .sb-item[hidden], #sidebar .sb-item.lock-hidden{display:none!important;}
   #sidebar .sb-logo{flex:0 0 auto!important;}
