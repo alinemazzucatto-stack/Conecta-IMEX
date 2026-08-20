@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 
 // Import routes
-import authRoutes from './routes/auth';
+import authLocalRoutes from './routes/authLocal';
 import appointmentRoutes from './routes/appointments';
 import professionalRoutes from './routes/professionals';
 import clientRoutes from './routes/clients';
@@ -14,8 +14,8 @@ import settingsRoutes from './routes/settings';
 // Load environment variables
 dotenv.config();
 
-// Validate required env vars
-const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_KEY', 'JWT_SECRET'];
+// Validate required env vars (JWT_SECRET is critical)
+const requiredEnvVars = ['JWT_SECRET'];
 requiredEnvVars.forEach(envVar => {
   if (!process.env[envVar]) {
     console.error(`❌ Missing environment variable: ${envVar}`);
@@ -36,11 +36,10 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Supabase client
-export const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
-);
+// Supabase client (optional - using local auth for now)
+export const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_KEY
+  ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+  : null;
 
 // Request logging middleware
 app.use((req: Request, _res: Response, next: NextFunction) => {
@@ -58,7 +57,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLocalRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/professionals', professionalRoutes);
 app.use('/api/clients', clientRoutes);
