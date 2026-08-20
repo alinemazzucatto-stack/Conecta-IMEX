@@ -31,11 +31,23 @@
     'rh': '🏢 RH'
   };
 
+  // Flag para prevenir abertura automática de modal
+  let allowModalOpen = false;
+
   // Interceptar função sbNav global
   const originalSbNav = window.sbNav;
 
   window.sbNav = function(viewId) {
-    console.log('[MENU-MODAL] Abrindo:', viewId);
+    console.log('[MENU-MODAL] sbNav chamado:', viewId);
+
+    // Se não foi por clique do menu, usar navegação padrão
+    if (!allowModalOpen) {
+      console.log('[MENU-MODAL] Navegação padrão (não é clique do menu)');
+      if (originalSbNav) {
+        return originalSbNav(viewId);
+      }
+      return;
+    }
 
     // Verificar se a view existe
     const view = document.getElementById('view-' + viewId);
@@ -82,6 +94,19 @@
   // Alias para compatibilidade
   window.forceView = window.sbNav;
 
+  // Interceptar cliques DOS ÍCONES DO MENU para ativar modal
+  document.addEventListener('click', function(e) {
+    const sbItem = e.target.closest('.sb-item');
+    if (sbItem) {
+      console.log('[MENU-MODAL] Clique do menu detectado');
+      allowModalOpen = true;
+      // Reseta a flag depois que sbNav foi executado
+      setTimeout(() => {
+        allowModalOpen = false;
+      }, 100);
+    }
+  });
+
   console.log('[MENU-MODAL-INTEGRATION] Sistema de integração carregado');
-  console.log('[MENU-MODAL-INTEGRATION] Todos os cliques do menu abrem modais!');
+  console.log('[MENU-MODAL-INTEGRATION] Modal abre APENAS com cliques do menu!');
 })();
