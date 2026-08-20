@@ -200,12 +200,64 @@ textarea{min-height:90px;resize:vertical}
 .br{background:var(--g-pink-s);color:#880e4f;border-color:#f48fb1}.br::before{background:var(--g-pink)}
 .bb{background:var(--g-teal-s);color:#006064;border-color:#80deea}.bb::before{background:var(--g-teal)}
 
-/* ── STATS ROW ── */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm)}
-.sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-60);margin-bottom:6px}
-.sc-num{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--pur)}
-.sc-sub{font-size:11px;color:var(--ink-60);margin-top:3px}
+/* ── STATS ROW - ESSENCE CLINIC ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.sc{
+  background:var(--card);
+  border:1px solid #e5e7eb;
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.06);
+  display:grid;
+  grid-template-columns:70px 1fr auto;
+  gap:16px;
+  align-items:center;
+  transition:.25s ease;
+}
+.sc:hover{
+  box-shadow:0 8px 24px rgba(0,92,254,0.12);
+  border-color:rgba(0,92,254,0.2);
+  transform:translateY(-2px)
+}
+.sc-icon{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  background:#f3f4f6;
+  flex-shrink:0
+}
+.sc-content{display:flex;flex-direction:column;gap:4px;flex:1}
+.sc-lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin:0}
+.sc-num{font-family:'Inter','Montserrat',sans-serif;font-size:32px;line-height:1;font-weight:800;color:var(--ink);margin:0}
+.sc-sub{font-size:11px;color:#9ca3af;margin:0}
+.sc-badge{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  padding:6px 10px;
+  border-radius:8px;
+  background:#f0fdf4;
+  color:#15803d
+}
+.sc-badge.negative{background:#fef2f2;color:#dc2626}
+
+/* ── KPIS GRID - ESSENCE CLINIC ── */
+.kpis-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:16px;
+  margin-bottom:24px
+}
+.kpis-grid .sc{
+  grid-template-columns:auto 1fr auto;
+  padding:20px;
+}
 
 /* ── CONTENT GRID ── */
 .cg{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}
