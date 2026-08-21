@@ -20,6 +20,7 @@
   ];
   var labels={};items.forEach(function(item){labels[item[0]]=item[2];});
   var current='colaboradores';
+  var collapsedByUser=false;
   var baseGrhTab=window.grhTab;
   var baseSbNav=window.sbNav;
 
@@ -91,20 +92,24 @@
       cluster.appendChild(group);
     }
 
-    if(parent.dataset.essGrhBound!=='true'){
-      parent.dataset.essGrhBound='true';
+    if(!parent.__essGrhBound){
+      parent.__essGrhBound=true;
       parent.addEventListener('click',function(ev){
         ev.preventDefault();ev.stopPropagation();
         var liveGroup=document.getElementById('ess-grh-side-submenu');
         if(!liveGroup) return;
-        expanded(true);
-        open(current);
-        requestAnimationFrame(function(){parent.scrollIntoView({block:'nearest'});});
+        var willOpen=!liveGroup.classList.contains('open');
+        collapsedByUser=!willOpen;
+        expanded(willOpen);
+        if(willOpen){
+          open(current);
+          requestAnimationFrame(function(){parent.scrollIntoView({block:'nearest'});});
+        }
       });
       parent.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();parent.click();}});
     }
-    if(group.dataset.essGrhBound!=='true'){
-      group.dataset.essGrhBound='true';
+    if(!group.__essGrhBound){
+      group.__essGrhBound=true;
       group.addEventListener('click',function(ev){
         var btn=ev.target.closest('.ess-grh-side-link');if(!btn)return;
         ev.preventDefault();ev.stopPropagation();open(btn.dataset.grhTab);
@@ -114,7 +119,7 @@
   }
 
   window.grhTab=function(tab){return open(tab);};
-  window.sbNav=function(id){if(String(id||'').toLowerCase()==='gestao-rh')return open(current);return typeof baseSbNav==='function'?baseSbNav.apply(this,arguments):false;};;
+  window.sbNav=function(id){if(String(id||'').toLowerCase()==='gestao-rh'){collapsedByUser=false;return open(current);}return typeof baseSbNav==='function'?baseSbNav.apply(this,arguments):false;};;
   document.addEventListener('click',function(ev){
     var other=ev.target.closest&&ev.target.closest('#sidebar .sb-item:not(#sb-gestao-rh)');
     if(other) expanded(false);
@@ -141,7 +146,7 @@
     }
     var view=document.getElementById('view-gestao-rh');
     var active=!!(view&&(view.classList.contains('active')||getComputedStyle(view).display!=='none'));
-    if(active&&group&&!group.classList.contains('open')){expanded(true);sync(current);}
+    if(active&&!collapsedByUser&&group&&!group.classList.contains('open')){expanded(true);sync(current);}
   }
 
   function watchSidebar(){

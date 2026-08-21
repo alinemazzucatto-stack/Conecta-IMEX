@@ -412,7 +412,7 @@ body.essence-rh-ui #view-gestao-rh .ess-permission-guide p{margin:0;color:#64748
 }
 
 /* Essence v20 - submenu RH presente no HTML e visível quando Gestão RH está ativa */
-body.essence-rh-ui #sidebar #ess-grh-side-cluster:has(#sb-gestao-rh.active)>.ess-grh-side-submenu{
+body.essence-rh-ui #sidebar #ess-grh-side-cluster:has(#sb-gestao-rh.ess-grh-expanded)>.ess-grh-side-submenu{
   display:flex!important;
   flex-direction:column!important;
   max-height:none!important;
@@ -422,6 +422,6 @@ body.essence-rh-ui #sidebar #ess-grh-side-cluster:has(#sb-gestao-rh.active)>.ess
   visibility:visible!important;
   opacity:1!important;
 }
-body.essence-rh-ui #sidebar #ess-grh-side-cluster:has(#sb-gestao-rh.active)>#sb-gestao-rh .ess-grh-arrow{
+body.essence-rh-ui #sidebar #ess-grh-side-cluster:has(#sb-gestao-rh.ess-grh-expanded)>#sb-gestao-rh .ess-grh-arrow{
   transform:rotate(0deg)!important;
 }
