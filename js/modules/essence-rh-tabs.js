@@ -75,7 +75,7 @@
     v.style.setProperty('visibility','visible','important');
     v.style.setProperty('opacity','1','important');
     var bar=document.getElementById('grh-tabs'); if(bar) bar.style.setProperty('display','none','important');
-    v.querySelectorAll(':scope > .hero, :scope > section.hero').forEach(function(hero){ hero.style.setProperty('display','flex','important'); });
+    v.querySelectorAll('.hero').forEach(function(hero){ hero.style.setProperty('display','none','important'); hero.setAttribute('aria-hidden','true'); });
     var back=document.getElementById('grh-back-bar'); if(back) back.style.setProperty('display','none','important');
     var moduleHero=document.getElementById('grh-module-hero'); if(moduleHero) moduleHero.style.setProperty('display','none','important');
     document.body.classList.remove('docs-rh-open');
@@ -111,6 +111,12 @@
     if(tab==='documentos' && typeof window.grhDocsPainelHTML==='function' && !pane.querySelector('[data-docs-rh="1"]')) pane.innerHTML=window.grhDocsPainelHTML();
     if(tab==='pesquisas' && typeof window.grhPesquisasPainelHTML==='function' && !pane.querySelector('[data-grh-pesq="2"]')) pane.innerHTML=window.grhPesquisasPainelHTML();
     if(tab==='roadmap' && typeof window.grhRoadmapPainelHTML==='function' && pane.textContent.trim().length<80) pane.innerHTML=window.grhRoadmapPainelHTML();
+    if(tab==='acessos'){
+      var permissions=pane.querySelector('#ap-pane-permissoes');
+      if(permissions && (permissions.textContent.trim()==='Em breve.' || permissions.textContent.trim().length<30)){
+        permissions.innerHTML='<div class="ess-permission-guide"><article><span>👤</span><div><h3>Colaborador</h3><p>Acessa dados pessoais, documentos próprios, benefícios, férias, pesquisas e trilhas liberadas.</p></div></article><article><span>👔</span><div><h3>Pessoa Gestora</h3><p>Consulta a equipe, acompanha solicitações, aprova férias e visualiza indicadores do seu escopo.</p></div></article><article><span>🏢</span><div><h3>Recursos Humanos</h3><p>Administra cadastros, remuneração, admissões, desligamentos, documentos, benefícios e permissões.</p></div></article><article><span>🔒</span><div><h3>Segurança por perfil</h3><p>As opções definidas em Acessos determinam quais módulos aparecem para cada perfil e unidade.</p></div></article></div>';
+      }
+    }
   }
 
   function paneFor(tab){
@@ -206,7 +212,7 @@
     if(tab==='beneficios') setTimeout(function(){invoke('grhRenderBeneficiosSaude');},80);
     if(tab==='documentos') setTimeout(function(){invoke('grhDocsCarregar');},60);
     organizePane(pane);
-    if(tab==='colaboradores'){setTimeout(enhanceCollaborators,100);setTimeout(enhanceCollaborators,700);setTimeout(enhanceCollaborators,1500);}
+
     return pane;
   }
 
@@ -218,8 +224,7 @@
     var pane=renderTab(tab);
     pane.style.setProperty('display','block','important'); pane.classList.add('active');
     markActive(tab);
-    requestAnimationFrame(function(){ showHost(); pane.style.setProperty('display','block','important'); markActive(tab); });
-    setTimeout(function(){ showHost(); pane.style.setProperty('display','block','important'); markActive(tab); },120);
+    pane.setAttribute('aria-hidden','false');
     return false;
   }
 

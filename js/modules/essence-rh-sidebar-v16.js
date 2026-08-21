@@ -58,27 +58,61 @@
 
   function build(){
     var parent=document.getElementById('sb-gestao-rh');if(!parent)return;
-    var existing=document.getElementById('ess-grh-side-submenu');
+    var sidebar=document.getElementById('sidebar');if(!sidebar)return;
+    var cluster=document.getElementById('ess-grh-side-cluster');
+    if(!cluster){
+      cluster=document.createElement('div');
+      cluster.id='ess-grh-side-cluster';
+      cluster.className='ess-grh-side-cluster';
+      parent.parentNode.insertBefore(cluster,parent);
+    }
+    if(parent.parentNode!==cluster) cluster.appendChild(parent);
+
+    var group=document.getElementById('ess-grh-side-submenu');
+    if(group && group.parentNode!==cluster) cluster.appendChild(group);
+
     parent.removeAttribute('onclick');
-    if(existing && existing.previousElementSibling!==parent) parent.insertAdjacentElement('afterend',existing);
-    if(!existing){
-      parent.removeAttribute('onclick');
-      parent.setAttribute('role','button');
-      parent.setAttribute('tabindex','0');
-      parent.setAttribute('aria-controls','ess-grh-side-submenu');
-      parent.setAttribute('aria-expanded','false');
-      var arrow=document.createElement('span');arrow.className='ess-grh-arrow';arrow.textContent='›';parent.appendChild(arrow);
-      var group=document.createElement('div');group.id='ess-grh-side-submenu';group.className='ess-grh-side-submenu';group.setAttribute('role','navigation');group.setAttribute('aria-label','Módulos de Gestão RH');
+    parent.setAttribute('role','button');
+    parent.setAttribute('tabindex','0');
+    parent.setAttribute('aria-controls','ess-grh-side-submenu');
+    if(!parent.hasAttribute('aria-expanded')) parent.setAttribute('aria-expanded','false');
+
+    var arrow=parent.querySelector('.ess-grh-arrow');
+    if(!arrow){arrow=document.createElement('span');arrow.className='ess-grh-arrow';parent.appendChild(arrow);}
+    arrow.textContent='⌄';
+
+    if(!group){
+      group=document.createElement('div');
+      group.id='ess-grh-side-submenu';
+      group.className='ess-grh-side-submenu';
+      group.setAttribute('role','navigation');
+      group.setAttribute('aria-label','Módulos de Gestão RH');
       group.innerHTML=items.map(function(item){return '<button type="button" class="ess-grh-side-link" data-grh-tab="'+item[0]+'"><span class="ess-grh-sub-icon">'+item[1]+'</span><span>'+item[2]+'</span></button>';}).join('');
-      parent.insertAdjacentElement('afterend',group);
-      parent.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();var willOpen=!group.classList.contains('open');expanded(willOpen);if(willOpen)open(current);});
+      cluster.appendChild(group);
+    }
+
+    if(parent.dataset.essGrhBound!=='true'){
+      parent.dataset.essGrhBound='true';
+      parent.addEventListener('click',function(ev){
+        ev.preventDefault();ev.stopPropagation();
+        var liveGroup=document.getElementById('ess-grh-side-submenu');
+        var willOpen=!!liveGroup&&!liveGroup.classList.contains('open');
+        expanded(willOpen);
+        if(willOpen){open(current);requestAnimationFrame(function(){parent.scrollIntoView({block:'nearest'});});}
+      });
       parent.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();parent.click();}});
-      group.addEventListener('click',function(ev){var btn=ev.target.closest('.ess-grh-side-link');if(!btn)return;ev.preventDefault();ev.stopPropagation();open(btn.dataset.grhTab);});
+    }
+    if(group.dataset.essGrhBound!=='true'){
+      group.dataset.essGrhBound='true';
+      group.addEventListener('click',function(ev){
+        var btn=ev.target.closest('.ess-grh-side-link');if(!btn)return;
+        ev.preventDefault();ev.stopPropagation();open(btn.dataset.grhTab);
+      });
     }
     hideHorizontalTabs();
   }
 
-  window.grhTab=function(tab){return open(tab);}
+  window.grhTab=function(tab){return open(tab);};
   window.sbNav=function(id){if(String(id||'').toLowerCase()==='gestao-rh')return open(current);return typeof baseSbNav==='function'?baseSbNav.apply(this,arguments):false;};;
   document.addEventListener('click',function(ev){
     var other=ev.target.closest&&ev.target.closest('#sidebar .sb-item:not(#sb-gestao-rh)');

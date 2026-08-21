@@ -5,6 +5,7 @@
   window.__ESSENCE_RH_DATA_V15__=true;
 
   var rawRemuneration=window.grhRenderRemuneracao;
+  var colRequest=0, addressRequest=0;
 
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function js(v){return String(v==null?'':v).replace(/'/g,'');}
@@ -38,12 +39,15 @@
     return card;
   }
 
+  function setStableHTML(node,html){ if(node && node.innerHTML!==html) node.innerHTML=html; }
+
   function sectors(list){
     var box=document.getElementById('grh-setor-stats'); if(!box) return;
     var map={}; list.forEach(function(c){var key=c.setor||'Sem setor';map[key]=(map[key]||0)+1;});
-    box.innerHTML=Object.keys(map).sort(function(a,b){return map[b]-map[a];}).map(function(key){
+    var html=Object.keys(map).sort(function(a,b){return map[b]-map[a];}).map(function(key){
       return '<article class="ess-sector-stat"><small>'+esc(key)+'</small><strong>'+map[key]+'</strong><span>'+(map[key]===1?'colaborador':'colaboradores')+'</span></article>';
     }).join('');
+    setStableHTML(box,html);
   }
 
   function summary(list){
@@ -51,19 +55,22 @@
     var active=list.filter(function(c){return !/inativo|deslig/i.test(String(c.status||''));});
     var clt=active.filter(function(c){return /clt|sim|true/i.test(String(c.clt||c.contrato||''));}).length;
     var values=[['👥','Total',list.length,'cadastros reais'],['✅','Ativos',active.length,'em operação'],['📄','CLT',clt,'contratos ativos'],['🤝','PJ',Math.max(active.length-clt,0),'prestadores ativos']];
-    box.innerHTML=values.map(function(v){return '<article><span>'+v[0]+'</span><div><small>'+v[1]+'</small><strong>'+v[2]+'</strong><p>'+v[3]+'</p></div></article>';}).join('');
+    setStableHTML(box,values.map(function(v){return '<article><span>'+v[0]+'</span><div><small>'+v[1]+'</small><strong>'+v[2]+'</strong><p>'+v[3]+'</p></div></article>';}).join(''));
   }
 
   async function renderCollaborators(){
+    var request=++colRequest;
     ensureList();
     var tbody=document.getElementById('grh-colab-body'); if(!tbody) return;
     try{
-      var all=await managed(), q=String((document.getElementById('grh-search')||{}).value||'').toLowerCase();
+      var all=await managed(); if(request!==colRequest) return;
+      var q=String((document.getElementById('grh-search')||{}).value||'').toLowerCase();
       var sectorFilter=String((document.getElementById('grh-filter-setor')||{}).value||''), statusEl=document.getElementById('grh-filter-status'), status=statusEl?String(statusEl.value):'Ativo', cltFilter=String((document.getElementById('grh-filter-clt')||{}).value||'');
       var select=document.getElementById('grh-filter-setor');
       if(select){
-        var selected=select.value; select.innerHTML='<option value="">Todos os setores</option>';
-        Array.from(new Set(all.map(function(c){return c.setor;}).filter(Boolean))).sort(function(a,b){return a.localeCompare(b,'pt-BR');}).forEach(function(value){var o=document.createElement('option');o.value=value;o.textContent=value;select.appendChild(o);});
+        var selected=select.value, sectorValues=Array.from(new Set(all.map(function(c){return c.setor;}).filter(Boolean))).sort(function(a,b){return a.localeCompare(b,'pt-BR');});
+        var sectorHTML='<option value="">Todos os setores</option>'+sectorValues.map(function(value){return '<option value="'+esc(value)+'">'+esc(value)+'</option>';}).join('');
+        setStableHTML(select,sectorHTML);
         if(Array.from(select.options).some(function(o){return o.value===selected;})) select.value=selected;
         sectorFilter=select.value;
       }
@@ -74,25 +81,28 @@
       if(status) data=data.filter(function(c){return String(c.status||'Ativo')===status;});
       data.sort(function(a,b){return String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR');});
       var count=document.getElementById('grh-col-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores';
-      tbody.innerHTML=data.length?data.map(function(c){
+      var html=data.length?data.map(function(c){
         var st=c.status||'Ativo', cls=/afast/i.test(st)?'warn':(/inativo|deslig/i.test(st)?'off':'ok');
         return '<tr><td class="ess-colab-name">'+esc(c.nome||'—')+'</td><td>'+esc(c.matricula||'—')+'</td><td>'+esc(c.email||'—')+'</td><td>'+esc(c.cpf||'—')+'</td><td>'+esc(c.funcao||c.cargo||'—')+'</td><td><span class="ess-tag">'+esc(c.setor||'—')+'</span></td><td>'+(c.clt==='Sim'?'✅ CLT':'PJ')+'</td><td>'+esc(typeof window.grhFmt==='function'?window.grhFmt(c.admissao):(c.admissao||'—'))+'</td><td>'+esc(typeof window.grhTempoEmpresa==='function'?window.grhTempoEmpresa(c.admissao):'—')+'</td><td><span class="ess-status '+cls+'">'+esc(st)+'</span></td><td>'+esc(c.roleAcesso||'colaborador')+'</td><td><button class="ess-icon-action" type="button" onclick="grhAbrirModalColab(\''+js(c._id||c.id||'')+'\')">✏️</button></td></tr>';
       }).join(''):'<tr><td colspan="12" class="ess-table-message">Nenhum colaborador encontrado.</td></tr>';
+      setStableHTML(tbody,html);
       sectors(all); summary(all);
-      setTimeout(function(){summary(all);},220);setTimeout(function(){summary(all);},920);setTimeout(function(){summary(all);},1750);
     }catch(error){tbody.innerHTML='<tr><td colspan="12" class="ess-table-message error">Erro ao carregar colaboradores: '+esc(error.message||error)+'</td></tr>';}
   }
 
   async function renderAddresses(){
+    var request=++addressRequest;
     var tbody=document.getElementById('grh-end-body'); if(!tbody) return;
     try{
-      var all=await managed(), q=String((document.getElementById('grh-end-search')||{}).value||'').toLowerCase();
+      var all=await managed(); if(request!==addressRequest) return;
+      var q=String((document.getElementById('grh-end-search')||{}).value||'').toLowerCase();
       var data=q?all.filter(function(c){return [c.nome,c.email,c.setor,c.funcao].some(function(v){return String(v||'').toLowerCase().includes(q);});}):all;
       var count=document.getElementById('grh-end-count'); if(count) count.textContent=data.length+' colaboradores reais';
-      tbody.innerHTML=data.length?data.map(function(c){
+      var html=data.length?data.map(function(c){
         var a=c.endereco||{}, cep=a.cep||c.cep||'Não informado', street=a.rua||c.rua||'Não informado', number=a.num||a.numero||c.num||c.numero||'—', comp=a.comp||c.comp||'', district=a.bairro||c.bairro||'Não informado', city=a.cidade||c.cidade||'Não informado', uf=a.uf||c.uf||'', pending=cep==='Não informado'||street==='Não informado';
         return '<tr><td class="ess-address-person"><strong>'+esc(c.nome||'—')+'</strong><small>'+esc(c.email||'')+'</small></td><td>'+esc(cep)+'</td><td>'+esc(street)+'</td><td>'+esc(number)+(comp?' ('+esc(comp)+')':'')+'</td><td>'+esc(district)+'</td><td>'+esc(city)+(uf?' / '+esc(uf):'')+'</td><td><span class="ess-status '+(pending?'warn':'ok')+'">'+(pending?'Pendente':'Atualizado')+'</span><button class="ess-address-edit" type="button" onclick="grhAbrirModalEndereco(\''+js(c._id||c.id||'')+'\')">📍 Editar</button></td></tr>';
       }).join(''):'<tr><td colspan="7" class="ess-table-message">Nenhum colaborador encontrado.</td></tr>';
+      setStableHTML(tbody,html);
     }catch(error){tbody.innerHTML='<tr><td colspan="7" class="ess-table-message error">Erro ao carregar endereços: '+esc(error.message||error)+'</td></tr>';}
   }
 
@@ -115,10 +125,10 @@
 
   function refresh(){
     var colPane=document.getElementById('grh-pane-colaboradores');
-    if(colPane&&getComputedStyle(colPane).display!=='none'){renderCollaborators();setTimeout(renderCollaborators,850);setTimeout(renderCollaborators,1700);}
+    if(colPane&&getComputedStyle(colPane).display!=='none') renderCollaborators();
     var endPane=document.getElementById('grh-pane-enderecos'); if(endPane&&getComputedStyle(endPane).display!=='none') renderAddresses();
     var remPane=document.getElementById('grh-pane-remuneracao'); if(remPane&&getComputedStyle(remPane).display!=='none') organizeToolbar();
   }
   document.addEventListener('DOMContentLoaded',function(){setTimeout(refresh,700);});
-  window.addEventListener('load',function(){setTimeout(refresh,1000);});
+
 })();
