@@ -1,8 +1,8 @@
 // Gestão RH consolidada: navegação administrativa por abas, sem rotas legadas conflitantes.
 (function(){
   'use strict';
-  if(window.__ESSENCE_RH_TABS_V13__) return;
-  window.__ESSENCE_RH_TABS_V13__ = true;
+  if(window.__ESSENCE_RH_TABS_V14__) return;
+  window.__ESSENCE_RH_TABS_V14__ = true;
 
   var legacy = { grhTab:window.grhTab, sbNav:window.sbNav, switchView:window.switchView };
   var bootstrapping = false;
@@ -130,35 +130,83 @@
     try{ if(typeof window[name]==='function') return window[name](); }catch(e){ console.warn('[Gestão RH] '+name,e); }
   }
 
+  function prepareCollaborators(){
+    var pane=document.getElementById('grh-pane-colaboradores'); if(!pane) return null;
+    pane.classList.add('ess-rh-pane-organized','ess-colab-pane');
+    pane.style.setProperty('display','block','important');
+
+    var restored=document.getElementById('grh-colaboradores-restaurado');
+    if(restored){ restored.classList.remove('active'); restored.style.setProperty('display','none','important'); }
+    var legacyKpis=document.getElementById('colabKpiTopV1');
+    if(legacyKpis) legacyKpis.style.setProperty('display','none','important');
+
+    var table=document.getElementById('grh-colab-table');
+    var listCard=table&&table.closest('.card');
+    if(listCard){
+      listCard.classList.add('ess-rh-board','ess-colab-list-board');
+      listCard.style.setProperty('display','block','important');
+      var heading=listCard.querySelector('.cht h2'); if(heading) heading.textContent='Lista de colaboradores';
+    }
+
+    var summary=pane.querySelector('.ess-colab-summary-board');
+    if(!summary){
+      summary=document.createElement('section');
+      summary.className='ess-rh-board ess-colab-summary-board';
+      summary.innerHTML='<div class="ess-rh-board-head"><div><small>VISÃO GERAL</small><h2>Resumo da equipe</h2><p>Indicadores rápidos da base. A listagem completa fica no quadro seguinte.</p></div></div><div class="ess-colab-overview"></div>';
+    }
+    var overview=summary.querySelector('.ess-colab-overview');
+    if(listCard){ pane.insertBefore(summary,listCard); pane.insertBefore(listCard,summary.nextSibling); }
+    else pane.insertBefore(summary,pane.firstChild);
+
+    var sectors=document.getElementById('grh-setor-stats');
+    if(sectors){
+      var sectorBoard=document.getElementById('colabSetoresBottomV1');
+      if(!sectorBoard){
+        sectorBoard=document.createElement('section'); sectorBoard.id='colabSetoresBottomV1';
+        sectorBoard.innerHTML='<div class="colab-setores-head-v1"><h2>Distribuição por setor</h2><p>Leitura complementar da composição da equipe por área.</p></div>';
+      }
+      sectorBoard.className='ess-rh-board ess-colab-sector-board';
+      sectors.classList.add('colab-setores-grid-final-v1'); sectorBoard.appendChild(sectors); pane.appendChild(sectorBoard);
+    }
+    return overview;
+  }
+
   function enhanceCollaborators(){
-    var pane=document.getElementById('grh-pane-colaboradores'); if(!pane) return;
-    var overview=pane.querySelector('.ess-colab-overview');
-    if(!overview){ overview=document.createElement('section'); overview.className='ess-colab-overview'; pane.insertBefore(overview,pane.firstChild); }
+    var overview=prepareCollaborators(); if(!overview) return;
     Promise.resolve(typeof window.grhGetColabs==='function'?window.grhGetColabs(true):[]).then(function(list){
       list=Array.isArray(list)?list:[];
       var norm=function(v){return String(v||'').toLowerCase();};
       var ativos=list.filter(function(c){return !/inativo|deslig/.test(norm(c.status));});
       var clt=ativos.filter(function(c){return /clt|sim|true/.test(norm(c.clt||c.contrato||c.tipoContrato));}).length;
       var pj=Math.max(ativos.length-clt,0);
-      var now=new Date();
-      var experiencia=ativos.filter(function(c){var d=new Date(c.admissao||c.dataAdmissao||''); return !isNaN(d)&&((now-d)/86400000)<=90;}).length;
-      var incompletos=ativos.filter(function(c){return !(c.nome&&c.email&&(c.cpf||c.documento)&&(c.funcao||c.cargo)&&c.setor);}).length;
-      var vals=[['👥','Total',list.length,'cadastros na base'],['✅','Ativos',ativos.length,'em operação'],['📄','CLT',clt,'contratos ativos'],['🤝','PJ',pj,'prestadores ativos'],['⏳','Experiência',experiencia,'até 90 dias'],['⚠️','Incompletos',incompletos,'revisar cadastro']];
+      var vals=[['👥','Total',list.length,'cadastros na base'],['✅','Ativos',ativos.length,'em operação'],['📄','CLT',clt,'contratos ativos'],['🤝','PJ',pj,'prestadores ativos']];
       overview.innerHTML=vals.map(function(v){return '<article><span>'+v[0]+'</span><div><small>'+v[1]+'</small><strong>'+v[2]+'</strong><p>'+v[3]+'</p></div></article>';}).join('');
+      prepareCollaborators();
     }).catch(function(){});
+  }
+
+  function organizePane(pane){
+    if(!pane) return;
+    pane.classList.add('ess-rh-pane-organized');
+    Array.prototype.forEach.call(pane.children,function(child){
+      if(child.id==='grh-tabs'||child.classList.contains('hero')) return;
+      if(child.classList.contains('card')||child.tagName==='SECTION') child.classList.add('ess-rh-content-block');
+    });
   }
 
   function renderTab(tab){
     var cfg=tabs[tab], pane=paneFor(tab);
     pane.style.setProperty('display','block','important');
     pane.classList.add('active');
+    if(tab==='colaboradores') prepareCollaborators();
     if(tab==='remuneracao') window.__remPremiumRenderedV3=false;
     if(tab==='movimentacoes') window.__movRealRendered=false;
     cfg.render.forEach(invoke);
     if(tab==='ferias') invoke('politicaCarregar');
     if(tab==='beneficios') setTimeout(function(){invoke('grhRenderBeneficiosSaude');},80);
     if(tab==='documentos') setTimeout(function(){invoke('grhDocsCarregar');},60);
-    if(tab==='colaboradores'){setTimeout(enhanceCollaborators,100);setTimeout(enhanceCollaborators,700);}
+    organizePane(pane);
+    if(tab==='colaboradores'){setTimeout(enhanceCollaborators,100);setTimeout(enhanceCollaborators,700);setTimeout(enhanceCollaborators,1500);}
     return pane;
   }
 
