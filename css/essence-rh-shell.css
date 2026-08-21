@@ -6,7 +6,7 @@ body.essence-rh-ui #sidebar.sidebar{width:var(--ess-sidebar)!important;min-width
 body.essence-rh-ui #sidebar .sb-logo{height:86px!important;min-height:86px!important;width:auto!important;margin:0!important;padding:18px 10px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;border-bottom:1px solid var(--ess-border)!important;overflow:hidden!important}
 body.essence-rh-ui #sidebar .sb-logo img{display:none!important}
 body.essence-rh-ui #sidebar .sb-logo:before{content:'C';width:44px;height:44px;display:grid;place-items:center;flex:0 0 44px;border-radius:13px;background:linear-gradient(135deg,var(--ess-cyan),var(--ess-primary));color:#fff;font:800 21px Montserrat,sans-serif;box-shadow:0 8px 18px rgba(0,82,204,.24)}
-body.essence-rh-ui #sidebar .sb-logo:after{content:'Conecta RH\A Plataforma de Pessoas';white-space:pre;color:var(--ess-primary);font:800 17px/1.25 Montserrat,sans-serif}
+body.essence-rh-ui #sidebar .sb-logo:after{content:'Conecta IMEX';white-space:pre;color:var(--ess-primary);font:800 17px/1.25 Montserrat,sans-serif}
 body.essence-rh-ui #sidebar:before{content:'NAVEGAÇÃO';display:block;padding:18px 12px 8px;color:#91a0b5;font:800 10px/1 Montserrat,sans-serif;letter-spacing:.12em}
 body.essence-rh-ui #sidebar .sb-item{position:relative!important;width:100%!important;height:52px!important;min-height:52px!important;max-height:52px!important;margin:3px 0!important;padding:6px 12px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#506078!important;cursor:pointer!important;transition:.2s!important;overflow:hidden!important}
 body.essence-rh-ui #sidebar .sb-item[style*="display:none"],body.essence-rh-ui #sidebar .sb-item.lock-hidden{display:none!important}
@@ -157,7 +157,7 @@ body.essence-rh-ui #sidebar .sb-item>span:first-child{
 }
 /* Essence v9 - menor recuo lateral e módulos contidos na área útil */
 @media(min-width:901px){
-  body.essence-rh-ui .page{padding-left:4px!important;padding-right:4px!important}
+  body.essence-rh-ui .page{padding-left:0!important;padding-right:0!important}
 }
 body.essence-rh-ui #view-gestao-rh,
 body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao,
