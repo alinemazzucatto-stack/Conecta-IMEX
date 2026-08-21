@@ -96,9 +96,10 @@
       parent.addEventListener('click',function(ev){
         ev.preventDefault();ev.stopPropagation();
         var liveGroup=document.getElementById('ess-grh-side-submenu');
-        var willOpen=!!liveGroup&&!liveGroup.classList.contains('open');
-        expanded(willOpen);
-        if(willOpen){open(current);requestAnimationFrame(function(){parent.scrollIntoView({block:'nearest'});});}
+        if(!liveGroup) return;
+        expanded(true);
+        open(current);
+        requestAnimationFrame(function(){parent.scrollIntoView({block:'nearest'});});
       });
       parent.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();parent.click();}});
     }
