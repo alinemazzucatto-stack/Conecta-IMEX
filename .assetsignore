@@ -1,0 +1,9 @@
+.git
+.git/**
+.wrangler
+.wrangler/**
+essence-clinic
+essence-clinic/**
+tests
+tests/**
+*.md
