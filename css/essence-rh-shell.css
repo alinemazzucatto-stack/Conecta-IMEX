@@ -75,3 +75,67 @@ body.essence-rh-ui #view-gestao-rh #grh-module-hero{display:none!important}
 body.essence-rh-ui #view-gestao-rh .imex-rh-grid-final{display:none!important}
 body.essence-rh-ui #view-gestao-rh>div[style*="padding"]{padding-top:20px!important}
 @media(max-width:900px){body.essence-rh-ui #view-gestao-rh #grh-tabs{top:76px!important}}
+/* Essence v6 - abas da Gestão RH idênticas ao padrão do Dashboard RH */
+body.essence-rh-ui #view-gestao-rh #grh-tabs{
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:18px!important;
+  width:100%!important;
+  min-height:46px!important;
+  margin:0 0 24px!important;
+  padding:0 2px!important;
+  position:sticky!important;
+  top:82px!important;
+  z-index:30!important;
+  border:0!important;
+  border-bottom:1px solid var(--border,#e2e8f0)!important;
+  border-radius:0!important;
+  background:#f7faff!important;
+  box-shadow:none!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  flex-wrap:nowrap!important;
+  scrollbar-width:thin;
+}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .tab{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  min-width:0!important;
+  min-height:44px!important;
+  width:auto!important;
+  margin:0!important;
+  padding:8px 2px!important;
+  border:0!important;
+  border-bottom:2px solid transparent!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:var(--ink-60,#64748b)!important;
+  font:700 13px/1.2 Montserrat,sans-serif!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  transform:none!important;
+  overflow:visible!important;
+}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .tab::before,
+body.essence-rh-ui #view-gestao-rh #grh-tabs .tab::after{content:none!important;display:none!important}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .tab:hover{
+  color:#0047ff!important;
+  background:transparent!important;
+  border-bottom-color:rgba(0,71,255,.35)!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .tab.active{
+  color:#0047ff!important;
+  background:rgba(0,71,255,.045)!important;
+  border-bottom-color:#0047ff!important;
+  box-shadow:none!important;
+}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-title,
+body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-sub{display:inline!important;font:inherit!important;color:inherit!important;margin:0!important}
+body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-sub{display:none!important}
+@media(max-width:900px){body.essence-rh-ui #view-gestao-rh #grh-tabs{top:76px!important;gap:15px!important}}
