@@ -185,3 +185,53 @@ body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-compare-card{min-w
 @media(max-width:1400px) and (min-width:761px){
   body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-kpi-grid.rem-kpi-grid2{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
+/* Essence v13 - Gestão RH administrativa completa + paleta clara */
+body.essence-rh-ui #view-gestao-rh{
+  --pur:#2583e8;
+  --pur-dark:#1766bd;
+  --pur-vibrant:#168fd4;
+  --pur-mid:#dceeff;
+  --pur-soft:#eef8ff;
+}body.essence-rh-ui .rem-modal,
+body.essence-rh-ui .mov-modal,
+body.essence-rh-ui #grh-modal-bsa,
+body.essence-rh-ui #grh-modal-doc,
+body.essence-rh-ui #grh-modal-beneficios-upload,
+body.essence-rh-ui #grh-modal-beneficios-pdf,
+body.essence-rh-ui #grh-modal-historico-beneficios{
+  --pur:#2583e8;
+  --pur-dark:#1766bd;
+  --pur-vibrant:#168fd4;
+  --pur-mid:#dceeff;
+  --pur-soft:#eef8ff;
+}
+body.essence-rh-ui.docs-rh-open #view-gestao-rh #grh-tabs,
+body.essence-rh-ui #view-gestao-rh[data-docs-mode="open"] #grh-tabs{display:flex!important}
+body.essence-rh-ui #view-gestao-rh [style*="color:#9613f7"],
+body.essence-rh-ui #view-gestao-rh [style*="color: #9613f7"]{color:#2583e8!important}body.essence-rh-ui #view-gestao-rh [style*="color:#7c3aed"],
+body.essence-rh-ui #view-gestao-rh [style*="color: #7c3aed"],
+body.essence-rh-ui #view-gestao-rh [style*="color:#4c1d95"],
+body.essence-rh-ui #view-gestao-rh [style*="color:#1e1b4b"]{color:#1766bd!important}
+body.essence-rh-ui #view-gestao-rh [style*="background:#9613f7"],
+body.essence-rh-ui #view-gestao-rh [style*="background: #9613f7"]{background:#5bbcf2!important}
+body.essence-rh-ui #view-gestao-rh [style*="border-color:#9613f7"],
+body.essence-rh-ui #view-gestao-rh [style*="border-color: #9613f7"]{border-color:#5bbcf2!important}
+body.essence-rh-ui #view-gestao-rh [style*="background:linear-gradient"][style*="#9613f7"],
+body.essence-rh-ui #view-gestao-rh [style*="background: linear-gradient"][style*="#9613f7"]{background:linear-gradient(135deg,#5bbcf2,#2583e8)!important}
+body.essence-rh-ui #view-gestao-rh .rem-kpi.featured,
+body.essence-rh-ui #view-gestao-rh .rem-kpi2-solida{background:linear-gradient(135deg,#5bc7eb,#2583e8)!important;box-shadow:0 10px 24px rgba(37,131,232,.20)!important}
+body.essence-rh-ui #view-gestao-rh .rem-btn-gradiente{background:linear-gradient(135deg,#43b6e7,#2583e8)!important;box-shadow:0 8px 20px rgba(37,131,232,.22)!important}
+body.essence-rh-ui #view-gestao-rh .rem-ia-predicao{background:#eef8ff!important;border-color:#bfe3fb!important;color:#1766bd!important}
+body.essence-rh-ui #view-gestao-rh .rem-bar{background:linear-gradient(90deg,#2583e8,#74cef2)!important}
+.ess-rh-admin-head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:16px;padding:20px 22px;border:1px solid #cfe8fa;border-radius:18px;background:linear-gradient(135deg,#f8fcff,#eaf7ff);box-shadow:0 8px 22px rgba(31,117,181,.07)}
+.ess-rh-admin-head small{display:block;color:#2583e8;font-size:10px;font-weight:900;letter-spacing:.10em;margin-bottom:5px}
+.ess-rh-admin-head h2{margin:0;color:#172033;font-size:21px;font-weight:900}.ess-rh-admin-head p{margin:5px 0 0;color:#64748b;font-size:13px;line-height:1.5}
+.ess-rh-admin-actions{display:flex;gap:8px;flex-wrap:wrap}.ess-rh-admin-actions .btn{white-space:nowrap}
+.ess-benefits-admin{display:grid;gap:14px}.ess-benefits-admin .grh-bplan-card{margin:0!important;border-color:#d7eaf8!important;box-shadow:0 7px 20px rgba(31,117,181,.06)!important}
+.ess-benefits-admin .grh-bplan-head{background:linear-gradient(135deg,#fff,#f3faff)!important}
+.ess-provider-section{margin-top:2px;padding:20px;border:1px solid #d7eaf8;border-radius:18px;background:#fff;box-shadow:0 7px 20px rgba(31,117,181,.06)}
+.ess-provider-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}.ess-provider-title h2{margin:0;font-size:18px}.ess-provider-title p{margin:4px 0 0;color:#64748b;font-size:12px}.ess-provider-title>span,.ess-provider-status{padding:5px 9px;border-radius:999px;background:#e6f7ef;color:#087a4c;font-size:10px;font-weight:900;white-space:nowrap}
+.ess-provider-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.ess-provider-card{position:relative;display:flex;align-items:flex-start;gap:11px;min-width:0;padding:14px;border:1px solid #e1edf7;border-radius:14px;background:#fafdff}.ess-provider-icon{width:38px;height:38px;display:grid;place-items:center;flex:0 0 38px;border-radius:11px;background:#e8f6ff;font-size:18px}.ess-provider-card h3{margin:1px 0 4px;font-size:13px}.ess-provider-card p{margin:0;padding-right:42px;color:#64748b;font-size:11px;line-height:1.4}.ess-provider-card .ess-provider-status{position:absolute;right:9px;top:9px}
+.ess-colab-overview{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-bottom:14px}.ess-colab-overview article{display:flex;align-items:center;gap:10px;min-width:0;padding:13px;border:1px solid #dcebf7;border-radius:15px;background:#fff;box-shadow:0 6px 18px rgba(31,117,181,.05)}.ess-colab-overview article>span{width:34px;height:34px;display:grid;place-items:center;flex:0 0 34px;border-radius:11px;background:#eaf7ff}.ess-colab-overview small{display:block;color:#64748b;font-size:9px;font-weight:900;text-transform:uppercase}.ess-colab-overview strong{display:block;color:#1766bd;font-size:20px;line-height:1.1;margin-top:2px}.ess-colab-overview p{margin:2px 0 0;color:#94a3b8;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1350px){.ess-colab-overview{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.ess-colab-overview{grid-template-columns:repeat(2,1fr)}.ess-rh-admin-head{align-items:flex-start}.ess-provider-grid{grid-template-columns:1fr}}

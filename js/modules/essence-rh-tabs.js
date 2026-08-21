@@ -1,84 +1,191 @@
-// Gestão RH no padrão Essence: painel único com abas, sem hub de cartões.
+// Gestão RH consolidada: navegação administrativa por abas, sem rotas legadas conflitantes.
 (function(){
   'use strict';
-  if(window.__ESSENCE_RH_TABS__) return;
-  window.__ESSENCE_RH_TABS__ = true;
+  if(window.__ESSENCE_RH_TABS_V13__) return;
+  window.__ESSENCE_RH_TABS_V13__ = true;
 
-  var originalGrhTab = window.grhTab;
-  var originalSbNav = window.sbNav;
-  var originalSwitchView = window.switchView;
-  var openingTab = false;
+  var legacy = { grhTab:window.grhTab, sbNav:window.sbNav, switchView:window.switchView };
+  var bootstrapping = false;
+  var activeTab = 'colaboradores';
+  var tabs = {
+    colaboradores:{pane:'colaboradores',render:['grhRenderColabs']},
+    enderecos:{pane:'enderecos',render:['grhRenderEnderecos']},
+    remuneracao:{pane:'remuneracao',render:['grhRenderRemuneracao']},
+    ferias:{pane:'ferias',render:['grhRenderFerias','renderRH']},
+    beneficios:{pane:'beneficios',render:['grhRenderBeneficiosSaude']},
+    documentos:{pane:'documentos',render:['grhDocsCarregar']},
+    pesquisas:{pane:'pesquisas',render:[]},
+    admissao:{pane:'admissao',render:['grhRenderAdmissao']},
+    desligamentos:{pane:'desligamentos',render:['grhRenderDesligamentos']},
+    movimentacoes:{pane:'movimentacoes',render:['grhRenderMovimentacoes']},
+    acessos:{pane:'acessos',render:['acessosCarregar']},
+    roadmap:{pane:'roadmap',render:['grhRenderRoadmap']}
+  };
 
   function normalize(tab){
-    tab = String(tab || 'colaboradores').toLowerCase();
-    if(tab === 'beneficios') return 'beneficios-rh';
-    if(tab === 'pesquisas') return 'pesquisas-rh';
-    if(tab === 'roadmap') return 'roadmap-produto';
-    if(tab === 'endereco') return 'enderecos';
-    return tab;
+    tab=String(tab||'colaboradores').toLowerCase().trim();
+    var aliases={'beneficios-rh':'beneficios','pesquisas-rh':'pesquisas','roadmap-produto':'roadmap','proximas-funcionalidades':'roadmap','endereco':'enderecos','gestao-ferias':'ferias'};
+    return aliases[tab]||tab;
   }
 
-  function tabButton(tab){
-    var aliases = {
-      'beneficios-rh':'beneficios',
-      'pesquisas-rh':'pesquisas',
-      'roadmap-produto':'roadmap'
-    };
-    var key = aliases[tab] || tab;
-    return Array.from(document.querySelectorAll('#grh-tabs button')).find(function(btn){
-      return (btn.getAttribute('onclick') || '').indexOf("'" + key + "'") !== -1;
-    }) || null;
+  function view(){ return document.getElementById('view-gestao-rh'); }
+
+  function deriveTab(btn){
+    var preset=btn.getAttribute('data-ess-rh-tab');
+    if(preset) return normalize(preset);
+    var code=btn.getAttribute('onclick')||'';
+    var m=code.match(/grhTab\(\s*['\"]([^'\"]+)/i);
+    return normalize(m?m[1]:'');
   }
 
-  function enforcePanel(tab){
-    var view = document.getElementById('view-gestao-rh');
-    if(!view) return;
-    view.classList.add('grh-module-open');
-    var tabs = document.getElementById('grh-tabs');
-    if(tabs) tabs.style.setProperty('display','flex','important');
-    view.querySelectorAll(':scope > .hero, :scope > section.hero').forEach(function(hero){
-      hero.style.setProperty('display','flex','important');
+  function bindTabs(){
+    var bar=document.getElementById('grh-tabs');
+    if(!bar) return;
+    bar.querySelectorAll('button').forEach(function(btn){
+      var tab=deriveTab(btn);
+      if(!tabs[tab]) return;
+      btn.setAttribute('data-ess-rh-tab',tab);
+      btn.removeAttribute('onclick');
+      btn.type='button';
     });
-    var back = document.getElementById('grh-back-bar');
-    if(back) back.style.setProperty('display','none','important');
-    var moduleHero = document.getElementById('grh-module-hero');
-    if(moduleHero) moduleHero.style.setProperty('display','none','important');
-    document.querySelectorAll('#grh-tabs button').forEach(function(btn){ btn.classList.remove('active'); });
-    var active = tabButton(tab);
-    if(active) active.classList.add('active');
-    try{ sessionStorage.setItem('grhUltimaAba', tab); }catch(e){}
   }
 
-  function openTab(tab, btn){
-    tab = normalize(tab);
-    if(openingTab){
-      enforcePanel(tab);
-      return false;
+  function ensureStructure(){
+    var v=view();
+    if((!v || !document.getElementById('grh-tabs') || !document.getElementById('grh-pane-colaboradores')) && !bootstrapping){
+      bootstrapping=true;
+      try{ if(typeof legacy.grhTab==='function') legacy.grhTab.call(window,'colaboradores',null); }catch(e){ console.warn('[Gestão RH] reconstrução',e); }
+      bootstrapping=false;
+      v=view();
     }
-    var targetBtn = btn || tabButton(tab);
-    var result = false;
-    openingTab = true;
-    try{
-      result = typeof originalGrhTab === 'function' ? originalGrhTab.call(window, tab, targetBtn) : false;
-    }finally{
-      openingTab = false;
-    }
-    enforcePanel(tab);
-    requestAnimationFrame(function(){ enforcePanel(tab); });
-    setTimeout(function(){ enforcePanel(tab); }, 60);
-    return result;
+    try{ if(typeof window.__ensurePanelsGRH==='function') window.__ensurePanelsGRH(); }catch(e){}
+    bindTabs();
+    return v;
   }
 
-  window.grhTab = openTab;
-  window.sbNav = function(id){
-    if(String(id || '').toLowerCase() === 'gestao-rh') return openTab('colaboradores');
-    return typeof originalSbNav === 'function' ? originalSbNav.apply(this, arguments) : false;
-  };
-  window.switchView = function(id){
-    if(String(id || '').toLowerCase() === 'gestao-rh') return openTab('colaboradores');
-    return typeof originalSwitchView === 'function' ? originalSwitchView.apply(this, arguments) : window.sbNav(id);
-  };
-  window.voltarGestaoRH = window.voltarParaGestaoRH = window.voltarMenuGestaoRH = function(){
-    return openTab('colaboradores');
-  };
+  function showHost(){
+    var v=ensureStructure(); if(!v) return null;
+    document.querySelectorAll('[id^="view-"]').forEach(function(el){
+      if(el!==v){ el.classList.remove('active','beneficios-force-active'); el.style.setProperty('display','none','important'); }
+    });
+    var employeeBenefits=document.getElementById('view-beneficios');
+    if(employeeBenefits){ employeeBenefits.classList.remove('active','beneficios-force-active'); employeeBenefits.style.setProperty('display','none','important'); employeeBenefits.style.setProperty('visibility','hidden','important'); }
+    v.classList.add('active','grh-module-open');
+    v.style.setProperty('display','block','important');
+    v.style.setProperty('visibility','visible','important');
+    v.style.setProperty('opacity','1','important');
+    var bar=document.getElementById('grh-tabs'); if(bar) bar.style.setProperty('display','flex','important');
+    v.querySelectorAll(':scope > .hero, :scope > section.hero').forEach(function(hero){ hero.style.setProperty('display','flex','important'); });
+    var back=document.getElementById('grh-back-bar'); if(back) back.style.setProperty('display','none','important');
+    var moduleHero=document.getElementById('grh-module-hero'); if(moduleHero) moduleHero.style.setProperty('display','none','important');
+    document.body.classList.remove('docs-rh-open');
+    v.removeAttribute('data-docs-mode');
+    document.querySelectorAll('#sidebar .sb-item').forEach(function(item){item.classList.toggle('active',item.id==='sb-gestao-rh');});
+    var title=document.getElementById('tPageTitle'); if(title) title.textContent='Gestão RH';
+    var icon=document.getElementById('tPageIcon'); if(icon) icon.textContent='🏢';
+    return v;
+  }
+
+  function benefitsAdminHTML(){
+    var bodySaude=typeof window.grhBeneficioCardBody==='function'?window.grhBeneficioCardBody('saude'):'<div class="empty">Carregando plano de saúde…</div>';
+    var bodyOdonto=typeof window.grhBeneficioCardBody==='function'?window.grhBeneficioCardBody('odonto'):'<div class="empty">Carregando plano odontológico…</div>';
+    var providers=[
+      ['🏋️','Wellhub','Academias, dependentes, elegibilidade e utilização'],
+      ['❤️','Starbem','Consultas, dependentes e elegibilidade'],
+      ['🏥','Dasa','Exames, agendamentos, dependentes e utilização'],
+      ['🧠','Optum','Psicologia, nutrição, medicina e indicadores de uso'],
+      ['🍔','iFood Benefícios','VA/VR, recargas, cartões e conferência mensal']
+    ];
+    return '<div class="ess-benefits-admin">'+
+      '<section class="ess-rh-admin-head"><div><small>GESTÃO RH · BENEFÍCIOS</small><h2>Gerenciamento de benefícios</h2><p>Controle titulares, dependentes, custos, importações e histórico. Esta é a visão administrativa do RH.</p></div><div class="ess-rh-admin-actions">'+
+      '<button class="btn btn-g" type="button" onclick="grhAbrirBeneficios()">📊 Importar planilha</button>'+
+      '<button class="btn btn-g" type="button" onclick="grhAbrirBeneficiosPdf()">📄 Importar PDFs</button>'+
+      '<button class="btn btn-p" type="button" onclick="grhAbrirHistoricoBeneficios()">🕘 Histórico</button></div></section>'+
+      '<div class="grh-bplan-card" id="grh-bplan-saude"><div class="grh-bplan-head" onclick="grhToggleBeneficioPlano(\'saude\')"><div class="grh-bplan-ico">🩺</div><div class="grh-bplan-info"><h3>Plano de Saúde — Unimed</h3><p>Titulares, dependentes, plano, status e valores mensais</p></div><div class="grh-bplan-kpis"><div class="grh-bplan-kpi"><strong id="grh-bsa-saude-total">0</strong><span>colaboradores</span></div><div class="grh-bplan-kpi"><strong id="grh-bsa-saude-custo">R$ 0,00</strong><span>custo mensal</span></div></div><div class="grh-bplan-chevron" id="grh-bplan-chevron-saude">▾</div></div><div class="grh-bplan-body" id="grh-bplan-body-saude" style="display:none">'+bodySaude+'</div></div>'+
+      '<div class="grh-bplan-card" id="grh-bplan-odonto"><div class="grh-bplan-head" onclick="grhToggleBeneficioPlano(\'odonto\')"><div class="grh-bplan-ico">🦷</div><div class="grh-bplan-info"><h3>Plano Odontológico — Uniodonto</h3><p>Titulares, dependentes, plano, status e valores mensais</p></div><div class="grh-bplan-kpis"><div class="grh-bplan-kpi"><strong id="grh-bsa-odonto-total">0</strong><span>colaboradores</span></div><div class="grh-bplan-kpi"><strong id="grh-bsa-odonto-custo">R$ 0,00</strong><span>custo mensal</span></div></div><div class="grh-bplan-chevron" id="grh-bplan-chevron-odonto">▾</div></div><div class="grh-bplan-body" id="grh-bplan-body-odonto" style="display:none">'+bodyOdonto+'</div></div>'+
+      '<section class="ess-provider-section"><div class="ess-provider-title"><div><h2>Outros fornecedores</h2><p>Visão de gerenciamento do pacote corporativo.</p></div><span>5 fornecedores ativos</span></div><div class="ess-provider-grid">'+providers.map(function(p){return '<article class="ess-provider-card"><div class="ess-provider-icon">'+p[0]+'</div><div><h3>'+p[1]+'</h3><p>'+p[2]+'</p></div><span class="ess-provider-status">Ativo</span></article>';}).join('')+'</div></section></div>';
+  }
+
+  function ensureSpecialPane(tab,pane){
+    if(tab==='beneficios' && !pane.querySelector('.ess-benefits-admin')) pane.innerHTML=benefitsAdminHTML();
+    if(tab==='documentos' && typeof window.grhDocsPainelHTML==='function' && !pane.querySelector('[data-docs-rh="1"]')) pane.innerHTML=window.grhDocsPainelHTML();
+    if(tab==='pesquisas' && typeof window.grhPesquisasPainelHTML==='function' && !pane.querySelector('[data-grh-pesq="2"]')) pane.innerHTML=window.grhPesquisasPainelHTML();
+    if(tab==='roadmap' && typeof window.grhRoadmapPainelHTML==='function' && pane.textContent.trim().length<80) pane.innerHTML=window.grhRoadmapPainelHTML();
+  }
+
+  function paneFor(tab){
+    var id='grh-pane-'+tabs[tab].pane;
+    var pane=document.getElementById(id);
+    if(!pane){ pane=document.createElement('div'); pane.id=id; pane.style.display='none'; view().appendChild(pane); }
+    ensureSpecialPane(tab,pane);
+    return pane;
+  }
+
+  function markActive(tab){
+    document.querySelectorAll('#grh-tabs button').forEach(function(btn){btn.classList.toggle('active',normalize(btn.getAttribute('data-ess-rh-tab'))===tab);});
+    try{sessionStorage.setItem('grhUltimaAba',tab);}catch(e){}
+  }
+
+  function invoke(name){
+    try{ if(typeof window[name]==='function') return window[name](); }catch(e){ console.warn('[Gestão RH] '+name,e); }
+  }
+
+  function enhanceCollaborators(){
+    var pane=document.getElementById('grh-pane-colaboradores'); if(!pane) return;
+    var overview=pane.querySelector('.ess-colab-overview');
+    if(!overview){ overview=document.createElement('section'); overview.className='ess-colab-overview'; pane.insertBefore(overview,pane.firstChild); }
+    Promise.resolve(typeof window.grhGetColabs==='function'?window.grhGetColabs(true):[]).then(function(list){
+      list=Array.isArray(list)?list:[];
+      var norm=function(v){return String(v||'').toLowerCase();};
+      var ativos=list.filter(function(c){return !/inativo|deslig/.test(norm(c.status));});
+      var clt=ativos.filter(function(c){return /clt|sim|true/.test(norm(c.clt||c.contrato||c.tipoContrato));}).length;
+      var pj=Math.max(ativos.length-clt,0);
+      var now=new Date();
+      var experiencia=ativos.filter(function(c){var d=new Date(c.admissao||c.dataAdmissao||''); return !isNaN(d)&&((now-d)/86400000)<=90;}).length;
+      var incompletos=ativos.filter(function(c){return !(c.nome&&c.email&&(c.cpf||c.documento)&&(c.funcao||c.cargo)&&c.setor);}).length;
+      var vals=[['👥','Total',list.length,'cadastros na base'],['✅','Ativos',ativos.length,'em operação'],['📄','CLT',clt,'contratos ativos'],['🤝','PJ',pj,'prestadores ativos'],['⏳','Experiência',experiencia,'até 90 dias'],['⚠️','Incompletos',incompletos,'revisar cadastro']];
+      overview.innerHTML=vals.map(function(v){return '<article><span>'+v[0]+'</span><div><small>'+v[1]+'</small><strong>'+v[2]+'</strong><p>'+v[3]+'</p></div></article>';}).join('');
+    }).catch(function(){});
+  }
+
+  function renderTab(tab){
+    var cfg=tabs[tab], pane=paneFor(tab);
+    pane.style.setProperty('display','block','important');
+    pane.classList.add('active');
+    if(tab==='remuneracao') window.__remPremiumRenderedV3=false;
+    if(tab==='movimentacoes') window.__movRealRendered=false;
+    cfg.render.forEach(invoke);
+    if(tab==='ferias') invoke('politicaCarregar');
+    if(tab==='beneficios') setTimeout(function(){invoke('grhRenderBeneficiosSaude');},80);
+    if(tab==='documentos') setTimeout(function(){invoke('grhDocsCarregar');},60);
+    if(tab==='colaboradores'){setTimeout(enhanceCollaborators,100);setTimeout(enhanceCollaborators,700);}
+    return pane;
+  }
+
+  function openTab(tab){
+    tab=normalize(tab); if(!tabs[tab]) tab='colaboradores';
+    var v=showHost(); if(!v) return false;
+    activeTab=tab;
+    v.querySelectorAll('[id^="grh-pane-"]').forEach(function(p){p.style.setProperty('display','none','important');p.classList.remove('active');});
+    var pane=renderTab(tab);
+    pane.style.setProperty('display','block','important'); pane.classList.add('active');
+    markActive(tab);
+    requestAnimationFrame(function(){ showHost(); pane.style.setProperty('display','block','important'); markActive(tab); });
+    setTimeout(function(){ showHost(); pane.style.setProperty('display','block','important'); markActive(tab); },120);
+    return false;
+  }
+
+  window.grhTab=function(tab){return openTab(tab);};
+  window.sbNav=function(id){ if(normalize(id)==='gestao-rh') return openTab('colaboradores'); return typeof legacy.sbNav==='function'?legacy.sbNav.apply(this,arguments):false; };
+  window.switchView=function(id){ if(normalize(id)==='gestao-rh') return openTab('colaboradores'); return typeof legacy.switchView==='function'?legacy.switchView.apply(this,arguments):window.sbNav(id); };
+  window.voltarGestaoRH=window.voltarParaGestaoRH=window.voltarMenuGestaoRH=function(){return openTab('colaboradores');};
+
+  document.addEventListener('click',function(ev){
+    var btn=ev.target&&ev.target.closest?ev.target.closest('#grh-tabs button[data-ess-rh-tab]'):null;
+    if(!btn) return;
+    ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation();
+    openTab(btn.getAttribute('data-ess-rh-tab'));
+  },true);
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ensureStructure();}); else ensureStructure();
 })();
