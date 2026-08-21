@@ -592,7 +592,23 @@ function verificarKeyAntes() {
     <div class="sb-item" id="sb-disc" onclick="sbNav('disc')" style="display:none" title=""><span>🧠</span><span class="sb-tip">DISC</span></div>
     <div class="sb-item" id="sb-meu-desenvolvimento" onclick="event.stopImmediatePropagation();window._fixEstruturaMeuDev?window._fixEstruturaMeuDev('meu-desenvolvimento'):sbNav('meu-desenvolvimento')" style="display:none" title=""><span>✨</span><span class="sb-tip">Meu Desenvolvimento</span></div>
     <!-- ── RH: 7 módulos principais ── -->
-    <div class="sb-item" id="sb-gestao-rh" onclick="sbNav('gestao-rh')" title=""><span>🏢</span><span class="sb-tip">Gestão RH</span></div>
+    <div id="ess-grh-side-cluster" class="ess-grh-side-cluster">
+      <div class="sb-item" id="sb-gestao-rh" onclick="sbNav('gestao-rh')" title="" role="button" tabindex="0" aria-controls="ess-grh-side-submenu" aria-expanded="false"><span>🏢</span><span class="sb-tip">Gestão RH</span><span class="ess-grh-arrow">⌄</span></div>
+      <div id="ess-grh-side-submenu" class="ess-grh-side-submenu" role="navigation" aria-label="Módulos de Gestão RH">
+        <button type="button" class="ess-grh-side-link" data-grh-tab="colaboradores"><span class="ess-grh-sub-icon">👥</span><span>Colaboradores</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="enderecos"><span class="ess-grh-sub-icon">📍</span><span>Endereços</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="remuneracao"><span class="ess-grh-sub-icon">💰</span><span>Remuneração</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="movimentacoes"><span class="ess-grh-sub-icon">🔄</span><span>Movimentações</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="admissao"><span class="ess-grh-sub-icon">📝</span><span>Admissões</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="desligamentos"><span class="ess-grh-sub-icon">🚪</span><span>Desligamentos</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="ferias"><span class="ess-grh-sub-icon">🏖️</span><span>Gestão de Férias</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="documentos"><span class="ess-grh-sub-icon">📄</span><span>Documentos</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="beneficios"><span class="ess-grh-sub-icon">🎁</span><span>Benefícios</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="acessos"><span class="ess-grh-sub-icon">🔐</span><span>Acessos e Permissões</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="pesquisas"><span class="ess-grh-sub-icon">📋</span><span>Pesquisas</span></button>
+        <button type="button" class="ess-grh-side-link" data-grh-tab="roadmap"><span class="ess-grh-sub-icon">🗺️</span><span>Próximas funcionalidades</span></button>
+      </div>
+    </div>
 
     <div class="sb-item" id="sb-dashboard" onclick="sbNav('dashboard')" title=""><span>📊</span><span class="sb-tip">Dashboard RH</span></div>
     <div class="sb-item" id="sb-auditoria" onclick="sbNav('auditoria')" title=""><span>📝</span><span class="sb-tip">Auditoria</span></div>
@@ -5521,11 +5537,11 @@ Desenvolvimento, Movimentações e Auditoria.
   <div class="modal-content" id="modal-content"></div>
 </div>
 
-<link rel="stylesheet" href="css/essence-rh-shell.css?v=19">
+<link rel="stylesheet" href="css/essence-rh-shell.css?v=20">
 <script src="js/modules/essence-rh-shell.js?v=16"></script>
-<script src="js/modules/essence-rh-tabs.js?v=19"></script>
-<script src="js/modules/essence-rh-data-v15.js?v=19"></script>
-<script src="js/modules/essence-rh-sidebar-v16.js?v=19"></script>
-<script src="js/modules/essence-clean-layout-v18.js?v=19"></script>
+<script src="js/modules/essence-rh-tabs.js?v=20"></script>
+<script src="js/modules/essence-rh-data-v15.js?v=20"></script>
+<script src="js/modules/essence-rh-sidebar-v16.js?v=20"></script>
+<script src="js/modules/essence-clean-layout-v18.js?v=20"></script>
 </body>
 </html>
