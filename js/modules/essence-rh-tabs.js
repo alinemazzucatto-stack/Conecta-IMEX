@@ -1,8 +1,8 @@
 // Gestão RH consolidada: navegação administrativa por abas, sem rotas legadas conflitantes.
 (function(){
   'use strict';
-  if(window.__ESSENCE_RH_TABS_V14__) return;
-  window.__ESSENCE_RH_TABS_V14__ = true;
+  if(window.__ESSENCE_RH_TABS_V16__) return;
+  window.__ESSENCE_RH_TABS_V16__ = true;
 
   var legacy = { grhTab:window.grhTab, sbNav:window.sbNav, switchView:window.switchView };
   var bootstrapping = false;
@@ -74,7 +74,7 @@
     v.style.setProperty('display','block','important');
     v.style.setProperty('visibility','visible','important');
     v.style.setProperty('opacity','1','important');
-    var bar=document.getElementById('grh-tabs'); if(bar) bar.style.setProperty('display','flex','important');
+    var bar=document.getElementById('grh-tabs'); if(bar) bar.style.setProperty('display','none','important');
     v.querySelectorAll(':scope > .hero, :scope > section.hero').forEach(function(hero){ hero.style.setProperty('display','flex','important'); });
     var back=document.getElementById('grh-back-bar'); if(back) back.style.setProperty('display','none','important');
     var moduleHero=document.getElementById('grh-module-hero'); if(moduleHero) moduleHero.style.setProperty('display','none','important');
