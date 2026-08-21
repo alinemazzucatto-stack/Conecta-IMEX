@@ -59,6 +59,8 @@
   function build(){
     var parent=document.getElementById('sb-gestao-rh');if(!parent)return;
     var existing=document.getElementById('ess-grh-side-submenu');
+    parent.removeAttribute('onclick');
+    if(existing && existing.previousElementSibling!==parent) parent.insertAdjacentElement('afterend',existing);
     if(!existing){
       parent.removeAttribute('onclick');
       parent.setAttribute('role','button');
@@ -85,11 +87,14 @@
 
   function init(){
     build();
+    var view=document.getElementById('view-gestao-rh');
     var pane=document.querySelector('#view-gestao-rh [id^="grh-pane-"].active');
     var tab=pane?String(pane.id).replace('grh-pane-',''):null;
-    if(labels[tab]){current=tab;expanded(true);sync(tab);}
+    var moduleActive=!!(view&&(view.classList.contains('active')||getComputedStyle(view).display!=='none'));
+    if(labels[tab]) current=tab;
+    if(labels[tab]||moduleActive){expanded(true);sync(current);}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(init,100);});
   else setTimeout(init,0);
-  setTimeout(init,700);setTimeout(init,1600);
+  setTimeout(init,700);setTimeout(init,1600);setTimeout(init,3000);
 })();

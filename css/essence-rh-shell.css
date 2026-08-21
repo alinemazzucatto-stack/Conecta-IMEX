@@ -327,3 +327,24 @@ body.essence-rh-ui #sidebar #sb-gestao-rh.lock-hidden + .ess-grh-side-submenu{di
   body.essence-rh-ui #sidebar .ess-grh-side-link{justify-content:center;padding:6px!important;border-left:0!important;border-radius:9px!important}
   body.essence-rh-ui #sidebar .ess-grh-side-link>span:last-child{display:none}
 }
+/* Essence v17 - submenu RH sempre visivel sem compressao */
+body.essence-rh-ui #sidebar .ess-grh-side-submenu{
+  flex:0 0 auto!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+body.essence-rh-ui #sidebar .ess-grh-side-submenu.open{
+  display:flex!important;
+  flex-direction:column!important;
+  max-height:none!important;
+  overflow:visible!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.essence-rh-ui #sidebar .ess-grh-side-submenu.open .ess-grh-side-link{
+  display:flex!important;
+  flex:0 0 38px!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.essence-rh-ui #sidebar:has(#sb-gestao-rh.active){overflow-y:auto!important}
