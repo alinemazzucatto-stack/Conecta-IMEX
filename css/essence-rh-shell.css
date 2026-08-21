@@ -262,3 +262,46 @@ body.essence-rh-ui #view-gestao-rh .ess-colab-sector-board .colab-setores-head-v
 body.essence-rh-ui #view-gestao-rh .ess-colab-sector-board #grh-setor-stats{padding:14px 22px 20px!important}
 @media(max-width:1100px){body.essence-rh-ui #view-gestao-rh .ess-colab-overview{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){body.essence-rh-ui #view-gestao-rh .ess-colab-overview{grid-template-columns:1fr;padding-inline:14px}body.essence-rh-ui #view-gestao-rh .ess-rh-board-head{padding-inline:14px}}
+/* Essence v15 - dados reais, tabelas legíveis e controles da folha agrupados */
+body.essence-rh-ui #view-gestao-rh .ess-colab-filters{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:1 1 620px;flex-wrap:wrap}
+body.essence-rh-ui #view-gestao-rh .ess-colab-filters input,
+body.essence-rh-ui #view-gestao-rh .ess-colab-filters select{height:38px;box-sizing:border-box;padding:7px 10px;border:1px solid #d7e4f0;border-radius:9px;background:#fff;color:#334155;font-size:12px}
+body.essence-rh-ui #view-gestao-rh .ess-colab-filters input{flex:1 1 240px;min-width:210px}
+body.essence-rh-ui #view-gestao-rh .ess-table-scroll{width:100%;max-width:100%;overflow-x:auto;overflow-y:visible}
+body.essence-rh-ui #view-gestao-rh .ess-table-message{text-align:center!important;padding:34px!important;color:#64748b!important}
+body.essence-rh-ui #view-gestao-rh .ess-table-message.error{color:#b91c1c!important}
+body.essence-rh-ui #view-gestao-rh #grh-colab-table tbody tr:hover,
+body.essence-rh-ui #view-gestao-rh #grh-end-body tr:hover{background:#f7fbff!important}
+body.essence-rh-ui #view-gestao-rh #grh-colab-table td,
+body.essence-rh-ui #view-gestao-rh #grh-end-body td{color:#53657d;font-size:12px;vertical-align:middle}
+body.essence-rh-ui #view-gestao-rh #grh-colab-table .ess-colab-name{padding-left:20px!important;color:#172033;font-weight:800;min-width:180px}
+body.essence-rh-ui #view-gestao-rh .ess-tag{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eaf7ff;color:#1766bd;font-size:10px;font-weight:800;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh .ess-status{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh .ess-status.ok{background:#e7f8ef;color:#087a4c}
+body.essence-rh-ui #view-gestao-rh .ess-status.warn{background:#fff4dc;color:#a45c08}
+body.essence-rh-ui #view-gestao-rh .ess-status.off{background:#f1f5f9;color:#64748b}
+body.essence-rh-ui #view-gestao-rh .ess-icon-action,
+body.essence-rh-ui #view-gestao-rh .ess-address-edit{border:1px solid #cfe1ef;background:#fff;color:#1766bd;border-radius:9px;padding:6px 9px;font-weight:800;cursor:pointer;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat{padding:14px 16px;border:1px solid #deebf5;border-radius:13px;background:#f9fcff}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat small{display:block;color:#64748b;font-size:9px;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat strong{display:block;margin:5px 0 2px;color:#2583e8;font-size:24px}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat span{color:#94a3b8;font-size:10px}
+body.essence-rh-ui #view-gestao-rh .ess-address-person{min-width:260px;padding-left:20px!important}
+body.essence-rh-ui #view-gestao-rh .ess-address-person strong{display:block;color:#172033;font-size:12px}
+body.essence-rh-ui #view-gestao-rh .ess-address-person small{display:block;margin-top:3px;color:#718096;font-size:10px}
+body.essence-rh-ui #view-gestao-rh .ess-address-edit{margin-left:7px}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-board{margin:0 0 18px;padding:18px;border:1px solid #d5e6f3;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(31,75,125,.06)}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-head{margin-bottom:14px}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-head small{display:block;color:#2583e8;font-size:9px;font-weight:900;letter-spacing:.1em}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-head h2{margin:3px 0 2px;color:#172033;font-size:18px}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-head p{margin:0;color:#64748b;font-size:11px}
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-board .rem-toolbar-legacy{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)!important;gap:12px!important;margin:0!important;max-width:none!important;overflow:visible!important;padding:0!important}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-group{display:flex;align-items:center;align-content:flex-start;gap:7px;flex-wrap:wrap;min-width:0;padding:12px;border:1px solid #e0ebf4;border-radius:13px;background:#f8fbfe}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-group>span{display:block;flex:0 0 100%;color:#64748b;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.07em}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-filters{grid-column:1/-1}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-filters #grh-rem-search{flex:1 1 280px!important;min-width:220px!important}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-filters #grh-rem-mes{flex:0 1 170px!important;width:170px!important}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-group .btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:36px!important;max-width:none!important;overflow:visible!important;text-overflow:clip!important;padding:8px 11px!important;font-size:10px!important}
+body.essence-rh-ui #view-gestao-rh .rem-toolbar-actions{align-items:flex-start}
+@media(max-width:1150px){body.essence-rh-ui #view-gestao-rh .ess-rem-control-board .rem-toolbar-legacy{grid-template-columns:1fr!important}body.essence-rh-ui #view-gestao-rh .rem-toolbar-filters{grid-column:auto}}
+@media(max-width:760px){body.essence-rh-ui #view-gestao-rh .ess-colab-list-board .card-head{align-items:flex-start!important}body.essence-rh-ui #view-gestao-rh .ess-colab-filters{justify-content:flex-start}body.essence-rh-ui #view-gestao-rh .ess-address-person{min-width:210px}}
