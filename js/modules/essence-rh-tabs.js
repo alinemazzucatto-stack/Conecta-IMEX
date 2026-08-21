@@ -33,7 +33,7 @@
   function enforcePanel(tab){
     var view = document.getElementById('view-gestao-rh');
     if(!view) return;
-    view.classList.remove('grh-module-open');
+    view.classList.add('grh-module-open');
     var tabs = document.getElementById('grh-tabs');
     if(tabs) tabs.style.setProperty('display','flex','important');
     view.querySelectorAll(':scope > .hero, :scope > section.hero').forEach(function(hero){
