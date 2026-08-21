@@ -68,3 +68,10 @@ body.essence-rh-ui .field input:disabled{background:#f5f8fc!important;border-col
   body.essence-rh-ui #sidebar .sb-logo{overflow:hidden!important;padding-inline:4px!important}
   body.essence-rh-ui #sidebar .sb-item.active:after{display:none}
 }
+/* Essence v5 - Gestão RH abre como painel de abas, não como hub */
+body.essence-rh-ui #view-gestao-rh #grh-tabs{display:flex!important;position:sticky!important;top:82px!important;z-index:30!important}
+body.essence-rh-ui #view-gestao-rh #grh-back-bar,
+body.essence-rh-ui #view-gestao-rh #grh-module-hero{display:none!important}
+body.essence-rh-ui #view-gestao-rh .imex-rh-grid-final{display:none!important}
+body.essence-rh-ui #view-gestao-rh>div[style*="padding"]{padding-top:20px!important}
+@media(max-width:900px){body.essence-rh-ui #view-gestao-rh #grh-tabs{top:76px!important}}
