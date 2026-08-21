@@ -26,7 +26,7 @@ body.essence-rh-ui .modal-overlay{background:rgba(10,29,60,.38)!important;backdr
 @media(max-width:600px){:root{--ess-sidebar:64px}body.essence-rh-ui .topbar{padding:0 14px!important}body.essence-rh-ui .profile-chip>span{display:none!important}body.essence-rh-ui .page{padding:16px!important}body.essence-rh-ui .modal-content{padding:18px 14px 32px!important}}
 /* Essence v4 - refinamento de marca, navegação e painéis internos */
 @media(min-width:901px){
-  :root{--ess-sidebar:292px}
+  :root{--ess-sidebar:248px}
   body.essence-rh-ui #sidebar.sidebar{padding-inline:16px!important}
 }
 body.essence-rh-ui #sidebar .sb-logo{order:-2!important;overflow:visible!important;padding-inline:8px!important}
