@@ -139,3 +139,19 @@ body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-title,
 body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-sub{display:inline!important;font:inherit!important;color:inherit!important;margin:0!important}
 body.essence-rh-ui #view-gestao-rh #grh-tabs .grh-card-sub{display:none!important}
 @media(max-width:900px){body.essence-rh-ui #view-gestao-rh #grh-tabs{top:76px!important;gap:15px!important}}
+/* Essence v8 - menu lateral mais compacto */
+body.essence-rh-ui #sidebar.sidebar{gap:0!important}
+body.essence-rh-ui #sidebar .sb-item{
+  height:48px!important;
+  min-height:48px!important;
+  max-height:48px!important;
+  flex:0 0 48px!important;
+  margin:1px 0!important;
+  padding-top:5px!important;
+  padding-bottom:5px!important;
+}
+body.essence-rh-ui #sidebar .sb-item>span:first-child{
+  width:34px!important;
+  height:34px!important;
+  flex-basis:34px!important;
+}
