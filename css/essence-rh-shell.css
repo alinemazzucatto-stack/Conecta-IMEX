@@ -155,3 +155,33 @@ body.essence-rh-ui #sidebar .sb-item>span:first-child{
   height:34px!important;
   flex-basis:34px!important;
 }
+/* Essence v9 - menor recuo lateral e módulos contidos na área útil */
+@media(min-width:901px){
+  body.essence-rh-ui .page{padding-left:12px!important;padding-right:12px!important}
+}
+body.essence-rh-ui #view-gestao-rh,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-premium-wrap{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao{overflow:hidden!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-premium-wrap>*{min-width:0!important;max-width:100%!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-toolbar-legacy{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  padding-bottom:3px!important;
+}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-kpi-grid,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-grid-2,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-grid-3{min-width:0!important;max-width:100%!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-kpi2,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-card,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-compare-card{min-width:0!important;overflow:hidden!important}
+@media(max-width:1400px) and (min-width:761px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-kpi-grid.rem-kpi-grid2{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
