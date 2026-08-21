@@ -305,3 +305,25 @@ body.essence-rh-ui #view-gestao-rh .rem-toolbar-group .btn{display:inline-flex!i
 body.essence-rh-ui #view-gestao-rh .rem-toolbar-actions{align-items:flex-start}
 @media(max-width:1150px){body.essence-rh-ui #view-gestao-rh .ess-rem-control-board .rem-toolbar-legacy{grid-template-columns:1fr!important}body.essence-rh-ui #view-gestao-rh .rem-toolbar-filters{grid-column:auto}}
 @media(max-width:760px){body.essence-rh-ui #view-gestao-rh .ess-colab-list-board .card-head{align-items:flex-start!important}body.essence-rh-ui #view-gestao-rh .ess-colab-filters{justify-content:flex-start}body.essence-rh-ui #view-gestao-rh .ess-address-person{min-width:210px}}
+/* Essence v16 - módulos RH no menu lateral expansível */
+body.essence-rh-ui #view-gestao-rh #grh-tabs{display:none!important}
+body.essence-rh-ui #sidebar #sb-gestao-rh{overflow:visible!important}
+body.essence-rh-ui #sidebar #sb-gestao-rh.active:after{display:none!important}
+body.essence-rh-ui #sidebar .ess-grh-arrow{margin-left:auto!important;width:auto!important;height:auto!important;flex:0 0 auto!important;display:block!important;background:none!important;box-shadow:none!important;color:#2583e8!important;font-size:20px!important;line-height:1!important;transition:transform .2s ease}
+body.essence-rh-ui #sidebar #sb-gestao-rh.ess-grh-expanded .ess-grh-arrow{transform:rotate(90deg)}
+body.essence-rh-ui #sidebar .ess-grh-side-submenu{display:block;max-height:0;opacity:0;margin:0 0 2px;padding:0 4px 0 14px;overflow:hidden;transition:max-height .28s ease,opacity .2s ease,padding .25s ease}
+body.essence-rh-ui #sidebar .ess-grh-side-submenu.open{max-height:620px;opacity:1;padding-top:5px;padding-bottom:7px}
+body.essence-rh-ui #sidebar .ess-grh-side-submenu:before{content:'';position:absolute}
+body.essence-rh-ui #sidebar .ess-grh-side-link{position:relative;width:100%;min-width:0;min-height:38px;display:flex;align-items:center;gap:9px;margin:1px 0;padding:7px 9px;border:0;border-left:2px solid #d9e8f5;border-radius:0 10px 10px 0;background:transparent;color:#64748b;font:700 11px/1.2 Montserrat,sans-serif;text-align:left;cursor:pointer;overflow:hidden;transition:.18s}
+body.essence-rh-ui #sidebar .ess-grh-side-link:hover{background:#edf7ff;color:#1766bd;border-left-color:#77c9ef}
+body.essence-rh-ui #sidebar .ess-grh-side-link.active{background:linear-gradient(90deg,#e4f6ff,#edf3ff);color:#075fc0;border-left-color:#2583e8;font-weight:900}
+body.essence-rh-ui #sidebar .ess-grh-side-link>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body.essence-rh-ui #sidebar .ess-grh-sub-icon{width:25px;height:25px;display:grid;place-items:center;flex:0 0 25px;border-radius:7px;background:#eaf7ff;font-size:12px}
+body.essence-rh-ui #sidebar #sb-gestao-rh[style*="display:none"] + .ess-grh-side-submenu,
+body.essence-rh-ui #sidebar #sb-gestao-rh.lock-hidden + .ess-grh-side-submenu{display:none!important}
+@media(max-width:900px){
+  body.essence-rh-ui #sidebar .ess-grh-arrow{display:none!important}
+  body.essence-rh-ui #sidebar .ess-grh-side-submenu{padding-left:3px!important;padding-right:3px!important}
+  body.essence-rh-ui #sidebar .ess-grh-side-link{justify-content:center;padding:6px!important;border-left:0!important;border-radius:9px!important}
+  body.essence-rh-ui #sidebar .ess-grh-side-link>span:last-child{display:none}
+}
