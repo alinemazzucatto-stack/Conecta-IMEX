@@ -6,6 +6,7 @@
 
   var rawRemuneration=window.grhRenderRemuneracao;
   var colRequest=0, addressRequest=0;
+  var colPage=1, colPageSize=15, colFilterKey='';
 
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function js(v){return String(v==null?'':v).replace(/'/g,'');}
@@ -21,10 +22,39 @@
     });
   }
 
+  function ensureCollaboratorPager(card){
+    if(!card) return null;
+    var pager=document.getElementById('grh-colab-pager');
+    if(!pager){
+      pager=document.createElement('div');
+      pager.id='grh-colab-pager';
+      pager.className='ess-colab-pager';
+      card.appendChild(pager);
+    }
+    return pager;
+  }
+
+  function renderCollaboratorPager(total,start,end){
+    var table=document.getElementById('grh-colab-table');
+    var pager=ensureCollaboratorPager(table&&table.closest('.card'));
+    if(!pager) return;
+    var pages=Math.max(1,Math.ceil(total/colPageSize));
+    colPage=Math.min(Math.max(colPage,1),pages);
+    var summaryText=total?(start+1)+'–'+end+' de '+total:'Nenhum resultado';
+    pager.innerHTML='<div class="ess-colab-page-summary"><strong>'+summaryText+'</strong><span>resultados filtrados</span></div>'+
+      '<div class="ess-colab-page-size"><label for="grh-colab-page-size">Linhas por página</label><select id="grh-colab-page-size" onchange="grhSetColabPageSize(this.value)">'+
+      [10,15,25,50].map(function(size){return '<option value="'+size+'"'+(size===colPageSize?' selected':'')+'>'+size+'</option>';}).join('')+'</select></div>'+
+      '<nav class="ess-colab-page-nav" aria-label="Paginação de colaboradores">'+
+      '<button type="button" onclick="grhColabPage(1)" '+(colPage===1?'disabled':'')+' aria-label="Primeira página">«</button>'+
+      '<button type="button" onclick="grhColabPage('+(colPage-1)+')" '+(colPage===1?'disabled':'')+'>Anterior</button>'+
+      '<span>Página <strong>'+colPage+'</strong> de <strong>'+pages+'</strong></span>'+
+      '<button type="button" onclick="grhColabPage('+(colPage+1)+')" '+(colPage===pages?'disabled':'')+'>Próxima</button>'+
+      '<button type="button" onclick="grhColabPage('+pages+')" '+(colPage===pages?'disabled':'')+' aria-label="Última página">»</button></nav>';
+  }
   function ensureList(){
     var pane=document.getElementById('grh-pane-colaboradores'); if(!pane) return null;
     var table=document.getElementById('grh-colab-table');
-    if(table) return table.closest('.card');
+    if(table){var existingCard=table.closest('.card');ensureCollaboratorPager(existingCard);return existingCard;}
     var card=document.createElement('div');
     card.className='card ess-rh-board ess-colab-list-board';
     card.innerHTML='<div class="card-head"><div class="cht"><h2>Lista de colaboradores</h2><p id="grh-col-count">Carregando...</p></div>'+
@@ -36,6 +66,7 @@
       '<div class="card-body" style="padding:0"><div class="ess-table-scroll"><table id="grh-colab-table"><thead><tr><th>Nome</th><th>Matrícula</th><th>E-mail</th><th>CPF</th><th>Função</th><th>Setor</th><th>CLT</th><th>Admissão</th><th>Tempo</th><th>Status</th><th>Acesso</th><th>Ações</th></tr></thead><tbody id="grh-colab-body"><tr><td colspan="12" class="ess-table-message">Carregando...</td></tr></tbody></table></div></div>';
     var sector=document.getElementById('colabSetoresBottomV1')||document.getElementById('grh-setor-stats');
     pane.insertBefore(card,sector&&sector.parentNode===pane?sector:null);
+    ensureCollaboratorPager(card);
     return card;
   }
 
@@ -74,18 +105,24 @@
         if(Array.from(select.options).some(function(o){return o.value===selected;})) select.value=selected;
         sectorFilter=select.value;
       }
+      var filterKey=[q,sectorFilter,status,cltFilter].join('|');
+      if(filterKey!==colFilterKey){colFilterKey=filterKey;colPage=1;}
       var data=all.slice();
       if(q) data=data.filter(function(c){return [c.nome,c.email,c.funcao,c.cargo,c.setor,c.matricula].some(function(v){return String(v||'').toLowerCase().includes(q);});});
       if(sectorFilter) data=data.filter(function(c){return c.setor===sectorFilter;});
       if(cltFilter) data=data.filter(function(c){return c.clt===cltFilter;});
       if(status) data=data.filter(function(c){return String(c.status||'Ativo')===status;});
       data.sort(function(a,b){return String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR');});
-      var count=document.getElementById('grh-col-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores';
-      var html=data.length?data.map(function(c){
+      var pages=Math.max(1,Math.ceil(data.length/colPageSize));
+      colPage=Math.min(Math.max(colPage,1),pages);
+      var start=(colPage-1)*colPageSize, end=Math.min(start+colPageSize,data.length), pageData=data.slice(start,end);
+      var count=document.getElementById('grh-col-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores encontrados';
+      var html=pageData.length?pageData.map(function(c){
         var st=c.status||'Ativo', cls=/afast/i.test(st)?'warn':(/inativo|deslig/i.test(st)?'off':'ok');
         return '<tr><td class="ess-colab-name">'+esc(c.nome||'—')+'</td><td>'+esc(c.matricula||'—')+'</td><td>'+esc(c.email||'—')+'</td><td>'+esc(c.cpf||'—')+'</td><td>'+esc(c.funcao||c.cargo||'—')+'</td><td><span class="ess-tag">'+esc(c.setor||'—')+'</span></td><td>'+(c.clt==='Sim'?'✅ CLT':'PJ')+'</td><td>'+esc(typeof window.grhFmt==='function'?window.grhFmt(c.admissao):(c.admissao||'—'))+'</td><td>'+esc(typeof window.grhTempoEmpresa==='function'?window.grhTempoEmpresa(c.admissao):'—')+'</td><td><span class="ess-status '+cls+'">'+esc(st)+'</span></td><td>'+esc(c.roleAcesso||'colaborador')+'</td><td><button class="ess-icon-action" type="button" onclick="grhAbrirModalColab(\''+js(c._id||c.id||'')+'\')">✏️</button></td></tr>';
-      }).join(''):'<tr><td colspan="12" class="ess-table-message">Nenhum colaborador encontrado.</td></tr>';
+      }).join(''):'<tr><td colspan="12" class="ess-table-message">Nenhum colaborador encontrado com os filtros selecionados.</td></tr>';
       setStableHTML(tbody,html);
+      renderCollaboratorPager(data.length,start,end);
       sectors(all); summary(all);
     }catch(error){tbody.innerHTML='<tr><td colspan="12" class="ess-table-message error">Erro ao carregar colaboradores: '+esc(error.message||error)+'</td></tr>';}
   }
@@ -120,6 +157,8 @@
   }
 
   window.grhRenderColabs=renderCollaborators;
+  window.grhColabPage=function(page){colPage=Math.max(1,Number(page)||1);return renderCollaborators();};
+  window.grhSetColabPageSize=function(size){colPageSize=Math.max(10,Number(size)||15);colPage=1;return renderCollaborators();};
   window.grhRenderEnderecos=renderAddresses;
   if(typeof rawRemuneration==='function') window.grhRenderRemuneracao=function(){var result=rawRemuneration.apply(this,arguments);setTimeout(organizeToolbar,40);setTimeout(organizeToolbar,300);setTimeout(organizeToolbar,900);setTimeout(organizeToolbar,1600);return result;};
 
