@@ -49,6 +49,57 @@
 #view-gamificacao .gm-tab-rh.on{color:#fff !important;background:linear-gradient(135deg,#6551d7,#8067e8) !important}
 
 #view-gamificacao .gm-panel{padding-top:0 !important}
+#view-gamificacao #gm-panel-progresso{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  padding:20px !important;
+  border:1px solid rgba(125,190,255,.38);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 82% 12%,rgba(56,189,248,.24),transparent 27%),
+    radial-gradient(circle at 12% 88%,rgba(99,102,241,.28),transparent 31%),
+    linear-gradient(145deg,#0d326d 0%,#104b91 52%,#116ca8 100%) !important;
+  box-shadow:0 20px 44px rgba(13,50,109,.26);
+}
+#view-gamificacao #gm-panel-progresso > *:not(.gm-progresso-cosmos){position:relative;z-index:2}
+#view-gamificacao .gm-progresso-cosmos{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+#view-gamificacao .gm-cosmo-star{
+  position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;
+  box-shadow:0 0 7px rgba(255,255,255,.95);animation:gamStarPulse 2.8s ease-in-out infinite
+}
+#view-gamificacao .gm-cosmo-star.small{width:2px;height:2px;opacity:.72}
+#view-gamificacao .gm-cosmo-meteor{
+  position:absolute;width:90px;height:2px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(186,230,253,.9),#fff);
+  transform:rotate(-24deg);opacity:0;animation:gamMeteor 8s linear infinite
+}
+@keyframes gamStarPulse{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
+@keyframes gamMeteor{0%,68%{opacity:0;transform:translate(-80px,-40px) rotate(-24deg)}71%{opacity:.9}82%,100%{opacity:0;transform:translate(430px,160px) rotate(-24deg)}}
+
+#view-gamificacao #gm-panel-progresso .gm-greet{
+  background:linear-gradient(110deg,rgba(4,38,91,.88),rgba(10,119,180,.72)) !important;
+  border:1px solid rgba(186,230,253,.30);
+  box-shadow:0 12px 30px rgba(3,28,69,.24);
+}
+#view-gamificacao #gm-panel-progresso .gm-stile{border-color:rgba(191,219,254,.34) !important;box-shadow:0 9px 23px rgba(3,28,69,.18) !important}
+#view-gamificacao #gm-panel-progresso .gm-stile:nth-child(1){background:rgba(73,164,255,.30) !important}
+#view-gamificacao #gm-panel-progresso .gm-stile:nth-child(2){background:rgba(52,211,153,.27) !important}
+#view-gamificacao #gm-panel-progresso .gm-stile:nth-child(3){background:rgba(129,140,248,.30) !important}
+#view-gamificacao #gm-panel-progresso .gm-stile:nth-child(4){background:rgba(251,191,36,.29) !important}
+#view-gamificacao #gm-panel-progresso .gm-stile-ico{background:rgba(255,255,255,.18)}
+#view-gamificacao #gm-panel-progresso .gm-stile-num{color:#fff !important}
+#view-gamificacao #gm-panel-progresso .gm-stile-lbl{color:#d8ebff !important}
+#view-gamificacao #gm-panel-progresso .gm-mini-card{
+  background:rgba(7,42,96,.66) !important;
+  border-color:rgba(148,203,255,.32) !important;
+  box-shadow:0 9px 24px rgba(3,28,69,.20) !important;
+}
+#view-gamificacao #gm-panel-progresso .gm-mini-title{color:#fff !important}
+#view-gamificacao #gm-panel-progresso .gm-mini-lbl,
+#view-gamificacao #gm-panel-progresso .gm-mini-sub,
+#view-gamificacao #gm-panel-progresso .gm-mini-foot{color:#c4def8 !important}
+#view-gamificacao #gm-panel-progresso .gm-prog-loja-head .gm-mini-lbl{color:#e5f2ff !important;font-weight:800}
 #view-gamificacao .gm-greet{
   position:relative;
   overflow:hidden;
