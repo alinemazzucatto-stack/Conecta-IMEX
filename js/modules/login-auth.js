@@ -248,7 +248,7 @@ window.doLogin = async function(){
     // Define a tela de destino antes de montar o menu, e força a navegação
     // logo depois — evita que a tela de colaborador apareça por uma fração
     // de segundo antes de trocar para a tela correta do papel logado.
-    var destino = 'intranet';
+    var destino = String(roleBase||'').toLowerCase().indexOf('rh')!==-1 ? 'inicio-rh' : 'intranet';
     function irParaDestino(){
       try{
         if(typeof window.sbNav === 'function') window.sbNav(destino);
@@ -326,7 +326,7 @@ window.doLogin = async function(){
       document.body.classList.add('role-'+roleBase);
       setTimeout(function(){
         if(typeof window.buildSidebar === 'function') window.buildSidebar();
-        var destino = 'intranet';
+        var destino = String(roleBase||'').toLowerCase().indexOf('rh')!==-1 ? 'inicio-rh' : 'intranet';
         if(typeof window.sbNav === 'function') window.sbNav(destino);
       }, 100);
       setTimeout(async function(){
