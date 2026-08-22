@@ -3,6 +3,7 @@
   'use strict';
 
   const META = {
+    'inicio-rh':['⌂','Início'],
     intranet:['🏠','Intranet'],
     gamificacao:['🏆','Gamificação'],
     'estrutura-carreira':['🏢','Estrutura e Carreira'],
@@ -22,7 +23,7 @@
   const MENU = {
     colaborador:['intranet','gamificacao','estrutura-carreira','mais','ouvidoria'],
     gestor:['intranet','gamificacao','estrutura-carreira','solicitacao','gestor','pesquisas','beneficios','ouvidoria','conecta-ai'],
-    rh:['intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
+    rh:['inicio-rh','intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
   };
 
   function $(id){ return document.getElementById(id); }
@@ -151,8 +152,8 @@
   }
 
   function navigate(id){
-    id = String(id || '').trim() || 'intranet';
-    if(!allowed(id)) id = 'intranet';
+    id = String(id || '').trim() || (roleAtual() === 'rh' ? 'inicio-rh' : 'intranet');
+    if(!allowed(id)) id = roleAtual() === 'rh' ? 'inicio-rh' : 'intranet';
 
     ensureBasicContent(id);
 

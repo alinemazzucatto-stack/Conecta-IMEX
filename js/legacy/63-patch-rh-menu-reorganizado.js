@@ -4,9 +4,10 @@
   if(window.__IMEX_RH_MENU_REORGANIZADO__) return;
   window.__IMEX_RH_MENU_REORGANIZADO__ = true;
 
-  const RH_ORDER_FINAL = ['intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
+  const RH_ORDER_FINAL = ['inicio-rh','intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
   const META_RH_FINAL = {
-    'intranet':['🏠','Início / Intranet'],
+    'inicio-rh':['⌂','Início'],
+    'intranet':['🏠','Intranet'],
     'gestao-rh':['🏢','Gestão RH'],
     'dashboard':['📊','Dashboard RH'],
     'ouvidoria':['📢','Ouvidoria RH'],
@@ -119,10 +120,10 @@
       // qual painel de conteúdo fica visível. No carregamento/F5, a tela
       // já vem com algo padrão marcado como ativo (geralmente Intranet,
       // com aparência de colaborador) antes do papel real ser confirmado.
-      // Por isso força sempre a ida pra Gestão RH quando este código roda
+      // Por isso força sempre a ida para o Início do RH quando este código roda
       // (que só acontece logo após o Firebase confirmar que é RH).
       [50,250,600].forEach(function(t){
-        setTimeout(function(){ if(typeof window.sbNav === 'function') window.sbNav('intranet'); }, t);
+        setTimeout(function(){ if(typeof window.sbNav === 'function') window.sbNav('inicio-rh'); }, t);
       });
       return r;
     }
