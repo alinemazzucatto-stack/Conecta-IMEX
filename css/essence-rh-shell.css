@@ -914,3 +914,57 @@ body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-history ta
 @media(max-width:620px){
   body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side{grid-template-columns:1fr}
 }
+
+/* Essence v35 - gestão administrativa de Benefícios */
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-view{display:grid;gap:15px;min-width:0}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border:1px solid #8fb7d4;border-radius:18px;background:linear-gradient(135deg,#b9d8ee,#e6f1f8);box-shadow:0 10px 26px rgba(31,75,125,.11)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-head small{display:block;margin-bottom:4px;color:#075fc0;font-size:9px;font-weight:900;letter-spacing:.11em}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-head h2{margin:0;color:#172033;font-size:22px;font-weight:950}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-head p{margin:5px 0 0;color:#53657d;font-size:11px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-message{padding:10px 13px;border:1px solid #9fbdd5;border-radius:11px;background:#dceaf5;color:#334a62;font-size:11px;font-weight:750}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-message.success{border-color:#66c291;background:#cceedd;color:#08643f}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-message.error{border-color:#e68b8b;background:#f9d2d2;color:#9f2424}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis article{display:flex;align-items:center;gap:11px;min-height:92px;padding:14px;border:1px solid #67abe5;border-radius:16px;background:linear-gradient(135deg,#9dcef8,#c8e4fb);box-shadow:0 7px 17px rgba(31,91,145,.11)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis article:nth-child(2){border-color:#66c291;background:linear-gradient(135deg,#9eddbd,#cceedd)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis article:nth-child(3){border-color:#dea93b;background:linear-gradient(135deg,#f5c65f,#ffe2a0)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis article:nth-child(4){border-color:#7788dc;background:linear-gradient(135deg,#aeb9ec,#d3d9f7)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis article>span{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.45);font-size:21px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis small{display:block;color:#40566f;font-size:8px;font-weight:900;text-transform:uppercase}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis strong{display:block;margin-top:3px;color:#075aa9;font-size:20px;line-height:1.1}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis p{margin:4px 0 0;color:#60738a;font-size:8px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-offered{padding:16px;border:1px solid #9fbdd5;border-radius:18px;background:#eaf2f9;box-shadow:0 10px 26px rgba(31,75,125,.10)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-section-head h3{margin:0;color:#172033;font-size:15px;font-weight:900}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-section-head p{margin:3px 0 0;color:#60738a;font-size:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-grid{display:grid;grid-template-columns:repeat(5,minmax(190px,1fr));gap:11px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card{display:flex;flex-direction:column;min-width:0;padding:15px;border:1px solid #67abe5;border-radius:16px;background:linear-gradient(150deg,#c8e4fb,#edf6fc);box-shadow:0 6px 15px rgba(31,91,145,.09)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card.green{border-color:#66c291;background:linear-gradient(150deg,#cceedd,#eefaf4)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card.orange{border-color:#dea93b;background:linear-gradient(150deg,#ffe2a0,#fff7df)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card.violet{border-color:#7788dc;background:linear-gradient(150deg,#d3d9f7,#f1f3fd)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card.cyan{border-color:#43b8ca;background:linear-gradient(150deg,#bce8ee,#edfafa)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card-icon{display:grid;place-items:center;width:38px;height:38px;margin-bottom:10px;border-radius:12px;background:rgba(255,255,255,.55);font-size:20px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card-title{display:flex;align-items:flex-start;justify-content:space-between;gap:7px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card-title h4{margin:0;color:#172033;font-size:13px;line-height:1.25}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card-title span{padding:4px 6px;border-radius:999px;background:#b3e3cb;color:#08643f;font-size:7px;font-weight:900;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card>p{min-height:31px;margin:7px 0 11px;color:#52667d;font-size:8px;line-height:1.5}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card dl{display:grid;gap:0;margin:0}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card dl>div{padding:6px 0;border-top:1px solid rgba(80,115,145,.19)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card dt{color:#60738a;font-size:7px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card dd{margin:2px 0 0;color:#24364c;font-size:9px;font-weight:850;overflow-wrap:anywhere}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefit-card>button{margin-top:auto;padding:9px 0 0;border:0;background:transparent;color:#075fc0;font-size:9px;font-weight:900;text-align:left;cursor:pointer}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:13px;padding:15px 17px;border:1px solid #7788dc;border-radius:17px;background:linear-gradient(135deg,#d3d9f7,#eef1fc);box-shadow:0 8px 20px rgba(60,72,150,.10)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:#aeb9ec;color:#3346a6;font-size:20px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central h3{margin:0;color:#172033;font-size:13px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central p{margin:3px 0 0;color:#53657d;font-size:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central>span{padding:5px 8px;border-radius:999px;background:#ffe2a0;color:#8a5000;font-size:8px;font-weight:900}
+.rem-benefits-modal{position:fixed;inset:0;z-index:7600;align-items:center;justify-content:center;padding:20px;background:rgba(10,28,55,.55);backdrop-filter:blur(3px)}
+.rem-benefits-modal-card{width:min(720px,96vw);max-height:88vh;overflow:auto;border:1px solid #9fbdd5;border-radius:20px;background:#f4f8fb;box-shadow:0 28px 70px rgba(9,28,55,.30)}
+.rem-benefits-modal-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:16px 19px;border-bottom:1px solid #b4cde0;background:#dceaf5}
+.rem-benefits-modal-head h3{margin:0;color:#172033;font-size:16px}.rem-benefits-modal-head button{border:0;background:transparent;color:#52667d;font-size:18px;cursor:pointer}
+#rem-benefits-modal-body{padding:18px}.rem-benefits-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rem-benefits-form label{display:flex;flex-direction:column;gap:5px}.rem-benefits-form label.wide{grid-column:1/-1}.rem-benefits-form label span{color:#40566f;font-size:9px;font-weight:900;text-transform:uppercase}.rem-benefits-form input,.rem-benefits-form textarea{width:100%;padding:10px 11px;border:1px solid #9fbdd5;border-radius:10px;background:#fff;color:#172033;font:600 11px Montserrat,sans-serif}.rem-benefits-form-actions{display:flex;justify-content:flex-end;gap:8px}
+.rem-benefits-detail-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rem-benefits-detail-summary article{padding:14px;border:1px solid #67abe5;border-radius:13px;background:#c8e4fb}.rem-benefits-detail-summary small{display:block;color:#52667d;font-size:8px;font-weight:900;text-transform:uppercase}.rem-benefits-detail-summary strong{display:block;margin-top:4px;color:#075aa9;font-size:20px}.rem-benefits-detail-info{margin:12px 0;padding:12px;border:1px solid #b7cfe2;border-radius:12px;background:#e7f0f7}.rem-benefits-detail-info p{margin:5px 0;color:#52667d;font-size:10px}.rem-benefits-people{display:grid;gap:6px}.rem-benefits-people>div{display:flex;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #b7cfe2;border-radius:9px;background:#fff;font-size:10px}.rem-benefits-request-table{overflow:auto}.rem-benefits-request-table table{width:100%;min-width:620px}
+@media(max-width:1300px){body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-grid{grid-template-columns:repeat(3,minmax(190px,1fr))}}
+@media(max-width:900px){body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-head{align-items:flex-start;flex-direction:column}body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-actions{justify-content:flex-start}body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis{grid-template-columns:1fr 1fr}body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-kpis,body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-grid{grid-template-columns:1fr}body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central{grid-template-columns:auto 1fr}body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central>span,body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-benefits-central>button{grid-column:1/-1}.rem-benefits-form{grid-template-columns:1fr}.rem-benefits-form label.wide{grid-column:auto}}
