@@ -1103,3 +1103,27 @@ body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-bands-empty{margin
 .rem-launch-main-fields{display:grid;grid-template-columns:170px 1fr 200px;gap:9px}.rem-launch-main-fields label,.rem-launch-values label,.rem-launch-note{display:grid;gap:4px}.rem-launch-main-fields span,.rem-launch-values span,.rem-launch-note span{font-size:8px;text-transform:uppercase;color:#5a708c;font-weight:900}.rem-launch-main-fields input,.rem-launch-main-fields select,.rem-launch-values input,.rem-launch-note input{box-sizing:border-box;width:100%;min-height:36px;padding:8px 9px;border:1px solid #bdd2e4;border-radius:8px;background:#fafdff;color:#193652}.rem-launch-values{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px}.rem-launch-note{margin-top:10px}.rem-launch-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:11px;padding-top:11px;border-top:1px solid #e0e9f1}
 .rem-launch-table-scroll{max-height:390px;overflow:auto;background:#f8fbfe}.rem-launch-table-scroll table{width:100%;min-width:1420px;border-collapse:collapse}.rem-launch-table-scroll thead{position:sticky;top:0;z-index:2}.rem-launch-table-scroll th,.rem-launch-table-scroll td{padding:10px 9px;border-bottom:1px solid #dce7ef;text-align:left;font-size:9px;white-space:nowrap}.rem-launch-table-scroll th{background:#dce9f3;color:#526a84;text-transform:uppercase;font-size:8px}.rem-launch-table-scroll td:first-child strong,.rem-launch-table-scroll td:first-child small{display:block}.rem-launch-table-scroll td:first-child small{color:#71829a}.rem-launch-status{display:inline-block;padding:5px 7px;border-radius:12px;background:#fff0cf;color:#946000;font-size:8px;font-weight:900}.rem-launch-status.enviado-a-contabilidade{background:#e5ebff;color:#3c59bb}.rem-launch-status.conferido{background:#d9f5e7;color:#087a50}.rem-launch-row-actions{display:flex;gap:5px}.rem-launch-row-actions button{border:1px solid #c7d8e7;background:#fff;border-radius:7px;padding:5px;cursor:pointer}
 @media(max-width:1000px){.rem-launch-summary{grid-template-columns:repeat(2,1fr)}.rem-launch-main-fields{grid-template-columns:1fr 1fr}.rem-launch-main-fields .wide{grid-column:1/-1}.rem-launch-values{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.rem-monthly-launches>header{flex-direction:column}.rem-launch-summary,.rem-launch-main-fields,.rem-launch-values{grid-template-columns:1fr}.rem-launch-main-fields .wide{grid-column:auto}}
+
+/* Essence v43 - cards consistentes e modais sem corte */
+.rem-dist-kpis article:nth-child(1){border-color:#67abe5;background:linear-gradient(135deg,#9dcef8,#c8e4fb)}
+.rem-dist-kpis article:nth-child(2){border-color:#66c291;background:linear-gradient(135deg,#9eddbd,#cceedd)}
+.rem-dist-kpis article:nth-child(3){border-color:#7788dc;background:linear-gradient(135deg,#aeb9ec,#d3d9f7)}
+.rem-dist-kpis article:nth-child(4){border-color:#dea93b;background:linear-gradient(135deg,#f5c65f,#ffe2a0)}
+.rem-budget-modal,.rem-budget-modal *,.rem-settings-modal,.rem-settings-modal *{box-sizing:border-box}
+.rem-budget-modal-card,.rem-settings-modal-card{max-width:100%}
+.rem-budget-modal-body,.rem-settings-modal-body{min-width:0}
+.rem-budget-modal-body>*,.rem-settings-modal-body>*{min-width:0;max-width:100%}
+.rem-budget-form>*,.rem-budget-movement-form>*,.rem-settings-form>*,.rem-settings-mapping>*,.rem-settings-category-add>*,.rem-settings-edit-list>*,.rem-settings-benefits>*{min-width:0}
+.rem-settings-modal{padding:18px;overflow:hidden}
+.rem-settings-modal-card{display:flex;flex-direction:column;width:min(780px,calc(100vw - 48px));max-height:calc(100vh - 36px);overflow:hidden;border-radius:16px}
+.rem-settings-modal-card>header{position:relative;flex:0 0 auto;padding:13px 17px}
+.rem-settings-modal-card>header h3{font-size:20px;line-height:1.15}
+.rem-settings-modal-body{display:flex;flex-direction:column;min-height:0;overflow:auto;padding:15px 17px}
+.rem-settings-form-actions{position:sticky;bottom:-15px;z-index:3;flex:0 0 auto;flex-wrap:wrap;margin:16px -17px -15px;padding:11px 17px;background:#f8fbff;box-shadow:0 -7px 16px #173a5d0a}
+.rem-settings-modal-body .rem-settings-benefits article{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rem-settings-modal-body .rem-settings-category-add,.rem-settings-modal-body .rem-settings-category-add.centers{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rem-settings-modal-body .rem-settings-edit-list article{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rem-settings-modal-body .rem-settings-edit-list article.category{grid-template-columns:minmax(0,1fr) auto 35px}
+.rem-settings-modal-body button,.rem-budget-modal-body button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:820px){.rem-settings-modal{padding:12px}.rem-settings-modal-card{width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.rem-settings-modal-body{padding:13px}.rem-settings-form-actions{bottom:-13px;margin:14px -13px -13px;padding:10px 13px}}
+@media(max-width:620px){.rem-settings-form,.rem-settings-mapping,.rem-settings-modal-body .rem-settings-benefits article,.rem-settings-modal-body .rem-settings-category-add,.rem-settings-modal-body .rem-settings-category-add.centers,.rem-settings-modal-body .rem-settings-edit-list article{grid-template-columns:1fr}.rem-settings-modal-body .rem-settings-edit-list article.category{grid-template-columns:1fr auto}.rem-settings-form-actions .btn{flex:1 1 140px}}
