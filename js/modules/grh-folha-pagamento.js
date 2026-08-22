@@ -320,6 +320,8 @@
     if(currentView==='settings'&&typeof window.remConfigEnsure==='function') window.remConfigEnsure();
     applyCurrentView();
     if(currentView==='payroll'&&!state.rows.length) window.remFolhaLoadSaved(false);
+    if(currentView==='payroll'&&typeof window.remLancamentosEnsure==='function') window.remLancamentosEnsure();
+    if(currentView==='payroll'&&typeof window.remLancamentosLoad==='function') window.remLancamentosLoad(false);
     if(currentView==='benefits'&&typeof window.remBeneficiosLoad==='function') window.remBeneficiosLoad(false);
     if(currentView==='salary-bands'&&typeof window.remFaixasLoad==='function') window.remFaixasLoad(false);
     if(currentView==='budget'&&typeof window.remOrcamentoLoad==='function') window.remOrcamentoLoad(false);
