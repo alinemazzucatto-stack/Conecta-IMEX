@@ -10,7 +10,7 @@
   function norm(v){return String(v||'').toLowerCase();}
   function tipoClass(m){const s=norm(m.motivo); if(s.includes('promo'))return 'promocao'; if(s.includes('substit'))return 'substituicao'; if(s.includes('admiss'))return 'admissao'; if(s.includes('interna')||s.includes('remanej'))return 'interna'; if(s.includes('quadro'))return 'quadro'; return 'substituicao';}
   function tipoResumo(m){const s=norm(m.motivo); if(s.includes('promo'))return 'Promoção'; if(s.includes('substit'))return 'Substituição'; if(s.includes('admiss'))return 'Admissão'; if(s.includes('interna')||s.includes('remanej'))return 'Mov. Interna'; if(s.includes('quadro'))return 'Aumento Quadro'; return 'Outros';}
-  function status(m){return 'Pendente';}
+  function status(m){return m.status||'Pendente';}
   function stats(){return {
     total: movs.length,
     prom: movs.filter(m=>tipoResumo(m)==='Promoção').length,
@@ -29,7 +29,7 @@
       <td>${esc(m.cargoProposto||'-')}</td>
       <td>${esc(m.salarioAtual||'-')}</td>
       <td>${esc(m.salarioProposto||'-')}</td>
-      <td><span class="mov-badge pendente">${status(m)}</span></td>
+      <td><span class="mov-badge ${norm(status(m))}">${status(m)}</span></td>
       <td><div class="mov-actions">
         <button class="mov-action" title="Visualizar" onclick="window.movRealAbrir(${idx},'view')">👁</button>
         <button class="mov-action" title="Editar" onclick="window.movRealAbrir(${idx},'edit')">✏️</button>
@@ -60,8 +60,11 @@
         <div class="mov-card-head">
           <div><h2>🔄 Base de Movimentações</h2><p>Dados reais extraídos da planilha/PDF enviado: mês, motivo, substituição, colaborador, cargos, salários e alteração.</p></div>
           <div class="mov-tools">
-            <button class="btn btn-g" onclick="window.movRealExportExcel()">📊 Exportar Excel</button>
-            <button class="btn btn-g" onclick="window.movRealExportPDF()">📄 Exportar PDF</button>
+            <input type="file" id="movRealImport" accept=".xlsx,.xls" hidden onchange="grhImportarMovimentacoes(this)">
+            <button class="btn btn-g" onclick="grhBaixarModeloMovimentacoes()">⬇️ Modelo</button>
+            <button class="btn btn-g" onclick="document.getElementById('movRealImport').click()">📤 Importar</button>
+            <button class="btn btn-g" onclick="window.movRealExportExcel()">📊 Excel</button>
+            <button class="btn btn-g" onclick="window.movRealExportPDF()">📄 PDF</button>
             <button class="btn btn-p" onclick="window.movRealNova()">+ Nova Movimentação</button>
           </div>
         </div>
@@ -117,16 +120,16 @@
   function dadosHTML(m,readonly){
     const ro=readonly?'readonly':'';
     return `<div class="mov-form">
-      <label>Mês<input value="${esc(m.mes)}" ${ro}></label>
-      <label>Motivo<input value="${esc(m.motivo)}" ${ro}></label>
-      <label>Colaborador<input value="${esc(m.colaborador)}" ${ro}></label>
-      <label>Colaborador a substituir<input value="${esc(m.substituir)}" ${ro}></label>
-      <label>Cargo atual<input value="${esc(m.cargoAtual)}" ${ro}></label>
-      <label>Cargo proposto<input value="${esc(m.cargoProposto)}" ${ro}></label>
-      <label>Salário atual<input value="${esc(m.salarioAtual)}" ${ro}></label>
-      <label>Salário proposto<input value="${esc(m.salarioProposto)}" ${ro}></label>
+      <label>Mês<input data-field="mes" value="${esc(m.mes)}" ${ro}></label>
+      <label>Motivo<input data-field="motivo" value="${esc(m.motivo)}" ${ro}></label>
+      <label>Colaborador<input data-field="colaborador" value="${esc(m.colaborador)}" ${ro}></label>
+      <label>Colaborador a substituir<input data-field="substituir" value="${esc(m.substituir)}" ${ro}></label>
+      <label>Cargo atual<input data-field="cargoAtual" value="${esc(m.cargoAtual)}" ${ro}></label>
+      <label>Cargo proposto<input data-field="cargoProposto" value="${esc(m.cargoProposto)}" ${ro}></label>
+      <label>Salário atual<input data-field="salarioAtual" value="${esc(m.salarioAtual)}" ${ro}></label>
+      <label>Salário proposto<input data-field="salarioProposto" value="${esc(m.salarioProposto)}" ${ro}></label>
       <label>Status<select ${readonly?'disabled':''}><option>Pendente</option><option>Aprovado</option><option>Reprovado</option></select></label>
-      <label class="full">Alteração / Observações<textarea ${readonly?'readonly':''}>${esc(m.alteracao)}</textarea></label>
+      <label class="full">Alteração / Observações<textarea data-field="alteracao" ${readonly?'readonly':''}>${esc(m.alteracao)}</textarea></label>
     </div>`;
   }
   function impactoHTML(m){
@@ -148,15 +151,15 @@
       <div class="mov-body" id="movRealBody">${modo==='hist'?historicoHTML(m):dadosHTML(m,modo==='view')}</div>
       <div class="mov-foot"><button class="mov-btn secondary" data-close>Cancelar</button><button class="mov-btn ok" onclick="window.movRealAprovar(${idx},true)">✅ Aprovar</button><button class="mov-btn danger" onclick="window.movRealReprovar(${idx},true)">❌ Reprovar</button><button class="mov-btn" onclick="window.movRealSalvar()">💾 Salvar</button></div>
     </div>`;
-    modal.classList.add('active');
+    modal.dataset.idx=String(idx); modal.dataset.mode=modo; modal.classList.add('active');
     modal.querySelector('.mov-close').onclick=()=>modal.classList.remove('active');
     modal.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>modal.classList.remove('active'));
     modal.querySelectorAll('.mov-tab').forEach(b=>b.onclick=function(){modal.querySelectorAll('.mov-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const body=document.getElementById('movRealBody');if(b.dataset.tab==='dados')body.innerHTML=dadosHTML(m,modo==='view');if(b.dataset.tab==='impacto')body.innerHTML=impactoHTML(m);if(b.dataset.tab==='historico')body.innerHTML=historicoHTML(m);if(b.dataset.tab==='auditoria')body.innerHTML=`<div class="mov-info-card"><h3>Auditoria</h3><p>Registro importado do arquivo Gestão RH - Movimentações.</p><p>Mês: ${esc(m.mes)} · Motivo: ${esc(m.motivo)}</p></div>`;});
   };
-  window.movRealSalvar=function(){const m=document.getElementById('movRealModal');if(m)m.classList.remove('active');alert('Movimentação salva em modo demonstrativo.');};
-  window.movRealAprovar=function(idx,modal){if(modal)document.getElementById('movRealModal')?.classList.remove('active');alert('Movimentação aprovada.');};
-  window.movRealReprovar=function(idx,modal){if(modal)document.getElementById('movRealModal')?.classList.remove('active');alert('Movimentação reprovada.');};
-  window.movRealNova=function(){window.movRealAbrir(0,'edit');};
+  window.movRealSalvar=function(){const modal=document.getElementById('movRealModal');if(!modal)return;const idx=Number(modal.dataset.idx);const item=movs[idx];if(item&&modal.dataset.mode!=='view'){modal.querySelectorAll('[data-field]').forEach(el=>item[el.dataset.field]=el.value);}modal.classList.remove('active');render();};
+  window.movRealAprovar=function(idx,modal){if(!movs[idx])return;movs[idx].status='Aprovado';if(modal)document.getElementById('movRealModal')?.classList.remove('active');render();};
+  window.movRealReprovar=function(idx,modal){if(!movs[idx])return;movs[idx].status='Reprovado';if(modal)document.getElementById('movRealModal')?.classList.remove('active');render();};
+  window.movRealNova=function(){movs.unshift({mes:new Date().toLocaleDateString('pt-BR',{month:'2-digit',year:'numeric'}),motivo:'Nova movimentação',substituir:'',colaborador:'',cargoAtual:'',cargoProposto:'',salarioAtual:'',salarioProposto:'',alteracao:'',status:'Pendente'});render();window.movRealAbrir(0,'edit');};
   window.movRealExportExcel=function(){if(!window.XLSX){alert('Biblioteca Excel não carregada.');return;} const ws=XLSX.utils.json_to_sheet(movs); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Movimentacoes'); XLSX.writeFile(wb,'movimentacoes_reais_imex.xlsx');};
   window.movRealExportPDF=function(){if(!(window.jspdf&&window.jspdf.jsPDF)){alert('Biblioteca PDF não carregada.');return;} const doc=new window.jspdf.jsPDF(); doc.text('Movimentações Reais - IMEX',14,18); if(doc.autoTable)doc.autoTable({startY:26,head:[['Mês','Motivo','Colaborador','Cargo Atual','Cargo Proposto','Salário Proposto']],body:movs.map(m=>[m.mes,m.motivo,m.colaborador,m.cargoAtual,m.cargoProposto,m.salarioProposto])}); doc.save('movimentacoes_reais_imex.pdf');};
   function aplicar(){const p=pane(); if(!p)return; if(getComputedStyle(p).display!=='none'&&!window.__movRealRendered)render();}
