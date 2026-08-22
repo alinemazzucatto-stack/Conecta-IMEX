@@ -49,6 +49,7 @@
   }
 
   function open(tab){
+    collapsedByUser=false;
     expanded(true);
     var result=typeof baseGrhTab==='function'?baseGrhTab.call(window,tab):false;
     sync(tab);
@@ -132,7 +133,8 @@
     var tab=pane?String(pane.id).replace('grh-pane-',''):null;
     var moduleActive=!!(view&&(view.classList.contains('active')||getComputedStyle(view).display!=='none'));
     if(labels[tab]) current=tab;
-    if(labels[tab]||moduleActive){expanded(true);sync(current);}
+    if(moduleActive){collapsedByUser=false;expanded(true);sync(current);}
+    else{collapsedByUser=true;expanded(false);var parent=document.getElementById('sb-gestao-rh');if(parent)parent.classList.remove('active');}
   }
   function guardSidebar(){
     var sidebar=document.getElementById('sidebar');

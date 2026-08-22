@@ -919,6 +919,8 @@ const ROLE_ACCESS = {
 
   // ── RH: 7 módulos principais ──
   rh: [
+    'inicio-rh',
+    'intranet',
     'gestao-rh',
     'desenvolvimento-talentos',
     'pesquisas',
@@ -936,6 +938,8 @@ const ROLE_ACCESS = {
   ],
 
   'rh-colaborador': [
+    'inicio-rh',
+    'intranet',
     'gestao-rh',
     'desenvolvimento-talentos',
     'pesquisas',
@@ -953,6 +957,7 @@ const ROLE_ACCESS = {
 };
 
 const TAB_META = {
+  'inicio-rh':            {icon:'⌂', label:'Início'},
   // ── COLABORADOR — 8 módulos principais ──
   intranet:              {icon:'🏠', label:'Intranet'},
   'estrutura-carreira':  {icon:'🏢', label:'Estrutura e Carreira'},
@@ -1044,6 +1049,7 @@ function buildSidebar() {
   // Intranet → Descritivo → Conecta AI → Gestor → Gestão RH → Pesquisas → Gestão de Acessos → Ouvidoria
   // Para colaborador/gestor, Férias aparece logo após Intranet. Para RH, Férias fica apenas dentro da Gestão RH.
   const finalOrder = [
+    'inicio-rh',
     'intranet',
     'meu-desenvolvimento',
     'solicitacao',
