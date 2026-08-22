@@ -14,6 +14,16 @@
     return String(btn.textContent||'').replace(/[😡😢😐🙂😄]/g,'').trim()||'Registrado';
   }
 
+  function usuarioEhRH(){
+    if(typeof window.intranetUsuarioEhRH==='function')return window.intranetUsuarioEhRH();
+    var perfil=String((window.currentUserData&&window.currentUserData.role)||sessionStorage.getItem('imexRoleReal')||sessionStorage.getItem('userRole')||'').toLowerCase();
+    return perfil==='rh'||perfil==='rh-colaborador';
+  }
+
+  function podePublicarTipo(tipo){
+    return usuarioEhRH()||tipo==='noticias'||tipo==='reconhecimento';
+  }
+
   window.intranetRegistrarHumor=function(btn){
     if(!btn) return;
     var valor=valorHumor(btn),bar=btn.closest('#tl-mood-bar');
@@ -79,7 +89,9 @@
   }
 
   window.intraAbrirAcao=function(tipo){
-    if(typeof window.tlComposeFocus==='function')window.tlComposeFocus(tipo||'noticias');
+    tipo=tipo||'noticias';
+    if(!podePublicarTipo(tipo))return;
+    if(typeof window.tlComposeFocus==='function')window.tlComposeFocus(tipo);
     else if(typeof window.intraAbrirModal==='function')window.intraAbrirModal();
   };
 
@@ -95,7 +107,7 @@
       }).sort(function(a,b){return a.data-b.data;}).slice(0,3);
       alvo.innerHTML=proximos.length?proximos.map(function(p){
         var ini=String(p.nome).split(/\s+/).filter(Boolean).slice(0,2).map(function(x){return x[0];}).join('').toUpperCase();
-        return '<div class="intra-empty-person"><span>'+esc(ini)+'</span><div><strong>'+esc(p.nome)+'</strong><small>'+esc(p.setor)+(p.setor?' · ':'')+p.data.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+'</small></div><button type="button" onclick="intraAbrirAcao(\'reconhecimento\')">🎁</button></div>';
+        return '<div class="intra-empty-person"><span>'+esc(ini)+'</span><div><strong>'+esc(p.nome)+'</strong><small>'+esc(p.setor)+(p.setor?' · ':'')+p.data.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+'</small></div>'+(usuarioEhRH()?'<button type="button" onclick="intraAbrirAcao(\'reconhecimento\')" title="Criar publicação de aniversário">🎁</button>':'')+'</div>';
       }).join(''):'<div class="intra-empty-muted">Nenhum aniversário cadastrado para os próximos dias.</div>';
     }).catch(function(){alvo.innerHTML='<div class="intra-empty-muted">Aniversários indisponíveis no momento.</div>';});
   }
@@ -104,13 +116,13 @@
     var feed=view.querySelector('#intra-feed');if(!feed||feed.querySelector('.card')||feed.querySelector('.intra-empty-dinamico'))return;
     if(!/nenhuma publica|nenhuma publicação|nenhuma publicaçao/i.test(feed.textContent||''))return;
     var nome=((window.currentUserData&&window.currentUserData.nome)||sessionStorage.getItem('userName')||'Colaborador').split(' ')[0];
+    var acoesInstitucionais=usuarioEhRH()?'<button type="button" onclick="intraAbrirAcao(\'enquetes\')"><span>📊</span><strong>Criar enquete</strong><small>Ouça rapidamente a equipe</small></button><button type="button" onclick="intraAbrirAcao(\'vagas\')"><span>💼</span><strong>Divulgar oportunidade</strong><small>Publique uma vaga interna</small></button>':'';
     feed.innerHTML='<section class="intra-empty-dinamico">'+
       '<div class="intra-empty-banner"><div><small>ESPAÇO DE CONEXÃO</small><h2>Vamos movimentar a Intranet, '+esc(nome)+'?</h2><p>Compartilhe uma novidade, reconheça alguém do time ou abra uma conversa com a empresa.</p></div><button type="button" onclick="intraAbrirAcao(\'noticias\')">＋ Criar publicação</button></div>'+
       '<div class="intra-empty-actions">'+
         '<button type="button" onclick="intraAbrirAcao(\'reconhecimento\')"><span>⭐</span><strong>Reconhecer colega</strong><small>Valorize uma atitude ou conquista</small></button>'+
-        '<button type="button" onclick="intraAbrirAcao(\'enquetes\')"><span>📊</span><strong>Criar enquete</strong><small>Ouça rapidamente a equipe</small></button>'+
-        '<button type="button" onclick="intraAbrirAcao(\'noticias\')"><span>🎉</span><strong>Compartilhar conquista</strong><small>Comemore resultados e novidades</small></button>'+
-        '<button type="button" onclick="intraAbrirAcao(\'vagas\')"><span>💼</span><strong>Divulgar oportunidade</strong><small>Publique uma vaga interna</small></button>'+
+        '<button type="button" onclick="intraAbrirAcao(\'noticias\')"><span>💬</span><strong>Compartilhar com a equipe</strong><small>Publique uma novidade do dia a dia</small></button>'+
+        acoesInstitucionais+
       '</div>'+
       '<div class="intra-empty-bottom">'+
         '<article><div class="intra-empty-title">🎂 Próximos aniversários</div><div id="intra-empty-aniversarios"><div class="intra-empty-muted">Carregando pessoas…</div></div></article>'+
@@ -118,6 +130,35 @@
       '</div>'+
     '</section>';
     preencherAniversariosVazio();
+  }
+
+  function prepararPermissoes(view){
+    var select=document.getElementById('intra-tipo');
+    if(select){
+      Array.prototype.forEach.call(select.options,function(opt){
+        var permitido=podePublicarTipo(opt.value);
+        opt.hidden=!permitido;opt.disabled=!permitido;
+      });
+      if(!podePublicarTipo(select.value))select.value='noticias';
+    }
+    if(view&&!usuarioEhRH())view.querySelectorAll('.tl-aniv-gift').forEach(function(el){el.remove();});
+  }
+
+  function protegerPublicacao(){
+    if(!window.__intraPublicarProtegida&&typeof window.intraPublicar==='function'){
+      var publicarOriginal=window.intraPublicar;
+      window.intraPublicar=function(){
+        var tipo=(document.getElementById('intra-tipo')||{}).value||'noticias';
+        if(!podePublicarTipo(tipo)){alert('Esta publicação é exclusiva do RH.');return Promise.resolve(false);}
+        return publicarOriginal.apply(this,arguments);
+      };
+      window.__intraPublicarProtegida=true;
+    }
+    if(!window.__intraModalProtegido&&typeof window.intraAbrirModal==='function'){
+      var modalOriginal=window.intraAbrirModal;
+      window.intraAbrirModal=function(){var retorno=modalOriginal.apply(this,arguments);setTimeout(function(){prepararPermissoes(document.getElementById('view-intranet'));},0);return retorno;};
+      window.__intraModalProtegido=true;
+    }
   }
 
   function sincronizarTitulo(view){
@@ -128,12 +169,12 @@
   function organizar(){
     var view=document.getElementById('view-intranet');if(!view)return;
     view.classList.add('intra-organizada');
-    prepararCabecalho(view);prepararHumor(view);prepararAcoesRapidas(view);montarEstadoVazio(view);sincronizarTitulo(view);
+    protegerPublicacao();prepararPermissoes(view);prepararCabecalho(view);prepararHumor(view);prepararAcoesRapidas(view);montarEstadoVazio(view);sincronizarTitulo(view);
   }
 
   document.addEventListener('click',function(ev){
     var presente=ev.target.closest&&ev.target.closest('#view-intranet .tl-aniv-gift');
-    if(!presente)return;
+    if(!presente||!usuarioEhRH())return;
     if(typeof window.tlComposeFocus==='function')window.tlComposeFocus('reconhecimento');
   },true);
 
