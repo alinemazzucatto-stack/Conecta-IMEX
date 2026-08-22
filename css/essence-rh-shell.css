@@ -811,3 +811,106 @@ body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board 
   body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head,
   body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head{align-items:flex-start;flex-direction:column}
 }
+/* Essence v34 - aba Folha de Pagamento dentro de Remuneração */
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-inner-tabs{display:flex;align-items:center;gap:4px;margin:0 0 14px;padding:5px;border:1px solid #a9c6dc;border-radius:14px;background:#dceaf5;box-shadow:0 6px 16px rgba(31,75,125,.08)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-inner-tabs button{min-height:38px;padding:8px 16px;border:1px solid transparent;border-radius:10px;background:transparent;color:#53657d;font:800 11px Montserrat,sans-serif;cursor:pointer;transition:.18s}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-inner-tabs button:hover{background:#c8dfee;color:#075aa9}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-inner-tabs button.active{border-color:#168fd4;background:linear-gradient(135deg,#0874ce,#07539d);color:#fff;box-shadow:0 5px 12px rgba(7,95,192,.22)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-overview-view{display:grid;gap:16px;min-width:0}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-view{display:grid;gap:14px;min-width:0}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:19px 21px;border:1px solid #8fb7d4;border-radius:18px;background:linear-gradient(135deg,#b9d8ee,#e6f1f8);box-shadow:0 10px 26px rgba(31,75,125,.11)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-hero small{display:block;margin-bottom:4px;color:#075fc0;font-size:9px;font-weight:900;letter-spacing:.11em}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-hero h2{margin:0;color:#172033;font-size:20px;font-weight:950}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-hero p{max-width:720px;margin:5px 0 0;color:#53657d;font-size:11px;line-height:1.5}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-controls{display:grid;grid-template-columns:minmax(210px,.55fr) minmax(280px,1.45fr);gap:10px;padding:13px;border:1px solid #a9c6dc;border-radius:15px;background:#dceaf5}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-controls label{display:flex;flex-direction:column;gap:5px;min-width:0}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-controls label>span{color:#40566f;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-controls input{height:38px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-file-label{justify-content:center;padding:9px 12px;border:1px solid #a9c6dc;border-radius:10px;background:#edf4f9}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-file-label strong{overflow:hidden;color:#075aa9;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop{display:flex;align-items:center;justify-content:center;gap:15px;min-height:112px;padding:18px;border:2px dashed #6fa6ce;border-radius:17px;background:#d7e9f5;color:#334a62;cursor:pointer;transition:.18s}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop:hover,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop.drag{border-color:#0874ce;background:#c4dff0;transform:translateY(-1px)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop>span{font-size:30px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop strong{display:block;font-size:13px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-drop p{margin:4px 0 0;color:#60738a;font-size:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-message{padding:10px 13px;border:1px solid #9fbdd5;border-radius:11px;background:#dceaf5;color:#334a62;font-size:11px;font-weight:750}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-message.success{border-color:#66c291;background:#cceedd;color:#08643f}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-message.error{border-color:#e68b8b;background:#f9d2d2;color:#9f2424}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis article{display:flex;align-items:center;gap:10px;min-width:0;padding:13px;border:1px solid #67abe5;border-radius:14px;background:linear-gradient(135deg,#9dcef8,#c8e4fb);box-shadow:0 6px 15px rgba(31,91,145,.10)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis article:nth-child(2){border-color:#66c291;background:linear-gradient(135deg,#9eddbd,#cceedd)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis article:nth-child(3){border-color:#dea93b;background:linear-gradient(135deg,#f5c65f,#ffe2a0)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis article:nth-child(4){border-color:#7788dc;background:linear-gradient(135deg,#aeb9ec,#d3d9f7)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis article>span{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.42)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis small{display:block;color:#40566f;font-size:9px;font-weight:900;text-transform:uppercase}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis strong{display:block;margin-top:2px;color:#075aa9;font-size:19px;line-height:1.1}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis p{margin:2px 0 0;color:#60738a;font-size:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-card{overflow:hidden;border:1px solid #9fbdd5;border-radius:18px;background:#eaf2f9;box-shadow:0 10px 26px rgba(31,75,125,.10)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 18px;border-bottom:1px solid #afc9dd;background:linear-gradient(135deg,#d3e4f1,#edf4fa)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-head h3{margin:0;color:#172033;font-size:16px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-head p{margin:3px 0 0;color:#60738a;font-size:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-head>div:last-child{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll{max-height:520px;overflow:auto;scrollbar-gutter:stable;background:#f4f8fb}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll table{min-width:1050px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll thead{position:sticky;top:0;z-index:2}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll td:first-child strong{display:block;color:#172033}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll td:first-child small,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-scroll td:last-child small{display:block;margin-top:3px;color:#64748b;font-size:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-status{display:inline-flex;padding:5px 8px;border:1px solid #66c291;border-radius:999px;background:#cceedd;color:#08643f;font-size:9px;font-weight:900;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-status.warn{border-color:#dea93b;background:#ffe2a0;color:#8a5000}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-status.error{border-color:#e68b8b;background:#f9d2d2;color:#9f2424}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-status.imported{border-color:#7788dc;background:#d3d9f7;color:#3346a6}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao #rem-folha-import:disabled{opacity:.48;cursor:not-allowed;transform:none!important}
+@media(max-width:900px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-hero{align-items:flex-start;flex-direction:column}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-actions{justify-content:flex-start}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-inner-tabs{align-items:stretch;flex-direction:column}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-controls{grid-template-columns:1fr}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-kpis{grid-template-columns:1fr}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-table-head{align-items:flex-start;flex-direction:column}
+}
+/* Essence v34.1 - Folha de Pagamento inspirada no painel de referência */
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-workspace{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:12px;align-items:stretch}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-guide{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:12px;padding:16px;border:1px solid #9fbdd5;border-radius:17px;background:#eaf3f9;box-shadow:0 8px 22px rgba(31,75,125,.09)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-section-title{grid-column:1/-1}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-section-title h3,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side h3{margin:0;color:#172033;font-size:13px;font-weight:900}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-section-title p{margin:3px 0 0;color:#60738a;font-size:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps article{display:flex;gap:9px;padding:13px 11px;border:1px solid #b2ccdf;border-radius:13px;background:#dceaf5}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps article>span{display:grid;place-items:center;flex:0 0 29px;width:29px;height:29px;border-radius:50%;background:#0874ce;color:#fff;font-size:11px;font-weight:900;box-shadow:0 5px 12px rgba(7,95,192,.22)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps strong{display:block;color:#27384d;font-size:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps p{margin:4px 0 0;color:#60738a;font-size:8px;line-height:1.45}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-guide .rem-payroll-drop{min-height:116px;padding:14px;text-align:center}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-guide .rem-payroll-drop>span{font-size:25px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-guide .rem-payroll-drop small{display:block;margin-top:6px;color:#075fc0;font-size:8px;font-weight:850}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side{display:grid;gap:12px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side>section{padding:14px;border:1px solid #9fbdd5;border-radius:17px;background:#dceaf5;box-shadow:0 8px 22px rgba(31,75,125,.08)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side-head span{padding:5px 8px;border-radius:999px;background:#aeb9ec;color:#3346a6;font-size:8px;font-weight:900}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side dl{display:grid;gap:0;margin:0 0 10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side dl>div{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid #b8d0e1}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side dt{color:#60738a;font-size:8px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side dd{margin:0;color:#172033;font-size:9px;font-weight:900;text-align:right}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side .btn{width:100%}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-tips{background:#cceedd!important;border-color:#66c291!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-tips p{margin:9px 0 0;color:#355c4c;font-size:8px;line-height:1.5}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-history .rem-payroll-table-scroll{max-height:360px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-history table{min-width:900px}
+@media(max-width:1200px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-workspace{grid-template-columns:1fr}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side{grid-template-columns:1fr 1fr}
+}
+@media(max-width:840px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-guide{grid-template-columns:1fr}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-section-title{grid-column:auto}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-steps{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .rem-payroll-side{grid-template-columns:1fr}
+}
