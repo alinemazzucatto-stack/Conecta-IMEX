@@ -18,7 +18,7 @@
   }
   function managed(){
     return Promise.resolve(typeof window.grhGetColabs==='function'?window.grhGetColabs(true):[]).then(function(list){
-      return (Array.isArray(list)?list:[]).filter(function(c){return !technical(c);});
+      return (Array.isArray(list)?list:[]).filter(function(c){return c && !technical(c) && (String(c.nome||'').trim() || String(c.email||'').trim());});
     });
   }
 
