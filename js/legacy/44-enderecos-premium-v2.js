@@ -406,6 +406,11 @@
   window.endPremiumExportPDFV2 = exportarPDF;
 
   function aplicar(){
+    const pane = getPane();
+    if(pane && pane.querySelector('#grh-address-summary')){
+      pane.querySelectorAll('.end-premium-stats,#endExportV2').forEach(function(el){el.remove();});
+      return;
+    }
     melhorarTabela();
     adicionarExportacoes();
   }
