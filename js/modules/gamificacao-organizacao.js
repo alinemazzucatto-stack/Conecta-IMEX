@@ -48,8 +48,8 @@
       }
       for(var m=0;m<3;m++){
         var meteoro=document.createElement('i');meteoro.className='gm-cosmo-meteor';
-        meteoro.style.left=(m*21-8)+'%';meteoro.style.top=(12+m*24)+'%';
-        meteoro.style.animationDelay=(m*2.7)+'s';cosmos.appendChild(meteoro);
+        meteoro.style.left=(96+m*17)+'%';meteoro.style.top=(-7+m*18)+'%';
+        meteoro.style.animationDelay=(m*2.8)+'s';meteoro.style.animationDuration=(7.8+m*.7)+'s';cosmos.appendChild(meteoro);
       }
       progresso.insertBefore(cosmos,progresso.firstChild);
     }
