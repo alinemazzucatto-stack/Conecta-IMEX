@@ -39,13 +39,73 @@
     if(carimbo) carimbo.textContent = texto;
   }
 
+  function normalizarRotulo(valor){
+    return String(valor||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+  }
+
+  function destinoDoCard(card){
+    var rotulo = normalizarRotulo(texto(card,'.sc-lbl'));
+    if(!rotulo) return '';
+    if(/ferias/.test(rotulo)) return 'grh:ferias';
+    if(/turnover|desligamento/.test(rotulo)) return 'grh:desligamentos';
+    if(/admiss/.test(rotulo)) return 'grh:admissao';
+    if(/folha|salario|remuneracao|custo medio|custo total|maior salario/.test(rotulo)) return 'grh:remuneracao';
+    if(/pesquisa|resposta|nps|nota media/.test(rotulo)) return 'grh:pesquisas';
+    if(/moviment|promocao|transferencia|mudanca/.test(rotulo)) return 'grh:movimentacoes';
+    if(/colaborador|total ativos|^clt$|^pj|tempo medio|maior setor|aniversariante/.test(rotulo)) return 'grh:colaboradores';
+    var pane = card.closest('.dash-section');
+    if(pane && pane.id==='dash-pane-movimentacoes') return 'grh:movimentacoes';
+    return '';
+  }
+
+  function decorarAtalhos(){
+    view = view || document.getElementById('view-dashboard');
+    if(!view) return;
+    view.querySelectorAll('.sc').forEach(function(card){
+      var destino = destinoDoCard(card);
+      if(!destino) return;
+      card.dataset.dashDestino = destino;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+      card.setAttribute('aria-label','Abrir detalhes de '+texto(card,'.sc-lbl'));
+      card.title = 'Clique para abrir os detalhes';
+    });
+  }
+
+  function abrirCard(card){
+    var destino = card && card.dataset.dashDestino;
+    if(!destino) return;
+    var partes = destino.split(':');
+    if(partes[0]==='grh' && typeof window.grhTab==='function') window.grhTab(partes[1]);
+  }
+
+  function ativarCards(){
+    view = view || document.getElementById('view-dashboard');
+    if(!view || view.__dashCardsAtivos) return;
+    view.__dashCardsAtivos = true;
+    view.addEventListener('click',function(ev){
+      var card = ev.target.closest('.sc[data-dash-destino]');
+      if(!card) return;
+      ev.preventDefault();
+      abrirCard(card);
+    });
+    view.addEventListener('keydown',function(ev){
+      var card = ev.target.closest('.sc[data-dash-destino]');
+      if(!card || (ev.key!=='Enter' && ev.key!==' ')) return;
+      ev.preventDefault();
+      abrirCard(card);
+    });
+    var observer = new MutationObserver(function(){ decorarAtalhos(); });
+    observer.observe(view,{childList:true,subtree:true});
+    decorarAtalhos();
+  }
   window.dashboardRHAtualizar = function(){
     montarCabecalho();
     atualizarCarimbo('Atualizando dados…');
     try{
       if(typeof window.dashRecarregarTudo === 'function') window.dashRecarregarTudo();
     }finally{
-      window.setTimeout(function(){ atualizarCarimbo('Atualizado em '+agora()); }, 850);
+      window.setTimeout(function(){ decorarAtalhos(); atualizarCarimbo('Atualizado em '+agora()); }, 850);
     }
   };
 
@@ -54,6 +114,7 @@
     window.clearTimeout(aberturaTimer);
     aberturaTimer = window.setTimeout(function(){
       montarCabecalho();
+      ativarCards();
       window.dashboardRHAtualizar();
     }, 40);
   }
@@ -153,6 +214,7 @@
 
   function iniciar(){
     montarCabecalho();
+    ativarCards();
     envolverNavegacao('sbNav');
     envolverNavegacao('switchView');
     view = document.getElementById('view-dashboard');
