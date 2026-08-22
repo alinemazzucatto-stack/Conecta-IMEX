@@ -1,0 +1,67 @@
+/* Perfil do colaborador · Meus Dados */
+#view-meus-dados.md-organizado {
+  padding: 18px 20px 34px !important;
+  background: linear-gradient(145deg,#e3eefb 0%,#eff6ff 52%,#e8f1fc 100%);
+  min-width: 0;
+}
+#view-meus-dados.md-organizado > .hero { display:none !important; }
+.md-cabecalho-compacto {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:15px 18px;
+  margin-bottom:14px;
+  border:1px solid #c7dbef;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fff 0%,#e8f4ff 100%);
+  box-shadow:0 8px 22px rgba(31,74,120,.07);
+}
+.md-cabecalho-compacto small { color:#0876ce;font-size:10px;font-weight:850;letter-spacing:.11em; }
+.md-cabecalho-compacto h1 { margin:3px 0 2px;color:#172238;font-size:22px;line-height:1.15; }
+.md-cabecalho-compacto p { margin:0;color:#657890;font-size:12px; }
+.md-cabecalho-compacto button {
+  min-height:36px;padding:8px 13px;border:1px solid #0789cd;border-radius:10px;
+  background:linear-gradient(135deg,#0874d1,#00a6c9);color:#fff;font-size:12px;font-weight:800;cursor:pointer;
+}
+#view-meus-dados.md-organizado #meusdados-body { padding:0 !important; }
+#view-meus-dados.md-organizado .card {
+  overflow:hidden;border:1px solid #d0dfef !important;border-radius:16px !important;
+  background:#fff !important;box-shadow:0 8px 22px rgba(35,72,115,.06) !important;
+}
+#view-meus-dados.md-organizado .md-cartao-perfil {
+  border-color:#a9d2f5 !important;
+  background:linear-gradient(135deg,#cce8ff 0%,#dceeff 55%,#d8e7ff 100%) !important;
+}
+#view-meus-dados.md-organizado .md-cartao-perfil .card-body { padding:18px 20px !important; }
+#view-meus-dados.md-organizado .md-cartao-cadastro .card-head { background:#e8f4ff;border-bottom:1px solid #cfe1f3; }
+#view-meus-dados.md-organizado .md-cartao-edicao .card-head { background:#e5f5ed;border-bottom:1px solid #bde2cf; }
+#view-meus-dados.md-organizado .card-head h2 { color:#172238;font-size:17px; }
+#view-meus-dados.md-organizado .card-head p { color:#6a7f97; }
+#view-meus-dados.md-organizado input:disabled {
+  opacity:1 !important;background:#edf5ff !important;border-color:#d4e3f2 !important;color:#526b86 !important;
+}
+.md-abas {
+  display:flex;gap:4px;overflow-x:auto;margin:0 0 16px;padding:4px;
+  border:1px solid #d4e3f2;border-radius:12px;background:#f2f7fd;scrollbar-width:thin;
+}
+.md-aba {
+  flex:1;min-width:150px;min-height:40px;padding:9px 12px;border:0;border-radius:9px;
+  background:transparent;color:#60758e;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap;
+}
+.md-aba.ativa { background:#fff;color:#0768bd;box-shadow:0 3px 10px rgba(31,84,135,.10); }
+.md-painel { display:none; }
+.md-painel.ativo { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px; }
+.md-painel .field { min-width:0;margin:0 !important; }
+.md-painel input,.md-painel select { width:100%;min-width:0; }
+.md-painel-aviso {
+  grid-column:1/-1;margin:0 0 2px;padding:10px 12px;border-radius:10px;
+  background:#edf5ff;color:#58708a;font-size:11px;
+}
+#view-meus-dados.md-organizado .md-acoes-edicao { display:flex;justify-content:flex-end;gap:8px;margin-top:18px; }
+@media(max-width:760px){
+  #view-meus-dados.md-organizado{padding:12px !important}
+  .md-cabecalho-compacto{align-items:flex-start;flex-direction:column}
+  .md-painel.ativo{grid-template-columns:1fr}
+  .md-aba{flex:0 0 auto}
+}
