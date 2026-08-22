@@ -918,6 +918,20 @@ async function renderDashPesquisas(){
   try{
     var snap = typeof db !== 'undefined' ? await db.collection(col('pesquisas')).get() : {docs:[]};
     var lista = snap.docs ? snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }) : [];
+    // Une as pesquisas do gerenciador administrativo aos registros já persistidos.
+    var pesquisasLocais = [];
+    try{
+      pesquisasLocais = JSON.parse(localStorage.getItem('_grh_pesq_ativas') || '[]')
+        .map(function(p){ return Object.assign({}, p, {status:'ativa'}); })
+        .concat(JSON.parse(localStorage.getItem('_grh_pesq_enc') || '[]')
+          .map(function(p){ return Object.assign({}, p, {status:'encerrada'}); }));
+    }catch(_e){ pesquisasLocais = []; }
+    var pesquisasUnificadas = {};
+    lista.concat(pesquisasLocais).forEach(function(p, idx){
+      var chave = String(p.id || p.titulo || p.nome || ('pesquisa-'+idx)).toLowerCase();
+      pesquisasUnificadas[chave] = Object.assign({}, pesquisasUnificadas[chave] || {}, p);
+    });
+    lista = Object.keys(pesquisasUnificadas).map(function(chave){ return pesquisasUnificadas[chave]; });
     var ativas = lista.filter(function(p){ return p.status!=='encerrada'; }).length;
     var totalRespostas = lista.reduce(function(s,p){ return s+((p.respostas||[]).length); },0);
 
@@ -957,7 +971,6 @@ function dashCarregarTudo(){
   renderDashRemuneracao();
   renderDashMovimentacoes();
   renderDashPesquisas();
-  if(typeof window.renderDash==='function') window.renderDash();
 }
 window.dashRecarregarTudo = function(){ dashJaCarregou=false; dashCarregarTudo(); };
 
