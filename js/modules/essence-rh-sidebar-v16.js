@@ -24,6 +24,42 @@
   var baseGrhTab=window.grhTab;
   var baseSbNav=window.sbNav;
 
+  function viewVisible(id){
+    var view=document.getElementById('view-'+id);
+    return !!(view&&getComputedStyle(view).display!=='none');
+  }
+
+  function createPrimaryItem(id,icon,label){
+    var item=document.createElement('div');
+    item.id='sb-'+id;
+    item.className='sb-item ess-rh-primary-link';
+    item.dataset.menuId=id;
+    item.title=label;
+    item.innerHTML='<span>'+icon+'</span><span class="sb-tip">'+label+'</span>';
+    return item;
+  }
+
+  function ensurePrimaryItems(){
+    var sidebar=document.getElementById('sidebar');
+    var cluster=document.getElementById('ess-grh-side-cluster');
+    if(!sidebar||!cluster) return;
+    var defs=[['inicio-rh','⌂','Início'],['intranet','🏠','Intranet']];
+    defs.forEach(function(def){
+      var item=document.getElementById('sb-'+def[0]);
+      if(!item) item=createPrimaryItem(def[0],def[1],def[2]);
+      item.style.removeProperty('display');
+      item.classList.toggle('active',viewVisible(def[0]));
+      item.onclick=function(ev){
+        if(ev){ev.preventDefault();ev.stopPropagation();}
+        collapsedByUser=true;
+        expanded(false);
+        var parent=document.getElementById('sb-gestao-rh');
+        if(parent) parent.classList.remove('active');
+        return typeof baseSbNav==='function'?baseSbNav.call(window,def[0]):false;
+      };
+      sidebar.insertBefore(item,cluster);
+    });
+  }
   function hideHorizontalTabs(){
     var bar=document.getElementById('grh-tabs');
     if(bar){bar.style.setProperty('display','none','important');bar.setAttribute('aria-hidden','true');}
@@ -92,6 +128,7 @@
       group.innerHTML=items.map(function(item){return '<button type="button" class="ess-grh-side-link" data-grh-tab="'+item[0]+'"><span class="ess-grh-sub-icon">'+item[1]+'</span><span>'+item[2]+'</span></button>';}).join('');
       cluster.appendChild(group);
     }
+    ensurePrimaryItems();
 
     if(!parent.__essGrhBound){
       parent.__essGrhBound=true;
@@ -131,7 +168,8 @@
     var view=document.getElementById('view-gestao-rh');
     var pane=document.querySelector('#view-gestao-rh [id^="grh-pane-"].active');
     var tab=pane?String(pane.id).replace('grh-pane-',''):null;
-    var moduleActive=!!(view&&(view.classList.contains('active')||getComputedStyle(view).display!=='none'));
+    var primaryActive=viewVisible('inicio-rh')||viewVisible('intranet');
+    var moduleActive=!primaryActive&&!!(view&&getComputedStyle(view).display!=='none');
     if(labels[tab]) current=tab;
     if(moduleActive){collapsedByUser=false;expanded(true);sync(current);}
     else{collapsedByUser=true;expanded(false);var parent=document.getElementById('sb-gestao-rh');if(parent)parent.classList.remove('active');}
@@ -146,8 +184,15 @@
       build();
       group=document.getElementById('ess-grh-side-submenu');
     }
+    ensurePrimaryItems();
+    if(viewVisible('inicio-rh')||viewVisible('intranet')){
+      collapsedByUser=true;
+      expanded(false);
+      parent.classList.remove('active');
+      return;
+    }
     var view=document.getElementById('view-gestao-rh');
-    var active=!!(view&&(view.classList.contains('active')||getComputedStyle(view).display!=='none'));
+    var active=!!(view&&getComputedStyle(view).display!=='none');
     if(active&&!collapsedByUser&&group&&!group.classList.contains('open')){expanded(true);sync(current);}
   }
 

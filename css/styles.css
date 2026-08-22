@@ -1740,8 +1740,7 @@ body.role-rh #sb-pesquisas,
   body.role-rh #sb-gamificacao,
   body.role-rh #sb-desenvolvimento-talentos,
   body.role-rh #sb-solicitacao,
-  body.role-rh #sb-estrutura-carreira,
-  body.role-rh #sb-intranet{
+  body.role-rh #sb-estrutura-carreira{
     display:none!important;
   }
 
