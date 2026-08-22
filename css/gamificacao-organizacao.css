@@ -70,12 +70,20 @@
 }
 #view-gamificacao .gm-cosmo-star.small{width:2px;height:2px;opacity:.72}
 #view-gamificacao .gm-cosmo-meteor{
-  position:absolute;width:90px;height:2px;border-radius:999px;
-  background:linear-gradient(90deg,transparent,rgba(186,230,253,.9),#fff);
-  transform:rotate(-24deg);opacity:0;animation:gamMeteor 8s linear infinite
+  position:absolute;z-index:0;width:150px;height:2px;border-radius:999px;
+  background:linear-gradient(90deg,#fff 0%,rgba(186,230,253,.9) 12%,rgba(125,211,252,.35) 50%,transparent 100%);
+  filter:drop-shadow(0 0 5px rgba(186,230,253,.9));
+  transform:rotate(-26deg);transform-origin:left center;
+  opacity:0;animation:gamMeteor 8.5s linear infinite;will-change:transform,opacity
 }
+#view-gamificacao .gm-cosmo-meteor::before{content:'';position:absolute;left:-2px;top:-2px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 18px #7dd3fc}
 @keyframes gamStarPulse{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
-@keyframes gamMeteor{0%,68%{opacity:0;transform:translate(-80px,-40px) rotate(-24deg)}71%{opacity:.9}82%,100%{opacity:0;transform:translate(430px,160px) rotate(-24deg)}}
+@keyframes gamMeteor{
+  0%,66%{opacity:0;transform:translate3d(0,0,0) rotate(-26deg)}
+  69%{opacity:.92}
+  88%{opacity:.72}
+  100%{opacity:0;transform:translate3d(-115vw,62vh,0) rotate(-26deg)}
+}
 
 #view-gamificacao #gm-panel-progresso .gm-greet{
   background:linear-gradient(110deg,rgba(4,38,91,.88),rgba(10,119,180,.72)) !important;
