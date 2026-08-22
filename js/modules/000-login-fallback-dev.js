@@ -173,7 +173,7 @@
       setTimeout(function() {
         try {
           if (typeof window.buildSidebar === 'function') window.buildSidebar();
-          var destino = usuario.perfil === 'rh' ? 'gestao-rh' : (usuario.perfil === 'gestor' ? 'gestor' : 'intranet');
+          var destino = 'intranet';
           if (typeof window.sbNav === 'function') window.sbNav(destino);
         } catch(e) {
           console.error('[LOGIN-FALLBACK] Erro ao navegar:', e);

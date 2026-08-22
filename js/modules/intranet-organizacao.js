@@ -40,7 +40,14 @@
   }
 
   function prepararCabecalho(view){
-    var head=view.querySelector('#intra-social-home > div:first-child');if(!head||head.querySelector('.intra-head-actions'))return;
+    var head=view.querySelector('#intra-social-home > div:first-child');if(!head)return;
+    var dados=head.querySelector(':scope > div:first-child');
+    var hora=new Date().getHours();
+    var saudacao=hora<12?'Bom dia':(hora<18?'Boa tarde':'Boa noite');
+    var nome=((window.currentUserData&&window.currentUserData.nome)||sessionStorage.getItem('userName')||'Colaborador').trim().split(/\s+/)[0];
+    var titulo=dados&&dados.querySelector('h2');
+    if(titulo)titulo.textContent=saudacao+', '+nome+'! 👋';
+    if(head.querySelector('.intra-head-actions'))return;
     var actions=document.createElement('div');actions.className='intra-head-actions';
     actions.innerHTML='<button type="button" class="intra-head-btn" onclick="intraAtualizarFeed()">↻ Atualizar</button><button type="button" class="intra-head-btn intra-head-btn--primary" onclick="if(typeof window.tlComposeFocus===\'function\')window.tlComposeFocus(\'noticias\');else if(typeof window.intraAbrirModal===\'function\')window.intraAbrirModal()">＋ Publicar</button>';
     head.appendChild(actions);
@@ -141,6 +148,24 @@
       view.__intraOrgObserver.observe(view,{childList:true,subtree:true});
     }
   }
+  var paginaInicialAplicada=false,tentativasInicio=0;
+  function abrirIntranetInicial(){
+    if(paginaInicialAplicada)return;
+    tentativasInicio++;
+    var login=document.getElementById('loginScreen');
+    var loginOculto=!login||getComputedStyle(login).display==='none';
+    var autenticado=window.currentUserData||sessionStorage.getItem('userEmail');
+    if(loginOculto&&autenticado){
+      paginaInicialAplicada=true;
+      setTimeout(function(){
+        if(typeof window.sbNav==='function')window.sbNav('intranet');
+        else if(typeof window.switchView==='function')window.switchView('intranet');
+        organizar();
+      },220);
+      return;
+    }
+    if(tentativasInicio<40)setTimeout(abrirIntranetInicial,250);
+  }
   var sbNavAnterior=window.sbNav;
   if(typeof sbNavAnterior==='function'){
     window.sbNav=function(id){
@@ -150,5 +175,6 @@
     };
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar);else iniciar();
+  setTimeout(abrirIntranetInicial,150);
   setTimeout(iniciar,400);setTimeout(iniciar,1200);
 })();
