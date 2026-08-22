@@ -775,3 +775,39 @@ body.essence-rh-ui #view-gestao-rh .rem-beneficios-total,
 body.essence-rh-ui #view-gestao-rh .grh-rmap-card,
 body.essence-rh-ui #view-gestao-rh .rem-faixa,
 body.essence-rh-ui #view-gestao-rh .ap-lista-card{border-color:#9fbdd5!important;background:#dceaf5!important}
+/* Essence v33 - topo de Remuneração organizado e responsivo */
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board{margin:0 0 16px;border:1px solid #9fbdd5;border-radius:18px;background:#dceaf5;box-shadow:0 10px 26px rgba(31,75,125,.12);overflow:hidden}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px 12px;border-bottom:1px solid #b4cde0;background:linear-gradient(135deg,#cfe1ef,#e9f2f8)}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head small,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head small{display:block;margin-bottom:3px;color:#075fc0;font-size:9px;font-weight:900;letter-spacing:.11em}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head h2,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head h2{margin:0;color:#172033;font-size:17px;font-weight:900}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head p{margin:3px 0 0;color:#60738a;font-size:10px}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head>span,
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head>span{padding:6px 10px;border:1px solid #8eb5d2;border-radius:999px;background:#c3dced;color:#075aa9;font-size:9px;font-weight:900;white-space:nowrap}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-legacy{display:grid!important;grid-template-columns:minmax(390px,1.35fr) minmax(315px,1fr) minmax(315px,1fr)!important;gap:10px!important;padding:12px!important;overflow:visible!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-group{padding:10px!important;border-color:#a9c6dc!important;background:#edf4f9!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-files{background:#e5e9f8!important;border-color:#aab5df!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-actions{background:#d8ebdf!important;border-color:#91c5a6!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-group>span{color:#40566f!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board #grh-rem-search{flex:1 1 190px!important;min-width:170px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board #grh-rem-mes{flex:0 0 132px!important;width:132px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .btn{min-height:34px!important;padding:7px 10px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi-grid2{grid-template-columns:repeat(6,minmax(150px,1fr))!important;gap:10px!important;padding:12px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi2{min-height:82px;padding:13px!important;border-width:1px!important;border-radius:14px!important;box-shadow:0 6px 15px rgba(31,75,125,.10)!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi2-valor{font-size:17px!important}
+body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi2-sub{color:#5f7188!important}
+@media(max-width:1350px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-legacy{grid-template-columns:1fr 1fr!important}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-filters{grid-column:1/-1!important}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi-grid2{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:760px){
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-legacy{grid-template-columns:1fr!important}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-board .rem-toolbar-filters{grid-column:auto!important}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-board .rem-kpi-grid2{grid-template-columns:1fr 1fr!important}
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-top-head,
+  body.essence-rh-ui #view-gestao-rh #grh-pane-remuneracao .ess-rem-summary-head{align-items:flex-start;flex-direction:column}
+}
