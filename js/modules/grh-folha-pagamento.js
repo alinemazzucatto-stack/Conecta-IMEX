@@ -100,7 +100,8 @@
     nav.innerHTML='<button type="button" class="active" data-rem-view="overview" onclick="remFolhaSwitch(\'overview\')">📊 Visão Geral</button>'+
       '<button type="button" data-rem-view="payroll" onclick="remFolhaSwitch(\'payroll\')">🧾 Folha de Pagamento</button>'+
       '<button type="button" data-rem-view="benefits" onclick="remFolhaSwitch(\'benefits\')">🎁 Benefícios</button>'+
-      '<button type="button" data-rem-view="salary-bands" onclick="remFolhaSwitch(\'salary-bands\')">📐 Faixas Salariais</button>';
+      '<button type="button" data-rem-view="salary-bands" onclick="remFolhaSwitch(\'salary-bands\')">📐 Faixas Salariais</button>'+
+      '<button type="button" data-rem-view="budget" onclick="remFolhaSwitch(\'budget\')">💼 Orçamento</button>';
     var overview=document.createElement('div');
     overview.id='rem-overview-view';
     overview.className='rem-overview-view';
@@ -120,10 +121,12 @@
     var payroll=w.querySelector('#rem-payroll-view');
     var benefits=w.querySelector('#rem-benefits-view');
     var salaryBands=w.querySelector('#rem-salary-bands-view');
+    var budget=w.querySelector('#rem-budget-view');
     if(overview) overview.style.display=currentView==='overview'?'grid':'none';
     if(payroll) payroll.style.display=currentView==='payroll'?'grid':'none';
     if(benefits) benefits.style.display=currentView==='benefits'?'grid':'none';
     if(salaryBands) salaryBands.style.display=currentView==='salary-bands'?'grid':'none';
+    if(budget) budget.style.display=currentView==='budget'?'grid':'none';
     w.querySelectorAll('.rem-inner-tabs button').forEach(function(btn){
       btn.classList.toggle('active',btn.getAttribute('data-rem-view')===currentView);
     });
@@ -302,14 +305,16 @@
     }
   }
   window.remFolhaSwitch=function(view){
-    currentView=view==='payroll'||view==='benefits'||view==='salary-bands'?view:'overview';
+    currentView=view==='payroll'||view==='benefits'||view==='salary-bands'||view==='budget'?view:'overview';
     ensure();
     if(currentView==='benefits'&&typeof window.remBeneficiosEnsure==='function') window.remBeneficiosEnsure();
     if(currentView==='salary-bands'&&typeof window.remFaixasEnsure==='function') window.remFaixasEnsure();
+    if(currentView==='budget'&&typeof window.remOrcamentoEnsure==='function') window.remOrcamentoEnsure();
     applyCurrentView();
     if(currentView==='payroll'&&!state.rows.length) window.remFolhaLoadSaved(false);
     if(currentView==='benefits'&&typeof window.remBeneficiosLoad==='function') window.remBeneficiosLoad(false);
     if(currentView==='salary-bands'&&typeof window.remFaixasLoad==='function') window.remFaixasLoad(false);
+    if(currentView==='budget'&&typeof window.remOrcamentoLoad==='function') window.remOrcamentoLoad(false);
   };
   window.remFolhaSelecionarArquivo=function(){
     var input=document.getElementById('rem-folha-file'); if(input) input.click();
