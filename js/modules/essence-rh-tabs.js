@@ -106,6 +106,32 @@
       '<section class="ess-provider-section"><div class="ess-provider-title"><div><h2>Outros fornecedores</h2><p>Visão de gerenciamento do pacote corporativo.</p></div><span>5 fornecedores ativos</span></div><div class="ess-provider-grid">'+providers.map(function(p){return '<article class="ess-provider-card"><div class="ess-provider-icon">'+p[0]+'</div><div><h3>'+p[1]+'</h3><p>'+p[2]+'</p></div><span class="ess-provider-status">Ativo</span></article>';}).join('')+'</div></section></div>';
   }
 
+  function ensureAddressPane(pane){
+    if(!pane) return pane;
+    if(!pane.querySelector('.ess-address-board') || !pane.querySelector('#grh-end-body')){
+      pane.innerHTML='<div class="card ess-address-board">'+
+        '<div id="grh-address-summary" class="ess-address-overview"></div>'+
+        '<div class="card-head"><div class="cht"><h2>📍 Endereços dos Colaboradores</h2><p id="grh-end-count">Carregando...</p></div>'+
+        '<div class="ess-address-controls">'+
+        '<input id="grh-end-search" type="text" placeholder="🔍 Buscar colaborador…" oninput="grhRenderEnderecos()">'+
+        '<select id="grh-end-status" onchange="grhRenderEnderecos()"><option value="">Todas as situações</option><option value="Atualizado">Atualizados</option><option value="Pendente">Pendentes</option></select>'+
+        '<select id="grh-end-uf" onchange="grhRenderEnderecos()"><option value="">Todas as UFs</option></select>'+
+        '<input type="file" id="grh-end-file-input" accept=".xlsx,.xls" style="display:none" onchange="grhImportarEnderecos(this)">'+
+        '<button class="btn btn-p" type="button" onclick="document.getElementById(\'grh-end-file-input\').click()">📤 Importar Planilha</button></div></div>'+
+        '<div class="card-body" style="padding:0"><div class="ess-address-table-scroll"><table id="grh-end-table">'+
+        '<thead><tr><th style="padding-left:20px">Colaborador</th><th>CEP</th><th>Logradouro</th><th>Número</th><th>Bairro</th><th>Cidade/UF</th><th style="width:170px">Situação / Ação</th></tr></thead>'+
+        '<tbody id="grh-end-body"><tr><td colspan="7" class="ess-table-message">⏳ Carregando...</td></tr></tbody></table></div></div>'+
+        '<div id="grh-address-pager" class="ess-address-pager"></div></div>';
+    }
+    var board=pane.querySelector('.ess-address-board');
+    if(board){
+      board.style.setProperty('display','block','important');
+      board.style.setProperty('visibility','visible','important');
+      board.style.setProperty('opacity','1','important');
+    }
+    return pane;
+  }
+
   function ensureSpecialPane(tab,pane){
     if(tab==='beneficios' && !pane.querySelector('.ess-benefits-admin')) pane.innerHTML=benefitsAdminHTML();
     if(tab==='documentos' && typeof window.grhDocsPainelHTML==='function' && !pane.querySelector('[data-docs-rh="1"]')) pane.innerHTML=window.grhDocsPainelHTML();
@@ -121,8 +147,10 @@
 
   function paneFor(tab){
     var id='grh-pane-'+tabs[tab].pane;
-    var pane=document.getElementById(id);
-    if(!pane){ pane=document.createElement('div'); pane.id=id; pane.style.display='none'; view().appendChild(pane); }
+    var host=view();
+    var pane=host&&host.querySelector('#'+id);
+    if(!pane&&host){ pane=document.createElement('div'); pane.id=id; pane.style.display='none'; host.appendChild(pane); }
+    if(tab==='enderecos') ensureAddressPane(pane);
     ensureSpecialPane(tab,pane);
     return pane;
   }
@@ -208,6 +236,17 @@
     if(tab==='remuneracao') window.__remPremiumRenderedV3=false;
     if(tab==='movimentacoes') window.__movRealRendered=false;
     cfg.render.forEach(invoke);
+    if(tab==='enderecos'){
+      [80,320,900].forEach(function(delay){
+        setTimeout(function(){
+          if(activeTab!=='enderecos') return;
+          var live=ensureAddressPane(paneFor('enderecos'));
+          if(!live) return;
+          live.style.setProperty('display','block','important');
+          invoke('grhRenderEnderecos');
+        },delay);
+      });
+    }
     if(tab==='ferias') invoke('politicaCarregar');
     if(tab==='beneficios') setTimeout(function(){invoke('grhRenderBeneficiosSaude');},80);
     if(tab==='documentos') setTimeout(function(){invoke('grhDocsCarregar');},60);

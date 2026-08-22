@@ -136,6 +136,12 @@
     }catch(error){tbody.innerHTML='<tr><td colspan="12" class="ess-table-message error">Erro ao carregar colaboradores: '+esc(error.message||error)+'</td></tr>';}
   }
 
+  function activeAddressPane(){
+    var host=document.getElementById('view-gestao-rh');
+    if(!host) return null;
+    return host.querySelector('#grh-pane-enderecos.active') || host.querySelector('#grh-pane-enderecos');
+  }
+
   function addressFields(c){
     c=c||{};
     var a=c.endereco||{};
@@ -156,7 +162,7 @@
   }
 
   function renderAddressSummary(list){
-    var box=document.getElementById('grh-address-summary'); if(!box) return;
+    var pane=activeAddressPane(), box=pane&&pane.querySelector('#grh-address-summary'); if(!box) return;
     var updated=list.filter(addressComplete).length, pending=Math.max(list.length-updated,0);
     var cities=new Set(list.map(function(c){return addressFields(c).city;}).filter(Boolean)).size;
     var values=[['📍','Total',list.length,'colaboradores'],['✅','Atualizados',updated,'cadastros completos'],['⚠️','Pendentes',pending,'precisam de revisão'],['🏙️','Cidades',cities,'localidades registradas']];
@@ -164,7 +170,7 @@
   }
 
   function renderAddressPager(total,start,end){
-    var pager=document.getElementById('grh-address-pager'); if(!pager) return;
+    var pane=activeAddressPane(), pager=pane&&pane.querySelector('#grh-address-pager'); if(!pager) return;
     var pages=Math.max(1,Math.ceil(total/addressPageSize));
     addressPage=Math.min(Math.max(addressPage,1),pages);
     var summaryText=total?(start+1)+'–'+end+' de '+total:'Nenhum resultado';
@@ -180,13 +186,13 @@
   }
   async function renderAddresses(){
     var request=++addressRequest;
-    var tbody=document.getElementById('grh-end-body'); if(!tbody) return;
+    var pane=activeAddressPane(), tbody=pane&&pane.querySelector('#grh-end-body'); if(!tbody) return;
     try{
       var all=await managed(); if(request!==addressRequest) return;
       renderAddressSummary(all);
-      var q=String((document.getElementById('grh-end-search')||{}).value||'').toLowerCase();
-      var statusFilter=String((document.getElementById('grh-end-status')||{}).value||'');
-      var ufSelect=document.getElementById('grh-end-uf'), ufFilter=String((ufSelect||{}).value||'');
+      var q=String(((pane.querySelector('#grh-end-search'))||{}).value||'').toLowerCase();
+      var statusFilter=String(((pane.querySelector('#grh-end-status'))||{}).value||'');
+      var ufSelect=pane.querySelector('#grh-end-uf'), ufFilter=String((ufSelect||{}).value||'');
       if(ufSelect){
         var selectedUf=ufSelect.value, ufs=Array.from(new Set(all.map(function(c){return addressFields(c).uf;}).filter(Boolean))).sort();
         var ufHTML='<option value="">Todas as UFs</option>'+ufs.map(function(uf){return '<option value="'+esc(uf)+'">'+esc(uf)+'</option>';}).join('');
@@ -208,7 +214,7 @@
       var pages=Math.max(1,Math.ceil(data.length/addressPageSize));
       addressPage=Math.min(Math.max(addressPage,1),pages);
       var start=(addressPage-1)*addressPageSize, end=Math.min(start+addressPageSize,data.length), pageData=data.slice(start,end);
-      var count=document.getElementById('grh-end-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores encontrados';
+      var count=pane.querySelector('#grh-end-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores encontrados';
       var html=pageData.length?pageData.map(function(c){
         var a=addressFields(c), complete=addressComplete(c);
         return '<tr><td class="ess-address-person"><strong>'+esc(c.nome||'—')+'</strong><small>'+esc(c.email||'')+'</small></td><td>'+esc(a.cep||'Não informado')+'</td><td>'+esc(a.street||'Não informado')+'</td><td>'+esc(a.number||'—')+(a.comp?' ('+esc(a.comp)+')':'')+'</td><td>'+esc(a.district||'Não informado')+'</td><td>'+esc(a.city||'Não informado')+(a.uf?' / '+esc(a.uf):'')+'</td><td><span class="ess-status '+(complete?'ok':'warn')+'">'+(complete?'Atualizado':'Pendente')+'</span><button class="ess-address-edit" type="button" onclick="grhAbrirModalEndereco(\''+js(c._id||c.id||'')+'\')">📍 Editar</button></td></tr>';
