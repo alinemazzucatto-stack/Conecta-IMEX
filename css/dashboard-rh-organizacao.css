@@ -1,7 +1,7 @@
 /* Dashboard RH — organização visual compacta */
 #view-dashboard.dash-rh-organizado {
   padding: 18px 20px 32px !important;
-  background: #f3f7fd;
+  background: linear-gradient(145deg, #e2eefb 0%, #edf5ff 48%, #e8f0fb 100%);
   min-width: 0;
 }
 
@@ -107,17 +107,17 @@
   padding: 15px 58px 13px 16px !important;
   border: 1px solid #b9d8f5 !important;
   border-radius: 14px !important;
-  background: #dceeff !important;
+  background: #c9e5ff !important;
   color: #123f71 !important;
   box-shadow: none !important;
   text-align: left !important;
 }
 #view-dashboard.dash-rh-organizado .sc:nth-child(4n+2),
-#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+2) { background: #dff4ea !important; border-color: #a9dfc4 !important; }
+#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+2) { background: #ccefdc !important; border-color: #83d1aa !important; }
 #view-dashboard.dash-rh-organizado .sc:nth-child(4n+3),
-#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+3) { background: #e6e8ff !important; border-color: #bfc5ff !important; }
+#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+3) { background: #d6d9ff !important; border-color: #9da7f7 !important; }
 #view-dashboard.dash-rh-organizado .sc:nth-child(4n+4),
-#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+4) { background: #fff0cf !important; border-color: #f2ca73 !important; }
+#view-dashboard.dash-rh-organizado .sc-solida:nth-child(4n+4) { background: #ffe5ad !important; border-color: #edae37 !important; }
 #view-dashboard.dash-rh-organizado .sc:hover,
 #view-dashboard.dash-rh-organizado .sc-solida:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 18px rgba(35, 77, 122, .10) !important; }
 #view-dashboard.dash-rh-organizado .sc-lbl { color: #46617f !important; white-space: normal !important; }
@@ -142,4 +142,31 @@
   #view-dashboard.dash-rh-organizado .stats-row,
   #view-dashboard.dash-rh-organizado .kpis-grid,
   #view-dashboard.dash-rh-organizado .cg { grid-template-columns: 1fr !important; }
+}
+
+#view-dashboard.dash-rh-organizado .dash-section.active {
+  padding: 14px !important;
+  border: 1px solid #c8dced;
+  border-radius: 16px;
+  background: rgba(255,255,255,.52);
+  box-shadow: 0 8px 24px rgba(38,75,118,.05);
+}
+#view-dashboard.dash-rh-organizado .sc[data-dash-destino] {
+  cursor: pointer !important;
+  position: relative;
+  outline: none;
+}
+#view-dashboard.dash-rh-organizado .sc[data-dash-destino]::before {
+  content: 'Abrir ›';
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  color: #075da8;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .02em;
+  opacity: .72;
+}
+#view-dashboard.dash-rh-organizado .sc[data-dash-destino]:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0,123,218,.24) !important;
 }
