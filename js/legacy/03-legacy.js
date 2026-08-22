@@ -74,6 +74,13 @@ function intraFecharModal() {
 }
 
 async function intraPublicar() {
+  const tipoSolicitado = document.getElementById('intra-tipo')?.value || 'noticias';
+  const perfilPublicador = String((window.currentUserData && window.currentUserData.role) || sessionStorage.getItem('imexRoleReal') || sessionStorage.getItem('userRole') || '').toLowerCase();
+  const publicadorEhRH = perfilPublicador === 'rh' || perfilPublicador === 'rh-colaborador';
+  if (!publicadorEhRH && tipoSolicitado !== 'noticias' && tipoSolicitado !== 'reconhecimento') {
+    alert('Esta publicação é exclusiva do RH.');
+    return;
+  }
   const titulo = document.getElementById('intra-titulo').value.trim();
   if (!titulo) { alert('Informe o título.'); return; }
   const btn = document.getElementById('intra-btn-publicar-modal');

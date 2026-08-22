@@ -255,6 +255,20 @@
     { tipo: "enquetes", ico: "📊", label: "Enquete" }
   ];
 
+  function usuarioEhRH() {
+    const perfil = String(
+      (window.currentUserData && window.currentUserData.role) ||
+      sessionStorage.getItem("imexRoleReal") ||
+      sessionStorage.getItem("userRole") || ""
+    ).toLowerCase();
+    return perfil === "rh" || perfil === "rh-colaborador";
+  }
+
+  function podePublicarTipo(tipo) {
+    return usuarioEhRH() || tipo === "noticias" || tipo === "reconhecimento";
+  }
+  window.intranetUsuarioEhRH = usuarioEhRH;
+
   function getInitials() {
     const label = document.getElementById("pLabel");
     const nome = label && label.textContent ? label.textContent.trim() : "Colaborador";
@@ -285,6 +299,8 @@
 
   function abrirPublicacao(tipo) {
     closeDropdown();
+    tipo = tipo || "noticias";
+    if (!podePublicarTipo(tipo)) return;
 
     const tipoField = document.getElementById("intra-tipo");
     if (tipoField) {
@@ -325,7 +341,7 @@
 
     injectStyles();
 
-    const dropdownItems = tiposPublicacao.map(item => `
+    const dropdownItems = tiposPublicacao.filter(item => podePublicarTipo(item.tipo)).map(item => `
       <div class="tl-pub-item" onclick="tlComposeFocus('${item.tipo}')">
         <span>${item.ico}</span>
         <span>${item.label}</span>
@@ -660,7 +676,7 @@
           : "background:" + avatarColor(p.nome || "C");
         return '<div class="tl-aniv-item"><div class="tl-aniv-av" style="' + avStyle + '">' + (p.foto ? "" : initialsFromName(p.nome)) + "</div>" +
           '<div><div class="tl-aniv-name">' + nomeShort + '</div><div class="tl-aniv-when">' + (p.setor || "") + " · " + dataFmt + "</div></div>" +
-          '<div class="tl-aniv-gift" title="Parabenizar">🎁</div></div>';
+          (usuarioEhRH() ? '<div class="tl-aniv-gift" title="Criar publicação de aniversário">🎁</div>' : '') + '</div>';
       }).join("");
       setTimeout(() => {
         const gifts = document.querySelectorAll(".tl-aniv-gift");
