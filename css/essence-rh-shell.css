@@ -624,3 +624,154 @@ body.essence-rh-ui #view-gestao-rh .ess-address-page-nav button{
   border-color:#9dbbd2!important;
   background:#eef5fa!important;
 }
+/* Essence v31 - contraste unificado em todos os módulos de Gestão de RH */
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"]{
+  --rh-surface:#eaf2f9;
+  --rh-surface-soft:#f1f6fa;
+  --rh-surface-head:#dbe9f5;
+  --rh-border:#afcbe2;
+  --rh-border-strong:#9fbdd5;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"]>.card,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"]>.ess-rh-board,
+body.essence-rh-ui #view-gestao-rh .ess-colab-summary-board,
+body.essence-rh-ui #view-gestao-rh .ess-colab-list-board,
+body.essence-rh-ui #view-gestao-rh .ess-colab-sector-board,
+body.essence-rh-ui #view-gestao-rh .ess-rem-control-board,
+body.essence-rh-ui #view-gestao-rh .rem-card,
+body.essence-rh-ui #view-gestao-rh .rem-compare-card,
+body.essence-rh-ui #view-gestao-rh .grh-bplan-card,
+body.essence-rh-ui #view-gestao-rh .ess-provider-section,
+body.essence-rh-ui #view-gestao-rh .ap-lista-card{
+  border-color:var(--rh-border,#afcbe2)!important;
+  background:var(--rh-surface,#eaf2f9)!important;
+  box-shadow:0 12px 30px rgba(31,75,125,.12)!important;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"]>.card>.card-head,
+body.essence-rh-ui #view-gestao-rh .ess-rh-board>.card-head,
+body.essence-rh-ui #view-gestao-rh .rem-card>.rem-card-head,
+body.essence-rh-ui #view-gestao-rh .ess-rh-admin-head,
+body.essence-rh-ui #view-gestao-rh .grh-bplan-head,
+body.essence-rh-ui #view-gestao-rh .ess-provider-title{
+  border-color:#b9d1e4!important;
+  background:linear-gradient(135deg,#dbe9f5 0%,#edf4fa 100%)!important;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .card-body,
+body.essence-rh-ui #view-gestao-rh .rem-card-body,
+body.essence-rh-ui #view-gestao-rh .grh-bplan-body{background:#f4f8fb}
+
+/* Campos, filtros e ações deixam de se perder no fundo branco. */
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] input:not([type="file"]):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] select,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] textarea{
+  border-color:var(--rh-border-strong,#9fbdd5)!important;
+  background:#f1f6fa!important;
+  box-shadow:0 2px 6px rgba(31,75,125,.06);
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] input:not([type="file"]):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):focus,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] select:focus,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] textarea:focus{
+  border-color:#2583e8!important;
+  background:#fff!important;
+  outline:3px solid rgba(37,131,232,.13);
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .btn.btn-p{
+  border:1px solid #18b7d2!important;
+  background:linear-gradient(135deg,#075fc0 0%,#064b91 100%)!important;
+  color:#fff!important;
+  box-shadow:0 7px 16px rgba(7,95,192,.22)!important;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .btn.btn-p:hover{
+  background:linear-gradient(135deg,#064fa2 0%,#043c78 100%)!important;
+  transform:translateY(-1px);
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .btn.btn-g,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ess-icon-action,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .fr-pill,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-pill,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-toptab{
+  border-color:#86afd0!important;
+  background:#d5e7f6!important;
+  color:#075aa9!important;
+  box-shadow:0 2px 6px rgba(31,75,125,.08);
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .btn.btn-g:hover,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ess-icon-action:hover,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .fr-pill:hover,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-pill:hover,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-toptab:hover{
+  border-color:#2583e8!important;
+  background:#bddbf1!important;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .fr-pill.active,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-pill.active,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ap-toptab.active{
+  border-color:#18b7d2!important;
+  background:#075fc0!important;
+  color:#fff!important;
+}
+
+/* Tabelas com cabeçalho e leitura por faixas. */
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] table thead th{
+  background:#cbdfee!important;
+  color:#334a62!important;
+  box-shadow:0 1px 0 #a9c5da!important;
+}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] table tbody tr:nth-child(odd) td{background:#f7fafc}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] table tbody tr:nth-child(even) td{background:#eaf2f8}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] table tbody tr:hover td{background:#d8e8f5!important}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .table-scroll,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .ess-table-scroll{background:#f4f8fb}
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .empty,
+body.essence-rh-ui #view-gestao-rh [id^="grh-pane-"] .import-zone{
+  border-color:#9fbdd5!important;
+  background:#dceaf5!important;
+}
+
+/* Colaboradores segue exatamente a intensidade aprovada em Endereços. */
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1){border-color:#67abe5!important;background:linear-gradient(135deg,#9dcef8,#c8e4fb)!important}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2){border-color:#66c291!important;background:linear-gradient(135deg,#9eddbd,#cceedd)!important}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3){border-color:#7788dc!important;background:linear-gradient(135deg,#aeb9ec,#d3d9f7)!important}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4){border-color:#dea93b!important;background:linear-gradient(135deg,#f5c65f,#ffe2a0)!important}
+body.essence-rh-ui #view-gestao-rh .ess-colab-filters{padding:9px;border:1px solid #b7cfe2;border-radius:12px;background:#dceaf5}
+body.essence-rh-ui #view-gestao-rh .ess-colab-pager{border-top-color:#afc9dd!important;background:#dceaf5!important}
+body.essence-rh-ui #view-gestao-rh .ess-colab-page-size select,
+body.essence-rh-ui #view-gestao-rh .ess-colab-page-nav button{border-color:#9dbbd2!important;background:#eef5fa!important}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat:nth-child(4n+1){border-color:#67abe5!important;background:#c8e4fb!important}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat:nth-child(4n+2){border-color:#66c291!important;background:#cceedd!important}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat:nth-child(4n+3){border-color:#dea93b!important;background:#ffe2a0!important}
+body.essence-rh-ui #view-gestao-rh .ess-sector-stat:nth-child(4n+4){border-color:#7788dc!important;background:#d3d9f7!important}
+
+/* Indicadores e quadros recorrentes em Remuneração, Movimentações e módulos administrativos. */
+body.essence-rh-ui #view-gestao-rh .rem-kpi2:not(.rem-kpi2-solida),
+body.essence-rh-ui #view-gestao-rh .grh-patch-kpi,
+body.essence-rh-ui #view-gestao-rh .grh-bplan-kpi,
+body.essence-rh-ui #view-gestao-rh .ess-provider-card,
+body.essence-rh-ui #view-gestao-rh .ess-permission-guide article,
+body.essence-rh-ui #view-gestao-rh .mov-final-kpis>*{
+  border-color:#67abe5!important;
+  background:#c8e4fb!important;
+  box-shadow:0 6px 15px rgba(31,91,145,.10)!important;
+}
+body.essence-rh-ui #view-gestao-rh .rem-kpi2:nth-child(4n+2):not(.rem-kpi2-solida),
+body.essence-rh-ui #view-gestao-rh .grh-patch-kpi:nth-child(4n+2),
+body.essence-rh-ui #view-gestao-rh .grh-bplan-kpi:nth-child(4n+2),
+body.essence-rh-ui #view-gestao-rh .ess-provider-card:nth-child(4n+2),
+body.essence-rh-ui #view-gestao-rh .ess-permission-guide article:nth-child(4n+2),
+body.essence-rh-ui #view-gestao-rh .mov-final-kpis>*:nth-child(4n+2){border-color:#66c291!important;background:#cceedd!important}
+body.essence-rh-ui #view-gestao-rh .rem-kpi2:nth-child(4n+3):not(.rem-kpi2-solida),
+body.essence-rh-ui #view-gestao-rh .grh-patch-kpi:nth-child(4n+3),
+body.essence-rh-ui #view-gestao-rh .grh-bplan-kpi:nth-child(4n+3),
+body.essence-rh-ui #view-gestao-rh .ess-provider-card:nth-child(4n+3),
+body.essence-rh-ui #view-gestao-rh .ess-permission-guide article:nth-child(4n+3),
+body.essence-rh-ui #view-gestao-rh .mov-final-kpis>*:nth-child(4n+3){border-color:#dea93b!important;background:#ffe2a0!important}
+body.essence-rh-ui #view-gestao-rh .rem-kpi2:nth-child(4n+4):not(.rem-kpi2-solida),
+body.essence-rh-ui #view-gestao-rh .grh-patch-kpi:nth-child(4n+4),
+body.essence-rh-ui #view-gestao-rh .grh-bplan-kpi:nth-child(4n+4),
+body.essence-rh-ui #view-gestao-rh .ess-provider-card:nth-child(4n+4),
+body.essence-rh-ui #view-gestao-rh .ess-permission-guide article:nth-child(4n+4),
+body.essence-rh-ui #view-gestao-rh .mov-final-kpis>*:nth-child(4n+4){border-color:#7788dc!important;background:#d3d9f7!important}
+body.essence-rh-ui #view-gestao-rh .rem-beneficios-total,
+body.essence-rh-ui #view-gestao-rh .grh-rmap-card,
+body.essence-rh-ui #view-gestao-rh .rem-faixa,
+body.essence-rh-ui #view-gestao-rh .ap-lista-card{border-color:#9fbdd5!important;background:#dceaf5!important}
