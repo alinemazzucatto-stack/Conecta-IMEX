@@ -238,3 +238,54 @@
   #view-gamificacao .gm-greet{padding:18px}
   #view-gamificacao .gm-stat-tiles,#view-gamificacao .gm-two-col,#view-gamificacao .gm-prog-loja-grid{grid-template-columns:1fr !important}
 }
+
+/* Contraste e cores dos quadros internos */
+#view-gamificacao #gm-panel-progresso .gm-prog-loja-nome{color:#17345f !important}
+#view-gamificacao #gm-panel-progresso .gm-prog-loja-custo{color:#5d48c7 !important}
+#view-gamificacao #gm-panel-progresso .gm-prog-loja-ok{color:#087c55 !important}
+#view-gamificacao #gm-panel-progresso .gm-prog-bar-wrap{background:rgba(75,112,160,.16) !important}
+
+#view-gamificacao #gm-panel-missoes .gm-miss-item:nth-child(4n+1){background:#e3f1ff !important;border-color:#a8cff4 !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-item:nth-child(4n+2){background:#e5f8ef !important;border-color:#a9dfc5 !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-item:nth-child(4n+3){background:#eeebff !important;border-color:#c8c0f5 !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-item:nth-child(4n){background:#fff1d7 !important;border-color:#f1cf8b !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-nome{color:#14223b !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-desc{color:#64748b !important}
+#view-gamificacao #gm-panel-missoes .gm-miss-meta{color:#52647e !important}
+
+#view-gamificacao #gm-panel-conquistas .gm-conq-title{color:#172033 !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-sub{color:#677892 !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-filtro{color:#52647e !important;background:#fff !important;border-color:#d5e1ef !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-filtro.on{color:#fff !important;background:linear-gradient(135deg,#654fd4,#8b6ee8) !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge:nth-child(4n+1){background:#e3f2ff !important;border-color:#94c5ef !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge:nth-child(4n+2){background:#e3f8ed !important;border-color:#9bdab9 !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge:nth-child(4n+3){background:#fff0ce !important;border-color:#efc76d !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge:nth-child(4n){background:#ede9ff !important;border-color:#bfb5f3 !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge-name{color:#263650 !important}
+#view-gamificacao #gm-panel-conquistas .gm-badge.locked{opacity:.68 !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-detail{background:#e6f1ff !important;border-color:#a8cdf2 !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-nome{color:#172033 !important}
+#view-gamificacao #gm-panel-conquistas .gm-conq-desc{color:#64748b !important}
+
+#view-gamificacao #gm-panel-streak .gm-streak-main{background:linear-gradient(145deg,#fff0cc,#ffe1a2) !important;border-color:#efc467 !important}
+#view-gamificacao #gm-panel-streak .gm-streak-side .gm-mini-card:first-child{background:#e2f2ff !important;border-color:#9fcaf0 !important}
+#view-gamificacao #gm-panel-streak .gm-streak-side .gm-mini-card:last-child{background:#e6f8ef !important;border-color:#9fd9bb !important}
+#view-gamificacao #gm-panel-streak .gm-streak-dias{color:#b96008 !important}
+#view-gamificacao #gm-panel-streak .gm-streak-recorde,
+#view-gamificacao #gm-panel-streak .gm-streak-week-lbl,
+#view-gamificacao #gm-panel-streak .gm-streak-dow,
+#view-gamificacao #gm-panel-streak .gm-streak-legend{color:#6f5c43 !important}
+
+#view-gamificacao #gm-panel-carteira .gm-carteira-layout .gm-mini-card:first-child{background:#e2f1ff !important;border-color:#9fc9ef !important}
+#view-gamificacao #gm-panel-carteira .gm-carteira-layout .gm-mini-card:last-child{background:#ece8ff !important;border-color:#bdb3ef !important}
+#view-gamificacao #gm-panel-carteira .gm-mini-lbl{color:#435570 !important}
+#view-gamificacao #gm-panel-carteira .gm-empty{color:#64748b !important}
+
+#view-gamificacao #gm-panel-loja .lj-card:nth-child(4n+1){background:#dfeeff !important;border-color:#a8caf0 !important}
+#view-gamificacao #gm-panel-loja .lj-card:nth-child(4n+2){background:#e2f7ed !important;border-color:#a4d9bd !important}
+#view-gamificacao #gm-panel-loja .lj-card:nth-child(4n+3){background:#fff0c9 !important;border-color:#edca74 !important}
+#view-gamificacao #gm-panel-loja .lj-card:nth-child(4n){background:#eee9ff !important;border-color:#c2b7ef !important}
+#view-gamificacao #gm-panel-loja .lj-card-body{background:transparent !important}
+#view-gamificacao #gm-panel-loja .lj-card-name{color:#14223b !important}
+#view-gamificacao #gm-panel-loja .lj-card-desc{color:#64748b !important}
+#view-gamificacao #gm-panel-loja .lj-cost{color:#3f35b5 !important}
