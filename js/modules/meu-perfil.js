@@ -26,10 +26,19 @@ function getEmail(){
   }catch(e){ return ''; }
 }
 
+function perfilAtualEhRH(){
+  var papel = String(window.currentUserRole || window._roleReal || window.role || sessionStorage.getItem('userRole') || '').toLowerCase();
+  return papel === 'rh' || papel === 'rh-colaborador' || document.body.classList.contains('role-rh');
+}
+
 function ensureSidebarIcon(){
   var sidebar = document.getElementById('sidebar');
   if(!sidebar) return;
   var item = document.getElementById('sb-meus-dados');
+  if(perfilAtualEhRH()){
+    if(item) item.style.setProperty('display','none','important');
+    return;
+  }
   if(!item){
     var spacer = sidebar.querySelector('.sb-spacer');
     item = document.createElement('div');

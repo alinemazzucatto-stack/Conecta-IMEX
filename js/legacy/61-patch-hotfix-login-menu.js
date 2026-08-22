@@ -10,8 +10,8 @@
     beneficios:['🎁','Meus Benefícios'],
     solicitacao:['🌴','Férias'],
     pesquisas:['📋','Pesquisas'],
-    ouvidoria:['📢','Ouvidoria'],
-    'conecta-ai':['🤖','Conecta AI'],
+    ouvidoria:['📢','Ouvidoria RH'],
+    'conecta-ai':['🤖','Conecta AI RH'],
     mais:['📦','Mais'],
     gestor:['👔','Gestor'],
     'gestao-rh':['🏢','Gestão RH'],
@@ -181,6 +181,8 @@
 
   window.sbNav = navigate;
   window.switchView = navigate;
+  // Rota estável exposta para os organizadores visuais carregados depois.
+  window.imexBaseNavigate = navigate;
   window.buildSidebar = renderMenu;
   window.renderSidebar = renderMenu;
   window.atualizarSidebar = renderMenu;

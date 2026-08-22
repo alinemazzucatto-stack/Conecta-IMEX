@@ -55,7 +55,12 @@
         expanded(false);
         var parent=document.getElementById('sb-gestao-rh');
         if(parent) parent.classList.remove('active');
-        return typeof baseSbNav==='function'?baseSbNav.call(window,def[0]):false;
+        var stableNav=window.imexBaseNavigate||baseSbNav;
+        var result=typeof stableNav==='function'?stableNav.call(window,def[0]):false;
+        if(def[0]==='intranet')setTimeout(function(){
+          if(typeof window.intraCarregar==='function')window.intraCarregar();
+        },60);
+        return result;
       };
       sidebar.insertBefore(item,cluster);
     });
