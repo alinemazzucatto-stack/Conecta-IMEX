@@ -38,6 +38,21 @@
     });
     var saudacao=view.querySelector('.gm-greet h2');
     if(saudacao)saudacao.textContent=saudacao.textContent.replace(/^Ola,?/,'Olá,');
+    var progresso=view.querySelector('#gm-panel-progresso');
+    if(progresso&&!progresso.querySelector('.gm-progresso-cosmos')){
+      var cosmos=document.createElement('div');cosmos.className='gm-progresso-cosmos';
+      for(var i=0;i<34;i++){
+        var estrela=document.createElement('i');estrela.className='gm-cosmo-star'+(i%3?' small':'');
+        estrela.style.left=((i*37)%97)+'%';estrela.style.top=((i*53)%91)+'%';
+        estrela.style.animationDelay=((i%9)*.31)+'s';cosmos.appendChild(estrela);
+      }
+      for(var m=0;m<3;m++){
+        var meteoro=document.createElement('i');meteoro.className='gm-cosmo-meteor';
+        meteoro.style.left=(m*21-8)+'%';meteoro.style.top=(12+m*24)+'%';
+        meteoro.style.animationDelay=(m*2.7)+'s';cosmos.appendChild(meteoro);
+      }
+      progresso.insertBefore(cosmos,progresso.firstChild);
+    }
 
     var cards=view.querySelectorAll('.gm-stile');
     ligarAtalho(cards[0],'carteira','Abrir carteira de pontos');
