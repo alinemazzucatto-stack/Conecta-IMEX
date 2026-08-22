@@ -16,6 +16,14 @@
     var name=String(c.nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
     return /@teste-temporario\.com$/i.test(mail)||/^diagnostico(?:\s|[._-]|$)/i.test(name);
   }
+  function contractType(c){
+    c=c||{};
+    var raw=String(c.tipoContrato||c.contrato||c.clt||'').trim();
+    if(/estag/i.test(raw)) return 'Estagiário';
+    if(/^(clt|sim|true)$/i.test(raw)) return 'CLT';
+    if(/^(pj|não|nao|false)$/i.test(raw)) return 'PJ';
+    return raw||'—';
+  }
   function managed(){
     return Promise.resolve(typeof window.grhGetColabs==='function'?window.grhGetColabs(true):[]).then(function(list){
       return (Array.isArray(list)?list:[]).filter(function(c){return c && !technical(c) && (String(c.nome||'').trim() || String(c.email||'').trim());});
@@ -61,7 +69,7 @@
       '<div class="ess-colab-filters"><input id="grh-search" placeholder="Buscar por nome, e-mail, função ou setor" oninput="grhRenderColabs()">'+
       '<select id="grh-filter-setor" onchange="grhRenderColabs()"><option value="">Todos os setores</option></select>'+
       '<select id="grh-filter-status" onchange="grhRenderColabs()"><option value="Ativo" selected>Ativos</option><option value="Afastado">Afastados</option><option value="">Todos</option><option value="Inativo">Somente inativos</option></select>'+
-      '<select id="grh-filter-clt" onchange="grhRenderColabs()"><option value="">CLT + PJ</option><option value="Sim">Somente CLT</option><option value="Não">Somente PJ</option></select>'+
+      '<select id="grh-filter-clt" onchange="grhRenderColabs()"><option value="">Todos os contratos</option><option value="CLT">Somente CLT</option><option value="PJ">Somente PJ</option><option value="Estagiário">Somente Estagiário</option></select>'+
       '<button class="btn btn-p btn-sm" type="button" onclick="grhAbrirModalColab(null)">➕ Novo</button><button class="btn btn-g btn-sm" type="button" onclick="grhExportarExcel()">📊 Excel</button></div></div>'+
       '<div class="card-body" style="padding:0"><div class="ess-table-scroll"><table id="grh-colab-table"><thead><tr><th>Nome</th><th>Matrícula</th><th>E-mail</th><th>CPF</th><th>Função</th><th>Setor</th><th>CLT</th><th>Admissão</th><th>Tempo</th><th>Status</th><th>Acesso</th><th>Ações</th></tr></thead><tbody id="grh-colab-body"><tr><td colspan="12" class="ess-table-message">Carregando...</td></tr></tbody></table></div></div>';
     var sector=document.getElementById('colabSetoresBottomV1')||document.getElementById('grh-setor-stats');
@@ -110,7 +118,7 @@
       var data=all.slice();
       if(q) data=data.filter(function(c){return [c.nome,c.email,c.funcao,c.cargo,c.setor,c.matricula].some(function(v){return String(v||'').toLowerCase().includes(q);});});
       if(sectorFilter) data=data.filter(function(c){return c.setor===sectorFilter;});
-      if(cltFilter) data=data.filter(function(c){return c.clt===cltFilter;});
+      if(cltFilter) data=data.filter(function(c){return contractType(c)===cltFilter;});
       if(status) data=data.filter(function(c){return String(c.status||'Ativo')===status;});
       data.sort(function(a,b){return String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR');});
       var pages=Math.max(1,Math.ceil(data.length/colPageSize));
@@ -119,7 +127,7 @@
       var count=document.getElementById('grh-col-count'); if(count) count.textContent=data.length+' de '+all.length+' colaboradores encontrados';
       var html=pageData.length?pageData.map(function(c){
         var st=c.status||'Ativo', cls=/afast/i.test(st)?'warn':(/inativo|deslig/i.test(st)?'off':'ok');
-        return '<tr><td class="ess-colab-name">'+esc(c.nome||'—')+'</td><td>'+esc(c.matricula||'—')+'</td><td>'+esc(c.email||'—')+'</td><td>'+esc(c.cpf||'—')+'</td><td>'+esc(c.funcao||c.cargo||'—')+'</td><td><span class="ess-tag">'+esc(c.setor||'—')+'</span></td><td>'+(c.clt==='Sim'?'✅ CLT':'PJ')+'</td><td>'+esc(typeof window.grhFmt==='function'?window.grhFmt(c.admissao):(c.admissao||'—'))+'</td><td>'+esc(typeof window.grhTempoEmpresa==='function'?window.grhTempoEmpresa(c.admissao):'—')+'</td><td><span class="ess-status '+cls+'">'+esc(st)+'</span></td><td>'+esc(c.roleAcesso||'colaborador')+'</td><td><button class="ess-icon-action" type="button" onclick="grhAbrirModalColab(\''+js(c._id||c.id||'')+'\')">✏️</button></td></tr>';
+        return '<tr><td class="ess-colab-name">'+esc(c.nome||'—')+'</td><td>'+esc(c.matricula||'—')+'</td><td>'+esc(c.email||'—')+'</td><td>'+esc(c.cpf||'—')+'</td><td>'+esc(c.funcao||c.cargo||'—')+'</td><td><span class="ess-tag">'+esc(c.setor||'—')+'</span></td><td>'+esc(contractType(c))+'</td><td>'+esc(typeof window.grhFmt==='function'?window.grhFmt(c.admissao):(c.admissao||'—'))+'</td><td>'+esc(typeof window.grhTempoEmpresa==='function'?window.grhTempoEmpresa(c.admissao):'—')+'</td><td><span class="ess-status '+cls+'">'+esc(st)+'</span></td><td>'+esc(c.roleAcesso||'colaborador')+'</td><td><button class="ess-icon-action" type="button" onclick="grhAbrirModalColab(\''+js(c._id||c.id||'')+'\')">✏️</button></td></tr>';
       }).join(''):'<tr><td colspan="12" class="ess-table-message">Nenhum colaborador encontrado com os filtros selecionados.</td></tr>';
       setStableHTML(tbody,html);
       renderCollaboratorPager(data.length,start,end);
