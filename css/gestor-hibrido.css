@@ -1,0 +1,11 @@
+/* Gestor é uma função adicional do colaborador, não um login separado. */
+#loginRoleGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#loginRoleGrid .role-btn[data-role="gestor"]{display:none!important}
+#btnTrocarPerfil.manager-mode-switch{display:inline-flex!important;align-items:center;gap:5px;background:#dff1ff!important;border:1px solid #9bcdf2!important;color:#075dcc!important;box-shadow:0 4px 12px rgba(7,93,204,.12)!important}
+#btnTrocarPerfil.manager-mode-switch:hover{background:#cfeaff!important;border-color:#69b8ee!important}
+body.role-gestor #btnTrocarPerfil.manager-mode-switch{background:#e6f8ef!important;border-color:#9fd8bc!important;color:#08734a!important}
+.manager-access-note{display:flex;align-items:flex-start;gap:12px;margin:0 0 14px;padding:14px 16px;border:1px solid #a8cff1;border-radius:14px;background:#e4f2ff;color:#36536f}
+.manager-access-note>span{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:#fff;font-size:19px;flex:0 0 auto}
+.manager-access-note strong{display:block;color:#075dcc;font-size:13px;margin-bottom:3px}.manager-access-note p{margin:0;font-size:11px;line-height:1.45}
+#grh-c-role.manager-role-select{background:#f4f9ff!important;border-color:#a8c9e8!important}
+@media(max-width:600px){#btnTrocarPerfil.manager-mode-switch{padding:5px 8px!important}#btnTrocarPerfil.manager-mode-switch span{display:none}}
