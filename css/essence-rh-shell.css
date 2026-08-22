@@ -461,3 +461,29 @@ body.essence-rh-ui #view-gestao-rh .ess-colab-page-nav span{min-width:112px;text
   body.essence-rh-ui #view-gestao-rh .ess-colab-page-size{margin-left:0}
   body.essence-rh-ui #view-gestao-rh .ess-colab-page-nav{width:100%;justify-content:space-between}
 }
+/* Essence v26 - indicadores de colaboradores com maior contraste */
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article{
+  box-shadow:0 7px 18px rgba(31,75,125,.08)!important;
+}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1){
+  background:linear-gradient(135deg,#dceeff 0%,#eef7ff 100%)!important;
+  border-color:#b8dafa!important;
+}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2){
+  background:linear-gradient(135deg,#dff6ea 0%,#eefbf5 100%)!important;
+  border-color:#b7e5ce!important;
+}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3){
+  background:linear-gradient(135deg,#e5e9ff 0%,#f2f4ff 100%)!important;
+  border-color:#c7d0fb!important;
+}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4){
+  background:linear-gradient(135deg,#ffedc9 0%,#fff7e7 100%)!important;
+  border-color:#f2d495!important;
+}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1)>span{background:#c6e4ff}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2)>span{background:#c8eedb}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3)>span{background:#d5dcff}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4)>span{background:#ffe2a9}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview small{color:#4d6077}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview p{color:#718096}
