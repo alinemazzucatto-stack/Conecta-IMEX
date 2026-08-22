@@ -211,7 +211,7 @@ window.doLogin = async function(){
       unidade: (colab.unidade || 'meta').toString().toLowerCase().indexOf('xpert') !== -1 ? 'xpert' : 'meta',
       setor: colab.setor || '', funcao: colab.funcao || colab.cargo || '',
       cargo: colab.cargo || colab.funcao || '', gestor: colab.gestor || '',
-      collectionPath: colabDoc.ref.parent.path
+      foto: colab.foto || '', collectionPath: colabDoc.ref.parent.path
     };
     window.currentUnidade = window.currentUserData.unidade;
 
@@ -248,7 +248,7 @@ window.doLogin = async function(){
     // Define a tela de destino antes de montar o menu, e força a navegação
     // logo depois — evita que a tela de colaborador apareça por uma fração
     // de segundo antes de trocar para a tela correta do papel logado.
-    var destino = roleBase === 'rh' ? 'gestao-rh' : (roleBase === 'gestor' ? 'gestor' : 'intranet');
+    var destino = 'intranet';
     function irParaDestino(){
       try{
         if(typeof window.sbNav === 'function') window.sbNav(destino);
@@ -326,7 +326,7 @@ window.doLogin = async function(){
       document.body.classList.add('role-'+roleBase);
       setTimeout(function(){
         if(typeof window.buildSidebar === 'function') window.buildSidebar();
-        var destino = roleBase === 'rh' ? 'gestao-rh' : (roleBase === 'gestor' ? 'gestor' : 'intranet');
+        var destino = 'intranet';
         if(typeof window.sbNav === 'function') window.sbNav(destino);
       }, 100);
       setTimeout(async function(){

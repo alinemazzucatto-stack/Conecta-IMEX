@@ -532,9 +532,10 @@
 
   function aplicarFotoNoAvatar(avEl, fotoUrl) {
     if (!avEl) return;
-    avEl.style.backgroundImage = "url(" + fotoUrl + ")";
-    avEl.style.backgroundSize = "cover";
-    avEl.style.backgroundPosition = "center";
+    avEl.style.setProperty("background-image", "url(" + fotoUrl + ")", "important");
+    avEl.style.setProperty("background-size", "cover", "important");
+    avEl.style.setProperty("background-position", "center", "important");
+    avEl.style.setProperty("background-repeat", "no-repeat", "important");
     const ini = avEl.querySelector(".tl-prof-initials-txt");
     if (ini) ini.style.display = "none";
   }
@@ -563,10 +564,13 @@
       "</div>";
     aside.appendChild(card);
 
-    let meDocId = null;
+    let meDocId = u.docId || u.id || sessionStorage.getItem("userDocId") || null;
     if (typeof window.grhGetColabs === "function") {
       window.grhGetColabs().then(colabs => {
-        const me = (colabs || []).find(c => (email && c.email === email) || c.nome === nome);
+        const emailNormalizado = String(email || "" ).trim().toLowerCase();
+        const me = (colabs || []).find(c =>
+          (emailNormalizado && String(c.email || "" ).trim().toLowerCase() === emailNormalizado) || c.nome === nome
+        );
         if (me) {
           meDocId = me._id || me.id || null;
           const t = document.getElementById("tl-prof-tempo"); if (t) t.textContent = tempoDeEmpresa(me.admissao);
@@ -582,6 +586,7 @@
 
     const avEl = document.getElementById("tl-prof-av");
     const inputEl = document.getElementById("tl-foto-input");
+    if (avEl && u.foto) aplicarFotoNoAvatar(avEl, u.foto);
     if (avEl && inputEl) {
       avEl.onclick = () => inputEl.click();
       inputEl.onchange = () => {
@@ -591,9 +596,17 @@
           aplicarFotoNoAvatar(avEl, dataUrl);
           try {
             if (meDocId && typeof db !== "undefined" && typeof col === "function") {
-              db.collection(col("grh_colabs")).doc(meDocId).update({ foto: dataUrl }).catch(() => {});
+              const caminhoColaboradores = u.collectionPath || col("grh_colabs");
+              db.collection(caminhoColaboradores).doc(meDocId).set({ foto: dataUrl }, { merge: true }).catch(() => {});
             }
           } catch (e) {}
+          if (window.currentUserData) window.currentUserData.foto = dataUrl;
+          try {
+            const usuarioSalvo = JSON.parse(localStorage.getItem("usuarioLogado") || "{}");
+            usuarioSalvo.foto = dataUrl;
+            localStorage.setItem("usuarioLogado", JSON.stringify(usuarioSalvo));
+          } catch (e) {}
+          avEl.title = "Foto atualizada com sucesso";
         });
       };
     }
