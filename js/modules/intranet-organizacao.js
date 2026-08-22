@@ -67,10 +67,61 @@
     if(verTodos){verTodos.textContent='Próximos 5';verTodos.style.cursor='default';}
   }
 
+  function esc(valor){
+    return String(valor||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+  }
+
+  window.intraAbrirAcao=function(tipo){
+    if(typeof window.tlComposeFocus==='function')window.tlComposeFocus(tipo||'noticias');
+    else if(typeof window.intraAbrirModal==='function')window.intraAbrirModal();
+  };
+
+  function preencherAniversariosVazio(){
+    var alvo=document.getElementById('intra-empty-aniversarios');
+    if(!alvo||typeof window.grhGetColabs!=='function')return;
+    Promise.resolve(window.grhGetColabs()).then(function(lista){
+      var hoje=new Date();hoje.setHours(0,0,0,0);
+      var proximos=(lista||[]).filter(function(c){return c.nascimento&&String(c.status||'Ativo').toLowerCase()!=='inativo';}).map(function(c){
+        var nasc=new Date(c.nascimento),prox=new Date(hoje.getFullYear(),nasc.getMonth(),nasc.getDate());
+        if(prox<hoje)prox.setFullYear(prox.getFullYear()+1);
+        return {nome:c.nome||'Colaborador',setor:c.setor||'',data:prox};
+      }).sort(function(a,b){return a.data-b.data;}).slice(0,3);
+      alvo.innerHTML=proximos.length?proximos.map(function(p){
+        var ini=String(p.nome).split(/\s+/).filter(Boolean).slice(0,2).map(function(x){return x[0];}).join('').toUpperCase();
+        return '<div class="intra-empty-person"><span>'+esc(ini)+'</span><div><strong>'+esc(p.nome)+'</strong><small>'+esc(p.setor)+(p.setor?' · ':'')+p.data.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+'</small></div><button type="button" onclick="intraAbrirAcao(\'reconhecimento\')">🎁</button></div>';
+      }).join(''):'<div class="intra-empty-muted">Nenhum aniversário cadastrado para os próximos dias.</div>';
+    }).catch(function(){alvo.innerHTML='<div class="intra-empty-muted">Aniversários indisponíveis no momento.</div>';});
+  }
+
+  function montarEstadoVazio(view){
+    var feed=view.querySelector('#intra-feed');if(!feed||feed.querySelector('.card')||feed.querySelector('.intra-empty-dinamico'))return;
+    if(!/nenhuma publica|nenhuma publicação|nenhuma publicaçao/i.test(feed.textContent||''))return;
+    var nome=((window.currentUserData&&window.currentUserData.nome)||sessionStorage.getItem('userName')||'Colaborador').split(' ')[0];
+    feed.innerHTML='<section class="intra-empty-dinamico">'+
+      '<div class="intra-empty-banner"><div><small>ESPAÇO DE CONEXÃO</small><h2>Vamos movimentar a Intranet, '+esc(nome)+'?</h2><p>Compartilhe uma novidade, reconheça alguém do time ou abra uma conversa com a empresa.</p></div><button type="button" onclick="intraAbrirAcao(\'noticias\')">＋ Criar publicação</button></div>'+
+      '<div class="intra-empty-actions">'+
+        '<button type="button" onclick="intraAbrirAcao(\'reconhecimento\')"><span>⭐</span><strong>Reconhecer colega</strong><small>Valorize uma atitude ou conquista</small></button>'+
+        '<button type="button" onclick="intraAbrirAcao(\'enquetes\')"><span>📊</span><strong>Criar enquete</strong><small>Ouça rapidamente a equipe</small></button>'+
+        '<button type="button" onclick="intraAbrirAcao(\'noticias\')"><span>🎉</span><strong>Compartilhar conquista</strong><small>Comemore resultados e novidades</small></button>'+
+        '<button type="button" onclick="intraAbrirAcao(\'vagas\')"><span>💼</span><strong>Divulgar oportunidade</strong><small>Publique uma vaga interna</small></button>'+
+      '</div>'+
+      '<div class="intra-empty-bottom">'+
+        '<article><div class="intra-empty-title">🎂 Próximos aniversários</div><div id="intra-empty-aniversarios"><div class="intra-empty-muted">Carregando pessoas…</div></div></article>'+
+        '<article><div class="intra-empty-title">⚡ Acessos rápidos</div><div class="intra-empty-links"><button onclick="abrirMeusDados()">🪪 Meus dados</button><button onclick="sbNav(\'solicitacao\')">🏖️ Férias</button><button onclick="sbNav(\'beneficios\')">🎁 Benefícios</button></div></article>'+
+      '</div>'+
+    '</section>';
+    preencherAniversariosVazio();
+  }
+
+  function sincronizarTitulo(view){
+    if(!view||getComputedStyle(view).display==='none')return;
+    var titulo=document.getElementById('tPageTitle');if(titulo)titulo.textContent='Intranet';
+    var icone=document.getElementById('tPageIcon');if(icone){icone.textContent='🏠';icone.style.display='';}
+  }
   function organizar(){
     var view=document.getElementById('view-intranet');if(!view)return;
     view.classList.add('intra-organizada');
-    prepararCabecalho(view);prepararHumor(view);prepararAcoesRapidas(view);
+    prepararCabecalho(view);prepararHumor(view);prepararAcoesRapidas(view);montarEstadoVazio(view);sincronizarTitulo(view);
   }
 
   document.addEventListener('click',function(ev){
@@ -89,6 +140,14 @@
       });
       view.__intraOrgObserver.observe(view,{childList:true,subtree:true});
     }
+  }
+  var sbNavAnterior=window.sbNav;
+  if(typeof sbNavAnterior==='function'){
+    window.sbNav=function(id){
+      var retorno=sbNavAnterior.apply(this,arguments);
+      if(String(id||'').toLowerCase()==='intranet')setTimeout(function(){organizar();sincronizarTitulo(document.getElementById('view-intranet'));},50);
+      return retorno;
+    };
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',iniciar);else iniciar();
   setTimeout(iniciar,400);setTimeout(iniciar,1200);
