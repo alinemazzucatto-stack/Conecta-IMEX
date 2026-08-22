@@ -487,19 +487,23 @@ body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3)>span
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4)>span{background:#ffc963}
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview small{color:#4d6077}
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview p{color:#718096}
-/* Essence v28 - gestão completa de endereços */
+/* Essence v29 - resumo único acima do módulo com paleta de Colaboradores */
 body.essence-rh-ui #view-gestao-rh .ess-address-board{overflow:hidden}
 body.essence-rh-ui #view-gestao-rh .ess-address-board>.card-head{display:grid!important;grid-template-columns:minmax(230px,.55fr) minmax(650px,1.7fr);align-items:end!important;gap:18px;padding:18px 20px!important}
 body.essence-rh-ui #view-gestao-rh .ess-address-controls{display:grid;grid-template-columns:minmax(250px,1.6fr) minmax(145px,.7fr) minmax(120px,.55fr) auto;gap:8px;align-items:center}
 body.essence-rh-ui #view-gestao-rh .ess-address-controls input,
 body.essence-rh-ui #view-gestao-rh .ess-address-controls select{width:100%!important;min-width:0;height:38px;padding:8px 11px;border:1px solid #d3e2ee;border-radius:9px;background:#fff;color:#53657d;font:700 10px Montserrat,sans-serif}
 body.essence-rh-ui #view-gestao-rh .ess-address-controls .btn{min-height:38px!important}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:10px;padding:4px 20px 18px}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview article{display:flex;align-items:center;gap:10px;padding:13px;border:1px solid #bfdcf4;border-radius:14px;background:linear-gradient(135deg,#d9ecff,#edf7ff)}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(2){border-color:#a8ddc1;background:linear-gradient(135deg,#d2f1e1,#ecf9f2)}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(3){border-color:#ebc979;background:linear-gradient(135deg,#ffe5ab,#fff3d5)}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(4){border-color:#b7c5f7;background:linear-gradient(135deg,#dce2ff,#f0f2ff)}
-body.essence-rh-ui #view-gestao-rh .ess-address-overview article>span{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.58)}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:10px;padding:18px 20px 10px}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article{display:flex;align-items:center;gap:10px;padding:13px;border:1px solid #83bff2;border-radius:14px;background:linear-gradient(135deg,#b9dcff,#d9ebff)}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(2){border-color:#88d6ae;background:linear-gradient(135deg,#c3efd8,#e0f7eb)}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(3){border-color:#e8b951;background:linear-gradient(135deg,#ffda91,#ffedc4)}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(4){border-color:#9caaf5;background:linear-gradient(135deg,#ced5ff,#e4e8ff)}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article>span{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(1)>span{background:#9fcefa}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(2)>span{background:#a9dfc3}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(3)>span{background:#ffc963}
+body.essence-rh-ui #view-gestao-rh .ess-address-overview article:nth-child(4)>span{background:#b8c3ff}
 body.essence-rh-ui #view-gestao-rh .ess-address-overview small{display:block;color:#53657d;font-size:9px;font-weight:900;text-transform:uppercase}
 body.essence-rh-ui #view-gestao-rh .ess-address-overview strong{display:block;color:#1766bd;font-size:20px;line-height:1.1}
 body.essence-rh-ui #view-gestao-rh .ess-address-overview p{margin:2px 0 0;color:#718096;font-size:9px}
@@ -530,3 +534,4 @@ body.essence-rh-ui #view-gestao-rh .ess-address-page-nav span{min-width:112px;te
   body.essence-rh-ui #view-gestao-rh .ess-address-page-size{margin-left:0}
   body.essence-rh-ui #view-gestao-rh .ess-address-page-nav{width:100%;justify-content:space-between}
 }
+body.essence-rh-ui #view-gestao-rh #grh-pane-enderecos>.end-premium-stats{display:none!important}
