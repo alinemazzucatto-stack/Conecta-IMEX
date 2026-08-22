@@ -98,7 +98,8 @@
     nav.className='rem-inner-tabs';
     nav.setAttribute('aria-label','Seções de Remuneração');
     nav.innerHTML='<button type="button" class="active" data-rem-view="overview" onclick="remFolhaSwitch(\'overview\')">📊 Visão Geral</button>'+
-      '<button type="button" data-rem-view="payroll" onclick="remFolhaSwitch(\'payroll\')">🧾 Folha de Pagamento</button>';
+      '<button type="button" data-rem-view="payroll" onclick="remFolhaSwitch(\'payroll\')">🧾 Folha de Pagamento</button>'+
+      '<button type="button" data-rem-view="benefits" onclick="remFolhaSwitch(\'benefits\')">🎁 Benefícios</button>';
     var overview=document.createElement('div');
     overview.id='rem-overview-view';
     overview.className='rem-overview-view';
@@ -116,8 +117,10 @@
     var w=wrap(); if(!w) return;
     var overview=w.querySelector('#rem-overview-view');
     var payroll=w.querySelector('#rem-payroll-view');
+    var benefits=w.querySelector('#rem-benefits-view');
     if(overview) overview.style.display=currentView==='overview'?'grid':'none';
     if(payroll) payroll.style.display=currentView==='payroll'?'grid':'none';
+    if(benefits) benefits.style.display=currentView==='benefits'?'grid':'none';
     w.querySelectorAll('.rem-inner-tabs button').forEach(function(btn){
       btn.classList.toggle('active',btn.getAttribute('data-rem-view')===currentView);
     });
@@ -296,10 +299,12 @@
     }
   }
   window.remFolhaSwitch=function(view){
-    currentView=view==='payroll'?'payroll':'overview';
+    currentView=view==='payroll'||view==='benefits'?view:'overview';
     ensure();
+    if(currentView==='benefits'&&typeof window.remBeneficiosEnsure==='function') window.remBeneficiosEnsure();
     applyCurrentView();
     if(currentView==='payroll'&&!state.rows.length) window.remFolhaLoadSaved(false);
+    if(currentView==='benefits'&&typeof window.remBeneficiosLoad==='function') window.remBeneficiosLoad(false);
   };
   window.remFolhaSelecionarArquivo=function(){
     var input=document.getElementById('rem-folha-file'); if(input) input.click();
