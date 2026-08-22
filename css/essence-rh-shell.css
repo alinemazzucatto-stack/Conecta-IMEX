@@ -461,29 +461,29 @@ body.essence-rh-ui #view-gestao-rh .ess-colab-page-nav span{min-width:112px;text
   body.essence-rh-ui #view-gestao-rh .ess-colab-page-size{margin-left:0}
   body.essence-rh-ui #view-gestao-rh .ess-colab-page-nav{width:100%;justify-content:space-between}
 }
-/* Essence v26 - indicadores de colaboradores com maior contraste */
+/* Essence v27 - indicadores de colaboradores com contraste reforçado */
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article{
   box-shadow:0 7px 18px rgba(31,75,125,.08)!important;
 }
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1){
-  background:linear-gradient(135deg,#dceeff 0%,#eef7ff 100%)!important;
-  border-color:#b8dafa!important;
+  background:linear-gradient(135deg,#b9dcff 0%,#d9ebff 100%)!important;
+  border-color:#83bff2!important;
 }
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2){
-  background:linear-gradient(135deg,#dff6ea 0%,#eefbf5 100%)!important;
-  border-color:#b7e5ce!important;
+  background:linear-gradient(135deg,#c3efd8 0%,#e0f7eb 100%)!important;
+  border-color:#88d6ae!important;
 }
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3){
-  background:linear-gradient(135deg,#e5e9ff 0%,#f2f4ff 100%)!important;
-  border-color:#c7d0fb!important;
+  background:linear-gradient(135deg,#ced5ff 0%,#e4e8ff 100%)!important;
+  border-color:#9caaf5!important;
 }
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4){
-  background:linear-gradient(135deg,#ffedc9 0%,#fff7e7 100%)!important;
-  border-color:#f2d495!important;
+  background:linear-gradient(135deg,#ffda91 0%,#ffedc4 100%)!important;
+  border-color:#e8b951!important;
 }
-body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1)>span{background:#c6e4ff}
-body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2)>span{background:#c8eedb}
-body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3)>span{background:#d5dcff}
-body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4)>span{background:#ffe2a9}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(1)>span{background:#9fcefa}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(2)>span{background:#a9dfc3}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(3)>span{background:#b8c3ff}
+body.essence-rh-ui #view-gestao-rh .ess-colab-overview article:nth-child(4)>span{background:#ffc963}
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview small{color:#4d6077}
 body.essence-rh-ui #view-gestao-rh .ess-colab-overview p{color:#718096}
