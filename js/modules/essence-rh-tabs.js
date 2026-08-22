@@ -233,9 +233,9 @@
     pane.style.setProperty('display','block','important');
     pane.classList.add('active');
     if(tab==='colaboradores') prepareCollaborators();
-    if(tab==='remuneracao') window.__remPremiumRenderedV3=false;
+    if(tab==='remuneracao' && !pane.querySelector('.rem-premium-wrap')) window.__remPremiumRenderedV3=false;
     if(tab==='movimentacoes') window.__movRealRendered=false;
-    cfg.render.forEach(invoke);
+    cfg.render.forEach(function(name){if(tab==='remuneracao'&&window.__remPremiumRenderedV3)return;invoke(name);});
     if(tab==='enderecos'){
       [80,320,900].forEach(function(delay){
         setTimeout(function(){

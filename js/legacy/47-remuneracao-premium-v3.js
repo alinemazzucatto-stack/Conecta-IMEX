@@ -557,19 +557,36 @@
 
     p.innerHTML = `
       <div class="rem-premium-wrap">
-        <div class="rem-toolbar-legacy">
-          <input id="grh-rem-search" type="text" placeholder="🔍 Buscar colaborador…" oninput="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()"/>
-          <input id="grh-rem-mes" type="month" title="Filtrar total da folha por mês"/>
-          <button class="btn btn-g btn-sm" onclick="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">🔎 Filtrar mês</button>
-          <button class="btn btn-g btn-sm" onclick="document.getElementById('grh-rem-mes').value='';if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">Limpar</button>
-          <button class="btn btn-g btn-sm" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
-          <button class="btn btn-g btn-sm" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirBeneficiosPdf()">🧾 Importar Benefícios (PDF)</button>
-          <button class="btn btn-g btn-sm" onclick="grhAbrirHistoricoBeneficios()">📅 Histórico de Benefícios</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirHolerites()">📤 Upload Automático de Holerites</button>
-          <button class="btn btn-p btn-sm" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
-        </div>
-        <div class="rem-kpi-grid rem-kpi-grid2" style="grid-template-columns:repeat(6,minmax(0,1fr))">
+        <section class="ess-rem-top-board">
+          <div class="ess-rem-top-head">
+            <div><small>OPERAÇÃO MENSAL</small><h2>Controles da remuneração</h2><p>Filtre a competência e acesse importações, modelos e cadastros.</p></div>
+            <span>Dados corporativos</span>
+          </div>
+          <div class="rem-toolbar-legacy" data-ess-organized="true">
+            <div class="rem-toolbar-group rem-toolbar-filters">
+              <span>Consulta e competência</span>
+              <input id="grh-rem-search" type="text" placeholder="🔍 Buscar colaborador…" oninput="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()"/>
+              <input id="grh-rem-mes" type="month" title="Filtrar total da folha por mês"/>
+              <button class="btn btn-g btn-sm" onclick="if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">🔎 Filtrar</button>
+              <button class="btn btn-g btn-sm" onclick="document.getElementById('grh-rem-mes').value='';if(typeof grhRenderRemuneracao==='function')grhRenderRemuneracao()">Limpar</button>
+            </div>
+            <div class="rem-toolbar-group rem-toolbar-files">
+              <span>Modelos e conferência</span>
+              <button class="btn btn-g btn-sm" onclick="grhBaixarModeloHolerites()">⬇️ Modelo holerites</button>
+              <button class="btn btn-g btn-sm" onclick="grhAbrirMapeamentoCpf()">⚙️ Mapeamento CPF</button>
+              <button class="btn btn-g btn-sm" onclick="grhAbrirHistoricoBeneficios()">📅 Histórico</button>
+            </div>
+            <div class="rem-toolbar-group rem-toolbar-actions">
+              <span>Importações e cadastro</span>
+              <button class="btn btn-p btn-sm" onclick="grhAbrirBeneficiosPdf()">🧾 Benefícios PDF</button>
+              <button class="btn btn-p btn-sm" onclick="grhAbrirHolerites()">📤 Enviar holerites</button>
+              <button class="btn btn-p btn-sm" onclick="grhAbrirModalRemuneracao(null)">➕ Adicionar</button>
+            </div>
+          </div>
+        </section>
+        <section class="ess-rem-summary-board">
+          <div class="ess-rem-summary-head"><div><small>VISÃO GERAL</small><h2>Resumo da competência</h2></div><span>Indicadores consolidados</span></div>
+          <div class="rem-kpi-grid rem-kpi-grid2">
           ${kpiCardRem('💰','Folha Salarial (mês)', s.folha?money(s.folha):'R$ 0,00', null, trendFolha, '#7c3aed', true)}
           ${kpiCardRem('🏢','Custo Total com Pessoal', money(s.custo), `folha + benefícios + provisões`, null, '#3b82f6')}
           ${kpiCardRem('📊','Salário Médio', s.mediaGeral?money(s.mediaGeral):'R$ 0,00', `${s.clt} CLT · ${s.pj} PJ`, null, '#10b981')}
@@ -577,6 +594,8 @@
           ${kpiCardRem('🎁','Custo com Benefícios', money(s.benef), 'saúde, odonto, VA e sindicato', null, '#ec4899')}
           ${kpiCardRem('👥','Colaboradores', String(s.ativos), 'Ativos', null, '#0ea5e9')}
         </div>
+
+        </section>
 
         <div class="rem-comparativo-grid" id="rem-comparativo-folha-beneficios-imex">
           <div class="rem-compare-card">
@@ -1018,6 +1037,9 @@
     const p=pane(); if(!p) return;
     const visible=getComputedStyle(p).display!=='none';
     if(visible && !window.__remPremiumRenderedV3){
+      if(window.__remPremiumLoadingV3) return;
+      window.__remPremiumLoadingV3=true;
+      try{
       // Evita que o HTML estático antigo do painel fique visível enquanto
       // os dados carregam (chegava a ficar ~5s por causa dos awaits em série).
       p.innerHTML = '<div class="rem-premium-wrap" style="padding:40px;text-align:center;color:#94a3b8">⏳ Carregando dados de remuneração…</div>';
@@ -1058,17 +1080,24 @@
           });
         }catch(e){ console.warn('Erro ao renderizar comparativo de benefícios:', e); }
       }
+      }finally{
+        window.__remPremiumLoadingV3=false;
+      }
     }
   }
+  window.remAplicarPremiumV3=aplicar;
 
   let debounceTimer = null;
   const oldGrhTab=window.grhTab;
   window.grhTab=function(tab,btn){
     const ret=typeof oldGrhTab==='function'?oldGrhTab.apply(this,arguments):undefined;
     if(String(tab||'').toLowerCase().includes('remun')){
-      window.__remPremiumRenderedV3=false;
-      if(debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(aplicar, 200);
+      const ready=window.__remPremiumRenderedV3&&pane()&&pane().querySelector('.ess-rem-summary-board');
+      if(!ready){
+        window.__remPremiumRenderedV3=false;
+        if(debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(aplicar, 200);
+      }
     }
     return ret;
   };
@@ -1076,9 +1105,12 @@
     const el=ev.target&&ev.target.closest&&ev.target.closest('button,a,div'); if(!el)return;
     const txt=(el.innerText||'').toLowerCase(); const attrs=((el.getAttribute('onclick')||'')+' '+(el.getAttribute('data-rh-tab')||'')+' '+(el.getAttribute('data-target')||'')).toLowerCase();
     if(txt.includes('remuneração')||txt.includes('remuneracao')||attrs.includes('remun')){
-      window.__remPremiumRenderedV3=false;
-      if(debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(aplicar, 200);
+      const ready=window.__remPremiumRenderedV3&&pane()&&pane().querySelector('.ess-rem-summary-board');
+      if(!ready){
+        window.__remPremiumRenderedV3=false;
+        if(debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(aplicar, 200);
+      }
     }
   },true);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(aplicar,900)); else setTimeout(aplicar,900);

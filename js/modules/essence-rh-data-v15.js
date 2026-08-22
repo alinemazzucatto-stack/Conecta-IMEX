@@ -243,7 +243,7 @@
   window.grhRenderEnderecos=renderAddresses;
   window.grhAddressPage=function(page){addressPage=Math.max(1,Number(page)||1);return renderAddresses();};
   window.grhSetAddressPageSize=function(size){addressPageSize=Math.max(10,Number(size)||15);addressPage=1;return renderAddresses();};
-  if(typeof rawRemuneration==='function') window.grhRenderRemuneracao=function(){var result=rawRemuneration.apply(this,arguments);setTimeout(organizeToolbar,40);setTimeout(organizeToolbar,300);setTimeout(organizeToolbar,900);setTimeout(organizeToolbar,1600);return result;};
+  if(typeof rawRemuneration==='function') window.grhRenderRemuneracao=function(){window.__remPremiumRenderedV3=false;var result=typeof window.remAplicarPremiumV3==='function'?window.remAplicarPremiumV3():rawRemuneration.apply(this,arguments);setTimeout(organizeToolbar,40);setTimeout(organizeToolbar,300);return result;};
 
   function refresh(){
     var colPane=document.getElementById('grh-pane-colaboradores');
