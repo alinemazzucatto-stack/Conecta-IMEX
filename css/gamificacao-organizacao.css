@@ -1,0 +1,181 @@
+/* Gamificação · organização visual na identidade Conecta IMEX */
+#view-gamificacao{
+  background:
+    radial-gradient(circle at 92% 5%,rgba(14,165,233,.14),transparent 26%),
+    radial-gradient(circle at 8% 35%,rgba(37,99,235,.09),transparent 28%),
+    #f3f7ff !important;
+  color:#172033 !important;
+  padding:20px 24px 34px !important;
+  min-height:100vh;
+  overflow-x:hidden !important;
+}
+#view-gamificacao #gm-cosmos-bg,
+#view-gamificacao .gm-star,
+#view-gamificacao .gm-meteor,
+#view-gamificacao > .hero{display:none !important}
+
+#view-gamificacao .gm-tabs{
+  position:relative;
+  display:flex !important;
+  gap:6px !important;
+  padding:7px !important;
+  margin:0 0 16px !important;
+  border:1px solid #cfe0f5 !important;
+  border-radius:15px !important;
+  background:rgba(255,255,255,.92) !important;
+  box-shadow:0 10px 30px rgba(30,64,175,.08) !important;
+  overflow-x:auto;
+  scrollbar-width:thin;
+}
+#view-gamificacao .gm-tab{
+  flex:0 0 auto;
+  min-height:39px;
+  padding:9px 14px !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  color:#5d6d86 !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  transition:.18s ease;
+}
+#view-gamificacao .gm-tab:hover{background:#eaf3ff !important;color:#0759c7 !important}
+#view-gamificacao .gm-tab.on{
+  color:#fff !important;
+  background:linear-gradient(135deg,#075dcc,#08a9db) !important;
+  box-shadow:0 6px 16px rgba(7,93,204,.24) !important;
+}
+#view-gamificacao .gm-tab-rh{margin-left:auto;color:#5941bd !important;background:#eeeaff !important}
+#view-gamificacao .gm-tab-rh.on{color:#fff !important;background:linear-gradient(135deg,#6551d7,#8067e8) !important}
+
+#view-gamificacao .gm-panel{padding-top:0 !important}
+#view-gamificacao .gm-greet{
+  position:relative;
+  overflow:hidden;
+  padding:21px 24px 20px;
+  margin-bottom:14px;
+  border-radius:18px;
+  background:linear-gradient(120deg,#073b8f 0%,#0868d7 58%,#09afd6 100%);
+  box-shadow:0 15px 34px rgba(7,82,174,.20);
+}
+#view-gamificacao .gm-greet::after{
+  content:'✦';position:absolute;right:26px;top:8px;font-size:72px;
+  color:rgba(255,255,255,.13);transform:rotate(12deg)
+}
+#view-gamificacao .gm-greet h2{color:#fff !important;font-size:23px !important;margin:0 0 5px !important}
+#view-gamificacao .gm-greet p{color:#dcecff !important;margin:0 !important;font-size:13px !important}
+
+#view-gamificacao .gm-stat-tiles{gap:12px !important;margin-bottom:14px !important}
+#view-gamificacao .gm-stile{
+  min-height:82px;
+  border-radius:16px !important;
+  padding:15px 16px !important;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(30,64,175,.07);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+#view-gamificacao .gm-stile:hover{transform:translateY(-2px);box-shadow:0 13px 26px rgba(30,64,175,.13)}
+#view-gamificacao .gm-stile:nth-child(1){background:#dceeff !important;border:1px solid #a7d2fb !important}
+#view-gamificacao .gm-stile:nth-child(2){background:#ddf7ec !important;border:1px solid #a4dfc4 !important}
+#view-gamificacao .gm-stile:nth-child(3){background:#e8e8ff !important;border:1px solid #bfc3ff !important}
+#view-gamificacao .gm-stile:nth-child(4){background:#fff0cf !important;border:1px solid #f6cb71 !important}
+#view-gamificacao .gm-stile-ico{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.68);display:grid;place-items:center}
+#view-gamificacao .gm-stile-num{color:#0759c7 !important;font-size:20px !important}
+#view-gamificacao .gm-stile-lbl{color:#60718b !important;font-weight:800 !important}
+
+#view-gamificacao .gm-two-col{gap:14px !important}
+#view-gamificacao .gm-mini-card,
+#view-gamificacao .card,
+#view-gamificacao .gm-prog-wrap,
+#view-gamificacao .gm-streak-card,
+#view-gamificacao .gm-wallet-card,
+#view-gamificacao .lj-section{
+  background:rgba(255,255,255,.94) !important;
+  border:1px solid #d3e1f2 !important;
+  border-radius:17px !important;
+  box-shadow:0 9px 26px rgba(30,64,175,.07) !important;
+  backdrop-filter:none !important;
+}
+#view-gamificacao .gm-mini-card{padding:18px !important;cursor:pointer;transition:.18s ease}
+#view-gamificacao .gm-mini-card:hover{transform:translateY(-2px);border-color:#8fc2f4 !important}
+#view-gamificacao .gm-mini-lbl,
+#view-gamificacao .gm-mini-sub,
+#view-gamificacao .gm-mini-foot{color:#64748b !important}
+#view-gamificacao .gm-mini-title{color:#172033 !important}
+
+#view-gamificacao .gm-miss-item,
+#view-gamificacao .gm-rank-item,
+#view-gamificacao .lj-hist-item,
+#view-gamificacao .gm-admin-item{
+  background:#f7faff !important;
+  border:1px solid #dbe7f4 !important;
+  border-radius:14px !important;
+}
+#view-gamificacao .gm-miss-item:hover,
+#view-gamificacao .gm-rank-item:hover{background:#eef6ff !important;border-color:#a9cff5 !important}
+#view-gamificacao .gm-miss-nome,
+#view-gamificacao .gm-rank-nome,
+#view-gamificacao .lj-hist-nome{color:#172033 !important}
+#view-gamificacao .gm-miss-meta,
+#view-gamificacao .gm-rank-meta,
+#view-gamificacao .lj-hist-status{color:#6b7c95 !important}
+#view-gamificacao .gm-rank-me{background:#e5f1ff !important;border-color:#85bff2 !important}
+#view-gamificacao .gm-loading,
+#view-gamificacao .gm-empty{color:#7688a3 !important}
+
+#view-gamificacao .gm-prog-bar-wrap,
+#view-gamificacao .gm-ring-track{background:#e7eef8 !important;stroke:#e7eef8 !important}
+#view-gamificacao .gm-prog-xp{color:#075dcc !important}
+#view-gamificacao .gm-prog-next,
+#view-gamificacao .gm-prog-info>div{color:#667892 !important}
+#view-gamificacao .gm-ring-num,
+#view-gamificacao .gm-ring-lv{color:#172033 !important}
+#view-gamificacao .gm-ring-nome{color:#667892 !important}
+
+#view-gamificacao .gm-badge{
+  background:#f8fbff !important;
+  border-color:#d8e5f3 !important;
+  color:#172033 !important;
+}
+#view-gamificacao .gm-badge.unlocked{background:#eef9f4 !important;border-color:#a8dfc6 !important}
+#view-gamificacao .gm-badge.locked{background:#f4f6fa !important;border-color:#e0e6ef !important;opacity:.72}
+
+#view-gamificacao .gm-prog-loja-card,
+#view-gamificacao .lj-card{
+  background:#fff !important;
+  border:1px solid #d6e3f2 !important;
+  color:#172033 !important;
+  box-shadow:0 8px 22px rgba(30,64,175,.07) !important;
+}
+#view-gamificacao .gm-prog-loja-card:nth-child(1),#view-gamificacao .lj-card:nth-child(4n+1){background:#e5f2ff !important}
+#view-gamificacao .gm-prog-loja-card:nth-child(2),#view-gamificacao .lj-card:nth-child(4n+2){background:#e7f8f0 !important}
+#view-gamificacao .gm-prog-loja-card:nth-child(3),#view-gamificacao .lj-card:nth-child(4n+3){background:#fff1d7 !important}
+#view-gamificacao .lj-card:nth-child(4n){background:#ecebff !important}
+#view-gamificacao .lj-nome,#view-gamificacao .lj-price{color:#172033 !important}
+#view-gamificacao .lj-desc,#view-gamificacao .lj-stock{color:#667892 !important}
+
+#view-gamificacao .gm-miss-go,
+#view-gamificacao .lj-btn,
+#view-gamificacao .gm-btn-confirm,
+#view-gamificacao .btn-p{
+  border:0 !important;
+  color:#fff !important;
+  background:linear-gradient(135deg,#075dcc,#08a9db) !important;
+  box-shadow:0 6px 15px rgba(7,93,204,.20) !important;
+}
+#view-gamificacao .gm-miss-go:hover,
+#view-gamificacao .lj-btn:hover{filter:brightness(.96);transform:translateY(-1px)}
+
+#view-gamificacao .gm-modal{background:#fff !important;color:#172033 !important;border:1px solid #d3e1f2 !important}
+#view-gamificacao .gm-modal h2,#view-gamificacao .gm-modal-title{color:#172033 !important}
+#view-gamificacao input,#view-gamificacao select,#view-gamificacao textarea{background:#f8fbff !important;color:#172033 !important;border-color:#bfd2e8 !important}
+
+@media(max-width:1100px){
+  #view-gamificacao{padding:16px !important}
+  #view-gamificacao .gm-stat-tiles{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media(max-width:680px){
+  #view-gamificacao{padding:12px !important}
+  #view-gamificacao .gm-greet{padding:18px}
+  #view-gamificacao .gm-stat-tiles,#view-gamificacao .gm-two-col,#view-gamificacao .gm-prog-loja-grid{grid-template-columns:1fr !important}
+}

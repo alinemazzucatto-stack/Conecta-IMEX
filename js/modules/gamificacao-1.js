@@ -44,7 +44,7 @@ var MISSOES=[
   {id:'trilha',    ico:'📚', nome:'Completar trilha de treinamento', desc:'Avance nos modulos da sua trilha de desenvolvimento.', xp:100, cat:'amber',  periodo:'mensal',   status:'andamento',  meta:'2/5 modulos',  prog:40, acao:"sbNav('trilhas')"},
   {id:'pdi',       ico:'🎯', nome:'Atualizar meu PDI',               desc:'Revise suas metas e plano de desenvolvimento individual.', xp:40,  cat:'purple', periodo:'mensal',   status:'disponivel', prazo:'Sem prazo',   acao:"sbNav('pdi')"},
   {id:'post',      ico:'✍', nome:'Publicar na intranet',            desc:'Compartilhe uma novidade ou conquista com o time.',  xp:25,  cat:'indigo', periodo:'semanal',  status:'disponivel', prazo:'Semanal',     acao:"sbNav('intranet')"},
-  {id:'foto',      ico:'📸', nome:'Atualizar foto de perfil',        desc:'Mantenha seu perfil sempre atualizado.',             xp:20,  cat:'teal',   periodo:'mensal',   status:'disponivel', prazo:'Sem prazo',   acao:''},
+  {id:'foto',      ico:'📸', nome:'Atualizar foto de perfil',        desc:'Mantenha seu perfil sempre atualizado.',             xp:20,  cat:'teal',   periodo:'mensal',   status:'disponivel', prazo:'Sem prazo',   acao:"abrirMeusDados()"},
   {id:'aniver',    ico:'🎂', nome:'Cumprimentar aniversariante',     desc:'Deixe uma mensagem para quem faz aniversario hoje.', xp:10,  cat:'rose',   periodo:'diaria',   status:'disponivel', prazo:'Hoje',        acao:"sbNav('intranet')"},
 ];
 
