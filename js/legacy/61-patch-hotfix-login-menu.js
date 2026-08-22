@@ -22,7 +22,7 @@
   const MENU = {
     colaborador:['intranet','gamificacao','estrutura-carreira','mais','ouvidoria'],
     gestor:['intranet','gamificacao','estrutura-carreira','solicitacao','gestor','pesquisas','beneficios','ouvidoria','conecta-ai'],
-    rh:['gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
+    rh:['intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
   };
 
   function $(id){ return document.getElementById(id); }
@@ -151,8 +151,8 @@
   }
 
   function navigate(id){
-    id = String(id || '').trim() || (roleAtual() === 'rh' ? 'gestao-rh' : 'intranet');
-    if(!allowed(id)) id = roleAtual() === 'rh' ? 'gestao-rh' : 'intranet';
+    id = String(id || '').trim() || 'intranet';
+    if(!allowed(id)) id = 'intranet';
 
     ensureBasicContent(id);
 
