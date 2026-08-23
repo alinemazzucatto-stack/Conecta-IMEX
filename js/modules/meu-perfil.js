@@ -37,6 +37,8 @@ function ensureSidebarIcon(){
   var item = document.getElementById('sb-meus-dados');
   if(perfilAtualEhRH()){
     if(item) item.style.setProperty('display','none','important');
+    var aviso = document.getElementById('meu-perfil-erro-banner');
+    if(aviso) aviso.remove();
     return;
   }
   if(!item){
@@ -300,6 +302,7 @@ try{
 // Diagnóstico visível: se depois de alguns segundos o ícone ainda não existir
 // (sem erro de JS), mostra na tela o motivo exato em vez de falhar em silêncio.
 setTimeout(function(){
+  if(perfilAtualEhRH()) return;
   if(document.getElementById('sb-meus-dados')) return; // deu certo, nada a avisar
   if(document.getElementById('meu-perfil-erro-banner')) return;
   var sidebar = document.getElementById('sidebar');
