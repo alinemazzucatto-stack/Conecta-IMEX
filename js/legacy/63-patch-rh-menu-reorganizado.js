@@ -115,17 +115,9 @@
   const oldBuild = window.buildSidebar;
   window.buildSidebar = function(){
     if(roleAtualSeguro() === 'rh'){
-      const r = renderRhMenuFinal();
-      // renderRhMenuFinal só troca os ÍCONES do menu lateral — não decide
-      // qual painel de conteúdo fica visível. No carregamento/F5, a tela
-      // já vem com algo padrão marcado como ativo (geralmente Intranet,
-      // com aparência de colaborador) antes do papel real ser confirmado.
-      // Por isso força sempre a ida para o Início do RH quando este código roda
-      // (que só acontece logo após o Firebase confirmar que é RH).
-      [50,250,600].forEach(function(t){
-        setTimeout(function(){ if(typeof window.sbNav === 'function') window.sbNav('inicio-rh'); }, t);
-      });
-      return r;
+      // A tela inicial já é definida pelo login. Reconstruir o menu não pode
+      // alterar a página escolhida pelo usuário (Intranet, Gamificação etc.).
+      return renderRhMenuFinal();
     }
     if(typeof oldBuild === 'function') return oldBuild.apply(this, arguments);
   };
