@@ -9,8 +9,6 @@
     ['enderecos','📍','Endereços'],
     ['remuneracao','💰','Remuneração'],
     ['movimentacoes','🔄','Movimentações'],
-    ['admissao','📝','Admissões'],
-    ['desligamentos','🚪','Desligamentos'],
     ['ferias','🏖️','Gestão de Férias'],
     ['documentos','📄','Documentos'],
     ['beneficios','🎁','Benefícios'],
@@ -18,7 +16,7 @@
     ['pesquisas','📋','Pesquisas'],
     ['roadmap','🗺️','Próximas funcionalidades']
   ];
-  var labels={};items.forEach(function(item){labels[item[0]]=item[2];});
+  var labels={};items.forEach(function(item){labels[item[0]]=item[2];});labels.admissao='Movimentações';labels.desligamentos='Movimentações';
   var current='colaboradores';
   var collapsedByUser=false;
   var baseGrhTab=window.grhTab;
@@ -82,11 +80,12 @@
 
   function sync(tab){
     tab=String(tab||current).toLowerCase();if(!labels[tab])tab='colaboradores';current=tab;
+    var menuTab=tab==='admissao'||tab==='desligamentos'?'movimentacoes':tab;
     var group=document.getElementById('ess-grh-side-submenu');
-    if(group) group.querySelectorAll('.ess-grh-side-link').forEach(function(btn){btn.classList.toggle('active',btn.dataset.grhTab===tab);});
+    if(group) group.querySelectorAll('.ess-grh-side-link').forEach(function(btn){btn.classList.toggle('active',btn.dataset.grhTab===menuTab);});
     var parent=document.getElementById('sb-gestao-rh');if(parent)parent.classList.add('active');
-    var title=document.getElementById('tPageTitle');if(title)title.textContent='Gestão RH · '+labels[tab];
-    var icon=document.getElementById('tPageIcon');if(icon){var meta=items.find(function(item){return item[0]===tab;});icon.textContent=meta?meta[1]:'🏢';}
+    var title=document.getElementById('tPageTitle');if(title)title.textContent='Gestão RH · '+labels[menuTab];
+    var icon=document.getElementById('tPageIcon');if(icon){var meta=items.find(function(item){return item[0]===menuTab;});icon.textContent=meta?meta[1]:'🏢';}
     try{sessionStorage.setItem('grhUltimaAba',tab);}catch(e){}
     hideHorizontalTabs();
   }
