@@ -23,7 +23,7 @@
   const MENU = {
     colaborador:['intranet','gamificacao','estrutura-carreira','mais','ouvidoria'],
     gestor:['intranet','gamificacao','estrutura-carreira','solicitacao','gestor','pesquisas','beneficios','ouvidoria','conecta-ai'],
-    rh:['inicio-rh','intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
+    rh:['inicio-rh','intranet','gamificacao','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto']
   };
 
   function $(id){ return document.getElementById(id); }
