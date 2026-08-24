@@ -4,7 +4,7 @@
   if(window.__IMEX_RH_MENU_REORGANIZADO__) return;
   window.__IMEX_RH_MENU_REORGANIZADO__ = true;
 
-  const RH_ORDER_FINAL = ['inicio-rh','intranet','gamificacao','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
+  const RH_ORDER_FINAL = ['inicio-rh','gamificacao','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
   const META_RH_FINAL = {
     'inicio-rh':['⌂','Início'],
     'intranet':['🏠','Intranet'],
