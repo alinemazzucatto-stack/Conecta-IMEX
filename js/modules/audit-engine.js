@@ -485,18 +485,9 @@
     return originalError.apply(console, args);
   };
 
-  // Iniciar engine quando DOM está pronto
-  document.addEventListener('DOMContentLoaded', function() {
-    if (window.isRH && window.isRH()) {
-      AuditEngine.start();
-      console.log('[AUDIT] Engine ativo - RH detectado');
-    }
-  });
-
-  // Garantir que engine está rodando para RH
-  if (typeof window.isRH === 'function' && window.isRH()) {
-    AuditEngine.start();
-  }
+  // A engine é iniciada apenas quando o usuário abre a tela de Auditoria.
+  // Rodá-la globalmente a cada 5 segundos bloqueava a navegação e repetia
+  // consultas sem permissão mesmo quando o módulo não estava em uso.
 
   console.log('[AUDIT] Engine carregado e pronto');
 })();

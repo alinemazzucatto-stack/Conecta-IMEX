@@ -14,7 +14,8 @@ function baseNavigate(id){routeSequence++;forceView(id);return routeSequence}
 function openIntranet(){baseNavigate('intranet');var view=document.getElementById('view-intranet'),home=document.getElementById('intra-social-home');if(view)view.classList.add('intra-organizada');if(home)home.style.setProperty('display','block','important');return false}
 window.imexOpenIntranet=openIntranet;
 function openGamificacao(){var sequence=baseNavigate('gamificacao'),view=document.getElementById('view-gamificacao');if(view)view.classList.add('gamificacao-organizada');setTimeout(function(){if(sequence===routeSequence&&typeof window.gmTab==='function')window.gmTab('progresso')},80);return false}
-function openRoute(id){if(id==='intranet')return openIntranet();if(id==='gamificacao')return openGamificacao();baseNavigate(id);setTimeout(function(){decorate(id)},40);return false}
+function auditLifecycle(id){var engine=window.AuditEngine;if(!engine)return;if(id==='auditoria'){if(typeof engine.start==='function')engine.start()}else if(typeof engine.stop==='function')engine.stop()}
+function openRoute(id){if(id!=='auditoria')auditLifecycle(id);if(id==='intranet')return openIntranet();if(id==='gamificacao')return openGamificacao();baseNavigate(id);if(id==='auditoria')setTimeout(function(){auditLifecycle(id)},60);setTimeout(function(){decorate(id)},40);return false}
 document.addEventListener('click',function(e){var item=e.target.closest&&e.target.closest('#sidebar .sb-item');if(!item||item.id==='sb-gestao-rh'||item.id==='sb-sair')return;var id=String(item.dataset.menuId||item.id.replace('sb-',''));if(!id)return;e.preventDefault();e.stopImmediatePropagation();openRoute(id)},true);
 function boot(){ouvidoria();ai();audit();setTimeout(function(){ouvidoria();ai();audit()},600);setTimeout(audit,2200);window.addEventListener('auditCompleted',audit)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
