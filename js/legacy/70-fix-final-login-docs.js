@@ -15,7 +15,7 @@ var $ = function(id){ return document.getElementById(id); };
 // disparar `doLogin()` DUAS VEZES em paralelo (uma pelo atributo inline, ver
 // index.html, outra por este listener chamando `lBtn.click()`). A fonte
 // única de login é `js/modules/login-auth.js`; a de seleção de perfil é
-// `selectRole` do núcleo autenticado.
+// `selectRole` em `61-patch-hotfix-login-menu.js`.
 
 /* ══ VOLTA PARA AS ABAS ══ */
 // Limpeza genérica da classe docs-rh-open no <body> — necessária para o

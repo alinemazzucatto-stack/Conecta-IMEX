@@ -139,9 +139,9 @@
   window.irPara = function(viewId) { window.forceView(viewId); };
 
   // ──────────────────────────────────────────────────────────────────────────────
-  // 4. MENU & SIDEBAR (implementação final em rh-navigation-v86.js)
+  // 4. MENU & SIDEBAR (definidas em 57-patch-critico-navegacao-renderizacao.js)
   // ──────────────────────────────────────────────────────────────────────────────
-  // Não redefinimos applyMenu() aqui — o controlador v86 fornece a implementação
+  // Não redefinimos applyMenu() aqui — deixamos 57-patch fornecer a implementação
   // completa com as listas COLAB_MENU, GESTOR_MENU, RH_MENU e visualRole()
 
   // Aliases para compatibilidade
@@ -153,7 +153,7 @@
 
   // Compatibilidade com código legado (português)
   // NÃO copiar window.applyMenu diretamente aqui: este arquivo carrega
-  // PRIMEIRO (prefixo 000-), antes de rh-navigation-v86.js
+  // PRIMEIRO (prefixo 000-), antes de 57-patch-critico-navegacao-renderizacao.js
   // definir applyMenu de verdade — uma cópia direta capturaria `undefined`
   // para sempre. Um wrapper preguiçoso resolve window.applyMenu só na hora
   // da chamada, quando ele já existe.
