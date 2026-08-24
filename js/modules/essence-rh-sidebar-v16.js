@@ -55,6 +55,7 @@
         expanded(false);
         var parent=document.getElementById('sb-gestao-rh');
         if(parent) parent.classList.remove('active');
+        if(def[0]==='intranet'&&typeof window.imexOpenIntranet==='function')return window.imexOpenIntranet();
         var stableNav=window.imexBaseNavigate||baseSbNav;
         var result=typeof stableNav==='function'?stableNav.call(window,def[0]):false;
         if(def[0]==='intranet')setTimeout(function(){

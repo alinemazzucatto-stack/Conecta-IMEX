@@ -51,6 +51,7 @@
     el.innerHTML = '<span>' + meta[0] + '</span><span class="sb-tip">' + meta[1] + '</span>';
     el.onclick = function(ev){
       if(ev) ev.preventDefault();
+      if(id === 'intranet' && typeof window.imexOpenIntranet === 'function') return window.imexOpenIntranet();
       if(typeof window.switchView === 'function') return window.switchView(id);
       if(typeof window.sbNav === 'function') return window.sbNav(id);
       return false;
