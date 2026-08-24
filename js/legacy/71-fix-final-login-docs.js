@@ -14,7 +14,7 @@ var $ = function(id){ return document.getElementById(id); };
 // paralelo várias vezes por clique/Enter. Ver comentário equivalente em
 // `70-fix-final-login-docs.js`. A fonte única de login é
 // `js/modules/login-auth.js`; a de seleção de perfil é `selectRole` em
-// núcleo autenticado do sistema.
+// `61-patch-hotfix-login-menu.js`.
 
 /* ── FIX ABA DOCUMENTOS ── */
 function abrirDocumentos(){
