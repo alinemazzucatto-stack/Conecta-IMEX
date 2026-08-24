@@ -3,6 +3,7 @@
   var currentRoute='';
   var labels={'inicio-rh':['⌂','Início'],intranet:['🏠','Intranet'],gamificacao:['🏆','Gamificação'],dashboard:['📊','Dashboard RH'],ouvidoria:['📢','Ouvidoria RH'],'conecta-ai':['🤖','Conecta AI RH'],auditoria:['📝','Auditoria'],'roadmap-produto':['🚀','Roadmap do Produto']};
   function show(id){
+    if(id==='inicio-rh'&&typeof window.rhEnsureHome==='function')window.rhEnsureHome();
     var host=document.querySelector('.main-area'),view=document.getElementById('view-'+id);
     if(!host||!view){console.error('[NAV-V83] view ausente:',id);return false}
     if(window.AuditEngine&&id!=='auditoria'&&typeof window.AuditEngine.stop==='function')window.AuditEngine.stop();
