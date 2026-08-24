@@ -3731,3 +3731,5 @@ body.docs-rh-open #view-gestao-rh{padding-top:0!important}
 
 /* Ação principal da visão geral de Movimentações */
 .people-cycle-actionbar{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #9fc9ef;border-radius:17px;background:linear-gradient(135deg,#dceeff,#e8f8ef);padding:17px 20px;box-shadow:0 8px 20px rgba(30,76,130,.08)}.people-cycle-actionbar small{display:block;color:#0872cb;font-size:9px;font-weight:900;letter-spacing:.1em}.people-cycle-actionbar h3{margin:3px 0 4px;color:#142033;font-size:18px}.people-cycle-actionbar p{margin:0;color:#607792;font-size:12px}.people-cycle-actionbar .btn{white-space:nowrap}@media(max-width:680px){.people-cycle-actionbar{align-items:flex-start;flex-direction:column}.people-cycle-actionbar .btn{width:100%}}
+/* Duas camadas de abas do ciclo de pessoas */
+.people-cycle-navigation{display:grid;gap:8px;min-width:0}.people-cycle-navigation .people-hub-tabs{margin:0}.people-cycle-navigation .people-cycle-subtabs{border:1px solid #c9dcf1;border-radius:12px}
