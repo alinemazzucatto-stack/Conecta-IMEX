@@ -4,10 +4,11 @@
   if(window.__IMEX_RH_MENU_REORGANIZADO__) return;
   window.__IMEX_RH_MENU_REORGANIZADO__ = true;
 
-  const RH_ORDER_FINAL = ['inicio-rh','intranet','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
+  const RH_ORDER_FINAL = ['inicio-rh','intranet','gamificacao','gestao-rh','dashboard','ouvidoria','conecta-ai','auditoria','roadmap-produto'];
   const META_RH_FINAL = {
     'inicio-rh':['⌂','Início'],
     'intranet':['🏠','Intranet'],
+    'gamificacao':['🏆','Gamificação'],
     'gestao-rh':['🏢','Gestão RH'],
     'dashboard':['📊','Dashboard RH'],
     'ouvidoria':['📢','Ouvidoria RH'],
@@ -91,7 +92,7 @@
     s.replaceChildren(frag);
 
     // Garantia extra: nenhum item duplicado de Colaborador fica visível no RH.
-    ['pesquisas','beneficios','gamificacao','desenvolvimento-talentos','estrutura-carreira','solicitacao'].forEach(id=>{
+    ['pesquisas','beneficios','desenvolvimento-talentos','estrutura-carreira','solicitacao'].forEach(id=>{
       const el = $('sb-' + id);
       if(el) el.style.setProperty('display','none','important');
     });

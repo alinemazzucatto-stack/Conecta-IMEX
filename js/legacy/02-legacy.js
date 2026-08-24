@@ -882,6 +882,7 @@ const ROLE_ACCESS = {
   // ── COLABORADOR: 8 módulos principais limpos ──
   colaborador: [
     'intranet',
+    'gamificacao',
     'estrutura-carreira',
     'desenvolvimento',
     'pesquisas',
@@ -901,6 +902,7 @@ const ROLE_ACCESS = {
   // ── GESTOR: herda colaborador + painel gestor ──
   gestor: [
     'intranet',
+    'gamificacao',
     'estrutura-carreira',
     'desenvolvimento',
     'pesquisas',
@@ -921,6 +923,7 @@ const ROLE_ACCESS = {
   rh: [
     'inicio-rh',
     'intranet',
+    'gamificacao',
     'gestao-rh',
     'desenvolvimento-talentos',
     'pesquisas',
@@ -940,6 +943,7 @@ const ROLE_ACCESS = {
   'rh-colaborador': [
     'inicio-rh',
     'intranet',
+    'gamificacao',
     'gestao-rh',
     'desenvolvimento-talentos',
     'pesquisas',
@@ -960,6 +964,7 @@ const TAB_META = {
   'inicio-rh':            {icon:'⌂', label:'Início'},
   // ── COLABORADOR — 8 módulos principais ──
   intranet:              {icon:'🏠', label:'Intranet'},
+  gamificacao:           {icon:'🏆', label:'Gamificação'},
   'estrutura-carreira':  {icon:'🏢', label:'Estrutura e Carreira'},
   desenvolvimento:       {icon:'🌱', label:'Desenvolvimento'},
   pesquisas:             {icon:'📋', label:'Pesquisas'},
@@ -1051,6 +1056,7 @@ function buildSidebar() {
   const finalOrder = [
     'inicio-rh',
     'intranet',
+    'gamificacao',
     'meu-desenvolvimento',
     'solicitacao',
     'gestor',
