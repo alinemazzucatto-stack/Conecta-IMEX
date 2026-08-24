@@ -43,7 +43,7 @@
     var sidebar=document.getElementById('sidebar');
     var cluster=document.getElementById('ess-grh-side-cluster');
     if(!sidebar||!cluster) return;
-    var defs=[['inicio-rh','⌂','Início'],['intranet','🏠','Intranet']];
+    var defs=[['inicio-rh','⌂','Início']];
     defs.forEach(function(def){
       var item=document.getElementById('sb-'+def[0]);
       if(!item) item=createPrimaryItem(def[0],def[1],def[2]);
