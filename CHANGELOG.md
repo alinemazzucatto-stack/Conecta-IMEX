@@ -152,3 +152,13 @@ window.irPara = window.forceView;       // Alias
 - Adicionados testes automatizados e limpeza única dos históricos do navegador.
 - Publicação preparada com recursos atualizados e exclusão dos arquivos internos.
 
+# 2026-10-23 Acesso exclusivo da administradora
+
+- Corrigido o login para usar o perfil administrativo existente em `users`,
+  sem exigir um cadastro na base de colaboradores removida.
+- Restritos login, restauração de sessão e operações do Firestore à identidade
+  administrativa autorizada, validando UID e e-mail.
+- Preservadas as contas existentes no Firebase Auth.
+- Quinze testes aprovados; simulador confirmou a permissão administrativa
+  e a negativa para visitantes e outra identidade.
+

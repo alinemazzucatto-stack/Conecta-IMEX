@@ -1,0 +1,373 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function email() {
+      return signedIn() && request.auth.token.email is string
+        ? request.auth.token.email
+        : '';
+    }
+
+    function isBootstrapAdmin() {
+      return email() == 'aline.mazzucatto@imex.com.br'
+        && request.auth.uid == 'qTyh5V0bOtewN4P7756FfsTuDMf1';
+    }
+
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function hasUserRecord() {
+      return signedIn() && exists(userPath());
+    }
+
+    function userData() {
+      return get(userPath()).data;
+    }
+
+    function isActive() {
+      return isBootstrapAdmin();
+    }
+
+    function role() {
+      return hasUserRecord() && userData().role is string
+        ? userData().role
+        : '';
+    }
+
+    function isRH() {
+      return isActive()
+        && (isBootstrapAdmin() || role() in ['rh', 'rh-colaborador']);
+    }
+
+    function isManager() {
+      return isActive() && role() == 'gestor';
+    }
+
+    function owns(data) {
+      return isActive()
+        && ((data.ownerUid is string && data.ownerUid == request.auth.uid)
+          || (data.authUid is string && data.authUid == request.auth.uid)
+          || (data.email is string && data.email == email()));
+    }
+
+    function manages(data) {
+      return isManager()
+        && ((data.managerUid is string && data.managerUid == request.auth.uid)
+          || (data.emailGestor is string && data.emailGestor == email())
+          || (data.gestorEmail is string && data.gestorEmail == email()));
+    }
+
+    function managerPatchOnly() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'statusGestor',
+        'statusRH',
+        'statusFinal',
+        'parecerGestor',
+        'dataParecerGestor',
+        'ultimaAtualizacao'
+      ]);
+    }
+
+    function internalInteractionOnly() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'reacoes',
+        'comentarios',
+        'ultimaAtualizacao'
+      ]);
+    }
+
+    match /users/{uid} {
+      allow read: if isBootstrapAdmin() && (isRH()
+        || (isActive() && request.auth.uid == uid)
+        || manages(resource.data));
+      allow create, update, delete: if isBootstrapAdmin() && (isRH());
+    }
+
+    match /grh_colabs/{docId} {
+      allow read: if isBootstrapAdmin() && (isRH());
+      allow create, update, delete: if isBootstrapAdmin() && (isRH());
+    }
+
+    match /meta_grh_colabs/{docId} {
+      allow read: if isBootstrapAdmin() && (isRH());
+      allow create, update, delete: if isBootstrapAdmin() && (isRH());
+    }
+
+    match /xpert_grh_colabs/{docId} {
+      allow read: if isBootstrapAdmin() && (isRH());
+      allow create, update, delete: if isBootstrapAdmin() && (isRH());
+    }
+
+    match /{requestsCollection}/{requestId} {
+      allow read: if isBootstrapAdmin() && (requestsCollection in ['reqs', 'meta_reqs', 'xpert_reqs']
+        && (isRH() || owns(resource.data) || manages(resource.data)));
+      allow create: if isBootstrapAdmin() && (requestsCollection in ['reqs', 'meta_reqs', 'xpert_reqs']
+        && (isRH()
+          || (isActive()
+            && request.resource.data.ownerUid == request.auth.uid
+            && request.resource.data.email == email())));
+      allow update: if isBootstrapAdmin() && (requestsCollection in ['reqs', 'meta_reqs', 'xpert_reqs']
+        && (isRH() || (manages(resource.data) && managerPatchOnly())));
+      allow delete: if isBootstrapAdmin() && (requestsCollection in ['reqs', 'meta_reqs', 'xpert_reqs']
+        && isRH());
+    }
+
+    match /{personalCollection}/{docId} {
+      allow read: if isBootstrapAdmin() && (personalCollection in [
+          'grh_documentos',
+          'meta_grh_documentos',
+          'xpert_grh_documentos',
+          'grh_beneficios',
+          'meta_grh_beneficios',
+          'xpert_grh_beneficios'
+        ]
+        && (isRH() || owns(resource.data)));
+      allow create, update, delete: if isBootstrapAdmin() && (personalCollection in [
+          'grh_documentos',
+          'meta_grh_documentos',
+          'xpert_grh_documentos',
+          'grh_beneficios',
+          'meta_grh_beneficios',
+          'xpert_grh_beneficios'
+        ]
+        && isRH());
+    }
+
+    match /{sensitiveCollection}/{docId} {
+      allow read, write: if isBootstrapAdmin() && (sensitiveCollection in [
+          'grh_rem',
+          'meta_grh_rem',
+          'xpert_grh_rem',
+          'grh_mov',
+          'meta_grh_mov',
+          'xpert_grh_mov',
+          'grh_desl',
+          'meta_grh_desl',
+          'xpert_grh_desl',
+          'grh_beneficios_totais',
+          'meta_grh_beneficios_totais',
+          'xpert_grh_beneficios_totais',
+          'grh_beneficios_saude',
+          'meta_grh_beneficios_saude',
+          'xpert_grh_beneficios_saude',
+          'grh_beneficios_odonto',
+          'meta_grh_beneficios_odonto',
+          'xpert_grh_beneficios_odonto',
+          'audit',
+          'meta_audit',
+          'xpert_audit'
+        ]
+        && isRH());
+    }
+
+    match /{internalCollection}/{docId} {
+      allow read: if isBootstrapAdmin() && (internalCollection in [
+          'intranet',
+          'meta_intranet',
+          'xpert_intranet',
+          'org_setores',
+          'meta_org_setores',
+          'xpert_org_setores',
+          'org_descritivos',
+          'meta_org_descritivos',
+          'xpert_org_descritivos'
+        ]
+        && isActive());
+      allow create, delete: if isBootstrapAdmin() && (internalCollection in [
+          'intranet',
+          'meta_intranet',
+          'xpert_intranet',
+          'org_setores',
+          'meta_org_setores',
+          'xpert_org_setores',
+          'org_descritivos',
+          'meta_org_descritivos',
+          'xpert_org_descritivos'
+        ]
+        && isRH());
+      allow update: if isBootstrapAdmin() && (internalCollection in [
+          'intranet',
+          'meta_intranet',
+          'xpert_intranet'
+        ]
+        && (isRH() || (isActive() && internalInteractionOnly())));
+      allow update: if isBootstrapAdmin() && (internalCollection in [
+          'org_setores',
+          'meta_org_setores',
+          'xpert_org_setores',
+          'org_descritivos',
+          'meta_org_descritivos',
+          'xpert_org_descritivos'
+        ]
+        && isRH());
+    }
+
+    match /{catalogCollection}/{docId} {
+      allow read: if isBootstrapAdmin() && (catalogCollection in [
+          'config',
+          'meta_config',
+          'xpert_config',
+          'configuracoes',
+          'meta_configuracoes',
+          'xpert_configuracoes',
+          'surveys',
+          'meta_surveys',
+          'xpert_surveys',
+          'pesquisas',
+          'meta_pesquisas',
+          'xpert_pesquisas',
+          'descricoes_cargos',
+          'meta_descricoes_cargos',
+          'xpert_descricoes_cargos',
+          'setores',
+          'meta_setores',
+          'xpert_setores',
+          'gestores',
+          'meta_gestores',
+          'xpert_gestores',
+          'intra_loja',
+          'meta_intra_loja',
+          'xpert_intra_loja',
+          'intra_loja_banners',
+          'meta_intra_loja_banners',
+          'xpert_intra_loja_banners'
+        ]
+        && isActive());
+      allow create, update, delete: if isBootstrapAdmin() && (catalogCollection in [
+          'config',
+          'meta_config',
+          'xpert_config',
+          'configuracoes',
+          'meta_configuracoes',
+          'xpert_configuracoes',
+          'surveys',
+          'meta_surveys',
+          'xpert_surveys',
+          'pesquisas',
+          'meta_pesquisas',
+          'xpert_pesquisas',
+          'descricoes_cargos',
+          'meta_descricoes_cargos',
+          'xpert_descricoes_cargos',
+          'setores',
+          'meta_setores',
+          'xpert_setores',
+          'gestores',
+          'meta_gestores',
+          'xpert_gestores',
+          'intra_loja',
+          'meta_intra_loja',
+          'xpert_intra_loja',
+          'intra_loja_banners',
+          'meta_intra_loja_banners',
+          'xpert_intra_loja_banners'
+        ]
+        && isRH());
+    }
+
+    match /{xpCollection}/{docId} {
+      allow read: if isBootstrapAdmin() && (xpCollection in [
+          'intra_xp',
+          'meta_intra_xp',
+          'xpert_intra_xp'
+        ]
+        && isActive());
+      allow create, update: if isBootstrapAdmin() && (xpCollection in [
+          'intra_xp',
+          'meta_intra_xp',
+          'xpert_intra_xp'
+        ]
+        && (isRH() || (isActive() && docId == email())));
+      allow delete: if isBootstrapAdmin() && (xpCollection in [
+          'intra_xp',
+          'meta_intra_xp',
+          'xpert_intra_xp'
+        ]
+        && isRH());
+    }
+
+    match /{selfServiceCollection}/{docId} {
+      allow read: if isBootstrapAdmin() && (selfServiceCollection in [
+          'intra_resgates',
+          'meta_intra_resgates',
+          'xpert_intra_resgates',
+          'disc_resultados',
+          'meta_disc_resultados',
+          'xpert_disc_resultados',
+          'pdis',
+          'meta_pdis',
+          'xpert_pdis',
+          'beneficios_solicitacoes',
+          'meta_beneficios_solicitacoes',
+          'xpert_beneficios_solicitacoes',
+          'respostas_pesquisa',
+          'meta_respostas_pesquisa',
+          'xpert_respostas_pesquisa',
+          'ouvidoria',
+          'meta_ouvidoria',
+          'xpert_ouvidoria',
+          'vaga_candidaturas',
+          'meta_vaga_candidaturas',
+          'xpert_vaga_candidaturas',
+          'notif',
+          'meta_notif',
+          'xpert_notif'
+        ]
+        && (isRH() || owns(resource.data) || docId == request.auth.uid));
+      allow create: if isBootstrapAdmin() && (selfServiceCollection in [
+          'intra_resgates',
+          'meta_intra_resgates',
+          'xpert_intra_resgates',
+          'disc_resultados',
+          'meta_disc_resultados',
+          'xpert_disc_resultados',
+          'pdis',
+          'meta_pdis',
+          'xpert_pdis',
+          'beneficios_solicitacoes',
+          'meta_beneficios_solicitacoes',
+          'xpert_beneficios_solicitacoes',
+          'respostas_pesquisa',
+          'meta_respostas_pesquisa',
+          'xpert_respostas_pesquisa',
+          'ouvidoria',
+          'meta_ouvidoria',
+          'xpert_ouvidoria',
+          'vaga_candidaturas',
+          'meta_vaga_candidaturas',
+          'xpert_vaga_candidaturas'
+        ]
+        && (isRH()
+          || (isActive()
+            && (owns(request.resource.data) || docId == request.auth.uid))));
+      allow update: if isBootstrapAdmin() && (selfServiceCollection in [
+          'disc_resultados',
+          'meta_disc_resultados',
+          'xpert_disc_resultados',
+          'pdis',
+          'meta_pdis',
+          'xpert_pdis'
+        ]
+        && (isRH()
+          || (isActive()
+            && (owns(resource.data) || docId == request.auth.uid)
+            && (owns(request.resource.data) || docId == request.auth.uid))));
+      allow update, delete: if isBootstrapAdmin() && (isRH());
+    }
+
+    // Compatibilidade segura: coleções de RH ainda não classificadas mantêm
+    // acesso somente para RH. Outros perfis continuam negados por padrão.
+    match /{rhCollection}/{docId} {
+      allow read, write: if isBootstrapAdmin() && (isRH());
+    }
+
+    match /{document=**} {
+      allow read, write: if isBootstrapAdmin() && (false);
+    }
+  }
+}

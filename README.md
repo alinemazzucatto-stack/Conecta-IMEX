@@ -20,7 +20,10 @@ uma validação funcional adequada.
 
 ## Situação verificada em 23/10/2026
 
-- Dez testes automatizados locais aprovados.
+- Quinze testes automatizados locais aprovados.
+- Acesso do aplicativo e do Firestore restrito à identidade administrativa
+  autorizada. O login usa o perfil existente em `users`, sem exigir cadastro
+  de colaborador. Consulte `ACESSO-ADMINISTRATIVO.md`.
 - Login exige autenticação Firebase; erro não libera contas locais de teste.
 - Tentativas simultâneas de login são bloqueadas e senhas mantêm seus espaços.
 - Publicação configurada pelo `wrangler.toml`; documentos de trabalho,

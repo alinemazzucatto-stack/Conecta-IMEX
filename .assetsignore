@@ -24,6 +24,8 @@ node_modules/**
 exclusao-firestore-concluida.png
 publicacao-limpa-cloudflare.png
 VERIFICACAO-PRIVACIDADE.json
+firestore.rules
+acesso-exclusivo-firebase.png
 .privacy-tmp
 .privacy-tmp/**
 privacy-tools

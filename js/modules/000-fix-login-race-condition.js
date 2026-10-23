@@ -31,6 +31,10 @@
     var origOnAuthStateChanged = window.auth.onAuthStateChanged;
     window.auth.onAuthStateChanged = function(callback) {
       var wrappedCallback = function(user) {
+        if (user && (!window.conectaAccessPolicy || !window.conectaAccessPolicy.isAllowed(user))) {
+          window.auth.signOut();
+          return;
+        }
         if (window.__loginEmAndamento || window.__restoringSession) {
           console.log('[AUTH-FIX] Bloqueando callback legado (login em andamento)');
           return;

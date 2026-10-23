@@ -27,7 +27,7 @@ function comTimeout(promise, ms, motivo){
 
 window.doLogin = async function(){
   if(window.__loginEmAndamento) return;
-  var email = (document.getElementById('lEmail') ? document.getElementById('lEmail').value : '').trim();
+  var email = (document.getElementById('lEmail') ? document.getElementById('lEmail').value : '').trim().toLowerCase();
   var pass  = (document.getElementById('lPass')  ? document.getElementById('lPass').value  : '');
   var btn   = document.getElementById('lBtn');
   var load  = document.getElementById('lLoading');
@@ -36,6 +36,9 @@ window.doLogin = async function(){
   if(err) err.style.display = 'none';
 
   if(!email || !pass){ showErr('Preencha e-mail e senha.'); return; }
+  if(!window.conectaAccessPolicy || email !== window.conectaAccessPolicy.ownerEmail){
+    showErr('O acesso está liberado somente para a administradora do sistema.'); return;
+  }
   if(btn) btn.disabled = true;
   if(load) load.style.display = 'block';
 
@@ -79,94 +82,28 @@ window.doLogin = async function(){
       if(String(authErr.message || '').indexOf('firestore-timeout:signin') !== -1){
         throw new Error('Não foi possível conectar ao servidor de autenticação (conexão lenta ou bloqueada). Verifique sua internet/rede e tente novamente.');
       }
-      if(authErr.code === 'auth/user-not-found'){
-        // Primeiro acesso real: confirma que o e-mail existe na base de
-        // colaboradores antes de criar a conta no Firebase Auth — evita que
-        // qualquer e-mail aleatório crie conta sem estar cadastrado no RH.
-        log2('Conta não existe ainda — verificando cadastro em grh_colabs...');
-        var achouCadastro = false;
-        try{
-          var existe = await comTimeout(db.collection('grh_colabs').where('email','==',email).limit(1).get(), 6000, 'existe-grh');
-          if(existe.empty){
-            existe = await comTimeout(db.collection('meta_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'existe-meta');
-          }
-          if(existe.empty){
-            existe = await comTimeout(db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'existe-xpert');
-          }
-          achouCadastro = !existe.empty;
-        }catch(e){
-          // Firestore sem permissão (ou travado por bloqueio de rede) para
-          // consulta pré-login — cai para a base local do arquivo antes de
-          // desistir.
-          log2('Firestore indisponível para verificação (' + e.message + ') — checando base local...');
-        }
-        if(!achouCadastro && typeof GRH_COLABS_ARQUIVO !== 'undefined'){
-          achouCadastro = GRH_COLABS_ARQUIVO.some(function(c){ return c.email === email; });
-        }
-        if(!achouCadastro){
-          throw new Error('E-mail não cadastrado na base de colaboradores.');
-        }
-        log2('Cadastro encontrado — criando conta de acesso (primeiro login)...');
-        cred = await comTimeout(auth.createUserWithEmailAndPassword(email, pass), 12000, 'signup');
-      } else {
-        throw authErr;
-      }
+      throw authErr;
     }
 
+    if(!window.conectaAccessPolicy.isAllowed(cred.user)){
+      try{ await auth.signOut(); }catch(e){}
+      throw new Error('Esta conta não está autorizada a acessar o sistema.');
+    }
     var uid = cred.user.uid;
-    log2('Auth OK — UID: ' + uid);
-
-    var colab = null;
-    var colabDoc = null;
+    var colabDoc = await comTimeout(db.collection('users').doc(uid).get(), 6000, 'perfil-acesso');
+    if(!colabDoc.exists){
+      throw new Error('Perfil administrativo não encontrado. O acesso precisa ser configurado no Firebase.');
+    }
+    var colab = colabDoc.data() || {};
+    if(String(colab.email || '').trim().toLowerCase() !== email ||
+       ['rh', 'rh-colaborador'].indexOf(colab.role) === -1){
+      throw new Error('Perfil administrativo inválido. Verifique a configuração da sua conta.');
+    }
+    colab = Object.assign({}, colab, {
+      perfis: colab.role === 'rh-colaborador' ? ['rh', 'colaborador'] : ['rh']
+    });
     var useLocalDb = false;
 
-    // Se estiver em modo de desenvolvimento (Firebase indisponível), pula direto para base local
-    var firestoreTravou = false;
-    if(!useLocalDb){
-      try{
-        log2('DIAG: consultando grh_colabs...');
-        var snap = await comTimeout(db.collection('grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-grh');
-        log2('DIAG: grh_colabs respondeu, empty=' + snap.empty);
-        if(snap.empty){
-          log2('DIAG: consultando meta_grh_colabs...');
-          snap = await comTimeout(db.collection('meta_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-meta');
-          log2('DIAG: meta_grh_colabs respondeu, empty=' + snap.empty);
-        }
-        if(snap.empty){
-          log2('DIAG: consultando xpert_grh_colabs...');
-          snap = await comTimeout(db.collection('xpert_grh_colabs').where('email','==',email).limit(1).get(), 6000, 'colab-xpert');
-          log2('DIAG: xpert_grh_colabs respondeu, empty=' + snap.empty);
-        }
-        if(!snap.empty){
-          colabDoc = snap.docs[0];
-          colab = colabDoc.data() || {};
-        }
-        log2('DIAG: bloco de consultas concluído, colab=' + (colab ? 'encontrado' : 'null'));
-      }catch(e){
-        firestoreTravou = String(e.message || '').indexOf('firestore-timeout') !== -1;
-        log2('DIAG: catch acionado. Firestore indisponível (' + (e.message || e) + '), buscando na base local...');
-      }
-    }
-    log2('DIAG: saiu do bloco Firestore, seguindo para fallback local se necessário.');
-
-    // Se Firestore falhou ou estamos em modo dev, tenta buscar na base local
-    if(!colab || Object.keys(colab).length === 0){
-      if(typeof GRH_COLABS_ARQUIVO !== 'undefined'){
-        var found = GRH_COLABS_ARQUIVO.find(function(c){ return c.email === email; });
-        if(found){
-          colab = found;
-          colabDoc = { id: email, ref: { parent: { path: 'grh_colabs' } }, data: function(){ return found; } };
-          log2('Usuário encontrado na base local');
-        }
-      }
-    }
-
-    if(!colab || Object.keys(colab).length === 0){
-      if(firestoreTravou){
-        throw new Error('Não foi possível conectar ao banco de dados (conexão lenta ou bloqueada). Verifique sua internet/rede e tente novamente.');
-      }
-      throw new Error('E-mail autenticado, mas não encontrado na base de colaboradores.');
-    }
     var perfis = Array.isArray(colab.perfis)
       ? colab.perfis.map(function(p){ return String(p).toLowerCase().trim(); }).filter(Boolean)
       : [String(colab.perfil || colab.roleAcesso || 'colaborador').toLowerCase().trim()];
@@ -272,6 +209,7 @@ window.doLogin = async function(){
 
   }catch(e){
     // Falhas de autenticação não podem criar sessões locais.
+    try{ if(typeof auth !== 'undefined' && auth.currentUser && typeof auth.signOut === 'function') await auth.signOut(); }catch(signOutError){}
     var msgs = {
       'auth/wrong-password': 'Senha incorreta.',
       'auth/invalid-credential': 'E-mail ou senha inválidos.',

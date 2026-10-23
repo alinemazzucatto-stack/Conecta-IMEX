@@ -4318,6 +4318,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════
 var __authCheckDone = false;
 auth.onAuthStateChanged(async (user) => {
+  if(user && (!window.conectaAccessPolicy || !window.conectaAccessPolicy.isAllowed(user))){
+    try{ await auth.signOut(); }catch(e){}
+    return;
+  }
   // Login em andamento pelo fluxo real (js/modules/login-auth.js) — ele já
   // cuida de tudo (coleção correta grh_colabs, papel/perfis, navegação).
   // Sem esta checagem, este listener corria em paralelo com aquele fluxo,
@@ -4360,9 +4364,7 @@ auth.onAuthStateChanged(async (user) => {
       if (userDoc.exists) {
         udata = userDoc.data();
       } else {
-        // Criar perfil automaticamente como colaborador
-        udata = { uid: user.uid, nome: user.email.split('@')[0], email: user.email, role: 'colaborador', unidade: 'meta', criadoEm: new Date().toISOString(), criadoPor: 'auto' };
-        await db.collection('users').doc(user.uid).set(udata);
+        throw new Error('Perfil administrativo não encontrado.');
       }
       // sessionStorage se perde ao fechar a aba/navegador (só sobrevive a um
       // F5 na mesma aba). Por isso usamos o localStorage.usuarioLogado (salvo
