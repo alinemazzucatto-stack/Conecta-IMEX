@@ -45,13 +45,43 @@ O console de Storage exibiu uma tela exigindo plano Blaze para acesso ao produto
 nenhum inventário de arquivos foi disponibilizado e nenhum arquivo de Storage
 foi excluído. Essa tela não comprova ausência de anexos em outros locais.
 
-## Pendências
+## Histórico Git e documentação
+
+- O conteúdo foi saneado em 302 versões históricas de arquivos, mantendo a
+  versão atual e suas correções. As 437 revisões foram processadas.
+- Os quatro ramos e as duas tags existentes no GitHub foram substituídos pelas
+  referências saneadas com verificação prévia das versões remotas.
+- Os pontos locais de recuperação antigos foram removidos e os objetos Git
+  inalcançáveis foram eliminados.
+- A verificação de 1.056 objetos históricos de texto não encontrou os 170
+  identificadores pessoais pesquisados, derivados dos cadastros e históricos.
+- Documentos Word, PDFs e o pacote ZIP de documentação foram lidos; não foram
+  encontrados esses identificadores em seus conteúdos extraíveis. Isso não
+  equivale a uma varredura visual/OCR de todas as imagens.
+
+## Publicação
+
+- A versão limpa foi publicada no Worker `conecta-imex` pela conta correta.
+- A implantação ativa passou a ser `d7584083`, com 100% do tráfego.
+- Foram enviados somente 164 arquivos do site, sem documentos internos.
+- O endereço público respondeu HTTP 200 e seu HTML coincidiu, por SHA-256,
+  com o pacote validado. Dez testes automatizados foram aprovados.
+- As URLs públicas de prévia foram desativadas; o endereço de produção
+  `https://conecta-imex.mazzucatto-24.workers.dev/` continua habilitado.
+- A limpeza única dos históricos locais será executada ao carregar a versão
+  atualizada em cada navegador. Não é possível apagar remotamente dados de
+  navegadores que ainda não carregaram essa versão.
+
+## Limites da conferência
 
 - Inspeção de anexos fora das coleções removidas.
-- Publicação das alterações e limpeza nos navegadores que usam a versão anterior.
-- Reescrita do histórico Git: versões anteriores ainda podem conter os dados.
-- Inspeção e limpeza de backups, arquivos exportados e documentação binária.
+- A Cloudflare mantém implantações anteriores no painel e não apresentou uma
+  opção de exclusão individual no menu consultado. Essas versões não foram
+  removidas do armazenamento do provedor; suas URLs de prévia foram desativadas.
+- Não foi solicitada limpeza dos caches internos e de cópias externas do GitHub.
+- Cópias e exportações fora da pasta deste projeto não foram inspecionadas.
 
-Não considerar a exclusão integral concluída enquanto as pendências acima
-permanecerem. Preservar as contas no Firebase Auth e os documentos de autorização
-necessários para manter o acesso.
+O escopo executado é a base operacional, os arquivos locais identificados,
+as referências Git e a publicação ativa. Não declarar eliminação universal
+de cópias fora desse escopo. As contas no Firebase Auth e os documentos de
+autorização necessários para manter o acesso foram preservados.

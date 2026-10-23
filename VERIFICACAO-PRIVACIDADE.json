@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-23",
+  "firebase_removed_collections": 17,
+  "sanitized_historic_blobs": 302,
+  "processed_commits": 437,
+  "git_remote_updated_branches": 4,
+  "git_remote_updated_tags": 2,
+  "tests_passed": 10,
+  "history": {
+    "checked_historic_text_blobs": 1056,
+    "remaining_known_identifiers": []
+  },
+  "published_payload": {
+    "payload_files": 164,
+    "matched_personal_identifiers": [],
+    "index_sha256": "990ad4b7a95aeb0dbc42347cc4e67f43b9c3bac53b408771b4ccf639f3dccb4d",
+    "index_identifiers_found": false
+  },
+  "public_url": "https://conecta-imex.mazzucatto-24.workers.dev/",
+  "deployment": "d7584083",
+  "preview_urls_enabled": false,
+  "document_inventory_unreadable_files": 0
+}

@@ -20,12 +20,14 @@ uma validação funcional adequada.
 
 ## Situação verificada em 23/10/2026
 
-- Seis testes automatizados locais aprovados.
+- Dez testes automatizados locais aprovados.
 - Login exige autenticação Firebase; erro não libera contas locais de teste.
 - Tentativas simultâneas de login são bloqueadas e senhas mantêm seus espaços.
 - Publicação configurada pelo `wrangler.toml`; documentos de trabalho,
   testes, configurações internas e dependências excluídos em `.assetsignore`.
-- Nenhuma publicação foi realizada nesta revisão.
+- Versão limpa publicada em 23/10/2026 e conferida no endereço público.
+- Histórico local e referências do GitHub saneados; detalhes e limites em
+  `EXCLUSAO-DADOS-STATUS.md`.
 
 ## Validações ainda necessárias
 
