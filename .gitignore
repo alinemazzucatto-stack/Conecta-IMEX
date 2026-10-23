@@ -1,3 +1,4 @@
 serve.ps1
 .claude/
 .wrangler/
+.privacy-tmp/

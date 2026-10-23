@@ -203,7 +203,7 @@
   function auditoriaHTML(r){
     return `<div class="end-form-v2">
       <label>Status da aprovação<select><option ${/aprov|atual/i.test(r.comprovante+r.status)?'selected':''}>Aprovado</option><option>Pendente</option><option>Reprovado</option><option>Revisar</option></select></label>
-      <label>Responsável<input value="Colaborador"></label>
+      <label>Responsável<input value="" placeholder="Informe o responsável"></label>
       <label>Data<input value="10/06/2026"></label>
       <label class="full">Observações<textarea placeholder="Observações do RH sobre o endereço/comprovante">Comprovante validado conforme cadastro informado.</textarea></label>
       <div class="full">
@@ -357,7 +357,9 @@
 
   window.endPremiumModeloV2 = function(){
     if(!window.XLSX){ alert('Biblioteca Excel não carregada.'); return; }
-    const data = [];
+    const data = [[
+      'Colaborador','E-mail','CEP','Logradouro','Número','Complemento','Bairro','Cidade','UF','Unidade','Status'
+    ]];
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Enderecos');

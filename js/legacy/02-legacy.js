@@ -4595,35 +4595,7 @@ async function gestaoRhCarregar() {
 
 // ── Importação automática da planilha na primeira vez ──
 async function grhImportarSeVazio() {
-  try {
-    const snap = await db.collection(col('grh_colabs')).limit(1).get();
-    if (!snap.empty) return; // já tem dados
-
-    // Dados extraídos da planilha Gestão_RH_Atualizada
-    const colaboradores = [];
-
-    const remuneracao = [];
-
-    const batch1 = db.batch();
-    colaboradores.forEach(c => {
-      const ref = db.collection(col('grh_colabs')).doc();
-      batch1.set(ref, { ...c, criadoEm: new Date().toISOString() });
-    });
-    await batch1.commit();
-
-    // Firestore limita 500 ops por batch — remuneração separada
-    const batch2 = db.batch();
-    remuneracao.forEach(r => {
-      const ref = db.collection(col('grh_rem')).doc();
-      batch2.set(ref, { ...r, criadoEm: new Date().toISOString() });
-    });
-    await batch2.commit();
-
-    _grhColabs = null;
-    _grhRem = null;
-  } catch(e) {
-    console.error('Erro ao importar base RH:', e);
-  }
+  // Base excluída: não reimportar cadastros automaticamente.
 }
 
 // ── Hero stats ──

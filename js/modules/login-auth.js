@@ -26,8 +26,9 @@ function comTimeout(promise, ms, motivo){
 }
 
 window.doLogin = async function(){
+  if(window.__loginEmAndamento) return;
   var email = (document.getElementById('lEmail') ? document.getElementById('lEmail').value : '').trim();
-  var pass  = (document.getElementById('lPass')  ? document.getElementById('lPass').value  : '').trim();
+  var pass  = (document.getElementById('lPass')  ? document.getElementById('lPass').value  : '');
   var btn   = document.getElementById('lBtn');
   var load  = document.getElementById('lLoading');
   var err   = document.getElementById('lErr');
@@ -58,7 +59,7 @@ window.doLogin = async function(){
   }, 2000);
 
   try{
-    if(!firebase || !firebase.apps || firebase.apps.length === 0){
+    if(typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0){
       throw new Error('Firebase não inicializado. Verifique sua conexão com a internet.');
     }
 
@@ -270,78 +271,7 @@ window.doLogin = async function(){
     }, 0);
 
   }catch(e){
-    // ── FALLBACK DE DEV: Se Firebase falhar, tentar login com dados de teste ──
-    log2('ERRO Firebase: ' + (e.code || e.message || e));
-    var USUARIOS_TESTE_FALLBACK = [
-      {email:'colaborador@teste.com', senha:'123456', nome:'João Silva', perfil:'colaborador', setor:'TI'},
-      {email:'gestor@teste.com', senha:'123456', nome:'Maria Santos', perfil:'gestor', setor:'Gestão'},
-      {email:'rh@teste.com', senha:'123456', nome:'Pedro Costa', perfil:'rh', setor:'RH'},
-      {email:'admin@teste.com', senha:'123456', nome:'Admin User', perfil:'rh', setor:'Sistema'}
-    ];
-    log2('Tentando fallback com email: ' + email);
-    var usuarioTeste = USUARIOS_TESTE_FALLBACK.find(u => u.email.toLowerCase() === email.toLowerCase());
-    log2('Usuário de teste encontrado: ' + (usuarioTeste ? usuarioTeste.email : 'NÃO'));
-    if(usuarioTeste && usuarioTeste.senha === pass){
-      log2('Firebase falhou, usando fallback local para ' + email);
-      var preferidoFallback = String((window.loginRole) || sessionStorage.getItem('imexPreferredRole') || usuarioTeste.perfil).toLowerCase().trim();
-      var perfisDisponiveisFallback = [usuarioTeste.perfil];
-      var roleFallback = (preferidoFallback === usuarioTeste.perfil || perfisDisponiveisFallback.indexOf(preferidoFallback) !== -1) ? preferidoFallback : usuarioTeste.perfil;
-      window.currentUserData = {
-        uid:'test_'+Math.random().toString(36).substr(2,9),
-        id:email,
-        docId:email,
-        nome:usuarioTeste.nome,
-        email:email,
-        role:roleFallback,
-        perfis:[usuarioTeste.perfil],
-        unidade:'meta',
-        setor:usuarioTeste.setor,
-        cargo:usuarioTeste.setor,
-        gestor:''
-      };
-      var roleBase = roleFallback;
-      window.role = roleBase;
-      window._roleReal = roleBase;
-      sessionStorage.setItem('userRole',roleBase);
-      sessionStorage.setItem('userPerfis',JSON.stringify([roleBase]));
-      sessionStorage.setItem('userName',usuarioTeste.nome);
-      sessionStorage.setItem('userEmail',email);
-      sessionStorage.setItem('userDocId',email);
-      sessionStorage.setItem('imexPreferredRole',roleBase);
-      sessionStorage.setItem('__lastLoginTime',Date.now().toString());
-      localStorage.setItem('usuarioLogado',JSON.stringify(window.currentUserData));
-
-      var loginScreen = document.getElementById('loginScreen');
-      var appShell = document.getElementById('appShell');
-      var load = document.getElementById('lLoading');
-      if(loginScreen) loginScreen.style.setProperty('display', 'none', 'important');
-      if(appShell) appShell.style.setProperty('display', 'flex', 'important');
-      if(load) load.style.display = 'none';
-      var pLabel = document.getElementById('pLabel');
-      if(pLabel) pLabel.textContent = roleBase.charAt(0).toUpperCase() + roleBase.slice(1);
-      var pDot = document.getElementById('pDot');
-      var dots = {colaborador:'👤',gestor:'👔',rh:'🏢'};
-      if(pDot) pDot.textContent = dots[roleBase] || '👤';
-      document.body.classList.remove('role-rh','role-gestor','role-colaborador');
-      document.body.classList.add('role-'+roleBase);
-      setTimeout(function(){
-        if(typeof window.buildSidebar === 'function') window.buildSidebar();
-        var destino = String(roleBase||'').toLowerCase().indexOf('rh')!==-1 ? 'inicio-rh' : 'intranet';
-        if(typeof window.sbNav === 'function') window.sbNav(destino);
-      }, 100);
-      setTimeout(async function(){
-        try{if(typeof window.updateHero === 'function') await window.updateHero();}catch(e){}
-        try{if(typeof window.renderAll === 'function') await window.renderAll();}catch(e){}
-        try{if(typeof window.enforcePermissions === 'function') window.enforcePermissions();}catch(e){}
-        if(roleBase === 'colaborador'){try{if(typeof window.updateColResumo === 'function') await window.updateColResumo();}catch(e){}}
-        window.__loginEmAndamento = false;
-      }, 1000);
-      if(btn) btn.disabled = false;
-      if(load) load.style.display = 'none';
-      return;
-    }
-
-    // ── ERRO: Fallback falhou ou usuário não encontrado ──
+    // Falhas de autenticação não podem criar sessões locais.
     var msgs = {
       'auth/wrong-password': 'Senha incorreta.',
       'auth/invalid-credential': 'E-mail ou senha inválidos.',

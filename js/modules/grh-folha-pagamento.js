@@ -395,7 +395,9 @@
   };
   window.remFolhaBaixarModelo=function(){
     if(!window.XLSX){message('A biblioteca de Excel ainda não foi carregada.','error');return;}
-    var data=[];
+    var data=[
+      ['Matrícula','Nome','CPF','Competência','Salário Base','Total Proventos','Total Descontos','Salário Líquido','INSS','IRRF','FGTS','Benefícios','Outros']
+    ];
     var ws=XLSX.utils.aoa_to_sheet(data);
     ws['!cols']=[{wch:13},{wch:34},{wch:16},{wch:13},{wch:15},{wch:17},{wch:17},{wch:17},{wch:12},{wch:12},{wch:12},{wch:14},{wch:12}];
     var wb=XLSX.utils.book_new();

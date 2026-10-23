@@ -143,3 +143,12 @@ window.irPara = window.forceView;       // Alias
 - Menu incompleto para alguns perfis
 - 30+ timers de polling consumindo CPU
 - 45+ definições de função duplicadas
+# 2026-10-23 Exclusão de dados de colaboradores
+
+- Removidas bases embutidas de colaboradores e históricos, inclusive os exemplos
+  de desligamentos usados quando a leitura remota falhava.
+- Modelos de planilha e campos demonstrativos passaram a abrir sem dados pessoais.
+- Desativada a recriação automática da base e o acesso local por contas de teste.
+- Adicionados testes automatizados e limpeza única dos históricos do navegador.
+- Publicação preparada com recursos atualizados e exclusão dos arquivos internos.
+

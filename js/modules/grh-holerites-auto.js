@@ -401,7 +401,7 @@
           const wCampos = palavras(campos.nome);
 
           // 1ª tentativa: nome IDÊNTICO (mesmo conjunto de palavras) — resolve o caso de
-          // colaboradores com nome parecido (ex: "Colaborador" vs "Colaborador").
+          // colaboradores com nomes semelhantes.
           let encontrados = colabs.filter(c => {
             const wColab = palavras(c.nome||'');
             if(!wColab.length || !wCampos.length || wColab.length !== wCampos.length) return false;
