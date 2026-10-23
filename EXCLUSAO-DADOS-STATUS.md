@@ -53,6 +53,8 @@ foi excluído. Essa tela não comprova ausência de anexos em outros locais.
   referências saneadas com verificação prévia das versões remotas.
 - Os pontos locais de recuperação antigos foram removidos e os objetos Git
   inalcançáveis foram eliminados.
+- Os caches locais de desenvolvimento/publicação e as listas temporárias usadas
+  para localizar os dados foram removidos após a conferência.
 - A verificação de 1.056 objetos históricos de texto não encontrou os 170
   identificadores pessoais pesquisados, derivados dos cadastros e históricos.
 - Documentos Word, PDFs e o pacote ZIP de documentação foram lidos; não foram
